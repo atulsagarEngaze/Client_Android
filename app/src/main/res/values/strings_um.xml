@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Mobile Verification Page -->
+    <string name="text_mobVer_defaultMobileNumber">Mobile Number</string>
+    <string name="button_mobVer_verfy">Verify</string>
+    <string name="label_mobVer_instruction">Please enter your mobile number to get started.</string>
+    <string name="label_mobVer_smsHint">A message will be sent to verify your mobile number. Standard text message charges may apply depending on your Mobile carrier.</string>
+    <string name="message_mobVer_wait">Please wait while we are verifying your mobile number.</string>
+    <string name="title_mobVer_errorPopup">There was a problem.</string>
+    <string name="message_mobVer_validationMessage">Kindly check the mobile number you have entered.</string>
+    <string name="message_mobVer_verificationFailure">We are unable to verify your Mobile number. Kindly check the number and retry.</string>
+    <string name="message_mobVer_noNetworkError">Network is not available. Kindly check with your service provider.</string>
+    <string name="message_mobVer_confirmNumber">Please confirm your number</string>
+    <string name="message_mobVer_invalidOtp">OTP entered is incorrect. Please try again</string>
+    <string name="message_mobVer_waitAndDetect">Please wait while we are auto verifying the OTP sent to this number</string>
+
+    <!-- User Registration Page -->
+    <string name="text_userReg_defaultProfileName">Profile Name</string>
+    <string name="text_userReg_defaultEmail">Email Id</string>
+    <string name="button_userReg_register">Register</string>
+    <string name="label_userReg_agreement">By clicking Register you agree to our</string>
+    <string name="link_userReg_privacyPolicy"><u>Privacy Policy</u></string>
+    <string name="link_userReg_termsOfService"><u>Terms Of Service</u></string>
+    <string name="message_userReg_saveInProgress">Please wait while we are saving your profile.</string>
+    <string name="message_userReg_success">Profile Saved Successfully.</string>
+    <string name="title_userReg_errorPopup">There was a problem.</string>
+    <string name="label_userReg_profileNameValidation">Kindly enter a valid profile name.</string>
+    <string name="message_userReg_emailValidation">Kindly enter a valid email id.</string>
+    <string name="message_userReg_errorSaving">We are unable to Save your Profile. Please check your internet connection and try again.</string>
+    <string name="message_smsGateway_success">Our SMS Gateway would be sending the verification code.</string>
+    <string name="message_smsGateway_error">We are unable to call the SMS Gateway.Please check your internet connection and try again.</string>
+    <string name="message_userReg_name_blank">"Kindly give a name to your profile."</string>
+    <string name="message_userReg_name_length">"Kindly restrict your profile name to 20 characters."</string>
+    <string name="message_userReg_name_special_character">"Kindly avoid special characters in your profile name."</string>
+
+    <!-- Home Page -->
+    <string name="message_home_initialize">You are almost there. Configuring Engaze for the first time use....</string>
+    <string name="message_home_noInternetConnection">No internet connection available</string>
+    <string name="message_home_errorRetrievingData">We are unable to fetch Event and Contact information. Please check your internet connection.</string>
+    <string name="label_home_menu_meetnow">Meet now</string>
+    <string name="label_home_menu_meetlater">Meet later</string>
+    <string name="label_home_menu_trackbuddy">Track buddies</string>
+    <string name="label_home_menu_sharemylocation">Share my loc.</string>
+    <string name="button_home_notification_accept">ACCEPT</string>
+    <string name="button_home_notification_reject">REJECT</string>
+    <string name="button_home_notification_view">VIEW</string>
+    <string name="button_home_notification_leave">LEAVE</string>
+    <string name="button_home_notification_extend">EXTEND</string>
+    <string name="button_home_notification_poke">POKE</string>
+    <string name="button_home_notification_end">END</string>
+    <string name="button_home_notification_stop">STOP</string>
+    <string name="header_home_notification_sharemylocation">People viewing your location</string>
+    <string name="header_home_notification_trackbuddy">People you are tracking</string>
+    <string name="header_home_notification_runningevents">Events running</string>
+    <string name="header_home_notification_pendingevents">Events awaiting your response</string>
+    <!-- Meet Now -->
+    <string name="title_meetNow_errorPopup">There was a problem.</string>
+    <string name="label_meetNow_errorMessage">Event creation Failed!! Please try again..</string>
+
+    <!-- Create Event -->
+    <string name="hint_add_friends">Enter Contacts</string>
+    <string name="title_createEvent_errorPopup">There was a problem.</string>
+    <string name="label_createEvent_errorMessage">Event creation Failed!! Please try again..</string>
+    <string name="event_invalid_input_message">"Please enter a valid input."</string>
+    <string name="message_createEvent_durationMaxAlert">"Please check the duration you have entered. Minimum allowed is 15 minutes and Maximum allowed is 24 hours. You can extend later if required."</string>
+    <string name="message_createEvent_trackingStartMaxAlert">"Please check the tracking start time which you have entered. Tracking cannot be started sooner than 2 hours prior to Event time. "</string>
+    <string name="message_createEvent_reminderMaxAlert">"Please check the reminder time which you have entered. Reminder cannot be set sooner than 24 hours prior to Event time. "</string>
+    <string name="message_createEvent_timestampCheck">"Please select a future Event Start time."</string>
+    <string name="label_event_from_history">"MORE FROM RECENT EVENT HSTORY"</string>
+    <!-- Contacts Page -->
+    <string name="message_contacts_errorRetrieveData">We are unable to fetch Contact information. Please re-try.</string>
+    <string name="message_contacts_noContacts">No Contacts or Groups Found!!</string>
+    <string name="message_meetnow_memberlistactivity">Do you want to meet now?</string>
+    <string name="message_contacts_empty_header">No Engaze contacts?</string>
+    <string name="message_contacts_empty">To start locating and tracking contacts, invite them to Engaze and refresh the list.</string>
+
+    <!-- Events List or My Schedule -->
+    <string name="message_mySchedule_errorRetrieveData">We are unable to fetch Event information. Please check your internet connection.</string>
+    <string name="msgHeader_mySchedule_noAcceptedEvent">"No accepted events"</string>
+    <string name="message_mySchedule_noAcceptedEvent">"You do not have any accepted events. Create new events and share with your friends"</string>
+    <string name="msgHeader_mySchedule_noPendingEvent">"No pending events"</string>
+    <string name="message_mySchedule_noPendingEvent">"You do not have any pending events. Create new events and share with your friends"</string>
+    <string name="msgHeader_mySchedule_noDeclinedEvent">"No declined events"</string>
+    <string name="message_mySchedule_noDeclinedEvent">"You do not have any declined events. Create new events and share with your friends"</string>
+    <string name="message_mySchedule_deleteSuccess">"Deleted Event successfully!"</string>
+    <string name="message_mySchedule_deleteFailue">"Unable to Delete Event. Please try again..."</string>
+
+    <!-- Running Events or Map View -->
+
+    <string name="message_runningEvent_eventLeftSuccessfully">"Left Event Successfully!!"</string>
+    <string name="message_runningEvent_eventLeaveFail">"Failed to Leave Event. Please retry after some time."</string>
+    <string name="message_runningEvent_eventEndConfirmation">"Are you sure you want to End this Event?"</string>
+    <string name="message_runningEvent_eventEndSuccess">"Event Ended Successfully!!"</string>
+    <string name="message_runningEvent_eventEndFail">"We are unable to end the Event. Please retry after some time."</string>
+    <string name="message_runningEvent_extendDurationValidation">"Please check the duration you have entered. Minimum allowed extension is 10 mins and maximum allowed is 12 hrs (720 minutes)."</string>
+    <string name="message_runningEvent_eventExtendSuccess">"Event Extended Successfully!!"</string>
+    <string name="message_runningEvent_eventExtendFail">"We are unable to extend the Event. Please retry after some time."</string>
+    <string name="message_runningEvent_updateParticipantsSuccess">"Participants updated Successfully!!"</string>
+    <string name="message_runningEvent_updateParticipantsFailure">"We are unable to update the Participants. Please retry after some time."</string>
+    <string name="message_runningEvent_updateDestinationSuccess">"Destination changed Successfully!!"</string>
+    <string name="message_runningEvent_updateDestinationFailure">"We are unable to update the Event Destination. Please retry after some time."</string>
+    <string name="label_runningEvent_yetToRespond">"Awaiting Response"</string>
+    <string name="label_runningEvent_declined">"Declined Invitation"</string>
+    <string name="label_runningEvent_acceptedLocationUnavailable">"Accepted but location unavailable"</string>
+    <string name="label_runningEvent_acceptedLocationNotFound">"fetching address from server.."</string>
+    <string name="message_runningEvent_pokedAllSuccessfully">"Poked All Participants Successfully!"</string>
+    <string name="message_runningEvent_pokeAllFail">"Unable to Poke All. Please retry after some time."</string>
+    <string name="message_runningEvent_pokeAllInterval">"You can do a Poke All again only after "</string>
+    <string name="message_runningEvent_pokedSuccessfully">"Poked Successfully!"</string>
+    <string name="message_runningEvent_pokeFail">"Unable to do a Poke. Please retry after some time."</string>
+    <string name="message_runningEvent_pokeInterval">"You can Poke this Participant again only after "</string>
+
+    <!-- User Feedback -->
+    <string name="label_feedback_hint"><font size="15">Write your feedback here</font></string>
+    <string name="message_feedback_saveFailure">"Unable to save the feedback. Please try again."</string>
+    <string name="message_feedback_success">Thanks for your feedback.</string>
+
+    <!-- General -->
+    <string name="message_general_event_retreive_failed">Failed to retreive event detail.Please try again.</string>
+    <string name="message_general_response_failed">Failed to save the response.</string>
+    <string name="message_general_event_end_success">Event Ended Successfully.</string>
+    <string name="message_general_event_end_fail">Failed to End the Event! Please re-try.</string>
+    <string name="message_general_event_null_error">This event is already over.</string>
+    <string name="message_general_no_internet_header">There is a problem.</string>
+    <string name="message_general_no_internet_message">Internet connection is lost.</string>
+    <string name="message_general_no_internet_responseFail">No internet connection, unable to proceed.</string>
+    <string name="message_general_exception">Unexpected error!</string>
+    <string name="message_general_progressDialog">Please wait..</string>
+    <string name="message_general_responseSaveSuccess">Response Saved Successfully</string>
+    <string name="unable_locate_address">"Unable to find the address. Connection may be slow. Please try again"</string>
+    <string name="event_location_hint"><i>select event location</i></string>
+    <string name="message_saveresponse_inprocess">Please wait while we are sending your response...</string>
+
+    <!-- Invitation -->
+    <string name="message_invitation_body">Coordinating is difficult while meeting friends outdoor for any event such as a party or a show. Try out "Engaze", for hassle free meetings and better coordination. Download "Engaze" from https://play.google.com/store/apps/details?id=com.redtop.engaze</string>
+    <string name="label_invitation_inviteUsing">"Invite using"</string>
+    <string name="message_invitation_success">"Invitation has been sent successfully"</string>
+    <string name="message_inviation_errorRetrieveFriends">We are unable to fetch Contact information. Please check your internet connection.</string>
+    <string name="message_nocontacts_suggest_invitation">Start by Inviting your Friends to Engaze!!</string>
+
+    <!-- OLD -->
+    <string name="quik_event_create_successful">Event Creation Successful!! Notification sent to Participants.</string>
+    <string name="event_create_successful">Event Creation Successful!! Notification sent to Participants.</string>
+    <string name="event_update_successful">Event Updated Successfully!! Participants shall be updated accordingly.</string>
+    <string name="event_update_failure">Event Updation Failed!! Try Again.</string>
+    <string name="accept_reject">Hi...You are invited to attend an event. Please respond.</string>
+    <string name="internet_not_available">"Internet connection is not available .Failed to refresh."</string>
+    <string name="f_failed_retrieve_events">"Failed to refresh the events."</string>
+    <string name="unable_locate">"Unable to locate"</string>
+    <string name="save_success">"Response Saved Successfully"</string>
+    <string name="save_fail">"Unable to save the response. Please try again"</string>
+    <string name="track_my_buddy_text_duration">how long you want to track</string>
+    <string name="track_my_buddy_text_start_button">start</string>
+    <string name="track_my_buddy_location_hint">place your friends are going</string>
+    <string name="track_my_buddy_add_friends_hint">Enter contacts whose location you want to track</string>
+    <string name="track_my_buddy_event_create_successful">Tracking is started. Notification sent to your buddies to share their location.</string>
+    <string name="track_my_buddy_text_notification">Track buddy request</string>
+    <string name="label_track_my_buddy_errorMessage">Unable to tracking! Please try again..</string>
+    <string name="share_my_location_notification">Share my location request</string>
+    <string name="share_my_location_text_duration">how long you want share your loc.</string>
+    <string name="share_my_location_text_start_button">start</string>
+    <string name="share_my_location_location_hint">choose the place you are going</string>
+    <string name="share_my_location_add_friends_hint">Enter contacts who can view your location</string>
+    <string name="sharemylocation_event_create_successful">Sharing of your location started. Notification sent to your buddies to view your location.</string>
+    <string name="label_sharemylocation_errorMessage">Unable to share your location! Please try again..</string>
+    <string name="track_location_timeinfo_text">"Started at %1$s, finishing after %2$s."</string>
+    <string name="meet_now_text_duration">how long tracking should be on</string>
+    <string name="meet_now_add_friends_hint">Enter contacts you want to meet</string>
+    <string name="meet_now_location_hint">choose the place you are meeting</string>
+    <string name="meet_now_event_create_successful">Meeting has started. Notification sent to your participants to share their location.</string>
+
+    <!-- reoccurrence related messages> -->
+    <string name="label_reccurrence_header">Event Reccurrence</string>
+    <string name="label_weekly">Weekly</string>
+    <string name="label_monthly">Monthly</string>
+    <string name="label_daily">Daily</string>
+    <string name="label_reccurrence">reccurrence</string>
+    <string name="label_end_after_occurrence"><![CDATA[ End after <font color=\'black\'>%1$s</font> occurrences]]></string>
+    <string name="label_daily_occurrences"><![CDATA[ Every <font color=\'black\'>%1$s</font> day(s) ]]></string>
+    <string name="label_weekly_occurrences"><![CDATA[ Every <font color=\'black\'>%1$s</font> weeks(s) on ]]></string>
+    <string name="label_weekly_days"><![CDATA[ Days: <font color=\'black\'>%1$s</font>]]></string>
+    <string name="label_monthly_occurrences"><![CDATA[Day <font color=\'black\'>%1$s</font> of every <font color=\'black\'>%2$s</font> month]]></string>
+
+    <!-- FB Sharing Strings -->
+    <string name="fb_login_success">"Successfully logged on to your Facebook!!"</string>
+    <string name="fb_login_cancel">"Cancelled your facebook login."</string>
+    <string name="fb_login_error">"Unable to login.Please try again later."</string>
+    <string name="fb_share_success">"Successfully shared on your Facebook Timeline!!"</string>
+    <string name="fb_share_cancel">"Cancelled sharing on your facebook timeline."</string>
+    <string name="fb_share_error">"Unable to share.Please try again later."</string>
+    <!-- <string name="fb_share_contenturl">"https://www.facebook.com/Engaze-Coordination-Simplified-1527588504210690/"</string> -->
+    <string name="fb_share_contenturl">"http://www.redtopdev.com/engaze"</string>
+    <string name="fb_share_title">"%1$s caught up with his friend(s) using Engaze"</string>
+    <string name="fb_share_description">"Engaze - for hassle free coordination during meetings."</string>
+
+</resources>

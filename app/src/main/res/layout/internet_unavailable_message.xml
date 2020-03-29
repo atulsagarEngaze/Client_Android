@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_internet_status"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="#787878"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:padding="4dip" >
+
+    <TextView
+        android:id="@+id/txt_internet_unavailable_message"
+        style="@style/PrimaryTextStyle"
+        android:textColor="@color/whiteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="No internet connection available"
+        android:textSize="14sp" />
+
+</LinearLayout>

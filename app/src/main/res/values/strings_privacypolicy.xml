@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <string name="msg_privacypolicy_heading">"Engaze Privacy Policy"</string>    
+    <string name="msg_privacypolicy">
+	"RedTop Developers provides this Privacy Policy to help you make an informed decision about whether to use or continue using the Engaze application. If you do not agree to our practices, please do not use the Engaze application.
+
+This Privacy Policy is incorporated into and is subject to the Engaze Terms of Usage. Your use of the Engaze and any personal information you provide remains subject to the terms of this Privacy Policy and our Terms of Usage.
+
+The Information Engaze Collects
+
+Engaze may obtain the various information from you or your mobile phone device, which may include information that can be used to identify you as specified below (Personally Identifiable Information).
+
+User Provided Information: You would be required to provide certain Personally Identifiable Information, such as your mobile phone number, profile name, email id etc to Engaze during registration as a user.
+
+Automatically collected Information: In addition to the above, Engaze will periodically access your GPS location and contact list on your mobile phone in order to provide real-time information about you to your friends or family and vice versa.
+
+Usage of collected Information
+
+If you submit Personally Identifiable Information to us, then we use your personal information to operate, maintain, and provide to you the features and functionality of Engaze. Information like mobile phone number, profile name, email address, GPS location will be saved to Engaze Database server. When another user creates and invites you to an event via Engaze, the
+
+information like your Profile name, GPS location etc may be collected and used by all participants of the event/meeting, provided you have accepted the event/meeting request. It is your responsibility to check all the participants in the event/meeting requests which you receive before accepting requests, so that your personally identifiable information is not shared with unintended users.
+
+Disclosure of your Information
+
+Other users of the Engaze may see your profile name, mobile number and GPS location in the below scenarios
+
+(i) You create an event and invites participants from your contact list. In this scenario your profile name, GPS location, Mobile number will be shared with all the participants of the current event.
+
+(ii) Another user of Engaze who has you in his/her contact list invites you along with few other users to an event/meeting. When you accept the event, you are also accepting to share your information like profile name, mobile number, GPS location with all the users who is a participant in the meeting. It is also possible that one or more of these users may be total strangers to you and you may wish not to share your information with them. In such scenarios you have the option to reject the event/meeting so that your information will not be shared to any one.
+
+(iii) The sharing of your GPS location with other participants of an event will begin at an offset duration prior to the event start. This offset duration is specified by the host while the event is created. The GPS location sharing will continue till the end of the event or until the event is manually ended by the host.
+
+Retention of your Information
+
+The duration of retention of information collected from you will be based on the type of information. Information like Profile name, email id, mobile number etc will be retained with Engaze as long as you are actively using Engaze. If your account is inactive for a period of 6 months or more, your information will be deleted from the Engaze servers. The GPS location information collected from your phone will be removed within 30 days of the date of data collection. Historical data corresponding to Events/Meetings will be retained for 60 days.
+
+Our Commitment To Childrens' Privacy
+
+Engaze does not knowingly collect or maintain Personally Identifiable Information or non-personally-identifiable information from persons under 16 years of age, and no part of the Engaze is directed to or intended to be used by persons under 16. If you are under 16 years of age, then please do not
+
+use the Engaze Application in any manner. If RedTop Developers learns that Personally Identifiable Information of persons under 16 years of age has been collected on the Engaze application, then RedTop Developers may deactivate the account and/or make the status submissions inaccessible.
+
+This Privacy Notice was last modified January 26th, 2016"
+\n\n\n
+    </string>   
+</resources>

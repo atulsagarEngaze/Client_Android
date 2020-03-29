@@ -1,0 +1,203 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mr_main_layout"
+    style="@style/MatchParent"
+    android:orientation="vertical"  >
+
+    <androidx.appcompat.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/registration_toolbar"
+        style="@style/ETMaterialTheme.ActionBar"
+        android:background="@color/secondaryBackground" />
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/padding_one_half"
+        android:background="@drawable/logo" />
+
+    <RelativeLayout
+        android:id="@+id/rl_number_verification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_double" >
+
+        <TextView
+            android:id="@+id/txtEnterMobileMsg"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/label_mobVer_instruction"
+            android:textColor="@color/icon"
+            android:textSize="@dimen/abc_text_size_medium_material" />
+
+        <RelativeLayout
+            android:id="@+id/rl_mobileNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="48dip"
+            android:layout_below="@+id/txtEnterMobileMsg"
+            android:layout_marginBottom="@dimen/paddinghalf"
+            android:layout_marginLeft="@dimen/padding_double"
+            android:layout_marginRight="@dimen/padding_double"
+            android:layout_marginTop="@dimen/padding"
+            android:background="@drawable/rect_corner_radius_bold_border" >
+
+            <EditText
+                android:id="@+id/country_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:background="@android:color/transparent"
+                android:editable="false"
+                android:hint="Code"
+                android:textColor="@color/primaryText" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/mobile_number"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/country_code"
+                android:background="@android:color/transparent"
+                android:hint="@string/text_mobVer_defaultMobileNumber"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:textColor="@color/primaryText"
+                android:textColorHint="@color/hintDisable" >
+                <requestFocus />
+            </EditText>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/verify_no"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:layout_below="@+id/rl_mobileNumber"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_marginLeft="@dimen/padding_double"
+            android:layout_marginRight="@dimen/padding_double"
+            android:background="@drawable/button_corner_radius"
+            android:elevation="5dip"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/button_mobVer_verfy"
+            android:textColor="@color/primaryBackground" />
+
+        <TextView
+            android:id="@+id/sms_cost_incur_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/verify_no"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:gravity="center_horizontal"
+            android:text="@string/label_mobVer_smsHint"
+            android:textColor="@color/secondaryText"
+            android:textSize="@dimen/small_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_verification_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/padding_one_half"
+        android:layout_marginRight="@dimen/padding_one_half"
+        android:layout_marginTop="@dimen/padding_one_half"
+        android:background="@drawable/otp_verificationt"
+        android:elevation="5dp"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:id="@+id/rl_circularProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding" >
+
+            <ProgressBar
+                android:id="@+id/circularProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                android:layout_centerInParent="true"
+                android:indeterminate="false"
+                android:max="300"
+                android:progress="300"
+                android:progressDrawable="@drawable/circular_progress_bar" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="progress"
+                android:textColor="@color/icon"
+                android:textSize="@dimen/large_text_size" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_otp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_circularProgressBar"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginTop="@dimen/padding_one_half" >
+
+            <TextView
+                android:id="@+id/lbl_otp"
+                style="@style/PrimaryTextStyle"
+                android:text="OTP"
+                android:textColor="@color/icon" />
+
+            <EditText
+                android:id="@+id/txt_otp"
+                style="@style/PrimaryTextStyle"
+                android:layout_width="120dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_toRightOf="@+id/lbl_otp"
+                android:background="@drawable/rect_corner_radius_bold_border"
+                android:focusable="true"
+                android:hint="Enter Otp"
+                android:inputType="number"
+                android:textColor="@color/primaryText"
+                android:textColorHint="@color/hintDisable"
+                android:textSize="@dimen/abc_text_size_medium_material" />
+
+            <Button
+                android:id="@+id/btn_otp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_corner_radius"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Validate"
+                android:textColor="@color/primaryBackground" >
+            </Button>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/otp_validation_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_otp_text"
+            android:layout_margin="@dimen/padding"
+            android:gravity="center_horizontal"
+            android:text="@string/message_mobVer_waitAndDetect"
+            android:textColor="@color/secondaryText"
+            android:textSize="@dimen/small_text_size" />
+    </RelativeLayout>
+
+</LinearLayout>

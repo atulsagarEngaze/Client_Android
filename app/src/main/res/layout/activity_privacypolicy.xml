@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    style="@style/MatchParent" >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/privacy_policy_toolbar"
+        style="@style/ETMaterialTheme.ActionBar"
+        android:background="@color/primaryBackground" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/privacy_policy_toolbar"
+            android:layout_margin="@dimen/padding"
+            android:orientation="vertical"
+            android:paddingTop="56dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_privacypolicy" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

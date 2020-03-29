@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2013 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<resources>
+
+    <!--
+         These are the default percent values that the contact photo and information should take up
+         in the ContactDetailFragment.
+    -->
+    <integer name="profile_name_maximum_legth">20</integer> <!-- when changing this value change the corresponding string: message_userReg_name_length as well -->
+    
+    <integer name="contact_detail_photo_percent">45</integer>
+    <integer name="contact_detail_info_percent">55</integer>
+    <integer name="runningevent_max_extend_minutes">720</integer>
+    <integer name="runningevent_min_extend_minutes">10</integer>
+    <integer name="event_creation_duration_max_minutes">1440</integer>
+    <integer name="event_creation_duration_min_minutes">15</integer>
+    <integer name="event_creation_duration_max_hours">24</integer>
+    <integer name="event_tracking_start_max_minutes">120</integer>
+    <integer name="event_tracking_start_max_hours">2</integer>
+    
+    <integer name="event_reminder_start_max_minutes">1440</integer>
+    <integer name="event_reminder_start_max_hours">24</integer>
+    <integer name="event_reminder_start_max_days">1</integer>
+    <integer name="event_reminder_start_max_weeks">1</integer>
+    <integer name="sms_timeout_period_millisecs">300000</integer>
+    <integer name="sms_interval_millisecs">1000</integer>
+    <integer name="minumim_reccurrence_value">2</integer>
+    <integer name="not_selected_alpha">100</integer>
+    
+
+</resources>

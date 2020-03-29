@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="msg_eula_heading">"Engaze End User License Agreement"</string>    
+    <string name="msg_eula">
+        
+"1. Your Acceptance
+
+This is an agreement between RedTop Developers, the owner of Engaze, and you. By using Engaze, you acknowledge and agree to these terms of service, and privacy policy. If you choose to not agree with any of these terms, you may not use the Engaze Application.
+
+2. Usage of Engaze
+
+Engaze is not intended to be a commercial application. The objective of the application is to ease Coordination amongst friends or family during events or meetings. RedTop Developers hereby grants you permission to use Engaze, subject to your compliance with Terms of Service, provided that:
+
+(i) use of the Engaze is solely for your personal use, and you are not permitted to resell or charge others for use of or access to the Service, or in any other manner inconsistent with these Terms of Service;
+
+(ii) you will copy or distribute any part of the application in any medium;
+
+(iii) you will not attempt to reverse engineer, alter or modify any part of the Application; and
+
+(iv) you will otherwise comply with the terms and conditions of these Terms of Service and Privacy Policy.
+
+3. Access to your information
+
+In order to use the features of Engaze, you agree that you will have to provide your personal information like mobile phone number, profile name and email id. In addition to these, in order to provide you with a better service you agree that Engaze may periodically access your GPS location and contact list on your mobile device to accurately locate you and your contacts on a map.
+
+4. Intellectual Property Rights
+
+The design of Engaze along with its content, logos and images are owned by or licensed to RedTop Developers. The Service is provided to you for your personal use only. RedTop Developers reserves all rights not expressly granted in and to the Service. You agree to not engage in the use, copying, or distribution of any of the Service other than expressly permitted herein, including any use, copying, or distribution for any commercial purposes.
+
+5. Warranty Disclaimer
+
+You agree that your use of Engaze shall be at your sole risk. To the fullest extent permitted by law. RedTop Developers makes no warranties or responsibility for any
+
+(i) errors, mistakes, or inaccuracies of content.
+
+(ii) personal injury or property damage, of any nature whatsoever, resulting from your access to and use of our service,
+
+(iii) any unauthorized access to or use of our servers and/or any and all personal information and/or financial information stored therein,
+
+(iv) any interruption or cessation of transmission to or from our service,
+
+(v) any bugs or viruses which may be transmitted to or through our service through the actions of any third party, (v) additional battery consumed by the usage of the Engaze,
+
+(vi) additional mobile data consumed by the usage of the Engaze, and/or
+
+(vii) any errors or omissions in any content or for any loss or damage of any kind incurred as a result of the use of any content or information made available via Engaze.
+
+6. Limitation of Liability
+
+In no event shall RedTop Developers, or its personnel be liable to you for any damages whatsoever resulting from any
+
+(i) errors, mistakes, or inaccuracies of content,
+
+(ii) personal injury or property damage, of any nature whatsoever, resulting from your access to and use of our application,
+
+(iii) any unauthorized access to or use of our secure servers and/or any and all personal information stored therein,
+
+(iv) any interruption or cessation of transmission to or from our servers,
+
+(v) any bugs or viruses, which may be transmitted to or through our application by any third party, whether based on warranty, contract, tort, or any other legal theory, and whether or not the company is advised of the possibility of such damages, and/or
+
+(vi) the disclosure of information pursuant to these terms of service or privacy policy. the foregoing limitation of liability shall apply to the fullest extent permitted by law in the applicable jurisdiction.
+
+7. Ability to Accept Terms of Service
+
+You affirm that you are either more than 16 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to
+
+abide by and comply with these Terms of Service. In any case, you affirm that you are at least 16 years old as the Engaze is not intended for children under 16."
+\n\n\n 
+  </string>   
+</resources>

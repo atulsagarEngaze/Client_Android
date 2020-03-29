@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    style="@style/MatchParent">
+
+    <LinearLayout
+        android:id="@+id/ll_profile_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_toolbar"
+            style="@style/ETMaterialTheme.ActionBar"
+            android:background="@color/secondaryBackground" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dip"
+            android:background="@drawable/logo" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dip"
+            android:layout_marginLeft="32dip"
+            android:layout_marginRight="32dip"
+            android:layout_marginTop="48dip"
+            android:background="@drawable/rect_corner_radius_bold_border" >
+
+            <EditText
+                android:id="@+id/ProfileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:background="@android:color/transparent"
+                android:hint="@string/text_userReg_defaultProfileName"
+                android:inputType="text"
+                android:textColor="@color/primaryText"
+                android:textColorHint="@color/hintDisable"
+                android:textSize="@dimen/abc_text_size_medium_material" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dip"
+            android:layout_marginBottom="@dimen/paddinghalf"
+            android:layout_marginLeft="32dip"
+            android:layout_marginRight="32dip"
+            android:layout_marginTop="@dimen/padding"
+            android:background="@drawable/rect_corner_radius_bold_border" >
+
+            <EditText
+                android:id="@+id/Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:background="@android:color/transparent"
+                android:hint="@string/text_userReg_defaultEmail"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/primaryText"
+                android:textColorHint="@color/hintDisable" >
+            </EditText>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/Save_Profile"
+            style="@style/FullWidthPrimaryButton"
+            android:layout_marginLeft="32dip"
+            android:layout_marginRight="32dip"
+            android:elevation="5dip"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="REGISTER"
+            android:textColor="@color/primaryBackground" />
+
+        <RelativeLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/ll_checkbox_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <!-- <CheckBox -->
+                <!-- android:id="@+id/checktermsandcondition" -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:checked="true" -->
+                <!-- android:text="CheckBox" /> -->
+
+                <TextView
+                    android:id="@+id/text_termsandservice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/label_userReg_agreement"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_terms_and_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_checkbox_text"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/linktermsandservice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/link_userReg_termsOfService"
+                    android:textColor="@color/secondaryText" />
+
+                <TextView
+                    android:id="@+id/textand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text=" and "
+                    android:textColor="@color/secondaryText" />
+
+                <TextView
+                    android:id="@+id/linkprivacypolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/link_userReg_privacyPolicy"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/internet_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/internet_unavailable_message" >
+    </include>
+
+</RelativeLayout>
