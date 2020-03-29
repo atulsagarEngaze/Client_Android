@@ -4,83 +4,73 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.common.Constants;
+import com.redtop.engaze.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 
 public class SplashActivity extends BaseActivity1 {
 
-	private ProgressDialog mProgress;
-	
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
-	@Override	
+    private ProgressDialog mProgress;
 
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
-		mContext.activityContext = this;
-		AppService.setApplicationContext(this.getApplicationContext());
-		AppService.deviceDensity = getResources().getDisplayMetrics().densityDpi;
-		setContentView(R.layout.activity_splash);			
-		String loginValue = PreffManager.getPref(Constants.LOGIN_ID, this);
-		Intent intent = null;
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
-		if(loginValue != null){				
-			String firstTimeUse = PreffManager.getPref("firstTime",  mContext);
-			if( firstTimeUse != null && firstTimeUse.equals("true")){
-				mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
-				mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
-				mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    @Override
 
-				mProgress.setCancelable(false);
-				mProgress.setCanceledOnTouchOutside(false);
-				mProgress.setIndeterminate(true);
-				mProgress.show();
-				PreffManager.setPref("firstTime", "false", mContext);
-				/*new Handler().postDelayed(new Runnable() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext.activityContext = this;
+        AppService.setApplicationContext(this.getApplicationContext());
+        AppService.deviceDensity = getResources().getDisplayMetrics().densityDpi;
+        setContentView(R.layout.activity_splash);
+        String loginId = PreffManager.getPref(Constants.LOGIN_ID, this);
+        Intent intent = null;
 
-					@Override
-					public void run() {
-						mProgress.hide();
-						//Intent intent = new Intent(getApplicationContext(), Recurrence.class);
-						Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-						startActivity(intent);
-					}
-				}, 3000);*/
+        if (loginId != null) {
+            mContext.loginId = loginId;
+            if (mContext.isFirstTimeLoading) {
+                mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
+                mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
+                mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-			}
-			else
-			{
-				Intent refreshServiceIntent = new Intent(this, EventRefreshService.class);
-				startService(refreshServiceIntent);
+                mProgress.setCancelable(false);
+                mProgress.setCanceledOnTouchOutside(false);
+                mProgress.setIndeterminate(true);
+                mProgress.show();
+                mContext.isFirstTimeLoading = false;
+                new Handler().postDelayed(new Runnable() {
 
-				/*intent = new Intent(this, HomeActivity.class);
-				//intent = new Intent(getApplicationContext(), Recurrence.class);
-				startActivity(intent);*/
+                    @Override
+                    public void run() {
+                        mProgress.hide();
+                        ;
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                    }
+                }, 3000);
 
-			}
-		}
-		else
-		{
+            } else {
+                Intent refreshServiceIntent = new Intent(this, EventRefreshService.class);
+                startService(refreshServiceIntent);
 
-			String authToken = PreffManager.getPref(Constants.USER_AUTH_TOKEN, mContext);
+                intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
 
-			/*if(authToken!=null && authToken.equals("1"))
-			{
-				intent = new Intent(this, ProfileActivity.class);
-			}
-			else
-			{
-				intent = new Intent(this, MobileNumberVerificationActivity.class);
-			}*/
+            }
+        } else {
 
-			intent = new Intent(this, MobileNumberVerificationActivity.class);
-			startActivity(intent);
+            String authToken = PreffManager.getPref(Constants.USER_AUTH_TOKEN, mContext);
 
-		}
-	}
+            if (authToken != null && authToken.equals("1")) {
+                intent = new Intent(this, ProfileActivity.class);
+            } else {
+                intent = new Intent(this, MobileNumberVerificationActivity.class);
+            }
+        }
+    }
 }

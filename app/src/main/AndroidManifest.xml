@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.redtop.engaze" >
 
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -26,6 +29,24 @@
             android:noHistory="false"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateVisible"
+            android:theme="@style/ETMaterialTheme">
+        </activity>
+
+        <activity
+            android:name="ProfileActivity"
+            android:label="@string/title_activity_login_message"
+            android:noHistory="true"
+            android:screenOrientation="locked"
+            android:theme="@style/ETMaterialTheme">
+        </activity>
+        <activity
+            android:name="EULAActivity"
+            android:screenOrientation="locked"
+            android:theme="@style/ETMaterialTheme">
+        </activity>
+        <activity
+            android:name="PrivacyPolicyActivity"
+            android:screenOrientation="locked"
             android:theme="@style/ETMaterialTheme">
         </activity>
         <activity

@@ -14,6 +14,7 @@ public class AppContext extends Application {
             .getSimpleName();
 
     public boolean isFirstTimeLoading = false;
+    public String loginId;
     public Context activityContext = null;
     public Boolean isInternetEnabled = true;
     private static AppContext mInstance;

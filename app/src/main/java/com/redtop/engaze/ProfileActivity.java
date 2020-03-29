@@ -33,7 +33,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
-import com.redtop.engaze.common.Constants;
+import com.redtop.engaze.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.service.FirstTimeInitializationService;

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.common.Constants;
+import com.redtop.engaze.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;

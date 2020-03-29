@@ -32,6 +32,7 @@ public class AppService {
 	}
 
 
+
 	public static void showAlert(Context context, String title, String message) {
 		if (((Activity) context).isFinishing() == false) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -54,23 +55,7 @@ public class AppService {
 		return x;
 	}
 
-	public static int getIncrementedNotificationId(Context context) {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		int notificationId = preferences.getInt("notificationId",0);
-		if(notificationId == 0 || notificationId == 99999999 ){
-			notificationId =1;
-		}
-		else
-		{
-			notificationId = notificationId +1;
-		}
-		SharedPreferences.Editor editor = preferences.edit();
-		editor.putInt("notificationId", notificationId);
-		editor.commit();
 
-		return notificationId;
-	}
 
 
 
@@ -180,162 +165,20 @@ public class AppService {
 
 
 
-	public static Bitmap generateCircleBitmapForText(Context context, int circleColor, float diameterDP, String text){
-		final int textColor = 0xffffffff;
-		DisplayMetrics metrics =Resources.getSystem().getDisplayMetrics();
-		float diameterPixels = diameterDP * (metrics.densityDpi / 160f);
-		float radiusPixels = diameterPixels/2;
-
-		// Create the bitmap
-		Bitmap output = Bitmap.createBitmap((int) diameterPixels, (int) diameterPixels,
-				Config.ARGB_8888);
-
-		// Create the canvas to draw on
-		Canvas canvas = new Canvas(output);
-		canvas.drawARGB(0, 0, 0, 0);
-
-		// Draw the circle
-		final Paint paintC = new Paint();
-		paintC.setAntiAlias(true);
-		paintC.setColor(circleColor);
-		canvas.drawCircle(radiusPixels, radiusPixels, radiusPixels, paintC);	   
-
-		// Draw the text
-		if (text != null && text.length() > 0) {
-			final Paint paintT = new Paint();
-			paintT.setColor(textColor);
-			paintT.setAntiAlias(true);
-			paintT.setTextSize(radiusPixels * (float)1.2);
-			Typeface typeFace = Typeface.DEFAULT;// Typeface.createFromAsset(context.getAssets(),"fonts/Roboto-Thin.ttf");
-			paintT.setTypeface(typeFace);
-			final Rect textBounds = new Rect();
-			paintT.getTextBounds(text, 0, text.length(), textBounds);
-			canvas.drawText(text, radiusPixels - textBounds.exactCenterX(), radiusPixels - textBounds.exactCenterY(), paintT);
-		}
-
-		return output;
-	}
 
 
-	public static Bitmap generateCircleBitmapForIcon(Context context, int circleColor, float diameterDP, Uri uri){
-		DisplayMetrics metrics =Resources.getSystem().getDisplayMetrics();
-		float diameterPixels = diameterDP * (metrics.densityDpi / 160f);
-		float radiusPixels = diameterPixels/2;
-		// Create the bitmap	    
 
-		Bitmap output = Bitmap.createBitmap((int) diameterPixels, (int) diameterPixels,
-				Config.ARGB_8888);
 
-		// Create the canvas to draw on
-		Canvas canvas = new Canvas(output);
-		canvas.drawARGB(0, 0, 0, 0);
 
-		// Draw the circle
-		final Paint paintC = new Paint();
-		paintC.setAntiAlias(true);
-		paintC.setColor(circleColor);
-		canvas.drawCircle(radiusPixels, radiusPixels, radiusPixels, paintC);
 
-		Bitmap bitmap=null;
-		try {
-			bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		int canWidth = canvas.getWidth();
-		int canheight = canvas.getHeight();
-		Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,canWidth-35, canheight-35, true);
 
-		canvas.drawBitmap(scaledBitmap, (canWidth- scaledBitmap.getWidth())/2, (canheight- scaledBitmap.getHeight())/2, paintC);
 
-		return output;
-	}
 
-	public static Bitmap generateCircleBitmapForImage(Context context,  float diameterDP, Uri uri) {
 
-		DisplayMetrics metrics =Resources.getSystem().getDisplayMetrics();
-		float diameterPixels = diameterDP * (metrics.densityDpi / 160f);	   
 
-		Bitmap bitmap=null;
-		try {
-			bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		Bitmap output = Bitmap.createBitmap((int) diameterPixels, (int) diameterPixels,
-				Config.ARGB_8888);
-		Canvas canvas = new Canvas(output);		
 
-		Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, (int) diameterPixels);
-		canvas.drawBitmap(roundBitmap, 0, 0, null); 
-		return output;
-
-	}
-
-	public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap, int radius) {
-		Bitmap finalBitmap;
-		if (bitmap.getWidth() != radius || bitmap.getHeight() != radius)
-			finalBitmap = Bitmap.createScaledBitmap(bitmap, radius, radius,
-					false);
-		else
-			finalBitmap = bitmap;
-		Bitmap output = Bitmap.createBitmap(finalBitmap.getWidth(),
-				finalBitmap.getHeight(), Config.ARGB_8888);
-		Canvas canvas = new Canvas(output);
-
-		final Paint paint = new Paint();
-		final Rect rect = new Rect(0, 0, finalBitmap.getWidth(),
-				finalBitmap.getHeight());
-
-		paint.setAntiAlias(true);
-		paint.setFilterBitmap(true);
-		paint.setDither(true);
-		canvas.drawARGB(0, 0, 0, 0);
-		paint.setColor(Color.parseColor("#BAB399"));
-		canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
-				finalBitmap.getHeight() / 2 + 0.7f,
-				finalBitmap.getWidth() / 2 + 0.1f, paint);
-		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-		canvas.drawBitmap(finalBitmap, rect, rect, paint);
-
-		return output;
-	}
-
-	private static List<Integer> materialColors = Arrays.asList(
-			0xffe57373,
-			0xfff06292,
-			0xffba68c8,
-			0xff9575cd,
-			0xff7986cb,
-			0xff64b5f6,
-			0xff4fc3f7,
-			0xff4dd0e1,
-			0xff4db6ac,
-			0xff81c784,
-			0xffaed581,
-			0xffff8a65,
-			0xffd4e157,
-			0xffffd54f,
-			0xffffb74d,
-			0xffa1887f,
-			0xff90a4ae
-			);
-
-	public static int getMaterialColor(Object key) {
-		return materialColors.get(Math.abs(key.hashCode()) % materialColors.size());
-	}
-
-	public static boolean isParticipantCurrentUser(String userId, Context context) {
-		if(PreffManager.getPref(Constants.LOGIN_ID, context).equalsIgnoreCase(userId)){
-			return true;
-		}
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	public static  CharSequence createTextForDisplay(CharSequence description, int maxLength) {		
 		//HOME_ACTIVITY_LOCATION_TEXT_LENGTH
@@ -436,12 +279,7 @@ public class AppService {
 
 	}	
 
-	public static boolean isCurrentUserInitiator(String initiatorId, Context context){
-		if(PreffManager.getPref(Constants.LOGIN_ID, context).equalsIgnoreCase(initiatorId)){
-			return true;
-		}
-		return false;	
-	}
+
 
 	public static boolean validateDurationInput(Duration duration, Context context) {
 		int userInput = duration.getTimeInterval(); 
@@ -570,22 +408,7 @@ public class AppService {
 		return true;		
 	}
 
-	public static Boolean isValidForLocationSharing(EventDetail event, EventMember mem, Context context){
-		Boolean isValid = true;		
-		if(Integer.parseInt(event.getEventTypeId())==200 && 
-				AppUtility.isCurrentUserInitiator(event.getInitiatorId(), context)&&
-				AppUtility.isParticipantCurrentUser(mem.getUserId(), context)
-				){
-			isValid = false;
-		}
 
-		if(Integer.parseInt(event.getEventTypeId())==100 &&
-				!AppUtility.isCurrentUserInitiator(event.getInitiatorId(), context) &&
-				!mem.getUserId().equalsIgnoreCase(event.getInitiatorId())){
-			isValid=false;
-		}
-		return isValid;
-	}
 	public static void setBackgrounOfRecycleViewItem( CardView view, int colorId){
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {			
 			view.setCardBackgroundColor(colorId);
@@ -607,29 +430,7 @@ public class AppService {
 		}
 	}
 	
-	public static boolean IsEventTrackBuddyEventForCurrentuser(EventDetail mEvent,
-			Context context) {
-		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
-		boolean isCurrentUserInitiator = isCurrentUserInitiator(mEvent.getInitiatorId(), context);
 
-		if((isCurrentUserInitiator && eventTypeId==200) ||
-				(!isCurrentUserInitiator && eventTypeId==100)){
-			return true; 
-		}
-		return false;
-	}
-	
-	public static boolean IsEventShareMyLocationEventForCurrentuser(EventDetail mEvent,
-			Context context) {
-		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
-		boolean isCurrentUserInitiator = isCurrentUserInitiator(mEvent.getInitiatorId(), context);
-
-		if((isCurrentUserInitiator && eventTypeId==100) ||
-				(!isCurrentUserInitiator && eventTypeId==200)){
-			return true; 
-		}
-		return false;
-	}
 	public static ProgressDialog showProgressBar(String title, String message, Context context ){
 		ProgressDialog dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 		if(!(title==null || title.equals(""))){
@@ -648,36 +449,4 @@ public class AppService {
 			dialog.dismiss();
 		}
 	}*/
-
-	public static void sendSms(String phonenumber, String message,
-							   boolean isBinary) {
-		//phonenumber = "0" + phonenumber;
-		Log.d("TAG", "no " + phonenumber);
-		Log.d("TAG", "message " + message);
-		SmsManager manager = SmsManager.getDefault();
-		if (isBinary) {
-			if (null != message) {
-				message = message.trim();
-			}
-			byte[] data = new byte[message.length()];
-			for (int index = 0; index < message.length(); ++index) {
-				data[index] = (byte) message.charAt(index);
-			}
-
-			manager.sendDataMessage(phonenumber, null,
-					(short)Integer.parseInt(Constants.SMS_PORT), data, null, null);
-			Log.d("Sending sms", "smsdata sent");
-
-		} else {
-			int length = message.length();
-			if (length > Constants.MAX_SMS_MESSAGE_LENGTH) {
-				ArrayList<String> messagelist = manager.divideMessage(message);
-				manager.sendMultipartTextMessage(phonenumber, null,
-						messagelist, null, null);
-			} else {
-				manager.sendTextMessage(phonenumber, null, message, null, null);
-				Log.d("Sending sms", "sms sent");
-			}
-		}
-	}
 }

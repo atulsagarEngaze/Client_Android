@@ -16,13 +16,15 @@ import com.redtop.engaze.app.AppContext;
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class BaseActivity1 extends AppCompatActivity {
-    public AppContext mContext;
+    public Context mContext;
+    public AppContext mAppContext;
     private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = AppContext.getInstance();
+        mContext = this;
+        mAppContext = AppContext.getInstance();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (mDialog ==null){
@@ -64,7 +66,7 @@ public abstract class BaseActivity1 extends AppCompatActivity {
         if(v!=null){
 
             LinearLayout networkStatusLayout= (LinearLayout) v;
-            if(mContext.isInternetEnabled)
+            if(mAppContext.isInternetEnabled)
             {
                 if(networkStatusLayout!=null)
                 {

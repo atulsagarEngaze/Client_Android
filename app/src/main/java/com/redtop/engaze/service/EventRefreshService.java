@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-/*import com.redtop.engaze.entity.EventDetail;
+/*import com.redtop.engaze.com.redtop.engaze.entity.EventDetail;
 import com.redtop.engaze.interfaces.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.utils.Constants;
 import com.redtop.engaze.utils.EventManager;*/

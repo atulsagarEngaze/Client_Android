@@ -1,8 +1,5 @@
 package com.redtop.engaze;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -36,8 +33,8 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.common.AppService;
 import com.redtop.engaze.common.PreffManager;
-import com.redtop.engaze.webservice.SMSService;
-import com.redtop.engaze.common.Constants;
+import com.redtop.engaze.manager.SMSManager;
+import com.redtop.engaze.constant.Constants;
 
 public class MobileNumberVerificationActivity extends BaseActivity1 {
 	private EditText mMobileNumberEdittext;
@@ -118,11 +115,10 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 					countDownTimer.cancel();
 					LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
 					gotoProfilePage();
-					hideProgressBar();
-				}
-				else{					
 
-					hideProgressBar();
+				}
+				else{
+
 					AlertDialog.Builder adb = null;
 					adb = new AlertDialog.Builder(mContext);
 
@@ -136,6 +132,7 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 						} });
 					adb.show();
 				}
+				hideProgressBar();
 			}
 		});
 	}
@@ -181,7 +178,6 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 				AppService.showAlert(mContext, "", getResources().getString(R.string.message_mobVer_noNetworkError));
 			}
 		}
-
 	}
 
 	private void confirmMobileNumber(){
@@ -274,18 +270,9 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 	private void sendSmsAndWait() {		
 		mOTP = String.valueOf(AppService.getRandamNumber());
 		String smsText = "OTP " + mOTP;
-		registerSmsReceiver();	
-		if(!countryCode.equals("+91")){						
-			//mSmsText = mMobileNumber + AppUtility.getRandamNumber();			
-			Log.d(TAG, "sendSmsAndWait mobile number " + mMobileNumber);		
-			setTimerLayout();
-			AppService.sendSms(mMobileNumber, smsText, false);
-		}
-		else{
-			//call API
-			setTimerLayout();
-			callSMSGateway(mOTP);
-		}
+		registerSmsReceiver();
+		setTimerLayout();
+		SMSManager.sendSMS(countryCode, mMobileNumber,smsText, mContext);
 	}
 
 	/**
@@ -300,32 +287,7 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 		countDownTimer.start();
 	}	
 
-	private void callSMSGateway(String smsText) {
-		try {
-			// making json object request
-			JSONObject mJRequestobj = new JSONObject();
 
-			mJRequestobj.put("CountryCodeForSMS", "+91");
-			mJRequestobj.put("ContactNumberForSMS", mMobileNumber);
-			mJRequestobj.put("MessageForSMS", smsText);
-			if(!AppService.isNetworkAvailable(mContext))
-			{
-				String message = mContext.getResources().getString(R.string.message_general_no_internet_responseFail);
-				Log.d(TAG, message);				
-				return ;
-
-			}
-			SMSService.callSMSGateway(mContext, mJRequestobj);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Log.d(TAG, e.toString());
-			
-			Toast.makeText(getApplicationContext(),
-					getResources().getString(R.string.message_smsGateway_error),
-					Toast.LENGTH_LONG).show();
-		}		
-	}	
 
 	private boolean validateNo() {
 		boolean flag = true;

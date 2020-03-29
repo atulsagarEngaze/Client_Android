@@ -1,7 +1,5 @@
 package com.redtop.engaze.common.enums;
 
-import com.redtop.engaze.common.Constants;
-
 public enum TrackingType {
     SELF(1),BUDDY(0);
     private final int trackingType;

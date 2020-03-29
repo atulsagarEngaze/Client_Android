@@ -2,8 +2,8 @@
 
 import java.util.Hashtable;
 
-import com.redtop.engaze.entity.ContactOrGroup;
-import com.redtop.engaze.entity.EventDetail;
+import com.redtop.engaze.com.redtop.engaze.entity.ContactOrGroup;
+import com.redtop.engaze.com.redtop.engaze.entity.EventDetail;
 import com.redtop.engaze.interfaces.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.localbroadcastmanager.HomeBroadcastManager;
 import com.redtop.engaze.utils.AppUtility;
