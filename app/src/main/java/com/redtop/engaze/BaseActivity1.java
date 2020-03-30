@@ -21,7 +21,7 @@ public abstract class BaseActivity1 extends AppCompatActivity {
     private ProgressDialog mDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         mAppContext = AppContext.getInstance();
@@ -31,11 +31,11 @@ public abstract class BaseActivity1 extends AppCompatActivity {
             mDialog = new ProgressDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
     }
-    protected void showProgressBar(String message ){
+    public void showProgressBar(String message ){
         showProgressBar("",message);
     }
 
-    protected void showProgressBar(String title, String message ){
+    public void showProgressBar(String title, String message ){
 
         if(!(title==null || title.equals(""))){
             mDialog.setTitle(title);

@@ -25,10 +25,10 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.utility.BitMapService;
 import com.redtop.engaze.common.utility.MaterialColor;
-import com.redtop.engaze.constant.Constants;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.webservice.ContactsService;
+import com.redtop.engaze.webservice.ContactsWS;
 
 public class ContactAndGroupListManager {
 	private static Context mContext;
@@ -157,7 +157,7 @@ public class ContactAndGroupListManager {
 			return ;
 		}
 
-		ContactsService.AssignUserIdToRegisteredUser(mContext, contactsAndgroups, new OnAPICallCompleteListner() {
+		ContactsWS.AssignUserIdToRegisteredUser(mContext, contactsAndgroups, new OnAPICallCompleteListner() {
 			@Override
 			public void apiCallComplete(JSONObject response) {
 				try{

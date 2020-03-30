@@ -10,24 +10,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request.Method;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
-import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.constant.DurationConstants;
-import com.redtop.engaze.constant.Veranstaltung;
+import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.enums.EventState;
+import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.manager.LocationManager;
 
 public class EventTrackerLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, 
 GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -46,7 +43,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 	private Runnable runningEventCheckRunnable = new Runnable() {
 		public void run() {	
 			Log.v(TAG, "Running event check callback. Checking for any running event");	
-			if(!AppUtility.isAnyEventInState(mContext, Veranstaltung.TRACKING_ON, true)){
+			if(!EventService.isAnyEventInState(mContext, EventState.TRACKING_ON, true)){
 				mContext.stopService(new Intent(mContext, EventTrackerLocationService.class));
 			}
 			else{
@@ -57,7 +54,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 	};
 	public synchronized static void peroformSartStop(Context context){
 
-		if(AppUtility.shouldShareLocation(context))
+		if(EventService.shouldShareLocation(context))
 		{
 			isFirstLocationRequiredForNewEvent = true;
 			if(AppService.isNetworkAvailable(context)){
@@ -119,64 +116,6 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 		}
 		runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
 		Log.v(TAG, "Destroy Running event check callback");	
-	}	
-
-	private static void onResponseReturn() {
-		Log.d(TAG, "returned from the server");		
-	}
-
-	public static void updateLocationToServer(final Location location) {
-
-		if(!AppService.isNetworkAvailable(mContext)){
-			Log.d(TAG, "No internet connection. Abortig location update to server.");
-			isUpdateInProgress = false;
-			return;
-		}
-		String tag_json_obj = "json_obj_post_user_location";
-		JSONObject jobj = new JSONObject();
-
-		try {
-			jobj.put("UserId", AppContext.getInstance().loginId);
-			jobj.put("Latitude", "" + location.getLatitude());
-			jobj.put("Longitude", "" + location.getLongitude());	
-			jobj.put("ETA", "1.0");
-			jobj.put("ArrivalStatus", "0");
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.d(TAG, "Failed to update location");
-			isUpdateInProgress = false;
-		}		
-
-		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
-				Constants.MAP_API_URL + Constants.METHOD_USER_LOCATION_UPLOAD,
-				jobj, new Response.Listener<JSONObject>() {
-
-			@Override
-			public void onResponse(JSONObject response) {
-				//Log.d(TAG, "inside : " + response.toString());
-				isUpdateInProgress = false;	
-				lastLocation = location;
-			}
-
-		}, new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "Error: " + error.getMessage());
-				error.printStackTrace();
-				isUpdateInProgress = false;
-				onResponseReturn();
-
-			}
-		}) {
-
-		};
-		jsonObjReq.setRetryPolicy((RetryPolicy) new DefaultRetryPolicy(DurationConstants.DEFAULT_SHORT_TIME_TIMEOUT,
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES, 
-				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-		// Adding request to request queue
-		VolleyAppController.getInstance().addToRequestQueue(jsonObjReq,
-				tag_json_obj);
 	}
 
 	@Override
@@ -186,20 +125,31 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 				if(isFirstLocationRequiredForNewEvent ||  lastLocation.distanceTo(location) > 
 				Integer.parseInt(mContext.getResources().getString(R.string.min_distance_in_meter_location_update))){
-					isUpdateInProgress = true;
 					updateLocationToServer(location);
 					isFirstLocationRequiredForNewEvent = false;
 				}
-
 			}
 			else{
 				updateLocationToServer(location);
-
 			}
-			//lastLocation = location;
 		}
+	}
 
-	}	
+	private void updateLocationToServer(final Location location){
+		isUpdateInProgress = true;
+		LocationManager.updateLocationToServer(mContext, location, new OnAPICallCompleteListner() {
+			@Override
+			public void apiCallComplete(JSONObject response) {
+				isUpdateInProgress = false;
+				lastLocation = location;
+			}
+		}, new OnActionFailedListner() {
+			@Override
+			public void actionFailed(String msg, Action action) {
+				isUpdateInProgress = false;
+			}
+		});
+	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {

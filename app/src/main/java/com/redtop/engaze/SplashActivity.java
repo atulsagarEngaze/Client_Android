@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.constant.Constants;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 

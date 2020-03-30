@@ -7,12 +7,12 @@ import android.util.Log;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.constant.Constants;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.webservice.ProfileService;
+import com.redtop.engaze.webservice.ProfileWS;
 
 
 public class ProfileManager {
@@ -31,7 +31,7 @@ public class ProfileManager {
 
 		}
 
-		ProfileService.saveProfile(context, jRequestobj, new OnAPICallCompleteListner() {
+		ProfileWS.saveProfile(context, jRequestobj, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {

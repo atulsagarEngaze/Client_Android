@@ -11,34 +11,26 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.widget.Toast;
 
-import com.redtop.engaze.BaseActivity;
-import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.AppService;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.constant.Constants;
-import com.redtop.engaze.constant.Veranstaltung;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.enums.EventState;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.entity.EventDetail;
-import com.redtop.engaze.interfaces.OnActionCompleteListner;
-import com.redtop.engaze.interfaces.OnActionFailedListner;
 import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
-import com.redtop.engaze.utils.Constants.Action;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @SuppressLint("SimpleDateFormat")
 public class EventService {
@@ -153,7 +145,7 @@ public class EventService {
 			//if(reminderDate.getTime() > currentDate.getTime()){
 
 			Intent intentAlarm = new Intent(context, EventTrackerAlarmReceiverService.class);				
-			intentAlarm.putExtra("AlarmType", Constants.EVENT_REMINDER);
+			intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_REMINDER);
 			intentAlarm.putExtra("ReminderType", eDetail.getReminderType());
 			intentAlarm.putExtra("EventId", eDetail.getEventId());
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -217,11 +209,11 @@ public class EventService {
 				cal.add(Calendar.MINUTE, Integer.parseInt(ed.getTrackingStartOffset())*-1);
 				Date currentDate =  Calendar.getInstance().getTime();
 				if(cal.getTime().getTime() - currentDate.getTime()<0){
-					ed.setState(Constants.TRACKING_ON);
+					ed.setState(EventState.TRACKING_ON);
 				}
 				else
 				{
-					ed.setState(Constants.EVENT_OPEN);
+					ed.setState(EventState.EVENT_OPEN);
 				}
 			}
 		} catch (ParseException e) {
@@ -291,95 +283,6 @@ public class EventService {
 		}				
 		long diff = (parsedEventEndTime.getTime() - new Date().getTime());
 		return diff;
-	}	
-
-	public static void pokeParticipant(final String userId, String userName, final String eventId, final Context context){
-		try {
-			String lastPokedTime = PreffManager.getPref(userId, context);
-			if(lastPokedTime != null){
-				SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-				Calendar lastCal = Calendar.getInstance();
-				Date lastpokeDate = originalformat.parse(lastPokedTime);				
-				lastCal.setTime(lastpokeDate);		
-				long diff = (Calendar.getInstance().getTimeInMillis()- lastCal.getTimeInMillis())/60000;
-				long pendingfrPoke = Constants.POKE_INTERVAL- diff;
-				if(diff>= Constants.POKE_INTERVAL){				
-					pokeAlert(userId,userName, eventId, context);
-				}else {
-					Toast.makeText(context,								
-							context.getResources().getString(R.string.message_runningEvent_pokeInterval)+ pendingfrPoke + " minutes.",
-							Toast.LENGTH_LONG).show();
-					((BaseActivity)context).actionCancelled(Action.POKEPARTICIPANT);
-				}					
-			}else {
-				pokeAlert(userId,userName, eventId, context);
-			}
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public static void pokeAlert(final String userId, String userName, final String eventId, final Context context) {
-		AlertDialog.Builder adb = null;
-		adb = new AlertDialog.Builder(context);				
-
-		adb.setTitle("Poke");
-		adb.setMessage("Do you want to poke " + userName + "?" +"\n"+ "You can poke again only after 15 minutes.");					
-		adb.setIcon(android.R.drawable.ic_dialog_alert);
-
-		adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {				
-				//Call Poke API				
-				pokeParticipants(userId, eventId, context);
-			} });
-
-		adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {							
-				dialog.dismiss();						
-				((BaseActivity)context).actionCancelled(Action.POKEPARTICIPANT);
-			} });
-		adb.show();
-	}
-
-	private  static void pokeParticipants(final String userId, String eventId, final Context context) {
-		JSONObject jobj = new JSONObject();						
-		String[] userList = {userId};		
-		JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));		
-		EventDetail ed = InternalCaching.getEventFromCache(eventId, context);
-		try {
-			((BaseActivity)context).showProgressBar(context.getString(R.string.message_general_progressDialog));
-			jobj.put("RequestorId", AppContext.getInstance().loginId);
-			jobj.put("RequestorName", AppUtility.getPref(Constants.LOGIN_NAME, context));
-			jobj.put("UserIdsForRemind", mJSONArray);
-			jobj.put("EventName", ed.getName());
-			jobj.put("EventId", ed.getEventId());
-
-			EventManager.pokeParticipants(context,jobj, new OnActionCompleteListner() {
-
-				@Override
-				public void actionComplete(Action action) {
-					SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");						 
-					Date currentdate = Calendar.getInstance().getTime();
-					String currentTimestamp = originalformat.format(currentdate);
-					PreffManager.setPref(userId, currentTimestamp, context);
-					((BaseActivity)context).actionComplete(Action.POKEPARTICIPANT);
-				}
-			}, new OnActionFailedListner() {
-
-				@Override
-				public void actionFailed(String msg, Action action) {					
-					action = Action.POKEPARTICIPANT;
-					((BaseActivity)context).actionFailed(msg, action);
-				}
-			});
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			((BaseActivity)context).actionFailed(null, Action.POKEPARTICIPANT);
-		}
 	}
 
 	public static void removeLocationServiceCheckAlarm(Context context){
@@ -421,7 +324,7 @@ public class EventService {
 		} 
 	}
 
-	public static boolean IsEventTrackBuddyEventForCurrentuser(EventDetail mEvent) {
+	public static boolean isEventTrackBuddyEventForCurrentuser(EventDetail mEvent) {
 		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
 		boolean isCurrentUserInitiator = EventParticipant.isCurrentUserInitiator(mEvent.getInitiatorId());
 
@@ -432,7 +335,7 @@ public class EventService {
 		return false;
 	}
 
-	public static boolean IsEventShareMyLocationEventForCurrentuser(EventDetail mEvent) {
+	public static boolean isEventShareMyLocationEventForCurrentuser(EventDetail mEvent) {
 		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
 		boolean isCurrentUserInitiator = EventParticipant.isCurrentUserInitiator(mEvent.getInitiatorId());
 
@@ -441,5 +344,115 @@ public class EventService {
 			return true;
 		}
 		return false;
+	}
+
+	public static Boolean isAnyEventInState(Context context, String state, Boolean checkOnlyWhenEventAccepted){
+		List<EventDetail> events = InternalCaching.getEventListFromCache(context);
+		if(events==null){
+			return false;
+		}
+		for(EventDetail ed : events){
+			if(ed.getState().equals(state)){
+				if(checkOnlyWhenEventAccepted)
+				{
+
+					if(ed.getCurrentParticipant().getAcceptanceStatus()== AcceptanceStatus.ACCEPTED
+					){
+						return true;
+					}
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+
+	}
+
+	public static Boolean shouldShareLocation(Context context){
+		List<EventDetail> events = InternalCaching.getEventListFromCache(context);
+		List<EventDetail> trackingEvents = InternalCaching. getTrackEventListFromCache(context);
+		if(events==null){
+			return false;
+		}
+		for(EventDetail ed : events){
+			if(ed.getCurrentParticipant().getAcceptanceStatus()==AcceptanceStatus.ACCEPTED
+					&& ed.getState().equals(EventState.TRACKING_ON)
+			){
+				return true;
+			}
+		}
+		if(trackingEvents==null){
+			return false;
+		}
+		for(EventDetail ed : trackingEvents){
+			if(isEventShareMyLocationEventForCurrentuser(ed)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static List<EventDetail> parseEventDetailList(JSONArray jsonStr, Context context) {
+		JSONArray eventDetailJsonArray = jsonStr;
+		List<EventDetail> eventDetailList = new ArrayList<EventDetail>();
+		String loginUser = AppContext.getInstance().loginId;
+		try {
+			for (int i = 0; i < eventDetailJsonArray.length(); i++) {
+				JSONObject c = eventDetailJsonArray.getJSONObject(i);
+				EventDetail dt = new EventDetail(
+						ParticipantService.parseMemberList(context, c.getJSONArray("UserList")),
+						AppService.convertNullToEmptyString(c.getString("EventId")),
+						AppService.convertNullToEmptyString(c.getString("Name")),
+						AppService.convertNullToEmptyString(c.getString("EventTypeId")),
+						AppService.convertNullToEmptyString(c.getString("Description")),
+						AppService.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("StartTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
+						AppService.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("EndTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
+						AppService.convertNullToEmptyString(c.getString("Duration")),
+						AppService.convertNullToEmptyString(c.getString("InitiatorId")),
+						AppService.convertNullToEmptyString(c.getString("InitiatorName")),
+						AppService.convertNullToEmptyString(c.getString("EventStateId")),
+						AppService.convertNullToEmptyString(c.getString("TrackingStateId")),
+						c.getString("DestinationLatitude"),
+						c.getString("DestinationLongitude"),
+						c.getString("DestinationName"),
+						c.getString("DestinationAddress"),
+						c.getString("IsTrackingRequired"),
+						c.getString("ReminderOffset"),
+						//AppUtility.checkNull(c.getString("IsTrackingRequired")),
+						//AppUtility.checkNull(c.getString("ReminderOffset")),
+						//c.getString("ReminderType"),
+						"notification",
+						c.getString("TrackingStartOffset"),
+						c.getString("IsQuickEvent"));
+				dt.setCurrentParticipant(dt.getMember(loginUser));
+				dt.setIsRecurrence(c.getString("IsRecurring"));
+				if(c.getString("IsRecurring").equals("true")){
+					dt.setNumberOfOccurencesLeft(c.getString("RecurrenceRemaining"));
+					dt.setNumberOfOccurences(c.getString("RecurrenceCount"));
+					dt.setFrequencyOfOcuurence(c.getString("RecurrenceFrequency"));
+					dt.setRecurrenceType(c.getString("RecurrenceFrequencyTypeId"));
+
+					if(c.getString("RecurrenceFrequencyTypeId").equals("2")){
+
+						ArrayList<String>strRecurrencedays = new ArrayList<String>(Arrays.asList(c.getString("RecurrenceDaysOfWeek")
+								.split(",")));
+						ArrayList<Integer>recurrencedays = new ArrayList<Integer>();
+						for (String strDay : strRecurrencedays){
+							recurrencedays.add(Integer.parseInt(strDay));
+						}
+						dt.setRecurrenceDays(recurrencedays);
+					}
+					dt.setRecurrenceActualStartTime(DateUtil.convertUtcToLocalDateTime(c.getString("StartTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
+				}
+
+				eventDetailList.add(dt);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return eventDetailList;
 	}
 }

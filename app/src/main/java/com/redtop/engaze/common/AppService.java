@@ -56,10 +56,7 @@ public class AppService {
 	}
 
 
-
-
-
-	public static String checkNull(String str) {
+	public static String convertNullToEmptyString(String str) {
 		if (str == null) {
 			str = "";
 		}
@@ -230,54 +227,6 @@ public class AppService {
 			return resultantlines.substring(0,resultantlines.length()-3) + "...";
 		}
 	}
-	*//*public static Boolean shouldShareLocation(Context context){
-		List<EventDetail> events = InternalCaching.getEventListFromCache(context);
-		List<EventDetail> trackingEvents = InternalCaching. getTrackEventListFromCache(context);
-		if(events==null){
-			return false;
-		}
-		for(EventDetail ed : events){
-			if(ed.getCurrentMember().getAcceptanceStatus()==AcceptanceStatus.ACCEPTED 
-					&& ed.getState().equals(Constants.TRACKING_ON)
-					){
-				return true;
-			}
-		}
-		if(trackingEvents==null){
-			return false;
-		}
-		for(EventDetail ed : trackingEvents){
-			if(AppUtility.IsEventShareMyLocationEventForCurrentuser(ed, context)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static Boolean isAnyEventInState(Context context, String state, Boolean checkOnlyWhenEventAccepted){
-		List<EventDetail> events = InternalCaching.getEventListFromCache(context);
-		if(events==null){
-			return false;
-		}
-		for(EventDetail ed : events){
-			if(ed.getState().equals(state)){
-				if(checkOnlyWhenEventAccepted)
-				{
-
-					if(ed.getCurrentMember().getAcceptanceStatus()==AcceptanceStatus.ACCEPTED 
-							){
-						return true;
-					}
-				}
-				else
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-
-	}	
 
 
 
@@ -401,12 +350,7 @@ public class AppService {
 		return (rad * 180.0 / Math.PI);
 	}*/
 /*
-	public static Boolean isNotifyUser( EventDetail event){
-		if(event!=null && event.getCurrentMember().getAcceptanceStatus()== AcceptanceStatus.DECLINED){
-			return false;
-		}
-		return true;		
-	}
+
 
 
 	public static void setBackgrounOfRecycleViewItem( CardView view, int colorId){

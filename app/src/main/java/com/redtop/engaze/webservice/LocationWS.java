@@ -13,21 +13,18 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 
 import org.json.JSONObject;
 
-public class ProfileService extends BaseWebService {
+public class LocationWS extends BaseWebService {
 
-    private final static String TAG = SMSService.class.getName();
-
-    public static void saveProfile(Context context, JSONObject jRequestobj,
-                                   final OnAPICallCompleteListner listnerOnSuccess,
-                                   final OnAPICallCompleteListner listnerOnFailure) {
-        try
-        {
-            String apiUrl = MAP_API_URL + Routes.ACCOUNT_REGISTER;
+    public static void updateLocation(Context context,JSONObject jRequestobj,
+                                      final OnAPICallCompleteListner listnerOnSuccess,
+                                      final OnAPICallCompleteListner listnerOnFailure) {
+        try {
+            String apiUrl = MAP_API_URL + Routes.USER_LOCATION_UPLOAD;
 
             Log.d(TAG, "Calling URL:" + apiUrl);
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                    apiUrl , jRequestobj, new Response.Listener<JSONObject>() {
+                    apiUrl, jRequestobj, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
@@ -41,8 +38,7 @@ public class ProfileService extends BaseWebService {
                     Log.d(TAG, "Volley Error: " + error.getMessage());
                     listnerOnFailure.apiCallComplete(null);
                 }
-            })
-            {
+            }) {
                 @Override
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
@@ -53,13 +49,11 @@ public class ProfileService extends BaseWebService {
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             // Adding request to request queue
             addToRequestQueue(jsonObjReq, context);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
             listnerOnFailure.apiCallComplete(null);
         }
 
     }
-
 }

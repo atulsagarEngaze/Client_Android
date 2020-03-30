@@ -1,4 +1,4 @@
-package com.redtop.engaze.domain;
+package com.redtop.engaze.Interface;
 
 import java.io.Serializable;
 

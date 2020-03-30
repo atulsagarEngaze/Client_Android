@@ -1,10 +1,18 @@
 package com.redtop.engaze.domain;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.redtop.engaze.Interface.DataModel;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class EventDetail implements DataModel {
 
@@ -403,7 +411,7 @@ public class EventDetail implements DataModel {
 				}
 			}
 		}
-		return member;		
+		return member;
 	}
 
 	@SuppressWarnings("null")
@@ -417,9 +425,9 @@ public class EventDetail implements DataModel {
 				if(mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString()))	{
 					memStatus.add(mem);
 				}
-			}		
+			}
 		}
-		return memStatus;	
+		return memStatus;
 	}
 
 	@SuppressWarnings("null")
@@ -441,5 +449,6 @@ public class EventDetail implements DataModel {
 		else{
 			return 0;
 		}
-	}	
+	}
+
 }

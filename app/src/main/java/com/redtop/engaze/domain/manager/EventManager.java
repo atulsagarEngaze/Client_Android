@@ -17,7 +17,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
+import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
+import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.AppService;
 import com.redtop.engaze.common.ContactAndGroupListManager;
@@ -25,13 +29,20 @@ import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.constant.Constants;
-import com.redtop.engaze.constant.Veranstaltung;
+import com.redtop.engaze.common.enums.EventState;
+import com.redtop.engaze.common.constant.IntentConstants;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
+import com.redtop.engaze.domain.EventPlace;
+import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.TrackLocationMember;
+import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
+import com.redtop.engaze.service.EventTrackerLocationService;
+import com.redtop.engaze.webservice.EventWS;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -47,7 +58,7 @@ public class EventManager {
 		if(list!=null){			
 			for(EventDetail e : list){
 				if(e.getCurrentParticipant().getAcceptanceStatus()== AcceptanceStatus.ACCEPTED
-						&& e.getState().equals(Constants.TRACKING_ON)){
+						&& e.getState().equals(EventState.TRACKING_ON)){
 					runningList.add(e);
 				}
 			}
@@ -85,7 +96,7 @@ public class EventManager {
 			return;
 		}
 
-		event.setState(Constants.TRACKING_ON);
+		event.setState(EventState.TRACKING_ON);
 		InternalCaching.saveEventToCache(event, context);
 		EventTrackerLocationService.peroformSartStop(context);
 
@@ -100,7 +111,7 @@ public class EventManager {
 			return;
 		}
 
-		event.setState(Constants.TRACKING_ON);
+		event.setState(EventState.TRACKING_ON);
 		InternalCaching.saveEventToCache(event, context);
 		EventTrackerLocationService.peroformSartStop(context);
 
@@ -114,14 +125,14 @@ public class EventManager {
 			Log.d(TAG, message );
 			return;
 		}	
-		event.setState(Constants.EVENT_END);	
+		event.setState(EventState.EVENT_END);
 		EventNotificationManager.cancelAllNotifications(context, event);
 		EventTrackerLocationService.peroformSartStop(context);
 		InternalCaching.removeEventFromCache(eventid, context);
 		checkForReccurrence(context, event);		
 	}
 
-	public static void saveEvent(final Context context, final JSONObject mEventJobj,final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
+	public static void saveEvent(final Context context, final JSONObject mEventJobj, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		if(!AppService.isNetworkAvailable(context))
 		{
@@ -130,7 +141,7 @@ public class EventManager {
 			listnerOnFailure.actionFailed(message, Action.SAVEEVENT);
 			return ;
 		}
-		APICaller.CreateEvent(context, mEventJobj, new OnAPICallCompleteListner() {
+		EventWS.CreateEvent(context, mEventJobj, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {
@@ -141,11 +152,11 @@ public class EventManager {
 
 					if (Status == "true")
 					{
-						EventDetail eventDetailData =  new JsonParser().parseEventDetailList(response.getJSONArray("ListOfEvents"), context).get(0);						
+						EventDetail eventDetailData =  EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"), context) .get(0);
 						int eventTypeId = Integer.parseInt(eventDetailData.getEventTypeId());
 						EventService.setEndEventAlarm(context, eventDetailData);
 						if(isMeetNow){
-							eventDetailData.setState(Constants.TRACKING_ON);
+							eventDetailData.setState(EventState.TRACKING_ON);
 							eventDetailData.isQuickEvent="true";
 						}
 						else if(eventTypeId==100 || eventTypeId==200){
@@ -159,7 +170,7 @@ public class EventManager {
 
 							}
 							EventService.setEventReminder(context, eventDetailData);
-							eventDetailData.setState(Constants.EVENT_OPEN);
+							eventDetailData.setState(EventState.EVENT_OPEN);
 							eventDetailData.isQuickEvent="false";
 						}					
 						EventNotificationManager.cancelNotification(context, eventDetailData);
@@ -190,7 +201,7 @@ public class EventManager {
 	public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final Context context, final String eventid,  final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		String message ="";
-		if(!AppUtility.isNetworkAvailable(context))
+		if(!AppService.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -207,7 +218,7 @@ public class EventManager {
 		}
 
 
-		APICaller.saveUserResponse(userAcceptanceResponse,context, eventid, new OnAPICallCompleteListner() {
+		EventWS.saveUserResponse(userAcceptanceResponse,context, eventid, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {
@@ -220,15 +231,15 @@ public class EventManager {
 					{
 
 						if(userAcceptanceResponse == AcceptanceStatus.ACCEPTED){
-							event.getCurrentMember().
-							setAcceptanceStatus(Constants.AcceptanceStatus.ACCEPTED);
+							event.getCurrentParticipant().
+							setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
 							SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 							Date startDate = originalformat.parse(event.getStartTime());
 							Date currentDate =  Calendar.getInstance().getTime();
 							if(currentDate.getTime() >= startDate.getTime())
 							{ //quick event
-								event.setState(Constants.TRACKING_ON);
+								event.setState(EventState.TRACKING_ON);
 							}
 							else
 							{
@@ -279,7 +290,7 @@ public class EventManager {
 			listnerOnFailure.actionFailed(message, Action.GETEVENTDATAFROMSERVER);
 			return ;
 		}
-		APICaller.getEventDetail(context, eventid, new OnAPICallCompleteListner() {
+		EventWS.getEventDetail(context, eventid, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {
@@ -289,10 +300,10 @@ public class EventManager {
 					String Status = (String)response.getString("Status");
 					if (Status == "true")
 					{				
-						List<EventDetail> eventDetailList =  new JsonParser().parseEventDetailList(response.getJSONArray("ListOfEvents"), context);	
+						List<EventDetail> eventDetailList =  EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"), context);
 						EventDetail event = eventDetailList.get(0);
-						if(EventService.IsEventShareMyLocationEventForCurrentuser(event)){
-							event.setState(Constants.TRACKING_ON);
+						if(EventService.isEventShareMyLocationEventForCurrentuser(event)){
+							event.setState(EventState.TRACKING_ON);
 						}
 						InternalCaching.saveEventToCache(event, context);
 						EventService.setEndEventAlarm(context,event);
@@ -345,7 +356,7 @@ public class EventManager {
 		
 		final String eventid = event.getEventId();
 
-		APICaller.leaveEvent(context, eventid, new OnAPICallCompleteListner() {
+		EventWS.leaveEvent(context, eventid, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {
@@ -406,7 +417,7 @@ public class EventManager {
 		}
 		final String eventid = event.getEventId();
 
-		APICaller.endEvent(context, event.getEventId(), new OnAPICallCompleteListner() {
+		EventWS.endEvent(context, event.getEventId(), new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {	
@@ -471,7 +482,7 @@ public class EventManager {
 		}
 		final String eventid =  event.getEventId();
 
-		APICaller.endEvent(context, event.getEventId(), new OnAPICallCompleteListner() {
+		EventWS.endEvent(context, event.getEventId(), new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {	
@@ -484,7 +495,7 @@ public class EventManager {
 						EventService.RemoveEndEventAlarm(context, eventid);
 						InternalCaching.removeEventFromCache(eventid, context);	
 						//LocalBroadCast
-						Intent intent = new Intent(Constants.EVENT_DELETE_BY_INITIATOR);
+						Intent intent = new Intent(IntentConstants.EVENT_DELETE_BY_INITIATOR);
 						intent.putExtra("eventId", event.getEventId());
 						LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 						listnerOnSuccess.actionComplete(Action.DELETEEVENT);
@@ -510,54 +521,9 @@ public class EventManager {
 		});
 	}
 
-	public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final Context context, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
-		String message ="";
-		if(!AppService.isNetworkAvailable(context))
-		{
-			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
-			Log.d(TAG, message);
-			listenerOnFailure.actionFailed(message, Action.ADDREMOVEPARTICIPANTS);
-			return ;
-		}
 
-		APICaller.addRemoveParticipants(addRemoveContactsJSON, context, new OnAPICallCompleteListner() {
 
-			@Override
-			public void apiCallComplete(JSONObject response) {	
-				Log.d(TAG, "EventResponse:" + response.toString());				
-				try{
-
-					String Status = (String)response.getString("Status");
-					if (Status == "true")
-					{
-						List<EventDetail> eventDetailList =  new JsonParser().parseEventDetailList(response.getJSONArray("ListOfEvents"), context);	
-						EventDetail event = eventDetailList.get(0);
-						InternalCaching.saveEventToCache(event, context);
-						listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
-					}
-					else
-					{						
-						listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);									
-					}
-				}
-				catch(Exception ex){
-					Log.d(TAG, ex.toString());
-					ex.printStackTrace();
-					listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);			
-				}
-
-			}
-		}, new OnAPICallCompleteListner() {
-
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);				
-			}
-		});
-
-	}
-
-	public static void changeDestination(final EventPlace destinationPlace, final Context context,final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+	public static void changeDestination(final EventPlace destinationPlace, final Context context, final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 		String message ="";
 		if(!AppService.isNetworkAvailable(context))
 		{
@@ -575,7 +541,7 @@ public class EventManager {
 		}
 		final String eventId = event.getEventId();
 
-		APICaller.changeDestination(destinationPlace, context, eventId, new OnAPICallCompleteListner() {
+		EventWS.changeDestination(destinationPlace, context, eventId, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {								
@@ -628,7 +594,7 @@ public class EventManager {
 		}
 		final String eventid = event.getEventId();
 
-		APICaller.extendEventEndTime(i,context, eventid, new OnAPICallCompleteListner() {
+		EventWS.extendEventEndTime(i,context, eventid, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {								
@@ -689,7 +655,7 @@ public class EventManager {
 				}
 			}
 			InternalCaching.saveEventToCache(event, context);
-			if(AppUtility.isNotifyUser(event) && EventParticipant.isCurrentUserInitiator(event.getInitiatorId())){
+			if(ParticipantService.isNotifyUser(event) && EventParticipant.isCurrentUserInitiator(event.getInitiatorId())){
 				EventNotificationManager.showEventResponseNotification(context, event,userName, eventAcceptanceStateId );
 			}
 			listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
@@ -720,7 +686,7 @@ public class EventManager {
 				}
 			}
 			InternalCaching.saveEventToCache(event, context);
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showEventLeftNotification(context, event,userName );
 			}
 			listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTLEFT);
@@ -744,11 +710,11 @@ public class EventManager {
 			return ;
 		}
 		try{
-			event.setState(Constants.EVENT_END);			
+			event.setState(EventState.EVENT_END);
 			// Remove Event End Alarm and the entire event from cache
 			EventService.RemoveEndEventAlarm(context, eventid);
 			EventNotificationManager.cancelAllNotifications(context, event);
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showEventEndNotification(context, event);
 			}
 			EventTrackerLocationService.peroformSartStop(context);			
@@ -773,7 +739,7 @@ public class EventManager {
 			return ;
 		}
 		try{
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showEventExtendedNotification(context, event);	
 			}
 			//Remove old End Event Alarm and set new one
@@ -800,7 +766,7 @@ public class EventManager {
 			return ;
 		}
 		try{
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showParticipantsUpdatedNotification(context, event);
 			}
 			listnerOnSuccess.actionComplete(Action.PARTICIPANTSUPDATEDBYINITIATOR);
@@ -823,7 +789,7 @@ public class EventManager {
 		}
 		try{
 			EventNotificationManager.cancelAllNotifications(context, event);
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showEventDeleteNotification(context, event);
 			}
 			EventService.RemoveEndEventAlarm(context, eventid);
@@ -848,7 +814,7 @@ public class EventManager {
 			return ;
 		}
 		try{
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showDestinationChangedNotification(context, event);
 			}
 			listnerOnSuccess.actionComplete(Action.EVENTDESTINATIONCHANGEDBYINITIATOR);
@@ -871,7 +837,7 @@ public class EventManager {
 		}
 		try{
 			EventNotificationManager.cancelNotification(context, event);
-			if(AppUtility.isNotifyUser(event)){
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.showRemovedFromEventNotification(context, event);
 			}
 			EventService.RemoveEndEventAlarm(context, eventid);
@@ -899,7 +865,7 @@ public class EventManager {
 			return ;
 		}
 
-		APICaller.RefreshEventListFromServer(context, new OnAPICallCompleteListner() {
+		EventWS.RefreshEventListFromServer(context, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {
@@ -909,7 +875,7 @@ public class EventManager {
 					Log.d(TAG, "EventResponse status:" + Status);
 					if (Status == "true")
 					{
-						List<EventDetail> eventDetailList =  new JsonParser().parseEventDetailList(response.getJSONArray("ListOfEvents"), context);
+						List<EventDetail> eventDetailList =  EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"), context);
 						EventService.RemovePastEvents(context, eventDetailList);
 						EventService.upDateEventStatus(eventDetailList);
 						InternalCaching.saveEventListToCache(eventDetailList, context);	
@@ -955,54 +921,6 @@ public class EventManager {
 			InternalCaching.saveEventToCache(event, context);
 		}
 
-	}
-
-	public static void pokeParticipants(final Context context, JSONObject pokeParticipantsJSON,
-			final OnActionCompleteListner onActionCompleteListner,
-			final OnActionFailedListner onActionFailedListner) {
-		String message ="";
-		if(!AppService.isNetworkAvailable(context))
-		{
-			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
-			Log.d(TAG, message);
-			onActionFailedListner.actionFailed(message, Action.POKEALL);
-			return ;
-		}
-
-		APICaller.pokeParticipants(context, pokeParticipantsJSON, new OnAPICallCompleteListner() {
-
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				Log.d(TAG, "PokeAllResponse:" + response.toString());
-
-				try {								
-					String Status = (String)response.getString("Status");
-
-					if (Status == "true")
-					{						
-						onActionCompleteListner.actionComplete(Action.POKEALL);
-					}
-					else{
-						onActionFailedListner.actionFailed(null, Action.POKEALL);						
-					}
-
-				} catch (Exception ex) {
-					Log.d(TAG, ex.toString());
-					ex.printStackTrace();
-					onActionFailedListner.actionFailed(null, Action.POKEALL);	
-				}		
-
-			}
-		}, new OnAPICallCompleteListner() {
-
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				if(response!=null){
-					Log.d(TAG, "EventResponse:" + response.toString());
-				}
-				onActionFailedListner.actionFailed(null, Action.POKEALL);				
-			}
-		});
 	}
 
 	private static void checkForReccurrence(final Context context, EventDetail event){

@@ -33,7 +33,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
-import com.redtop.engaze.constant.Constants;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.service.FirstTimeInitializationService;
@@ -64,7 +64,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext.activityContext = this;
+		mContext= this;
 		setContentView(R.layout.activity_profile);
 		startInitializationService();		
 		TextView eulaTextView = (TextView)findViewById(R.id.linktermsandservice);
@@ -150,7 +150,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 		Save_Profile.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(mContext.isInternetEnabled){
+				if(mAppContext.isInternetEnabled){
 					hideKeyboard(v);
 					creatJsonAndStartService();
 				}
@@ -158,7 +158,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 		});
 	}
 	private void startInitializationService() {
-		mContext.isFirstTimeLoading = true;
+		mAppContext.isFirstTimeLoading = true;
 		Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 		startService(registeredContactsRefreshServiceIntent);		
 	}
@@ -264,7 +264,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 					if(mProgress.isShowing()){
 						mProgress.hide();
 					}
-					mContext.isFirstTimeLoading = true;
+					mAppContext.isFirstTimeLoading = true;
 					Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 					startService(registeredContactsRefreshServiceIntent);				
 					

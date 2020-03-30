@@ -34,7 +34,7 @@ import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.common.AppService;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.manager.SMSManager;
-import com.redtop.engaze.constant.Constants;
+import com.redtop.engaze.common.constant.Constants;
 
 public class MobileNumberVerificationActivity extends BaseActivity1 {
 	private EditText mMobileNumberEdittext;

@@ -7,8 +7,8 @@ import android.widget.Toast;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.AppService;
-import com.redtop.engaze.constant.Constants;
-import com.redtop.engaze.webservice.SMSService;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.webservice.SmsWS;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class SMSManager {
                 return ;
 
             }
-            SMSService.callSMSGateway(context, mJRequestobj);
+            SmsWS.callSMSGateway(context, mJRequestobj);
 
         } catch (JSONException e) {
             e.printStackTrace();

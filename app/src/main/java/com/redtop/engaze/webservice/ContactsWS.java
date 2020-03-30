@@ -12,8 +12,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.PreffManager;
-import com.redtop.engaze.constant.DurationConstants;
+import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.domain.ContactOrGroup;
 
 import org.json.JSONArray;
@@ -22,9 +21,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ContactsService extends BaseWebService {
+public class ContactsWS extends BaseWebService {
 
-    private final static String TAG = ContactsService.class.getName();
+    private final static String TAG = ContactsWS.class.getName();
     public static void AssignUserIdToRegisteredUser(Context context, final HashMap<String, ContactOrGroup> contactsAndgroups,
                                                     final OnAPICallCompleteListner listnerOnSuccess,
                                                     final OnAPICallCompleteListner listnerOnFailure){

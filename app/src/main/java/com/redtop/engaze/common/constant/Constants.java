@@ -1,4 +1,4 @@
-package com.redtop.engaze.constant;
+package com.redtop.engaze.common.constant;
 
 public class Constants {	
 	public static boolean DEBUG = false;
@@ -65,10 +65,7 @@ public class Constants {
 	public static final int EDIT_ACTIVITY_LOCATION_TEXT_LENGTH = 34;
 	public static final int MEMBER_NAME_TEXT_LENGTH = 20;
 	public static final int ZOOM_VALUE= 16;
-	public static final String TRACKING_ON = "1";
-	public static final String TRACKING_OFF = "2";
-	public static final String EVENT_END = "3";	
-	public static final String EVENT_OPEN = "4";
+
 	public static final String EMAIL_ACCOUNT = "emailAccount";
 	public static final float DESTINATION_RADIUS = 30;
 	public static final long POKE_INTERVAL = 15;

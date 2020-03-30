@@ -1,4 +1,4 @@
-package com.redtop.engaze.constant;
+package com.redtop.engaze.common.constant;
 
 public class DurationConstants {
 

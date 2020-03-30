@@ -1,4 +1,4 @@
-package com.redtop.engaze.constant;
+package com.redtop.engaze.common.constant;
 
 public class Veranstaltung {
     public static final String EVENT_RECEIVED ="eventReceived";

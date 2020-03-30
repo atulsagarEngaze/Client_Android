@@ -5,6 +5,7 @@ package com.redtop.engaze.domain;
 
 import android.content.Context;
 
+import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.ReminderFrom;
@@ -257,4 +258,5 @@ public class EventParticipant implements DataModel {
         }
         return false;
     }
+
 }

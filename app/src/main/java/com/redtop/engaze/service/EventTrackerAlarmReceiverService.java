@@ -1,8 +1,8 @@
 package com.redtop.engaze.service;
 
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.constant.Constants;
-import com.redtop.engaze.constant.Veranstaltung;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;

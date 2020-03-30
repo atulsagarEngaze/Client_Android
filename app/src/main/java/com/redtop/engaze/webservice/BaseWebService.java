@@ -2,10 +2,19 @@ package com.redtop.engaze.webservice;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+
+import org.json.JSONObject;
 
 public abstract class BaseWebService {
 
@@ -24,6 +33,56 @@ public abstract class BaseWebService {
         }
 
         return mRequestQueue;
+    }
+
+    protected static void callAPI(Context context, JSONObject jRequestobj, String url, int method,
+                                  final OnAPICallCompleteListner listnerOnSuccess,
+                                  final OnAPICallCompleteListner listnerOnFailure) {
+
+        Log.d(TAG, "Calling URL:" + url);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                url, jRequestobj, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                listnerOnSuccess.apiCallComplete(response);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Volley Error: " + error.getMessage());
+                listnerOnFailure.apiCallComplete(null);
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+        jsonObjReq.setRetryPolicy((RetryPolicy) new DefaultRetryPolicy(DEFAULT_MEDIUM_TIME_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Adding request to request queue
+        addToRequestQueue(jsonObjReq, context);
+
+    }
+
+    protected static void getData(Context context, JSONObject jRequestobj, String url,
+                                  final OnAPICallCompleteListner listnerOnSuccess,
+                                  final OnAPICallCompleteListner listnerOnFailure) {
+
+        callAPI(context, jRequestobj, url, Request.Method.GET, listnerOnSuccess, listnerOnFailure);
+
+    }
+
+
+    protected static void postData(Context context, JSONObject jRequestobj, String url,
+                                   final OnAPICallCompleteListner listnerOnSuccess,
+                                   final OnAPICallCompleteListner listnerOnFailure) {
+        callAPI(context, jRequestobj, url, Request.Method.POST, listnerOnSuccess, listnerOnFailure);
     }
 
     protected static <T> void addToRequestQueue(Request<T> req, String tag, Context context) {

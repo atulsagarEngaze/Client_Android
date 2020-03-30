@@ -27,13 +27,14 @@ import com.google.android.gms.common.internal.Constants;
 import com.redtop.engaze.EventsActivity;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.UserMessageHandler;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.constant.Veranstaltung;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.EventManager;
@@ -176,12 +177,12 @@ public class EventNotificationManager {
                     new NotificationCompat.Builder(context);
             String title = "";
             String[] events = new String[2];
-            if (EventService.IsEventTrackBuddyEventForCurrentuser(event)) {
+            if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
                 title = "Tracking request";
                 events[0] = new String(event.GetInitiatorName() + " wants to share his/her location");
                 events[1] = new String(parsedDate);
 
-            } else if (EventService.IsEventShareMyLocationEventForCurrentuser(event)) {
+            } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
                 title = "Tracking request";
                 events[0] = new String(event.GetInitiatorName() + " wants to track your location");
                 events[1] = new String(parsedDate);
@@ -264,11 +265,11 @@ public class EventNotificationManager {
     public static void showEventExtendedNotification(Context context, EventDetail eventDetail) {
         String notificationMessage = "";
         String title = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
             title = "Tracking extended";
             notificationMessage = eventDetail.GetInitiatorName() + " has extended sharing his/her location";
 
-        } else if (EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             title = "Tracking extended";
             notificationMessage = eventDetail.GetInitiatorName() + " has extended tracking your location";
         } else {
@@ -280,8 +281,8 @@ public class EventNotificationManager {
     public static void showDestinationChangedNotification(Context context, EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)
-                || EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
+                || EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking destination changed";
             notificationMessage = eventDetail.GetInitiatorName() + " has changed the destination ";
         } else {
@@ -294,8 +295,8 @@ public class EventNotificationManager {
     public static void showParticipantsUpdatedNotification(Context context, EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)
-                || EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
+                || EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking participants updated";
             notificationMessage = eventDetail.GetInitiatorName() + " has added/removed participant(s) ";
         } else {
@@ -307,10 +308,10 @@ public class EventNotificationManager {
     public static void showRemovedFromEventNotification(Context context, EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
             notificationTitle = "Removed from Tracking";
             notificationMessage = eventDetail.GetInitiatorName() + " has stopped sharing location with you";
-        } else if (EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationTitle = "Removed from Tracking";
             notificationMessage = eventDetail.GetInitiatorName() + " has stopped tracking your location";
         } else {
@@ -329,10 +330,10 @@ public class EventNotificationManager {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking ended";
             notificationMessage = eventDetail.GetInitiatorName() + " has stopped sharing location";
-        } else if (EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking ended";
             notificationMessage = eventDetail.GetInitiatorName() + " has stopped tracking your location";
         } else {
@@ -362,9 +363,9 @@ public class EventNotificationManager {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking request";
-        } else if (EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationTitle = "Tracking request";
         } else {
             notificationTitle = "";
@@ -388,9 +389,9 @@ public class EventNotificationManager {
     public static void showEventLeftNotification(Context context, EventDetail eventDetail, String userName) {
         String notificationTitle = "Tracking stopped";
         String notificationMessage = "";
-        if (EventService.IsEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
             notificationMessage = userName + " has stopped sharing location";
-        } else if (EventService.IsEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
             notificationMessage = userName + " has stopped viewing your location";
         } else {
             notificationTitle = "";
