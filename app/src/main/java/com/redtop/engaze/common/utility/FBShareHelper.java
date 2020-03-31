@@ -1,4 +1,4 @@
-package com.redtop.engaze.utils;
+package com.redtop.engaze.common.utility;
 
 import android.content.Context;
 import android.net.Uri;
@@ -16,16 +16,17 @@ import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.redtop.engaze.BaseActivity;
+import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.R;
 
 public class FBShareHelper {
 
-	private BaseActivity mActivity;
+	private BaseActivity1 mActivity;
 	private  CallbackManager mCallbackManager;
 	private ShareDialog mShareDialog;
 	
 	public FBShareHelper(Context context){
-		mActivity = (BaseActivity)context;
+		mActivity = (BaseActivity1)context;
 	}
 	
 	public CallbackManager getFBCallbackManager(){

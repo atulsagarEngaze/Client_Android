@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,11 +23,9 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.redtop.engaze.app.VolleyAppController;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.EngazeLogReader;
+import com.redtop.engaze.app.AppContext;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 public class FeedbackActivity extends BaseActivity1 {
@@ -119,7 +115,7 @@ public class FeedbackActivity extends BaseActivity1 {
 		int id = item.getItemId();
 		switch (id) {
 		case R.id.action_feedback:
-			AppUtility.hideKeyboard(mFeedbacktext, mContext);
+			hideKeyboard(mFeedbacktext);
 			if (!mFeedbacktext.getText().toString().isEmpty()){	
 				SaveFeedback();
 			}
@@ -176,7 +172,7 @@ public class FeedbackActivity extends BaseActivity1 {
 	private void createFeedbackJson() {
 		jobj = new JSONObject();								
 		try {
-			jobj.put("RequestorId", AppUtility.getPref(Constants.LOGIN_ID, mContext));
+			jobj.put("RequestorId", AppContext.getInstance().loginId);
 
 			if(logcat ){
 				jobj.put("Feedback", EngazeLogReader.getLog());

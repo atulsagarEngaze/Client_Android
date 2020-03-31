@@ -16,353 +16,344 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.entity.ContactOrGroup;
-import com.redtop.engaze.entity.EventMember;
-import com.redtop.engaze.entity.EventPlace;
-import com.redtop.engaze.interfaces.OnActionCompleteListner;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
-import com.redtop.engaze.utils.Constants.Action;
-import com.redtop.engaze.utils.ContactAndGroupListManager;
-import com.redtop.engaze.utils.DateUtil;
-import com.redtop.engaze.utils.EventManager;
-import com.redtop.engaze.utils.InternalCaching;
-import com.redtop.engaze.utils.JsonSerializer;
+import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.common.ContactAndGroupListManager;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.domain.ContactOrGroup;
+import com.redtop.engaze.domain.EventParticipant;
+import com.redtop.engaze.domain.EventPlace;
+import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.domain.service.ParticipantService;
 
-@SuppressLint({ "ResourceAsColor", "SimpleDateFormat" })
-public class RunningEventActions  extends RunningEventActivityResults  {
+import androidx.appcompat.app.AlertDialog;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {		
-		super.onCreate(savedInstanceState);		
-	}
+@SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
+public class RunningEventActions extends RunningEventActivityResults {
 
-	@Override
-	protected void initialize(Bundle savedInstanceState){
-		super.initialize(savedInstanceState);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-	public void onEventParticipantUpdatedByInitiator() {
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-		ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getMembers(), mContext);
-		updateRecyclerViews();
-		if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-			runningEventAlertDialog("Tracking Updated!", mEvent.GetInitiatorName() + " has updated the participants list.", true);			
-		}
-		else{
-			runningEventAlertDialog("Event Updated!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has updated the participants list.", true);
-		}
-	}
+    @Override
+    protected void initialize(Bundle savedInstanceState) {
+        super.initialize(savedInstanceState);
+    }
 
-	public void onUserRemovedFromEventByInitiator() {
-		if(isActivityRunning && ! ((Activity) mContext).isFinishing()){
-			if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-				runningEventAlertDialog("Removed from Tracking!", mEvent.GetInitiatorName() + " has removed you from this tracking event.", false);
-			}
-			else{
-				runningEventAlertDialog("Removed from Event!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has removed you from this event.", false);
-			}
-		}
-		locationhandler.removeCallbacks(locationRunnable);
-		mEvent = null;		
-	}
+    public void onEventParticipantUpdatedByInitiator() {
+        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        updateRecyclerViews();
+        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+            runningEventAlertDialog("Tracking Updated!", mEvent.GetInitiatorName() + " has updated the participants list.", true);
+        } else {
+            runningEventAlertDialog("Event Updated!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has updated the participants list.", true);
+        }
+    }
 
-	public void onEventDestinationUpdatedByInitiator(String changedDestination ) {
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-		ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getMembers(), mContext);
-		if(!mEvent.getDestinationLatitude().equals("null")){
-			mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
-		}
-		removeRoute();
-		createDestinationMarker();					
-		mEnableAutoCameraAdjust = true;
-		showAllMarkers();
-		if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-			runningEventAlertDialog("Tracking Destination Changed!", mEvent.GetInitiatorName() + " has changed tracking Destination to " + changedDestination, true);			
-		}
-		else{
-			runningEventAlertDialog("Event Destination Changed!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has changed this events Destination to " + changedDestination, true);
-		}
+    public void onUserRemovedFromEventByInitiator() {
+        if (isActivityRunning && !((Activity) mContext).isFinishing()) {
+            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                runningEventAlertDialog("Removed from Tracking!", mEvent.GetInitiatorName() + " has removed you from this tracking event.", false);
+            } else {
+                runningEventAlertDialog("Removed from Event!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has removed you from this event.", false);
+            }
+        }
+        locationhandler.removeCallbacks(locationRunnable);
+        mEvent = null;
+    }
 
-	}
+    public void onEventDestinationUpdatedByInitiator(String changedDestination) {
+        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        if (!mEvent.getDestinationLatitude().equals("null")) {
+            mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
+        }
+        removeRoute();
+        createDestinationMarker();
+        mEnableAutoCameraAdjust = true;
+        showAllMarkers();
+        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+            runningEventAlertDialog("Tracking Destination Changed!", mEvent.GetInitiatorName() + " has changed tracking Destination to " + changedDestination, true);
+        } else {
+            runningEventAlertDialog("Event Destination Changed!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has changed this events Destination to " + changedDestination, true);
+        }
 
-	public void onEventEndedByInitiator() {
-		if(isActivityRunning && ! ((Activity) mContext).isFinishing()){
-			if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-				runningEventAlertDialog("Tracking ended!", mEvent.GetInitiatorName() +" has stopped sharing location", false);
-			}
-			else{
+    }
 
-				runningEventAlertDialog("Event ended!", mEvent.getName() + " ended by " + mEvent.GetInitiatorName(), false);						
-			}
-		}
-		locationhandler.removeCallbacks(locationRunnable);
-		mEvent = null;
-	}
+    public void onEventEndedByInitiator() {
+        if (isActivityRunning && !((Activity) mContext).isFinishing()) {
+            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                runningEventAlertDialog("Tracking ended!", mEvent.GetInitiatorName() + " has stopped sharing location", false);
+            } else {
 
-	public void onEventOver() {
-		if(isActivityRunning && ! ((Activity) mContext).isFinishing()){	
-			if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-				runningEventAlertDialog("Tracking Over!", "Tracking ended at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
-			}
-			else{
-				runningEventAlertDialog("Event Over!", mEvent.getName() + " finished at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
-			}
-		}
-		locationhandler.removeCallbacks(locationRunnable);
-		mEvent = null;
-	}
+                runningEventAlertDialog("Event ended!", mEvent.getName() + " ended by " + mEvent.GetInitiatorName(), false);
+            }
+        }
+        locationhandler.removeCallbacks(locationRunnable);
+        mEvent = null;
+    }
 
-	public void onParticipantLeft(String EventResponderName) {
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-		ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getMembers(), mContext);
-		if(mEvent!=null){//incase event is already over
-			updateRecyclerViews();
-			arrangeListinAvailabilityOrder();	
-			String alertmsg ="";
-			if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-				alertmsg = EventResponderName +" has left stopped sharing location";
-			}
-			else{
-				alertmsg = EventResponderName +" has left " + mEvent.getName() ;
-			}
-			runningEventAlertDialog("Response Received!", alertmsg, true);
-		}
-	}
+    public void onEventOver() {
+        if (isActivityRunning && !((Activity) mContext).isFinishing()) {
+            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                runningEventAlertDialog("Tracking Over!", "Tracking ended at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
+            } else {
+                runningEventAlertDialog("Event Over!", mEvent.getName() + " finished at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
+            }
+        }
+        locationhandler.removeCallbacks(locationRunnable);
+        mEvent = null;
+    }
 
-	public void onUserResponse(int eventAcceptanceStateId,	String eventResponderName) {
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-		ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getMembers(), mContext);
-		if(mEvent!=null){//incase event is already over
-			updateRecyclerViews();
-			arrangeListinAvailabilityOrder();
-			String alertmsg ="";
+    public void onParticipantLeft(String EventResponderName) {
+        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        if (mEvent != null) {//incase event is already over
+            updateRecyclerViews();
+            arrangeListinAvailabilityOrder();
+            String alertmsg = "";
+            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                alertmsg = EventResponderName + " has left stopped sharing location";
+            } else {
+                alertmsg = EventResponderName + " has left " + mEvent.getName();
+            }
+            runningEventAlertDialog("Response Received!", alertmsg, true);
+        }
+    }
 
-			if(eventAcceptanceStateId != -1){
-				if(AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.ACCEPTED){
-					if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-						alertmsg = eventResponderName+" has accepted your tracking request";
-					}
-					else{
-						alertmsg = eventResponderName+" has accepted " + mEvent.getName() ;
-					}
-				}
-				else{
-					if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-						alertmsg = eventResponderName+" has rejected your tracking request";
-					}
-					else{
-						alertmsg = eventResponderName+" has rejected " + mEvent.getName() ;
-					}
-				}
-				runningEventAlertDialog("Response Received!", alertmsg, true);
-			}
-		}
-	}
+    public void onUserResponse(int eventAcceptanceStateId, String eventResponderName) {
+        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        if (mEvent != null) {//incase event is already over
+            updateRecyclerViews();
+            arrangeListinAvailabilityOrder();
+            String alertmsg = "";
 
-	public void onEventExtendedByInitiator(String extendEventDuration) {
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-		ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getMembers(), mContext);
-		UpdateTimeLeftItemOfRunningEventDetailsDataSet();
-		mEventDetailAdapter.notifyDataSetChanged();	
+            if (eventAcceptanceStateId != -1) {
+                if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.ACCEPTED) {
+                    if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                        alertmsg = eventResponderName + " has accepted your tracking request";
+                    } else {
+                        alertmsg = eventResponderName + " has accepted " + mEvent.getName();
+                    }
+                } else {
+                    if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                        alertmsg = eventResponderName + " has rejected your tracking request";
+                    } else {
+                        alertmsg = eventResponderName + " has rejected " + mEvent.getName();
+                    }
+                }
+                runningEventAlertDialog("Response Received!", alertmsg, true);
+            }
+        }
+    }
 
-		if(AppUtility.IsEventTrackBuddyEventForCurrentuser(mEvent, mContext)){
-			runningEventAlertDialog("Tracking Extended!", mEvent.GetInitiatorName() + " has extended tracking by " + extendEventDuration + " minutes.", true);			
-		}
-		else{
-			runningEventAlertDialog("Event Extended!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has extended this event by " + extendEventDuration + " minutes.", true);
-		}
-	}
+    public void onEventExtendedByInitiator(String extendEventDuration) {
+        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        UpdateTimeLeftItemOfRunningEventDetailsDataSet();
+        mEventDetailAdapter.notifyDataSetChanged();
 
-	public void onEventEndClicked() {
-		AlertDialog.Builder adb;
-		locationhandler.removeCallbacks(locationRunnable);
-		adb = new AlertDialog.Builder(this);
-		// adb.setView(alertDialogView);
+        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+            runningEventAlertDialog("Tracking Extended!", mEvent.GetInitiatorName() + " has extended tracking by " + extendEventDuration + " minutes.", true);
+        } else {
+            runningEventAlertDialog("Event Extended!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has extended this event by " + extendEventDuration + " minutes.", true);
+        }
+    }
 
-		adb.setTitle("End Event");
-		adb.setMessage(getResources().getString(R.string.message_runningEvent_eventEndConfirmation));
-		adb.setIcon(android.R.drawable.ic_dialog_alert);
+    public void onEventEndClicked() {
+        AlertDialog.Builder adb;
+        locationhandler.removeCallbacks(locationRunnable);
+        adb = new AlertDialog.Builder(this);
+        // adb.setView(alertDialogView);
 
-		adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				endEventActions();
-			} });
+        adb.setTitle("End Event");
+        adb.setMessage(getResources().getString(R.string.message_runningEvent_eventEndConfirmation));
+        adb.setIcon(android.R.drawable.ic_dialog_alert);
 
-		adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {							
-				dialog.dismiss();
-				locationhandler.postDelayed(locationRunnable, Constants.LOCATION_RETRIVAL_INTERVAL);
-			} });
-		adb.show();
-	}
+        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                endEventActions();
+            }
+        });
 
-	public void onShareOnFaceBookClicked() {
-		LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
-	}
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                locationhandler.postDelayed(locationRunnable, DurationConstants.LOCATION_RETRIVAL_INTERVAL);
+            }
+        });
+        adb.show();
+    }
 
-	public void onPokeAllParticipantsClicked() {
-		try {
-			String lastPokedTime = AppUtility.getPref(mEventId, mContext);
-			if(lastPokedTime != null){
-				SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-				Calendar lastCal = Calendar.getInstance();
-				Date lastPokeDate = originalformat.parse(lastPokedTime);				
-				lastCal.setTime(lastPokeDate);		
-				long diff = (Calendar.getInstance().getTimeInMillis()- lastCal.getTimeInMillis())/60000;
-				long pendingfrPoke = Constants.POKE_INTERVAL- diff;
-				if(diff>= Constants.POKE_INTERVAL){				
-					pokeAll();
-				}else {
-					Toast.makeText(mContext,								
-							getResources().getString(R.string.message_runningEvent_pokeAllInterval)+ pendingfrPoke + " minutes.",
-							Toast.LENGTH_LONG).show();
-				}					
-			}else {
-				pokeAll();
-			}
+    public void onShareOnFaceBookClicked() {
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+    }
 
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public void onPokeAllParticipantsClicked() {
+        try {
+            String lastPokedTime = PreffManager.getPref(mEventId, mContext);
+            if (lastPokedTime != null) {
+                SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Calendar lastCal = Calendar.getInstance();
+                Date lastPokeDate = originalformat.parse(lastPokedTime);
+                lastCal.setTime(lastPokeDate);
+                long diff = (Calendar.getInstance().getTimeInMillis() - lastCal.getTimeInMillis()) / 60000;
+                long pendingfrPoke = Constants.POKE_INTERVAL - diff;
+                if (diff >= Constants.POKE_INTERVAL) {
+                    pokeAll();
+                } else {
+                    Toast.makeText(mContext,
+                            getResources().getString(R.string.message_runningEvent_pokeAllInterval) + pendingfrPoke + " minutes.",
+                            Toast.LENGTH_LONG).show();
+                }
+            } else {
+                pokeAll();
+            }
 
-	public void onLeaveEventClicked() {
-		locationhandler.removeCallbacks(locationRunnable);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-		EventManager.leaveEvent(mContext, mEvent, new OnActionCompleteListner() {
+    public void onLeaveEventClicked() {
+        locationhandler.removeCallbacks(locationRunnable);
 
-			@Override
-			public void actionComplete(Action action) {
-				mEvent.getCurrentMember().setAcceptanceStatus(AcceptanceStatus.DECLINED);
-				((BaseActivity)mContext).actionComplete(action);
-				gotoPreviousPage();
+        EventManager.leaveEvent(mContext, mEvent, new OnActionCompleteListner() {
 
-			}
-		}, this);
-	}
+            @Override
+            public void actionComplete(Action action) {
+                mEvent.getCurrentParticipant().setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                ((BaseActivity1) mContext).actionComplete(action);
+                gotoPreviousPage();
 
-	public void onChangeEventDestinationClicked() {
-		Intent intent;
-		shouldExecuteOnResume = false;
-		if(!(mEvent.getDestinationLatitude().equals("null") ||mEvent.getDestinationLatitude()==null ||mEvent.getDestinationLatitude().equals(""))){
-			mDestinationPlace = new EventPlace(mEvent.getDestinationName(),mEvent.getDestinationAddress(),	 new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude())));
-			//mLh.displayPlace( mDestinationPlace, mEventLocationTextView );
-		}		
-		intent = new Intent(RunningEventActions.this, PickLocationActivity.class);
-		if(mDestinationPlace !=null)
-		{
-			intent.putExtra("DestinatonLocation", (Parcelable)mDestinationPlace); 
-		}
-		startActivityForResult(intent,UPDATE_LOCATION_REQUEST_CODE);
-	}
+            }
+        }, this);
+    }
 
-	public void onEditParticipantsClicked() {
-		shouldExecuteOnResume = false;
-		ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
-		String currentMemUserId = mEvent.getCurrentMember().getUserId();
-		ArrayList<EventMember>members = mEvent.getMembers();
-		for (EventMember mem : members){
-			if(!mem.getUserId().equals(currentMemUserId))
-				contactList.add(ContactAndGroupListManager.getContact(mContext, mem.getUserId()));			
-		}
+    public void onChangeEventDestinationClicked() {
+        Intent intent;
+        shouldExecuteOnResume = false;
+        if (!(mEvent.getDestinationLatitude().equals("null") || mEvent.getDestinationLatitude() == null || mEvent.getDestinationLatitude().equals(""))) {
+            mDestinationPlace = new EventPlace(mEvent.getDestinationName(), mEvent.getDestinationAddress(), new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude())));
+            //mLh.displayPlace( mDestinationPlace, mEventLocationTextView );
+        }
+        intent = new Intent(RunningEventActions.this, PickLocationActivity.class);
+        if (mDestinationPlace != null) {
+            intent.putExtra("DestinatonLocation", (Parcelable) mDestinationPlace);
+        }
+        startActivityForResult(intent, UPDATE_LOCATION_REQUEST_CODE);
+    }
 
-		AppUtility.setPrefArrayList("Invitees", contactList, mContext);
+    public void onEditParticipantsClicked() {
+        shouldExecuteOnResume = false;
+        ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
+        String currentMemUserId = mEvent.getCurrentParticipant().getUserId();
+        ArrayList<EventParticipant> members = mEvent.getParticipants();
+        for (EventParticipant mem : members) {
+            if (!mem.getUserId().equals(currentMemUserId))
+                contactList.add(ContactAndGroupListManager.getContact(mContext, mem.getUserId()));
+        }
 
-		Intent i = new Intent(RunningEventActions.this, ContactsListActivity.class);
-		startActivityForResult(i, ADDREMOVE_INVITEES_REQUEST_CODE);
-	}
+        PreffManager.setPrefArrayList("Invitees", contactList, mContext);
 
-	public void onEventExtendedClicked() {
-		Intent intent;
-		shouldExecuteOnResume = false;
-		intent = new Intent(RunningEventActions.this, SnoozeOffset.class);			
-		startActivityForResult(intent, SNOOZING_REQUEST_CODE);
-	}
+        Intent i = new Intent(RunningEventActions.this, ContactsListActivity.class);
+        startActivityForResult(i, ADDREMOVE_INVITEES_REQUEST_CODE);
+    }
 
-	public void onTrafficButtonClicked() {
-		if(mIsTrafficOn){
-			mMap.setTrafficEnabled(false);
-			mIsTrafficOn =  false;
-			viewManager.setTrafficButtonOff();
-		}
-		else{
-			mMap.setTrafficEnabled(true);
-			mIsTrafficOn =  true;
-			viewManager.setTrafficButtonOn();
-		}		
-	}
+    public void onEventExtendedClicked() {
+        Intent intent;
+        shouldExecuteOnResume = false;
+        intent = new Intent(RunningEventActions.this, SnoozeOffset.class);
+        startActivityForResult(intent, SNOOZING_REQUEST_CODE);
+    }
 
-	public void onEtaDistanceButtonClicked() {
-		if(mIsETAOn){				
-			mIsETAOn =  false;
-			viewManager.setEtaButtonOff();
-			removeEtaMarkers();
-		}
-		else{
-			mIsETAOn =  true;
-			viewManager.setEtaButtonOn();
-			createEtaDurationMarkers();					
-		}	
-	}
+    public void onTrafficButtonClicked() {
+        if (mIsTrafficOn) {
+            mMap.setTrafficEnabled(false);
+            mIsTrafficOn = false;
+            viewManager.setTrafficButtonOff();
+        } else {
+            mMap.setTrafficEnabled(true);
+            mIsTrafficOn = true;
+            viewManager.setTrafficButtonOn();
+        }
+    }
 
-	public void onReCenterButtonClicked() {
-		mMap.setPadding(0,AppUtility.dpToPx(mNormalMapTopPadding, mContext),0,20);
-		mEnableAutoCameraAdjust = true;
-		mAutoCameraMoved = true;
-		mShowRouteLoadedView = false;
-		mRouteStartUd = null;
-		mRouteEndUd = null;
-		
-		showAllMarkers();
-		viewManager.hideReCenterButton();
-	}
+    public void onEtaDistanceButtonClicked() {
+        if (mIsETAOn) {
+            mIsETAOn = false;
+            viewManager.setEtaButtonOff();
+            removeEtaMarkers();
+        } else {
+            mIsETAOn = true;
+            viewManager.setEtaButtonOn();
+            createEtaDurationMarkers();
+        }
+    }
 
-	public void onNavigationButtonClicked() {
-		// "http://maps.google.com/maps?saddr=51.5, 0.125&daddr=51.5, 0.15"
-		LatLng currentLatLng = mCurrentMarker.getPosition();
+    public void onReCenterButtonClicked() {
+        mMap.setPadding(0, AppUtility.dpToPx(mNormalMapTopPadding, mContext), 0, 20);
+        mEnableAutoCameraAdjust = true;
+        mAutoCameraMoved = true;
+        mShowRouteLoadedView = false;
+        mRouteStartUd = null;
+        mRouteEndUd = null;
 
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
-				"http://maps.google.com/maps?daddr=" + currentLatLng.latitude + "," +  currentLatLng.longitude +"" ));
-		startActivity(intent);
-	}
+        showAllMarkers();
+        viewManager.hideReCenterButton();
+    }
 
-	public void onToolbarBackArrowClicked() {
-		gotoPreviousPage();		
-	}	
+    public void onNavigationButtonClicked() {
+        // "http://maps.google.com/maps?saddr=51.5, 0.125&daddr=51.5, 0.15"
+        LatLng currentLatLng = mCurrentMarker.getPosition();
 
-	private void endEventActions(){ 
-		showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-		EventManager.endEvent(mContext, mEvent, new OnActionCompleteListner() {
-			@Override
-			public void actionComplete(Action action) {
-				mEvent = null;
-				((BaseActivity)mContext).actionComplete(action);
-				gotoPreviousPage();
-			}
-		},this);
-	}
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                "http://maps.google.com/maps?daddr=" + currentLatLng.latitude + "," + currentLatLng.longitude + ""));
+        startActivity(intent);
+    }
 
-	private  void pokeAll() {
-		showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-		JSONObject jObj = JsonSerializer.createPokeAllContactsJSON(mContext, mEvent);
-		EventManager.pokeParticipants(mContext,jObj, new OnActionCompleteListner() {
+    public void onToolbarBackArrowClicked() {
+        gotoPreviousPage();
+    }
 
-			@Override
-			public void actionComplete(Action action) {
-				SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");						 
-				Date currentdate = Calendar.getInstance().getTime();
-				String currentTimestamp = originalformat.format(currentdate);
-				AppUtility.setPref(mEventId, currentTimestamp, mContext);
-				((BaseActivity)mContext).actionComplete(action);
-			}
-		}, this);
-	}	
+    private void endEventActions() {
+        showProgressBar(getResources().getString(R.string.message_general_progressDialog));
+        EventManager.endEvent(mContext, mEvent, new OnActionCompleteListner() {
+            @Override
+            public void actionComplete(Action action) {
+                mEvent = null;
+                ((BaseActivity1) mContext).actionComplete(action);
+                gotoPreviousPage();
+            }
+        }, this);
+    }
+
+    private void pokeAll() {
+        showProgressBar(getResources().getString(R.string.message_general_progressDialog));
+        JSONObject jObj = JsonSerializer.createPokeAllContactsJSON(mContext, mEvent);
+        ParticipantService.pokeParticipants(mEvent, new OnActionCompleteListner() {
+
+            @Override
+            public void actionComplete(Action action) {
+                SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date currentdate = Calendar.getInstance().getTime();
+                String currentTimestamp = originalformat.format(currentdate);
+                AppUtility.setPref(mEventId, currentTimestamp, mContext);
+                ((BaseActivity) mContext).actionComplete(action);
+            }
+        }, this);
+    }
 }

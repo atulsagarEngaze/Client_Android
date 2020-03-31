@@ -14,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -30,6 +29,7 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.common.utility.Comparer;
 import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.FBShareHelper;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
@@ -38,20 +38,7 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.entity.ContactOrGroup;
-import com.redtop.engaze.entity.Duration;
-import com.redtop.engaze.entity.EventDetail;
-import com.redtop.engaze.entity.EventPlace;
-import com.redtop.engaze.entity.UsersLocationDetail;
 import com.redtop.engaze.localbroadcastmanager.RunningEventBroadcastManager;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Comparer;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.ContactAndGroupListManager;
-import com.redtop.engaze.utils.DateUtil;
-import com.redtop.engaze.utils.FBShareHelper;
-import com.redtop.engaze.utils.GoogleDirection;
-import com.redtop.engaze.utils.InternalCaching;
 import com.redtop.engaze.viewmanager.RunningEventViewManager;
 
 import androidx.appcompat.app.AlertDialog;
@@ -176,7 +163,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 		}
 		switch (getTimeLeft()){
 		case "5 MINS" :
-			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId(), mContext)){
+			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId())){
 				snoozeFlag  = 1;
 				Intent intent = new Intent(mContext, SnoozeOffset.class);			
 				startActivityForResult(intent, SNOOZING_REQUEST_CODE);					

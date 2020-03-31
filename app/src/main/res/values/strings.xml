@@ -29,6 +29,7 @@
 
     <string name="title_share_my_location">Share my location</string>
     <string name="title_track_buddies">Track buddies</string>
+    <string name="title_running_event_track_buddies">Track buddies</string>
 
 
     <string name="app_label">Engaze</string>
