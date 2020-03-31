@@ -15,17 +15,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.interfaces.OnGpsSetOnListner;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.LocationHelper;
+import com.redtop.engaze.Interface.OnGpsSetOnListner;
+import com.redtop.engaze.common.AppLocationService;
+import com.redtop.engaze.common.constant.DurationConstants;
 
-public class BaseLocationActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, 
+public class BaseLocationActivity extends ActionSuccessFailMessageActivity implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 	public static LatLng mMyCoordinates;
 	protected static String mDistance ="";
 	protected static String mDuration ="";
 	protected GoogleMap mMap;
-	protected LocationHelper mLh;
+	protected AppLocationService mLh;
 	protected Geocoder mGeocoder;
 	protected GoogleApiClient mGoogleApiClient;	
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -35,16 +35,18 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 	private LocationRequest mLocationRequest;
 	protected OnGpsSetOnListner gpsOnListner= null;
 
+	private final static String TAG = BaseLocationActivity.class.getName();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLocationRequest = LocationRequest.create()
 				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-				.setInterval(Constants.LOCATION_REFRESH_INTERVAL_NORMAL)   //in milliseconds    
-				.setFastestInterval(Constants.LOCATION_REFRESH_INTERVAL_FAST); //in milliseconds
+				.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL)   //in milliseconds
+				.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST); //in milliseconds
 		//markerCenterImageResId =	R.drawable.ic_home;
 		createGoogleApiClient();
-		mLh = new LocationHelper(this, BaseLocationActivity.this);		
+		mLh = new AppLocationService(this, BaseLocationActivity.this);
 		mGeocoder = new Geocoder(this, Locale.getDefault());		
 	}
 

@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.utility.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +22,7 @@ public abstract class BaseActivity1 extends AppCompatActivity {
     private ProgressDialog mDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         mAppContext = AppContext.getInstance();
@@ -31,28 +32,17 @@ public abstract class BaseActivity1 extends AppCompatActivity {
             mDialog = new ProgressDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
     }
-    public void showProgressBar(String message ){
-        showProgressBar("",message);
+
+    protected void showProgressBar(String message ){
+        ProgressBar.showProgressBar(message);
     }
 
-    public void showProgressBar(String title, String message ){
-
-        if(!(title==null || title.equals(""))){
-            mDialog.setTitle(title);
-        }
-        mDialog.setMessage(message);
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
-        mDialog.setCancelable(false);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setIndeterminate(true);
-        mDialog.show();
+    protected void showProgressBar(String title, String message ){
+        ProgressBar.showProgressBar(title, message);
     }
 
     protected void hideProgressBar(){
-        if(mDialog!=null && mDialog.isShowing()){
-            mDialog.dismiss();
-        }
+        ProgressBar.hideProgressBar();
     }
 
     protected void hideKeyboard(View view) {

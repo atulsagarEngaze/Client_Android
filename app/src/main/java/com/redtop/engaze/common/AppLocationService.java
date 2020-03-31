@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.redtop.engaze.Interface.OnSelectLocationCompleteListner;
 import com.redtop.engaze.adapter.SuggestedLocationAdapter;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventPlace;
 
 public class AppLocationService {
@@ -133,7 +134,7 @@ public class AppLocationService {
     }
 
     public Place getPlaceFromLatLang(final LatLng ltlang) {
-        if (!AppService.isNetworkAvailable(mContext)) {
+        if (!AppUtility.isNetworkAvailable(mContext)) {
             return null;
         }
         List<Address> addresses = null;

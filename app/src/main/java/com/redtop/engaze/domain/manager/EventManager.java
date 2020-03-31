@@ -23,7 +23,7 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -134,7 +134,7 @@ public class EventManager {
 
 	public static void saveEvent(final Context context, final JSONObject mEventJobj, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -201,7 +201,7 @@ public class EventManager {
 	public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final Context context, final String eventid,  final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -283,7 +283,7 @@ public class EventManager {
 
 	public static void getEventDataFromServer(final Context context, final String eventid,final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -338,7 +338,7 @@ public class EventManager {
 	public static void leaveEvent(final Context context, final EventDetail event,  final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -401,7 +401,7 @@ public class EventManager {
 	public static void endEvent(final Context context, final EventDetail event,  final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -467,7 +467,7 @@ public class EventManager {
 
 	public static void deleteEvent(final Context context, final EventDetail event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -525,7 +525,7 @@ public class EventManager {
 
 	public static void changeDestination(final EventPlace destinationPlace, final Context context, final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -578,7 +578,7 @@ public class EventManager {
 
 	public static void extendEventEndTime(final int i, final Context context, final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -855,7 +855,7 @@ public class EventManager {
 	public static void refreshEventList(final Context context, final OnRefreshEventListCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure){
 
 		String message ="";
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);

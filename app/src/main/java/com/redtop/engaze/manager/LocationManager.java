@@ -6,7 +6,7 @@ import android.util.Log;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.webservice.LocationWS;
 
@@ -19,7 +19,7 @@ public class LocationManager {
     public static void updateLocationToServer(Context context, final Location location, final OnAPICallCompleteListner listnerOnSuccess,
                                               final OnActionFailedListner listnerOnFailure ) {
 
-        if(!AppService.isNetworkAvailable(context)){
+        if(!AppUtility.isNetworkAvailable(context)){
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }

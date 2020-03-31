@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.redtop.engaze.common.ContactAndGroupListManager;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.common.utility.BitMapService;
+import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;
 
 public class UsersLocationDetail implements Serializable {
@@ -213,9 +213,9 @@ public class UsersLocationDetail implements Serializable {
 			cg = new ContactOrGroup();
 			cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap(context));
 			if (isParticipantCurrentUser || uld.getUserName().startsWith("~")) {
-				cg.setImageBitmap(BitMapService.generateCircleBitmapForText(context, MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(1, 2).toUpperCase()));
+				cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(context, MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(1, 2).toUpperCase()));
 			} else {
-				cg.setImageBitmap(BitMapService.generateCircleBitmapForText(context, MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(0, 1).toUpperCase()));
+				cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(context, MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(0, 1).toUpperCase()));
 			}
 		} else {
 			uld.setUserName(cg.getName());

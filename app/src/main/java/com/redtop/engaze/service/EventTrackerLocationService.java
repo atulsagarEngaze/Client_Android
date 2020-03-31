@@ -19,7 +19,7 @@ import com.google.android.gms.location.places.Places;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.DurationConstants;
@@ -57,7 +57,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 		if(EventService.shouldShareLocation(context))
 		{
 			isFirstLocationRequiredForNewEvent = true;
-			if(AppService.isNetworkAvailable(context)){
+			if(AppUtility.isNetworkAvailable(context)){
 				context.startService(new Intent(context, EventTrackerLocationService.class));
 			}
 		}

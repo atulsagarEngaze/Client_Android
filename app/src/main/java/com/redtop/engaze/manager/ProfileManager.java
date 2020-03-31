@@ -6,7 +6,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
@@ -22,7 +22,7 @@ public class ProfileManager {
 			final OnAPICallCompleteListner listnerOnSuccess, 
 			final OnActionFailedListner listnerOnFailure){
 
-		if(!AppService.isNetworkAvailable(context))
+		if(!AppUtility.isNetworkAvailable(context))
 		{
 			String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);

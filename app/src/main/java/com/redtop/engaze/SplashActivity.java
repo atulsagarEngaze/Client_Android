@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
@@ -25,8 +25,8 @@ public class SplashActivity extends BaseActivity1 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext.activityContext = this;
-        AppService.setApplicationContext(this.getApplicationContext());
-        AppService.deviceDensity = getResources().getDisplayMetrics().densityDpi;
+        AppUtility.setApplicationContext(this.getApplicationContext());
+        AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
         String loginId = PreffManager.getPref(Constants.LOGIN_ID, this);
         Intent intent = null;

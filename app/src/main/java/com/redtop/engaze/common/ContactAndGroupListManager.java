@@ -23,7 +23,8 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.utility.BitMapService;
+import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.ContactOrGroup;
@@ -74,11 +75,11 @@ public class ContactAndGroupListManager {
 					cg = new ContactOrGroup();
 					cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap(context));
 					if(EventParticipant.isParticipantCurrentUser(mem.getUserId())|| mem.getProfileName().startsWith("~") ){
-						cg.setImageBitmap(BitMapService.generateCircleBitmapForText(context, MaterialColor.getColor(mem.getProfileName()), 40,mem.getProfileName().substring(1, 2).toUpperCase() ));
+						cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(context, MaterialColor.getColor(mem.getProfileName()), 40,mem.getProfileName().substring(1, 2).toUpperCase() ));
 					}
 					else
 					{
-						cg.setImageBitmap(BitMapService.generateCircleBitmapForText(context, MaterialColor.getColor(mem.getProfileName()), 40,mem.getProfileName().substring(0, 1).toUpperCase() ));
+						cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(context, MaterialColor.getColor(mem.getProfileName()), 40,mem.getProfileName().substring(0, 1).toUpperCase() ));
 					}
 				}
 				mem.setContact(cg);
@@ -148,7 +149,7 @@ public class ContactAndGroupListManager {
 	private static void cacheRegisteredContacts(final HashMap<String, ContactOrGroup> contactsAndgroups,
 			final OnRefreshMemberListCompleteListner listnerOnSuccess, 
 			final OnRefreshMemberListCompleteListner listnerOnFailure){
-		if(!AppService.isNetworkAvailable(mContext))
+		if(!AppUtility.isNetworkAvailable(mContext))
 		{
 			String message = mContext.getResources().getString(R.string.message_general_no_internet_responseFail);		
 			//Toast.makeText(mContext,	message, Toast.LENGTH_SHORT).show();
@@ -216,16 +217,16 @@ public class ContactAndGroupListManager {
 					cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap(mContext));								
 					String startingchar = cg.getName().substring(0, 1);
 					if(!(startingchar.matches("[0-9]") ||startingchar.startsWith("+")) ){
-						cg.setImageBitmap(BitMapService.generateCircleBitmapForText(mContext, MaterialColor.getColor(cg.getName()), 40,startingchar.toUpperCase() ));
+						cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(mContext, MaterialColor.getColor(cg.getName()), 40,startingchar.toUpperCase() ));
 					}
 					else
 					{
-						cg.setImageBitmap(BitMapService.generateCircleBitmapForIcon(mContext, MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
+						cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(mContext, MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
 					}
 				}
 				else
 				{
-					Bitmap pofilePicBitmap = BitMapService.generateCircleBitmapForImage(mContext, 54, Uri.parse(cg.getThumbnailUri()));
+					Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(mContext, 54, Uri.parse(cg.getThumbnailUri()));
 					cg.setImageBitmap(pofilePicBitmap);	
 					cg.setIconImageBitmap(pofilePicBitmap);
 

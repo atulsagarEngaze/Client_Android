@@ -9,11 +9,12 @@ import java.io.Serializable;
 
 import android.util.Log;
 
+import com.redtop.engaze.common.utility.AppUtility;
 
 
 public class ObjectSerializer {
 
-	private final static String TAG = AppService.class.getName();
+	private final static String TAG = AppUtility.class.getName();
     
     public static String serialize(Serializable obj) throws IOException {
         if (obj == null) return "";

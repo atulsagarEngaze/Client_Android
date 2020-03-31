@@ -16,7 +16,9 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
+import com.redtop.engaze.common.AppLocationService;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.DurationConstants;
 
 public class LocationUpdateActivity extends BaseActivity1 implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -27,7 +29,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 	protected static String mDistance ="";
 	protected static String mDuration ="";
 	protected GoogleMap mMap;
-	protected LocationHelper mLh;
+	protected AppLocationService mLh;
 	protected Geocoder mGeocoder;
 	protected GoogleApiClient mGoogleApiClient;	
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -42,11 +44,11 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 		super.onCreate(savedInstanceState);
 		mLocationRequest = LocationRequest.create()
 				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-				.setInterval(Constants.LOCATION_REFRESH_INTERVAL_NORMAL)   //in milliseconds
-				.setFastestInterval(Constants.LOCATION_REFRESH_INTERVAL_FAST); //in milliseconds
+				.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL)   //in milliseconds
+				.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST); //in milliseconds
 		//markerCenterImageResId =	R.drawable.ic_home;
 		createGoogleApiClient();
-		mLh = new LocationHelper(this, LocationUpdateActivity.this);
+		mLh = new AppLocationService(this, LocationUpdateActivity.this);
 		mGeocoder = new Geocoder(this, Locale.getDefault());		
 	}
 

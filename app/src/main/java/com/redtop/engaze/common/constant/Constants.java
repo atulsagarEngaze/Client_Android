@@ -40,6 +40,8 @@ public class Constants {
 	public static final String GCM_REGISTRATION_TOKEN = "gcmregistrationToken";
 	public static final String CURRENT_LATITUDE ="latitude";
 	public static final String CURRENT_LONGITUDE ="longitude";
+
+
 	public static final int ReminderBroadcastId = 1;
 	public static final int TrackingStartBroadcastId = 2;
 	public static final int TrackingStopBroadcastId = 3;

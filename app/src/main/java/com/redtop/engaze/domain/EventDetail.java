@@ -1,17 +1,17 @@
 package com.redtop.engaze.domain;
 
-import android.content.Context;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.utility.DateUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EventDetail implements DataModel {
@@ -45,7 +45,7 @@ public class EventDetail implements DataModel {
 	private ArrayList<EventParticipant> participants;
 	private ArrayList<EventParticipant>ReminderEnabledMembers;
 
-	private ArrayList<ContactOrGroup>contactOrGroup;
+	private ArrayList<ContactOrGroup> contactOrGroups;
 	private ArrayList<UsersLocationDetail> usersLocationDetailList ;
 	public ArrayList<Integer> notificationIds;
 	public int snoozeNotificationId =0;
@@ -90,7 +90,7 @@ public class EventDetail implements DataModel {
 		this.reminderOffset = reminderOffset;
 		this.reminderType = reminderType;
 		this.trackingStartOffset = trackingStartOffset;
-		this.contactOrGroup = contactOrGroups;
+		this.contactOrGroups = contactOrGroups;
 		this.isQuickEvent = isQuickEvent;
 		this.notificationIds = new ArrayList<Integer>();
 	}
@@ -326,12 +326,12 @@ public class EventDetail implements DataModel {
 		this.ReminderEnabledMembers =  ReminderEnabledMembers;
 	}
 
-	public ArrayList<ContactOrGroup> getContactOrGroup(){
-		return this.contactOrGroup;
+	public ArrayList<ContactOrGroup> getContactOrGroups(){
+		return this.contactOrGroups;
 	}
 
-	public void setContactOrGroup(ArrayList<ContactOrGroup> contactOrGroup){
-		this.contactOrGroup =  contactOrGroup;
+	public void setContactOrGroups(ArrayList<ContactOrGroup> contactOrGroups){
+		this.contactOrGroups = contactOrGroups;
 	}
 
 	public ArrayList<UsersLocationDetail> getUsersLocationDetailList(){

@@ -9,6 +9,7 @@ import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.ReminderFrom;
+import com.redtop.engaze.domain.service.ParticipantService;
 
 import java.util.ArrayList;
 
@@ -207,56 +208,5 @@ public class EventParticipant implements DataModel {
                 + ", userEventEndTime=" + userEventEndTime + "]";
     }
 
-
-	public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(EventDetail event, AcceptanceStatus acceptanceStatus, Context context){
-
-		ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
-		ArrayList<EventParticipant> participants = event.getParticipants();
-		if (participants !=null && participants.size()>0)
-		{
-			for (EventParticipant mem : participants) {
-				if(isValidForLocationSharing(event, mem, context)){
-					if(mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString()))	{
-						memStatus.add(mem);
-					}
-				}
-			}
-		}
-		return memStatus;
-	}
-
-    public static boolean isParticipantCurrentUser(String userId) {
-        if (AppContext.getInstance().loginId.equalsIgnoreCase(userId)) {
-            return true;
-        }
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public static Boolean isValidForLocationSharing(EventDetail event, EventParticipant mem, Context context) {
-        Boolean isValid = true;
-
-        Boolean isCurrentUserInitiator = isCurrentUserInitiator(event.getInitiatorId());
-        if (Integer.parseInt(event.getEventTypeId()) == 200 &&
-                isCurrentUserInitiator &&
-                isParticipantCurrentUser(mem.getUserId())
-        ) {
-            isValid = false;
-        }
-
-        if (Integer.parseInt(event.getEventTypeId()) == 100 &&
-                !isCurrentUserInitiator &&
-                !mem.getUserId().equalsIgnoreCase(event.getInitiatorId())) {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    public static boolean isCurrentUserInitiator(String initiatorId) {
-        if (AppContext.getInstance().loginId.equalsIgnoreCase(initiatorId)) {
-            return true;
-        }
-        return false;
-    }
 
 }

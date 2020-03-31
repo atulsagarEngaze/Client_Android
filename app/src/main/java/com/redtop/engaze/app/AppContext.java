@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.redtop.engaze.common.utility.ProgressBar;
 
 public class AppContext extends Application {
     public static final String TAG = AppContext.class
@@ -23,6 +24,7 @@ public class AppContext extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        ProgressBar.CreateProgressDialog(this);
     }
 
     public static synchronized AppContext getInstance() {

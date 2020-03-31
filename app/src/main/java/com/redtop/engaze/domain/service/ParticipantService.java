@@ -6,18 +6,18 @@ import android.content.DialogInterface;
 import android.widget.Toast;
 
 import com.redtop.engaze.ActionSuccessFailMessageActivity;
-import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
@@ -95,7 +95,7 @@ public class ParticipantService {
         JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));
         EventDetail ed = InternalCaching.getEventFromCache(eventId, context);
         try {
-            ((BaseActivity1)context).showProgressBar(context.getString(R.string.message_general_progressDialog));
+            ProgressBar.showProgressBar(context.getString(R.string.message_general_progressDialog));
             jobj.put("RequestorId", AppContext.getInstance().loginId);
             jobj.put("RequestorName", AppContext.getInstance().loginId);
             jobj.put("UserIdsForRemind", mJSONArray);
@@ -142,9 +142,9 @@ public class ParticipantService {
                 JSONObject c = jsonStr.getJSONObject(i);
 
                 mem = new EventParticipant(
-                        AppService.convertNullToEmptyString(c.getString("UserId")),
-                        AppService.convertNullToEmptyString(c.getString("ProfileName")),
-                        AppService.convertNullToEmptyString(c.getString("MobileNumber")),
+                        AppUtility.convertNullToEmptyString(c.getString("UserId")),
+                        AppUtility.convertNullToEmptyString(c.getString("ProfileName")),
+                        AppUtility.convertNullToEmptyString(c.getString("MobileNumber")),
                         AcceptanceStatus.getStatus(c.getInt("EventAcceptanceStateId"))
                 );
                 ContactOrGroup cg = ContactAndGroupListManager.getContact(context, c.getString("UserId"));
@@ -164,6 +164,90 @@ public class ParticipantService {
         }
         return list;
 
+    }
+
+    public static boolean isCurrentUserInitiator(String initiatorId){
+        if(AppContext.getInstance().loginId.equalsIgnoreCase(initiatorId)){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isParticipantCurrentUser(String userId) {
+        if (AppContext.getInstance().loginId.equalsIgnoreCase(userId)) {
+            return true;
+        }
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(EventDetail event, AcceptanceStatus acceptanceStatus){
+
+        ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
+        ArrayList<EventParticipant> participants = event.getParticipants();
+        if (participants !=null && participants.size()>0)
+        {
+            for (EventParticipant mem : participants) {
+                if(isValidForLocationSharing(event, mem)){
+                    if(mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString()))	{
+                        memStatus.add(mem);
+                    }
+                }
+            }
+        }
+        return memStatus;
+    }
+
+    public static Boolean isValidForLocationSharing(EventDetail event, EventParticipant mem) {
+        Boolean isValid = true;
+
+        Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.getInitiatorId());
+        if (Integer.parseInt(event.getEventTypeId()) == 200 &&
+                isCurrentUserInitiator &&
+                isParticipantCurrentUser(mem.getUserId())
+        ) {
+            isValid = false;
+        }
+
+        if (Integer.parseInt(event.getEventTypeId()) == 100 &&
+                !isCurrentUserInitiator &&
+                !mem.getUserId().equalsIgnoreCase(event.getInitiatorId())) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    public static JSONObject createUpdateParticipantsJSON(ArrayList<ContactOrGroup> contactsAndgroups, String eventId){
+        JSONObject userListJobj;
+        JSONObject jobj = new JSONObject();
+        JSONArray jsonarr = new JSONArray();
+
+        String userId;
+        try{
+            if(contactsAndgroups!=null){
+                for(ContactOrGroup cg : contactsAndgroups){
+                    userId = cg.getUserId();
+                    userListJobj = new JSONObject();
+                    if(userId != null && !userId.isEmpty()){
+                        userListJobj.put("UserId", userId);
+
+                    }
+                    else{
+                        userListJobj.put("MobileNumber", cg.getNumbers().get(0));
+                    }
+                    jsonarr.put(userListJobj);
+                }
+            }
+
+            jobj.put("EventId", eventId);
+            jobj.put("UserList", jsonarr);
+            jobj.put("RequestorId", AppContext.getInstance().loginId);
+        }
+        catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return jobj;
     }
 
 }

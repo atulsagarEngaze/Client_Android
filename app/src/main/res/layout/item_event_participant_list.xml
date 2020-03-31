@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:id="@+id/rl_participant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/colorBackground" >
+
+        <RelativeLayout
+            android:id="@+id/rl_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/img_status"
+                style="@style/CircularProfileStyle"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="@dimen/paddinghalf"               
+                />
+
+            <com.redtop.engaze.customeviews.CircularImageView
+                android:id="@+id/img_participant"
+                style="@style/CircularProfileStyle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="@dimen/paddinghalf" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_participant"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rl_status"
+            android:paddingLeft="@dimen/paddinghalf" />
+
+        <ImageView
+            android:id="@+id/img_poke"
+            android:layout_width="24dip"
+            android:layout_height="24dip"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_toLeftOf="@+id/img_call"
+            android:background="@drawable/ic_poke_black"
+            android:backgroundTint="@color/secondary_text"
+            android:tint="@color/secondary_text" />
+
+        <ImageView
+            android:id="@+id/img_call"
+            android:layout_width="24dip"
+            android:layout_height="24dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/paddinghalf"
+            android:layout_marginRight="@dimen/padding_one_half"
+            android:background="@drawable/ic_phone_in_talk_black_36dp"
+            android:backgroundTint="@color/secondary_text"
+            android:tint="@color/secondary_text" />
+
+        <!-- <ImageView -->
+        <!-- android:id="@+id/img_sms" -->
+        <!-- android:layout_width="24dip" -->
+        <!-- android:layout_height="24dip" -->
+        <!-- android:layout_alignParentRight="true" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_marginLeft="@dimen/paddinghalf" -->
+        <!-- android:layout_marginRight="@dimen/padding" -->
+        <!-- android:background="@drawable/ic_sms_primary_48" -->
+        <!-- /> -->
+
+    </RelativeLayout>
+
+</LinearLayout>

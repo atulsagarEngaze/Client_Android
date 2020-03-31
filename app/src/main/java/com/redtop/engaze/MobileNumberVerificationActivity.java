@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -168,14 +168,14 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 	private void validateAndSendSMS(){
 		mMobileNumber = mMobileNumberEdittext.getText().toString();
 		if (validateNo()) {
-			if(AppService.isNetworkAvailable(mContext))
+			if(AppUtility.isNetworkAvailable(mContext))
 			{				
 				confirmMobileNumber();
 			}
 			else
 			{
 				Log.d(TAG, "no data network");
-				AppService.showAlert(mContext, "", getResources().getString(R.string.message_mobVer_noNetworkError));
+				AppUtility.showAlert(mContext, "", getResources().getString(R.string.message_mobVer_noNetworkError));
 			}
 		}
 	}
@@ -268,7 +268,7 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 	}			
 	
 	private void sendSmsAndWait() {		
-		mOTP = String.valueOf(AppService.getRandamNumber());
+		mOTP = String.valueOf(AppUtility.getRandamNumber());
 		String smsText = "OTP " + mOTP;
 		registerSmsReceiver();
 		setTimerLayout();
@@ -297,13 +297,13 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 
 		if (countryCode =="" || countryCode.isEmpty()) {
 			flag = false;
-			AppService.showAlert(mContext, "", "Unable to Locate Country Code.");
+			AppUtility.showAlert(mContext, "", "Unable to Locate Country Code.");
 		} else if (no == null || no.equals("")) {
 			flag = false;
-			AppService.showAlert(mContext, "", "Please enter mobile no.");
+			AppUtility.showAlert(mContext, "", "Please enter mobile no.");
 		} else if (no.length() >= 15 || no.length() <= 4) {
 			flag = false;
-			AppService.showAlert(mContext, "",
+			AppUtility.showAlert(mContext, "",
 					getResources().getString(R.string.message_mobVer_validationMessage));
 		}
 		Log.d(TAG, "country " + countryCode);

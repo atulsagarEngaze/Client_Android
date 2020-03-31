@@ -24,9 +24,14 @@ import com.redtop.engaze.adapter.HomeRunningEventListAdapter.RunningEventAdapter
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter;
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter.TrackLocationAdapterCallback;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.TrackLocationMember;
+import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
 import com.redtop.engaze.interfaces.OnActionCompleteListner;
 import com.redtop.engaze.interfaces.OnRefreshEventListCompleteListner;
@@ -88,8 +93,8 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 		//homeViewManager.setRunningEventRecycleViewAdapter(mRunningEventAdapter);			
 		homeViewManager.setLocationViewAdapter(mSuggestedLocationAdapter);		
 		SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.home_map);
-		mLatlong = new LatLng( Double.longBitsToDouble(AppUtility.getPrefLong("lat", mContext)), 
-				Double.longBitsToDouble(AppUtility.getPrefLong("long", mContext)));
+		mLatlong = new LatLng( Double.longBitsToDouble(PreffManager.getPrefLong("lat", mContext)),
+				Double.longBitsToDouble(PreffManager.getPrefLong("long", mContext)));
 		fragment.getMapAsync(this);
 		gpsOnListner = null;			
 	}

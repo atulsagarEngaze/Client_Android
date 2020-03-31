@@ -7,12 +7,11 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.webservice.EventWS;
 import com.redtop.engaze.webservice.ParticipantWS;
 
 import org.json.JSONObject;
@@ -26,7 +25,7 @@ public class ParticipantManager {
                                         final OnActionCompleteListner onActionCompleteListner,
                                         final OnActionFailedListner onActionFailedListner) {
         String message ="";
-        if(!AppService.isNetworkAvailable(context))
+        if(!AppUtility.isNetworkAvailable(context))
         {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
@@ -72,7 +71,7 @@ public class ParticipantManager {
 
     public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final Context context, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
         String message ="";
-        if(!AppService.isNetworkAvailable(context))
+        if(!AppUtility.isNetworkAvailable(context))
         {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);

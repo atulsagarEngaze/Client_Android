@@ -1,22 +1,18 @@
-package com.redtop.engaze.common;
+package com.redtop.engaze.common.utility;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-import android.telephony.SmsManager;
-import android.util.Log;
+import android.util.DisplayMetrics;
 
 
-public class AppService {
-	private final static String TAG = AppService.class.getName();
+public class AppUtility {
+	private final static String TAG = AppUtility.class.getName();
 
 	private static  Context appContext;
 
@@ -64,10 +60,22 @@ public class AppService {
 	}
 
 	public static boolean isNetworkAvailable(Context context) {
-		ConnectivityManager connectivityManager 
+		ConnectivityManager connectivityManager
 		= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	public int pxToDp(int px, Context context) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+		return dp;
+	}
+
+	public static int dpToPx(int dp, Context context) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+		return px;
 	}
 
 	/*public static void sendMsgViaWatsApp(Context context) {
@@ -95,70 +103,12 @@ public class AppService {
 
 
 
-	public int pxToDp(int px, Context context) {
-		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-		int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-		return dp;
-	}
 
-	public static int dpToPx(int dp, Context context) {
-		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-		int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
-		return px;
-	}
 
-	public static Bitmap overlayBitmapToCenter(Bitmap bitmap1, Bitmap bitmap2) {
-		int bitmap1Width = bitmap1.getWidth();
-		int bitmap1Height = bitmap1.getHeight();
-		int bitmap2Width = bitmap2.getWidth();
-		int bitmap2Height = bitmap2.getHeight();
 
-		float marginLeft = (float) (bitmap1Width * 0.5 - bitmap2Width * 0.5);
-		float marginTop = (float) (bitmap1Height * 0.5 - bitmap2Height * 0.664);
 
-		Bitmap overlayBitmap = Bitmap.createBitmap(bitmap1Width, bitmap1Height, bitmap1.getConfig());
-		Canvas canvas = new Canvas(overlayBitmap);
-		canvas.drawBitmap(bitmap1, new Matrix(), null);
-		canvas.drawBitmap(bitmap2, marginLeft, marginTop, null);
-		return overlayBitmap;
-	}
 
-	public static Bitmap overlayBitmapToCenterOfPin(Bitmap bitmap1, Bitmap bitmap2) {
-		int bitmap1Width = bitmap1.getWidth();
-		int bitmap1Height = bitmap1.getHeight();
-		int bitmap2Width = bitmap2.getWidth();
-		int bitmap2Height = bitmap2.getHeight();
 
-		float marginLeft = (float) (bitmap1Width * 0.5 - bitmap2Width * 0.5);
-		float marginTop = (float) (bitmap1Height * 0.5 - bitmap2Height * 1.00);
-
-		Bitmap overlayBitmap = Bitmap.createBitmap(bitmap1Width, bitmap1Height, bitmap1.getConfig());
-		Canvas canvas = new Canvas(overlayBitmap);
-		canvas.drawBitmap(bitmap1, new Matrix(), null);
-		canvas.drawBitmap(bitmap2, marginLeft, marginTop, null);
-		return overlayBitmap;
-	}
-	public static Bitmap getCroppedBitmap(Bitmap bitmap) {
-		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-				bitmap.getHeight(), Config.ARGB_8888);
-		Canvas canvas = new Canvas(output);
-
-		final int color = 0xff424242;
-		final Paint paint = new Paint();
-		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-		paint.setAntiAlias(true);
-		canvas.drawARGB(0, 0, 0, 0);
-		paint.setColor(color);
-		// canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-		canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-				bitmap.getWidth() / 2, paint);
-		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-		canvas.drawBitmap(bitmap, rect, rect, paint);
-		//Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-		//return _bmp;
-		return output;
-	}	
 
 
 
@@ -366,13 +316,7 @@ public class AppService {
 		}
 	}
 	@SuppressLint("NewApi")
-	public static void setRippleDrawable(ImageView view, Context context, int rippleResourceDrawableId){
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {	
-			view.setBackground(context.getResources().getDrawable(rippleResourceDrawableId));
-		} else {
-			view.setBackground(context.getDrawable(rippleResourceDrawableId));
-		}
-	}
+
 	
 
 	public static ProgressDialog showProgressBar(String title, String message, Context context ){

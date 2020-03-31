@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_map_pointer"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pending_event_recycle_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/rl_pending_help_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding"
+        android:background="@android:color/transparent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/paddinghalf"
+            android:background="@color/primary"
+            android:paddingBottom="@dimen/paddinghalf"
+            android:paddingLeft="@dimen/padding"
+            android:paddingTop="@dimen/paddinghalf"
+            android:text="@string/msgHeader_mySchedule_noPendingEvent"
+            android:textColor="@color/colorBackground"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dip"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="250dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"
+                android:text="@string/message_mySchedule_noPendingEvent"
+                android:textAlignment="center"
+                android:textColor="@color/icon"
+                android:textSize="@dimen/primary_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

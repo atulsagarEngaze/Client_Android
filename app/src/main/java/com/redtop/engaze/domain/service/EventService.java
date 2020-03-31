@@ -18,18 +18,20 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.AppService;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
+import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @SuppressLint("SimpleDateFormat")
@@ -326,7 +328,7 @@ public class EventService {
 
 	public static boolean isEventTrackBuddyEventForCurrentuser(EventDetail mEvent) {
 		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
-		boolean isCurrentUserInitiator = EventParticipant.isCurrentUserInitiator(mEvent.getInitiatorId());
+		boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId());
 
 		if((isCurrentUserInitiator && eventTypeId==200) ||
 				(!isCurrentUserInitiator && eventTypeId==100)){
@@ -337,7 +339,7 @@ public class EventService {
 
 	public static boolean isEventShareMyLocationEventForCurrentuser(EventDetail mEvent) {
 		int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
-		boolean isCurrentUserInitiator = EventParticipant.isCurrentUserInitiator(mEvent.getInitiatorId());
+		boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId());
 
 		if((isCurrentUserInitiator && eventTypeId==100) ||
 				(!isCurrentUserInitiator && eventTypeId==200)){
@@ -404,17 +406,17 @@ public class EventService {
 				JSONObject c = eventDetailJsonArray.getJSONObject(i);
 				EventDetail dt = new EventDetail(
 						ParticipantService.parseMemberList(context, c.getJSONArray("UserList")),
-						AppService.convertNullToEmptyString(c.getString("EventId")),
-						AppService.convertNullToEmptyString(c.getString("Name")),
-						AppService.convertNullToEmptyString(c.getString("EventTypeId")),
-						AppService.convertNullToEmptyString(c.getString("Description")),
-						AppService.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("StartTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
-						AppService.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("EndTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
-						AppService.convertNullToEmptyString(c.getString("Duration")),
-						AppService.convertNullToEmptyString(c.getString("InitiatorId")),
-						AppService.convertNullToEmptyString(c.getString("InitiatorName")),
-						AppService.convertNullToEmptyString(c.getString("EventStateId")),
-						AppService.convertNullToEmptyString(c.getString("TrackingStateId")),
+						AppUtility.convertNullToEmptyString(c.getString("EventId")),
+						AppUtility.convertNullToEmptyString(c.getString("Name")),
+						AppUtility.convertNullToEmptyString(c.getString("EventTypeId")),
+						AppUtility.convertNullToEmptyString(c.getString("Description")),
+						AppUtility.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("StartTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
+						AppUtility.convertNullToEmptyString(DateUtil.convertUtcToLocalDateTime(c.getString("EndTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))),
+						AppUtility.convertNullToEmptyString(c.getString("Duration")),
+						AppUtility.convertNullToEmptyString(c.getString("InitiatorId")),
+						AppUtility.convertNullToEmptyString(c.getString("InitiatorName")),
+						AppUtility.convertNullToEmptyString(c.getString("EventStateId")),
+						AppUtility.convertNullToEmptyString(c.getString("TrackingStateId")),
 						c.getString("DestinationLatitude"),
 						c.getString("DestinationLongitude"),
 						c.getString("DestinationName"),
@@ -455,4 +457,5 @@ public class EventService {
 		}
 		return eventDetailList;
 	}
+
 }

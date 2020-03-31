@@ -37,13 +37,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.redtop.engaze.adapter.CachedLocationAdapter;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
-import com.redtop.engaze.entity.AutoCompletePlace;
-import com.redtop.engaze.entity.EventPlace;
-import com.redtop.engaze.interfaces.OnSelectLocationCompleteListner;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.DestinationCacher;
-import com.redtop.engaze.viewmanager.LocationViewManager;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.cache.DestinationCacher;
+import com.redtop.engaze.domain.AutoCompletePlace;
+import com.redtop.engaze.domain.EventPlace;
+
 
 public abstract class LocationActivity extends BaseLocationActivity implements LocationListener  {
 	protected LocationViewManager locationViewManager =null;
@@ -52,7 +50,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 	public ArrayList<Marker> mMarkers = new ArrayList<Marker>();		
 	public LatLng mLatlong = null ;
 	public EventPlace mEventPlace;	
-	public ArrayList<AutoCompletePlace>mAutoCompletePlaces = new ArrayList<AutoCompletePlace>();	
+	public ArrayList<AutoCompletePlace>mAutoCompletePlaces = new ArrayList<AutoCompletePlace>();
 	public String mOriginalQuery="";		
 	public Boolean isMapSetToMyLocation = false;
 	public Boolean findLatLangOnCameraChange = true;
@@ -148,8 +146,8 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 				if(isGPSOn){
 					if(mMyCoordinates==mLatlong && mMyCoordinates !=null && mLatlong !=null){
 						locationViewManager.setGpsOnPinOnMyLocationDrawable();
-						AppUtility.setPrefLong("lat", Double.doubleToLongBits(mLatlong.latitude), mContext);
-						AppUtility.setPrefLong("long", Double.doubleToLongBits(mLatlong.longitude), mContext);
+						PreffManager.setPrefLong("lat", Double.doubleToLongBits(mLatlong.latitude), mContext);
+						PreffManager.setPrefLong("long", Double.doubleToLongBits(mLatlong.longitude), mContext);
 					}
 					else{					
 						locationViewManager.setGpsOnDrawable();

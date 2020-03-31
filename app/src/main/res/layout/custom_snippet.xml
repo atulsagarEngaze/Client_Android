@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/lluser_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/paddinghalf"
+        android:layout_marginRight="@dimen/paddinghalf"
+        android:layout_marginTop="@dimen/paddinghalf" >
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textColor="@color/primaryText" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lleta_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddinghalf" >
+
+        <TextView
+            android:id="@+id/eta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:gravity="center"
+            android:textColor="@color/primary_text" />
+
+        <TextView
+            android:id="@+id/distance_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/paddinghalf"
+            android:gravity="center"
+            android:textColor="@color/primary_text" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/info_window_divider"
+        style="@style/Divider"
+        android:layout_marginBottom="0dip"
+        android:layout_marginLeft="@dimen/paddinghalf"
+        android:layout_marginRight="@dimen/paddinghalf"
+        android:layout_marginTop="0dip" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddinghalf" >
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/secondary_text" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/info_window_load_route"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/paddinghalf"
+        android:layout_marginRight="@dimen/paddinghalf" >
+
+        <TextView
+            android:id="@+id/loadRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Load route"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/small_text_size" />
+    </RelativeLayout>
+
+</LinearLayout>

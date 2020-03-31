@@ -23,7 +23,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.internal.Constants;
 import com.redtop.engaze.EventsActivity;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
@@ -32,6 +31,7 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.UserMessageHandler;
 import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Veranstaltung;
