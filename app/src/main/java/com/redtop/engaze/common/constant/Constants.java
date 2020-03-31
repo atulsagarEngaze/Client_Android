@@ -62,7 +62,6 @@ public class Constants {
 
 
 	public static final int HOME_ACTIVITY_LOCATION_TEXT_LENGTH = 44;
-	public static final int PICK_LOCATION_ACTIVITY_LOCATION_TEXT_LENGTH = 36;
 	public static final int EVENTS_ACTIVITY_LOCATION_TEXT_LENGTH = 24;
 	public static final int EDIT_ACTIVITY_LOCATION_TEXT_LENGTH = 34;
 	public static final int MEMBER_NAME_TEXT_LENGTH = 20;
@@ -71,6 +70,7 @@ public class Constants {
 	public static final String EMAIL_ACCOUNT = "emailAccount";
 	public static final float DESTINATION_RADIUS = 30;
 	public static final long POKE_INTERVAL = 15;
+
 }
 
 

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +17,8 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.HomePendingEventListAdapter;
 import com.redtop.engaze.adapter.HomeRunningEventListAdapter;
 import com.redtop.engaze.adapter.HomeRunningEventListAdapter.RunningEventAdapterCallback;
@@ -25,28 +26,23 @@ import com.redtop.engaze.adapter.HomeTrackLocationListAdapter;
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter.TrackLocationAdapterCallback;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
-import com.redtop.engaze.interfaces.OnActionCompleteListner;
-import com.redtop.engaze.interfaces.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.localbroadcastmanager.HomeBroadcastManager;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
-import com.redtop.engaze.utils.Constants.Action;
-import com.redtop.engaze.utils.Constants.TrackingType;
-import com.redtop.engaze.utils.EventManager;
 import com.redtop.engaze.viewmanager.HomeViewManager;
+import com.redtop.engaze.viewmanager.LocationViewManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class HomeActivity extends LocationActivity implements RunningEventAdapterCallback,  NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner{		
+public class HomeActivity extends LocationActivity implements RunningEventAdapterCallback,  NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner {
 
 	private List<TrackLocationMember> mShareMyLocationList;	
 	private List<TrackLocationMember> mTrackBuddyList;	
@@ -59,7 +55,10 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 	private Boolean isGPSEnableThreadRun = false;
 	private HomeViewManager homeViewManager = null;
 	private Duration mSnooze;
+	protected HomeBroadcastManager mBroadcastManager = null;
+	public EventDetail notificationselectedEvent;
 
+	private static String TAG = HomeActivity.class.getName();
 	@Override
 	protected void onPause() {	
 		LocalBroadcastManager.getInstance(mContext).unregisterReceiver( mBroadcastManager);
@@ -80,10 +79,9 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	 	
 		mContext = this;
-		TAG = HomeActivity.class.getName();
 		setContentView(R.layout.activity_home);
-		locationViewManager = new HomeViewManager(this);
-		homeViewManager = (HomeViewManager)locationViewManager;
+		homeViewManager = new HomeViewManager(this);
+		locationViewManager = (LocationViewManager)homeViewManager;
 		mBroadcastManager = new HomeBroadcastManager(mContext);		
 		Log.i(TAG, "density: "+ AppUtility.deviceDensity);		
 		//mRunningEventAdapter = new HomeEventListAdapter(null, mContext);
@@ -284,7 +282,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 	}
 
 	public void onMeetLaterClicked() {
-		if(mInternetStatus){						
+		if(mInternetStatus){
 			Intent intent = new Intent(mContext, CreateEditEventActivity.class);
 			intent.putExtra("DestinatonLocation", (Parcelable)((HomeActivity)mContext).mEventPlace);
 			startActivity(intent);
@@ -292,7 +290,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 	}
 
 	public void onShareMyLocationClicked() {
-		if(mInternetStatus){						
+		if(mInternetStatus){
 			Intent intent = new Intent(mContext, TrackLocationActivity.class);
 			intent.putExtra("EventTypeId", 100);//EventType share my location
 			startActivity(intent);
@@ -300,7 +298,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 	}
 
 	public void onTrackBuddyClicked() {
-		if(mInternetStatus){						
+		if(mInternetStatus){
 			Intent intent = new Intent(mContext, TrackLocationActivity.class);			
 			intent.putExtra("EventTypeId", 200);//EventType track buddy
 			startActivity(intent);

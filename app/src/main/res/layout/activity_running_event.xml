@@ -1,0 +1,144 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground" >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/running_event_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dip"
+        android:background="@color/primary"
+        android:elevation="0dip"
+        app:theme="@style/ETMaterialTheme.Toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/ll_map_event_location"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_below="@+id/running_event_toolbar"
+        android:background="@color/colorBackground_secondary"
+        android:clipChildren="false"
+        android:elevation="3dp" >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/map_user_event_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+    <!-- <RelativeLayout -->
+    <!-- android:id="@+id/rl_progress_bar" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_below="@+id/ll_map_event_location" > -->
+
+
+    <!-- </RelativeLayout> -->
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_lyout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_map_event_location" >
+
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_map_user_location"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentTop="true"
+            android:progressDrawable="@drawable/progress_bar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="224dip"
+            android:layout_above="@id/ll_map_user_location" >
+
+            <ImageButton
+                android:id="@+id/img_traffic"
+                style="@style/CircularWhiteImageRightCorner"
+                android:layout_above="@+id/img_etaDistance"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="12dip"
+                android:layout_marginRight="12dip"
+                android:padding="@dimen/paddinghalf"
+                android:src="@drawable/traffic_on" />
+
+            <ImageButton
+                android:id="@+id/img_etaDistance"
+                style="@style/CircularWhiteImageRightCorner"
+                android:layout_above="@+id/img_navigation"
+                android:layout_alignParentRight="true"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_marginBottom="12dip"
+                android:layout_marginRight="12dip"
+                android:padding="@dimen/paddinghalf"
+                android:src="@drawable/eta_on" />
+
+            <ImageButton
+                android:id="@+id/img_navigation"
+                style="@style/CircularWhiteImageRightCorner"
+                android:layout_above="@+id/reCenter"
+                android:layout_alignParentRight="true"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_marginBottom="12dip"
+                android:layout_marginRight="12dip"
+                android:padding="@dimen/paddinghalf"
+                android:src="@drawable/map_direction" />
+
+            <Button
+                android:id="@+id/reCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="36dip"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="12dip"
+                android:layout_marginRight="12dip"
+                android:background="@color/colorBackground"
+                android:elevation="5dip"
+                android:text="Re-Center"
+                android:textAlignment="center"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/small_text_size" />
+
+            <include
+                android:id="@+id/internet_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                layout="@layout/internet_unavailable_message" >
+            </include>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_map_user_location"
+            android:layout_width="match_parent"
+            android:layout_height="84dip"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorBackground"
+            android:clipChildren="false"
+            android:elevation="25dip" >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/map_user_location_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

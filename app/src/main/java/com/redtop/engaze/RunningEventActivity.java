@@ -8,7 +8,6 @@ import java.util.Date;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,12 +19,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.constant.IntentConstants;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.EventManager;
-import com.redtop.engaze.utils.InternalCaching;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
+import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.service.ParticipantService;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 @SuppressLint({ "ResourceAsColor", "SimpleDateFormat" })
 public class RunningEventActivity extends RunningEventActions implements OnMapReadyCallback {
@@ -110,7 +112,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 
 				if(isEventPast()){					
 					EventManager.eventOver(mContext, mEventId);
-					Intent eventRemoved = new Intent(Constants.EVENT_OVER);
+					Intent eventRemoved = new Intent(IntentConstants.EVENT_OVER);
 					eventRemoved.putExtra("eventId", mEventId);						
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventRemoved);
 				}
@@ -134,8 +136,8 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 			LocalBroadcastManager.getInstance(mContext).registerReceiver(mRunningEventBroadcastManager,
 					mRunningEventBroadcastManager.mFilterEventNotExist);
 			if(mMyCoordinates !=null){			
-				AppUtility.setPrefLong("lat", Double.doubleToLongBits(mMyCoordinates.latitude), mContext);
-				AppUtility.setPrefLong("long", Double.doubleToLongBits(mMyCoordinates.longitude), mContext);
+				PreffManager.setPrefLong("lat", Double.doubleToLongBits(mMyCoordinates.latitude), mContext);
+				PreffManager.setPrefLong("long", Double.doubleToLongBits(mMyCoordinates.longitude), mContext);
 			}
 			//hideProgressBar();
 		}
@@ -238,9 +240,9 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu
 		if(mEvent!=null){
-			if (AppUtility.isCurrentUserInitiator(mEvent.getInitiatorId(), mContext)){
+			if (ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId())){
 				getMenuInflater().inflate(R.menu.menu_running_event_initiator, menu);			
-				if((mEvent.getMembersbyStatus(AcceptanceStatus.getStatus(1))).size() > 1){			
+				if((mEvent.getMembersbyStatus(AcceptanceStatus.getStatus(1))).size() > 1){
 					menu.removeItem(R.id.action_poke_all);			
 				}
 			}

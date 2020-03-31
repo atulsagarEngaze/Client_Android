@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_location_search_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground_secondary"
+    android:visibility="gone" >
+
+    <RelativeLayout
+        android:id="@+id/rl_location_search_box"
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        android:layout_marginLeft="@dimen/paddinghalf"
+        android:layout_marginRight="@dimen/paddinghalf"
+        android:layout_marginTop="@dimen/padding"
+        android:background="@color/colorBackground"
+        android:elevation="5dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+
+        <ImageView
+            android:id="@+id/img_select_location_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/paddingQuarter"
+            android:background="@drawable/ic_arrow_back_black_24dp"
+            android:backgroundTint="#4f4f4f" />
+
+        <EditText
+            android:id="@+id/txt_search_location"
+            style="@style/PrimaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/img_select_location_back"
+            android:background="@android:color/transparent"
+            android:dropDownAnchor="@+id/ll_pick_location"
+            android:dropDownVerticalOffset="@dimen/paddinghalf"
+            android:hint="@string/location_search_bar_hint"
+            android:inputType="textNoSuggestions"
+            android:textColorHint="@color/colorHintDisable"
+            android:textSize="@dimen/small_text_size" >
+        </EditText>
+
+        <ImageView
+            android:id="@+id/icon_search_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/paddinghalf"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:background="@drawable/ic_clear_black_24dp"
+            android:backgroundTint="#4f4f4f"
+            android:tint="@color/primary" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_location_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_location_search_box"
+        android:layout_marginBottom="@dimen/padding"
+        android:layout_marginLeft="@dimen/paddinghalf"
+        android:layout_marginRight="@dimen/paddinghalf"
+        android:layout_marginTop="@dimen/padding"
+        android:background="@color/colorListBackground"
+        android:elevation="5dip" >
+
+        <ListView
+            android:id="@+id/location_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null" >
+        </ListView>
+
+        <ListView
+            android:id="@+id/favourite_location_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:paddingBottom="@dimen/paddinghalf" >
+        </ListView>
+    </RelativeLayout>
+
+</RelativeLayout>

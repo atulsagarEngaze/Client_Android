@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:id="@+id/action_extend"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="1"
+        android:title="Extend"
+        app:showAsAction="never"/>
+   
+    <item
+        android:id="@+id/action_edit_participants"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="2"
+        android:title="Edit Participants"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_change_destination"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="3"
+        android:title="Change Destination"
+        app:showAsAction="never"/>   
+ <item
+        android:id="@+id/action_poke_all"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="4"
+        android:title="Poke All"
+        app:showAsAction="never"/>
+  <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="5"
+        android:title="Share on FB"
+        app:showAsAction="never"/>
+   <item
+        android:id="@+id/action_end"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="6"
+        android:title="End"
+        app:showAsAction="never"/>
+</menu>

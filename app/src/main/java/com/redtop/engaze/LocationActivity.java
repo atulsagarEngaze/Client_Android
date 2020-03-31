@@ -41,6 +41,7 @@ import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.domain.AutoCompletePlace;
 import com.redtop.engaze.domain.EventPlace;
+import com.redtop.engaze.viewmanager.LocationViewManager;
 
 
 public abstract class LocationActivity extends BaseLocationActivity implements LocationListener  {

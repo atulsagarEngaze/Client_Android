@@ -78,6 +78,57 @@ public class AppUtility {
 		return px;
 	}
 
+	public static  CharSequence createTextForDisplay(CharSequence description, int maxLength) {
+		//HOME_ACTIVITY_LOCATION_TEXT_LENGTH
+		int maxLengthForDevice = maxLength  + (int)5*(AppUtility.deviceDensity/320 -1 );// TODO Auto-generated method stub
+		if(description.length()<= maxLengthForDevice)
+		{
+			return description;
+		}
+		else
+		{
+			return description.toString().substring(0,maxLengthForDevice-3) + "...";
+		}
+	}
+
+	public static  CharSequence createTextForLocationDisplay(CharSequence description, int lineLength , int numLines) {
+		int lineCount = 0;
+		int totalLength = lineLength * numLines;
+		String descriptionStr = description.toString();
+		String tmpStr = "";
+		String singlieLinedisplayText ="";
+		String[] lines = descriptionStr.split(" ");
+
+		String resultantlines = "";
+		for (String line : lines){
+			tmpStr = singlieLinedisplayText + line + " ";
+			if(tmpStr.length()< lineLength){
+				singlieLinedisplayText = tmpStr;
+			}
+			else{
+				lineCount += 1;
+				if(lineCount <= numLines){
+					resultantlines += tmpStr.substring(0, lineLength);
+					singlieLinedisplayText = tmpStr.substring(lineLength, tmpStr.length());
+				}
+				else{
+					break;
+				}
+			}
+		}
+
+		if(lineCount < numLines){
+			resultantlines += tmpStr;
+		}
+
+		if(descriptionStr.length()<=totalLength){
+			return resultantlines;
+		}
+		else{
+			return resultantlines.substring(0,resultantlines.length()-3) + "...";
+		}
+	}
+
 	/*public static void sendMsgViaWatsApp(Context context) {
 
 		PackageManager pm=context.getPackageManager();
@@ -100,85 +151,6 @@ public class AppUtility {
 			.show();
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static  CharSequence createTextForDisplay(CharSequence description, int maxLength) {		
-		//HOME_ACTIVITY_LOCATION_TEXT_LENGTH
-		int maxLengthForDevice = maxLength  + (int)5*(AppUtility.deviceDensity/320 -1 );// TODO Auto-generated method stub
-		if(description.length()<= maxLengthForDevice)
-		{
-			return description;
-		}
-		else
-		{
-			return description.toString().substring(0,maxLengthForDevice-3) + "...";
-		}
-	}
-
-	public static  CharSequence createTextForLocationDisplay(CharSequence description, int lineLength , int numLines) {	
-		int lineCount = 0;
-		int totalLength = lineLength * numLines;
-		String descriptionStr = description.toString();
-		String tmpStr = "";		
-		String singlieLinedisplayText ="";		
-		String[] lines = descriptionStr.split(" ");
-
-		String resultantlines = "";
-		for (String line : lines){	
-			tmpStr = singlieLinedisplayText + line + " ";				
-			if(tmpStr.length()< lineLength){				
-				singlieLinedisplayText = tmpStr;							
-			}
-			else{				
-				lineCount += 1;				
-				if(lineCount <= numLines){	
-					resultantlines += tmpStr.substring(0, lineLength);
-					singlieLinedisplayText = tmpStr.substring(lineLength, tmpStr.length());					
-				}
-				else{
-					break;
-				}
-			}			
-		}
-
-		if(lineCount < numLines){
-			resultantlines += tmpStr;
-		}
-
-		if(descriptionStr.length()<=totalLength){
-			return resultantlines;
-		}
-		else{
-			return resultantlines.substring(0,resultantlines.length()-3) + "...";
-		}
-	}
-
-
 
 	public static boolean validateDurationInput(Duration duration, Context context) {
 		int userInput = duration.getTimeInterval(); 

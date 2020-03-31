@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/track_location_event_toolbar"
+        style="@style/ETMaterialTheme.ActionBar" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/rl_event_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/paddinghalf"
+                android:orientation="horizontal" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/icQuickEvtName"
+                    style="@style/IconStyle"
+                    android:text="@string/fa_book"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/QuickEventName"
+                    style="@style/PrimaryTextStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="56dip"
+                    android:background="#00000000"
+                    android:hint="@string/event_title_hint"
+                    android:inputType="text"
+                    android:paddingBottom="@dimen/paddinghalf"
+                    android:paddingTop="@dimen/paddinghalf"
+                    android:singleLine="false"
+                    android:textColorHint="@color/colorHintDisable" >
+                </EditText>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_event_name"
+                style="@style/Divider"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="72dip"
+                android:paddingLeft="72dip" />
+
+            <RelativeLayout
+                android:id="@+id/rl_participant_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/paddinghalf"
+                android:layout_marginTop="@dimen/paddinghalf"
+                android:orientation="horizontal" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/invitees"
+                    style="@style/IconStyle"
+                    android:text="@string/fa_user"
+                    android:textSize="20sp" />
+
+                <com.redtop.engaze.utils.FlowLayout
+                    android:id="@+id/participant_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginTop="@dimen/paddinghalf" >
+
+                    <com.redtop.engaze.utils.CustomAutoCompleteTextView
+                        android:id="@+id/searchAutoComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:completionThreshold="1"
+                        android:dropDownAnchor="@+id/participant_layout"
+                        android:dropDownWidth="match_parent"
+                        android:textColor="@color/secondary_text"
+                        android:textColorHint="@color/colorHintDisable"
+                        android:textSize="@dimen/primary_text_size" />
+                </com.redtop.engaze.utils.FlowLayout>
+            </RelativeLayout>
+
+            <View
+                style="@style/Divider"
+                android:layout_marginLeft="72dip"
+                android:paddingLeft="72dip" />
+
+            <RelativeLayout
+                android:id="@+id/row_start_at_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/watch"
+                    style="@style/IconStyle"
+                    android:text="@string/fa_clock_o"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/Duration"
+                    style="@style/SecondaryTextStyle"
+                    android:layout_marginLeft="56dip" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tracklocation_Duration_holder"
+                style="@style/PrimaryTextStyleEvent"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="56dip"
+                android:ems="10" >
+            </TextView>
+
+            <View
+                style="@style/Divider"
+                android:layout_marginLeft="72dip"
+                android:paddingLeft="72dip" />
+
+            <RelativeLayout
+                android:id="@+id/row_location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/paddinghalf"
+                android:orientation="horizontal" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/mapMarker"
+                    style="@style/IconStyle"
+                    android:text="@string/fa_map_marker"
+                    android:textSize="20sp" />
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tracklocation_location"
+                        style="@style/PrimaryTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="56dip"
+                        android:layout_marginTop="@dimen/padding"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/share_my_location_location_hint"
+                        android:textColorHint="@color/colorHintDisable" >
+                    </TextView>
+
+                    <ImageView
+                        android:id="@+id/icon_track_location_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/paddinghalf"
+                        android:layout_marginRight="@dimen/paddinghalf"
+                        android:background="@drawable/ic_clear_black_24dp"
+                        android:backgroundTint="#4f4f4f"
+                        android:tint="@color/primary" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_location_end"
+                style="@style/Divider"
+                android:layout_marginLeft="72dip"
+                android:paddingLeft="72dip" />
+
+            <Button
+                android:id="@+id/btn_tracking_start"
+                style="@style/FullWidthPrimaryButton"
+                android:layout_margin="16sp"
+                android:background="@drawable/ripple_event_save_buttton"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/share_my_location_text_start_button"
+                android:textColor="@color/colorBackground"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

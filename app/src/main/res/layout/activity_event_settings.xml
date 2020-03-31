@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:focusable="true"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/event_setting_toolbar"
+        style="@style/ETMaterialTheme.ActionBar" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true" >
+
+            <TableRow
+                android:id="@+id/row_reminder_heading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/icon_reminder"
+                    style="@style/HeaderIconStyle"
+                    android:layout_weight="1"
+                    android:text="@string/fa_bell"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/label_reminder_heading"
+                    style="@style/PrimaryTextStyle"
+                    android:layout_span="2"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dip"
+                    android:text="Reminder" />
+            </TableRow>
+
+            <TableRow>
+
+                <Space android:layout_weight="1" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_span="2"
+                    android:layout_weight="9" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_reminder_value"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Space android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/setting_reminder_value"
+                    style="@style/EventSettingsTextStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:layout_weight="8"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:inputType="number"
+                    android:textColorHint="@color/colorHintDisable" >
+                </EditText>
+            </TableRow>
+
+            <TableRow>
+
+                <Space android:layout_weight="1" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_span="2"
+                    android:layout_weight="9" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_reminder_minute"
+                android:layout_width="fill_parent"
+                android:layout_height="20dip"
+                android:focusableInTouchMode="true" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9" >
+
+                    <TextView
+                        android:id="@+id/reminder_minute"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:focusableInTouchMode="true"
+                        android:tag="minute"
+                        android:text="@string/minutes" />
+
+                    <ImageView
+                        android:id="@+id/icon_reminder_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_reminder_hour"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:focusableInTouchMode="true" >
+
+                    <TextView
+                        android:id="@+id/reminder_hour"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:tag="hour"
+                        android:text="@string/hours" />
+
+                    <ImageView
+                        android:id="@+id/icon_reminder_hour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <Space android:layout_weight="1" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_span="2"
+                    android:layout_weight="9" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_reminder_notification"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9" >
+
+                    <TextView
+                        android:id="@+id/reminder_notification"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/padding"
+                        android:tag="notification"
+                        android:text="As notification" />
+
+                    <ImageView
+                        android:id="@+id/icon_reminder_notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_reminder_alarm"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9" >
+
+                    <TextView
+                        android:id="@+id/reminder_alarm"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/padding"
+                        android:tag="email"
+                        android:text="As alarm" />
+
+                    <ImageView
+                        android:id="@+id/icon_reminder_alarm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" />
+                </RelativeLayout>
+            </TableRow>
+
+            <View style="@style/Divider" />
+
+            <TableRow
+                android:id="@+id/row_tracking_heading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <com.redtop.engaze.fontawesome.TextFont
+                    android:id="@+id/icon_tracking"
+                    style="@style/HeaderIconStyle"
+                    android:layout_weight="1"
+                    android:text="@string/fa_dot_circle_o"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/label_tracking_heading"
+                    style="@style/PrimaryTextStyle"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dip"
+                    android:text="Tracking" />
+
+                <!-- <Switch -->
+                <!-- android:id="@+id/setting_tracking_switch" -->
+                <!-- android:layout_height="5dp" -->
+                <!-- android:layout_gravity="start|center_vertical" -->
+                <!-- android:layout_weight="1" -->
+                <!-- android:maxHeight="5dp" -->
+                <!-- android:textSize="14sp" > -->
+                <!-- </Switch> -->
+            </TableRow>
+
+            <TableRow android:id="@+id/row_setting_tracking_value_start_border" >
+
+                <Space android:layout_weight="1" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_span="2"
+                    android:layout_weight="9" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_tracking_value"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Space android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/setting_tracking_value"
+                    style="@style/EventSettingsTextStyle"
+                    android:layout_marginBottom="@dimen/paddinghalf"
+                    android:layout_marginTop="@dimen/paddinghalf"
+                    android:layout_span="2"
+                    android:layout_weight="8"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
+                    android:inputType="number"
+                    android:textColorHint="@color/colorHintDisable" >
+                </EditText>
+            </TableRow>
+
+            <TableRow android:id="@+id/row_setting_tracking_value_end_border" >
+
+                <Space android:layout_weight="1" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_span="2"
+                    android:layout_weight="10" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_tracking_minute"
+                android:layout_width="fill_parent"
+                android:layout_height="20dip" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9" >
+
+                    <TextView
+                        android:id="@+id/tracking_minute"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/padding"
+                        android:tag="minute"
+                        android:text="@string/minutes" />
+
+                    <ImageView
+                        android:id="@+id/icon_tracking_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row_tracking_hour"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding"
+                android:focusableInTouchMode="true" >
+
+                <Space android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9" >
+
+                    <TextView
+                        android:id="@+id/tracking_hour"
+                        style="@style/EventSettingsTextStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="@dimen/padding"
+                        android:tag="hour"
+                        android:text="@string/hours" />
+
+                    <ImageView
+                        android:id="@+id/icon_tracking_hour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding"
+                        android:background="@drawable/ic_check_black_24dp"
+                        android:backgroundTint="@color/primary" >
+                    </ImageView>
+                </RelativeLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

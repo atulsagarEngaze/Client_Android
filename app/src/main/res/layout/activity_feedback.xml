@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context="com.redtop.engaze.FeedbackActivity" >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/feedback_toolbar"
+        style="@style/ETMaterialTheme.ActionBar" />    
+
+    <EditText
+        android:id="@+id/txt_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"        
+        android:layout_below="@id/feedback_toolbar"
+        android:background="@null"
+        android:hint="@string/label_feedback_hint"
+        android:padding="@dimen/padding"
+        android:singleLine="false"
+        android:textAlignment="textStart"
+        android:textColorHint="@color/colorHintDisable" 
+        android:textColor="@color/primary_text">
+        <requestFocus />
+        </EditText>
+
+</RelativeLayout>

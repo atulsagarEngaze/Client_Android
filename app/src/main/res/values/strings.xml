@@ -27,6 +27,10 @@
     <string name="title_mobile_verification">Mobile Verification</string>
     <!-- End-->
 
+    <string name="title_share_my_location">Share my location</string>
+    <string name="title_track_buddies">Track buddies</string>
+
+
     <string name="app_label">Engaze</string>
     <string name="activity_contacts_list">Contacts List</string>
     <string name="activity_contact_detail">Contact Detail</string>

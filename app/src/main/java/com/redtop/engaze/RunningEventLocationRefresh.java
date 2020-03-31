@@ -22,14 +22,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
-import com.redtop.engaze.entity.EventMember;
-import com.redtop.engaze.entity.UsersLocationDetail;
-import com.redtop.engaze.interfaces.OnAPICallCompleteListner;
-import com.redtop.engaze.utils.APICaller;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
-import com.redtop.engaze.utils.JsonParser;
-import com.redtop.engaze.utils.MarkerHelper;
+import com.redtop.engaze.domain.UsersLocationDetail;
+import com.redtop.engaze.manager.LocationManager;
+
+import androidx.cardview.widget.CardView;
 
 @SuppressLint({ "ResourceAsColor", "SimpleDateFormat" })
 public class RunningEventLocationRefresh extends RunningEventMarker {
@@ -43,7 +39,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 	@Override
 	protected void onResume() {		
 		if(mClickedUserLocationView!=null){
-			AppUtility.setBackgrounOfRecycleViewItem((CardView)mClickedUserLocationView, Color.TRANSPARENT);		
+			AppUtility.setBackgrounOfRecycleViewItem((CardView)mClickedUserLocationView, Color.TRANSPARENT);
 			mClickedUserLocationView = null;
 		}
 		super.onResume();
@@ -82,7 +78,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 			return;
 		}
 
-		APICaller.getLocationsFromServer(mContext, mUserId, mEventId, new OnAPICallCompleteListner() {
+		LocationManager.getLocationsFromServer(mContext, mUserId, mEventId, new OnAPICallCompleteListner() {
 
 			@Override
 			public void apiCallComplete(JSONObject response) {

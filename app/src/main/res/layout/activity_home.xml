@@ -1,0 +1,159 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:clipChildren="false" >
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false" >
+
+        <RelativeLayout
+            android:id="@+id/rl_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/rl_main_menu_buttons" >
+
+                <fragment
+                    android:id="@+id/home_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" >
+
+                    <ImageView
+                        android:id="@+id/img_center_pin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="12dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:local="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/home_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                app:theme="@style/ETMaterialTheme.Toolbar" >
+
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    layout="@layout/layout_home_menu_notification" >
+                </include>
+            </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:id="@+id/ll_pick_location"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_below="@+id/home_toolbar"
+                android:layout_marginLeft="@dimen/paddinghalf"
+                android:layout_marginRight="@dimen/paddinghalf"
+                android:layout_marginTop="@dimen/paddinghalf"
+                android:background="@color/colorBackground"
+                android:elevation="5dip"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/txt_location"
+                    style="@style/PrimaryTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/location_search_bar_hint"
+                    android:textColorHint="@color/colorHintDisable"
+                    android:textSize="@dimen/small_text_size" >
+                </TextView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dip"
+                android:background="@android:color/transparent"
+                android:elevation="5dip"
+                android:focusable="true" >
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    layout="@layout/layout_home_notification"
+                    android:clipChildren="false" >
+                </include>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_above="@+id/rl_main_menu_buttons"
+                android:paddingBottom="@dimen/paddinghalf" >
+
+                <ImageButton
+                    android:id="@+id/img_my_location"
+                    style="@style/CircularWhiteImageRightCorner"
+                    android:layout_above="@+id/internet_status"
+                    android:layout_alignWithParentIfMissing="true"
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginRight="12dip"
+                    android:padding="@dimen/paddinghalf"
+                    android:src="@drawable/pointer_on_gps_on" />
+
+                <include
+                    android:id="@+id/internet_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dip"
+                    android:layout_alignParentBottom="true"
+                    layout="@layout/internet_unavailable_message" >
+                </include>
+            </RelativeLayout>
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                layout="@layout/layout_home_menu_buttons" >
+            </include>
+        </RelativeLayout>
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            layout="@layout/layout_location_search_view" >
+        </include>
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/fragment_navigation_drawer"
+        android:name="com.redtop.engaze.fragment.NavDrawerFragment"
+        android:layout_width="@dimen/nav_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/fragment_navigation_drawer"
+        tools:layout="@layout/fragment_navigation_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

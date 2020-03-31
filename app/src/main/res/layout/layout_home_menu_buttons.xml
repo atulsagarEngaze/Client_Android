@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_main_menu_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".5"
+        android:background="@color/colorBackground" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/paddinghalf"
+        android:paddingTop="12dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/paddinghalf"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/img_meet_now"
+                style="@style/HomeMenuButton"
+                android:alpha="1.0"
+                android:background="@drawable/ripple_teal"
+                android:src="@drawable/ic_meetnow_white_24dp" />
+
+            <TextView
+                android:id="@+id/txt_meet_now"
+                style="@style/HomeMenuText"
+                android:text="@string/label_home_menu_meetnow" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/img_meet_later"
+                style="@style/HomeMenuButton"
+                android:alpha="1.0"
+                android:background="@drawable/ripple_bluegray"
+                android:src="@drawable/ic_event_add" />
+
+            <TextView
+                android:id="@+id/txt_meet_later"
+                style="@style/HomeMenuText"
+                android:text="@string/label_home_menu_meetlater" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/img_track_buddy"
+                style="@style/HomeMenuButton"
+                android:background="@drawable/ripple_amber"
+                android:src="@drawable/ic_trackbuddy" />
+
+            <TextView
+                android:id="@+id/txt_track_buddy"
+                style="@style/HomeMenuText"
+                android:text="@string/label_home_menu_trackbuddy" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/img_share_mylocation"
+                style="@style/HomeMenuButton"              
+                android:background="@drawable/ripple_lightgreen" 
+                android:src="@drawable/ic_trackme"/>
+
+            <TextView
+                android:id="@+id/txt_share_my_location"
+                style="@style/HomeMenuText"
+                android:text="@string/label_home_menu_sharemylocation" >
+            </TextView>
+        </LinearLayout>
+
+        <!-- <LinearLayout -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:orientation="vertical" > -->
+
+
+        <!-- <ImageButton -->
+        <!-- android:id="@+id/img_set_alert" -->
+        <!-- style="@style/HomeMenuButton" -->
+        <!-- android:background="@drawable/ripple_accent" -->
+        <!-- android:src="@drawable/ic_alarm_white_36x36" /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/txt_set_alert" -->
+        <!-- style="@style/HomeMenuText" -->
+        <!-- android:text="Set alert" > -->
+        <!-- </TextView> -->
+        <!-- </LinearLayout> -->
+    </LinearLayout>
+
+</FrameLayout>

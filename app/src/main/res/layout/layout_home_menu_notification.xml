@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:orientation="horizontal"   
+    android:paddingRight="4dp" >
+
+    <RelativeLayout
+        android:id="@+id/rl_hn_pending_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <ImageButton
+            android:id="@+id/img_hn_pending_events"
+            style="@style/HomeNotificationButton"
+            android:src="@drawable/selector_home_pending_event_notification" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp" >
+
+            <ImageButton
+                android:id="@+id/img_hn_pending_events_sub"
+                style="@style/HomeNotificationButton"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:background="@drawable/ripple_red" />
+
+            <TextView
+                android:id="@+id/txt_unread_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/paddingQuarter"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/extra_small_text_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_hn_running_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <ImageButton
+            android:id="@+id/img_hn_running_events"
+            style="@style/HomeNotificationButton"
+            android:src="@drawable/selector_home_running_event_notification" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp" >
+
+            <ImageButton
+                android:id="@+id/img_nh_running_events_sub"
+                style="@style/HomeNotificationButton"
+                android:paddingLeft="10dp"
+                 android:paddingRight="10dp"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:background="@drawable/ripple_lightgreen" />
+
+            <TextView
+                android:id="@+id/txt_running_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/paddingQuarter"
+                android:text="2"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/extra_small_text_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_hn_share_location_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <ImageButton
+            android:id="@+id/img_hn_location_sharing"
+            style="@style/HomeNotificationButton"
+            android:src="@drawable/selector_home_share_my_location_notification" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp" >
+
+            <ImageButton
+                android:id="@+id/img_nh_sharing_location_events_sub"
+                style="@style/HomeNotificationButton"
+                android:layout_width="16dip"
+                android:layout_height="16dip"               
+                android:background="@drawable/ripple_lightgreen" />
+
+            <TextView
+                android:id="@+id/txt_sharing_location_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/paddingQuarter"
+                android:text="2"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/extra_small_text_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_hn_track_buddy_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <ImageButton
+            android:id="@+id/img_hn_buddy_tracking"
+            style="@style/HomeNotificationButton"
+            android:src="@drawable/selector_home_track_buddy_notification" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp" >
+
+            <ImageButton
+                android:id="@+id/img_nh_track_buddy_events_sub"
+                style="@style/HomeNotificationButton"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:background="@drawable/ripple_lightgreen" />
+
+            <TextView
+                android:id="@+id/txt_track_buddy_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/paddingQuarter"
+                android:text="2"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/extra_small_text_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>
