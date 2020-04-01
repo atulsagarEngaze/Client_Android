@@ -67,7 +67,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             public void run() {
 
                 if (mEventId != null && mEvent != null) {
-                    turnOnOfInternetAvailabilityMessage(mContext);
+                    turnOnOfInternetAvailabilityMessage();
                     actBasedOnTimeLeft();
                     //loadMyCoordinates();
                     getLocationsFromServer();
