@@ -15,7 +15,6 @@ import com.facebook.login.LoginResult;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.R;
 
@@ -83,7 +82,7 @@ public class FBShareHelper {
 			@Override
 			public void onSuccess(Sharer.Result result) {
 				// TODO Auto-generated method stub
-				mActivity.hideProgressBar();
+				ProgressBar.hideProgressBar();
 				Toast.makeText(mActivity,								
 						mActivity.getResources().getString(R.string.fb_share_success),
 						Toast.LENGTH_LONG).show();
@@ -97,7 +96,7 @@ public class FBShareHelper {
 			@Override
 			public void onError(FacebookException error) {
 				// TODO Auto-generated method stub
-				mActivity.hideProgressBar();
+				ProgressBar.hideProgressBar();
 				Toast.makeText(mActivity,						
 						mActivity.getResources().getString(R.string.fb_share_error),
 						Toast.LENGTH_LONG).show();

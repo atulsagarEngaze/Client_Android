@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorListBackground" >
+
+    <ImageView
+        android:id="@+id/ic_location_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginRight="@dimen/padding"
+        android:background="@drawable/ic_access_time_black_24dp"
+        android:backgroundTint="@color/divider_secondary" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ic_location_item" 
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            style="@style/DividerSecondary"
+            android:layout_width="match_parent"            
+            android:layout_marginBottom="0dip"
+            android:layout_marginTop="0dip" />
+
+        <TextView
+            android:id="@+id/cached_location_name"
+            style="@style/PrimaryTextStyle"
+            android:paddingBottom="0dip"
+            android:paddingTop="@dimen/paddinghalf"
+            android:layout_width="fill_parent"             
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="0dip"
+            android:layout_marginLeft="0dip"
+            android:layout_marginTop="@dimen/paddingQuarter"
+            android:paddingLeft="0dip"
+             />
+        
+         <TextView
+            android:id="@+id/cached_location_description"
+            style="@style/SecondaryTextStyle"
+            android:textSize="@dimen/small_text_size"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_marginLeft="0dip"
+            android:layout_marginTop="0dip"
+            android:paddingLeft="0dip"
+            android:paddingTop="0dip" />
+    </LinearLayout>
+
+</RelativeLayout>

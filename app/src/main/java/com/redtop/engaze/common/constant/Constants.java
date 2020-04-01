@@ -71,6 +71,8 @@ public class Constants {
 	public static final float DESTINATION_RADIUS = 30;
 	public static final long POKE_INTERVAL = 15;
 
+	public static final int ROUTE_END_POINT_REQUEST_CODE = 9;
+
 }
 
 

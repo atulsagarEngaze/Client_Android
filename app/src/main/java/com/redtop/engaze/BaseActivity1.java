@@ -13,43 +13,45 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
+import com.redtop.engaze.domain.ContactOrGroup;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+
+import java.util.Hashtable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public abstract class BaseActivity1 extends AppCompatActivity {
     public Context mContext;
-    public AppContext mAppContext;
     private ProgressDialog mDialog;
-    protected static Boolean mInternetStatus;
     protected BroadcastReceiver mNetworkUpdateBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        mAppContext = AppContext.getInstance();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (mDialog ==null){
             mDialog = new ProgressDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
 
-        mInternetStatus = AppUtility.isNetworkAvailable(this);
-
         mNetworkUpdateBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if(intent.getAction().equals(Constants.NETWORK_STATUS_UPDATE))
                 {
-                    mInternetStatus = AppUtility.isNetworkAvailable(context);
-                    turnOnOfInternetAvailabilityMessage(context);
-                    if(mInternetStatus){
+                    AppContext.context.isInternetEnabled = AppUtility.isNetworkAvailable(context);
+                    turnOnOfInternetAvailabilityMessage();
+                    if(AppContext.context.isInternetEnabled){
                         onInternetConnectionResume();
                     }
                     else{
@@ -79,7 +81,7 @@ public abstract class BaseActivity1 extends AppCompatActivity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mNetworkUpdateBroadcastReceiver,
                 new IntentFilter(Constants.NETWORK_STATUS_UPDATE));
-        turnOnOfInternetAvailabilityMessage(this);
+        turnOnOfInternetAvailabilityMessage();
     }
 
     protected void showProgressBar(String message ){
@@ -99,13 +101,13 @@ public abstract class BaseActivity1 extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    protected void turnOnOfInternetAvailabilityMessage(Context context)
+    protected void turnOnOfInternetAvailabilityMessage()
     {
         View v = findViewById(R.id.internet_status);
         if(v!=null){
 
             LinearLayout networkStatusLayout= (LinearLayout) v;
-            if(mAppContext.isInternetEnabled)
+            if(AppContext.context.isInternetEnabled)
             {
                 if(networkStatusLayout!=null)
                 {
@@ -176,4 +178,92 @@ public abstract class BaseActivity1 extends AppCompatActivity {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.message_invitation_body));
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.label_invitation_inviteUsing)));
     }
+
+    public Boolean accessingContactsFirstTime(){
+        if(AppContext.context.isFirstTimeLoading = true){
+            processMemberList();
+            AppContext.context.isFirstTimeLoading = false;
+            return true;
+        }
+        return false;
+    }
+
+    private void processMemberList(){
+        if (PreffManager.getPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED)){
+            registeredMemberListCached();
+        }
+        else if (PreffManager.getPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED)){
+            showProgressBar(getResources().getString(R.string.message_general_progressDialog));
+            ContactAndGroupListManager.initializedRegisteredUser(new OnRefreshMemberListCompleteListner() {
+
+                @Override
+                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
+                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
+                    hideProgressBar();
+                    //accessingContactsFirstTime();
+                }
+            }, new OnRefreshMemberListCompleteListner() {
+
+                @Override
+                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
+                    hideProgressBar();
+                    Toast.makeText(mContext,
+                            getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else {
+            refreshMemberList();
+        }
+    }
+
+    protected void refreshMemberList(){
+        if(AppContext.context.isInternetEnabled)
+        {
+
+            Thread thread= new Thread(){
+                @Override
+                public void run(){
+                    ContactAndGroupListManager.cacheContactAndGroupList(new OnRefreshMemberListCompleteListner() {
+
+                        @Override
+                        public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
+                            PreffManager.setPref(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, "true");
+                            memberListRefreshed_success(memberList);
+
+                        }
+                    }, new OnRefreshMemberListCompleteListner() {
+
+                        @Override
+                        public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
+                            memberListRefreshed_fail();
+                            Toast.makeText(mContext,
+                                    getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            };
+            thread.start();
+        }
+        else
+        {
+
+            Toast.makeText(mContext,
+                    getResources().getString(R.string.internet_not_available), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    protected void registeredMemberListCached(){
+
+    }
+
+    protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList){
+
+    }
+
+    protected void memberListRefreshed_fail(){
+
+    }
+
 }

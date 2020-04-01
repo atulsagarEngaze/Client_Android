@@ -15,12 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,30 +23,33 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.EventsPagerAdapter;
-import com.redtop.engaze.app.SlidingTabLayout;
+import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.common.constant.Veranstaltung;
+import com.redtop.engaze.common.customeviews.SlidingTabLayout;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.EventDetail;
-import com.redtop.engaze.entity.EventDetail;
+import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.fragment.AcceptedEventsFragment;
 import com.redtop.engaze.fragment.DeclinedEventsFragment;
 import com.redtop.engaze.fragment.NavDrawerFragment;
 import com.redtop.engaze.fragment.PendingEventsFragment;
-import com.redtop.engaze.interfaces.OnRefreshEventListCompleteListner;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
-import com.redtop.engaze.utils.Constants.Action;
-import com.redtop.engaze.utils.EventHelper;
-import com.redtop.engaze.utils.EventManager;
-import com.redtop.engaze.utils.InternalCaching;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 @SuppressLint({ "NewApi", "Recycle" })
-public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.FragmentDrawerListener {
+public class EventsActivity extends ActionSuccessFailMessageActivity implements NavDrawerFragment.FragmentDrawerListener {
 
 
 	private ViewPager pager;
@@ -71,7 +68,11 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 	public HashMap<AcceptanceStatus, List<EventDetail>> mEventDetailHashmap= new HashMap<AcceptanceStatus, List<EventDetail>>();
 	private BroadcastReceiver mEventBroadcastReceiver;
 	private IntentFilter mFilter;
+
+	private final static String TAG = EventsActivity.class.getName();
+
 	private final Handler EventsRefreshHandler = new Handler();
+
 	private Runnable EventsRefreshRunnable = new Runnable() {
 		public void run() {	
 			refreshEventFragments();
@@ -81,7 +82,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 
 	@Override
 	protected void onResume() {	
-		loadEventDetailHashmap(InternalCaching.getEventListFromCache(mContext));
+		loadEventDetailHashmap(InternalCaching.getEventListFromCache());
 		refreshEventFragments();
 		LocalBroadcastManager.getInstance(this).registerReceiver(mEventBroadcastReceiver,
 				mFilter);
@@ -106,15 +107,14 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		mContext = this;
-		TAG = EventsActivity.class.getName();
-		loadEventDetailHashmap(InternalCaching.getEventListFromCache(mContext));
+		loadEventDetailHashmap(InternalCaching.getEventListFromCache());
 		super.onCreate(savedInstanceState);			
 		setContentView(R.layout.activity_events);
-		turnOnOfInternetAvailabilityMessage(mContext);
+		turnOnOfInternetAvailabilityMessage();
 		mEventTypeImages = getResources().obtainTypedArray(R.array.event_type_image);
 
 		final Drawable mylocationImage = getResources().getDrawable(R.drawable.ic_my_location_black_18dp);
-		mylocationImage.setColorFilter(getResources().getColor(R.color.secondary_text), PorterDuff.Mode.SRC_ATOP);
+		mylocationImage.setColorFilter(getResources().getColor(R.color.secondaryText), PorterDuff.Mode.SRC_ATOP);
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.event_list_toolbar);
 		if (toolbar != null) {		
@@ -147,39 +147,39 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				// TODO Auto-generated method stub
-				if(intent.getAction().equals(Constants.EVENT_RECEIVED)
-						|| intent.getAction().equals(Constants.EVENT_OVER)
-						|| intent.getAction().equals(Constants.EVENT_ENDED)
-						|| intent.getAction().equals(Constants.EVENTS_REFRESHED)
-						|| intent.getAction().equals(Constants.EVENT_USER_RESPONSE)
-						|| intent.getAction().equals(Constants.EVENT_EXTENDED_BY_INITIATOR)						
-						|| intent.getAction().equals(Constants.EVENT_ENDED_BY_INITIATOR)
-						|| intent.getAction().equals(Constants.EVENT_DELETE_BY_INITIATOR)
-						|| intent.getAction().equals(Constants.EVENT_UPDATED_BY_INITIATOR)
-						|| intent.getAction().equals(Constants.EVENT_DESTINATION_UPDATED_BY_INITIATOR)						
-						|| intent.getAction().equals(Constants.REMOVED_FROM_EVENT_BY_INITIATOR)
-						|| intent.getAction().equals(Constants.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR)						
+				if(intent.getAction().equals(Veranstaltung.EVENT_RECEIVED)
+						|| intent.getAction().equals(Veranstaltung.EVENT_OVER)
+						|| intent.getAction().equals(Veranstaltung.EVENT_ENDED)
+						|| intent.getAction().equals(Veranstaltung.EVENTS_REFRESHED)
+						|| intent.getAction().equals(Veranstaltung.EVENT_USER_RESPONSE)
+						|| intent.getAction().equals(Veranstaltung.EVENT_EXTENDED_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.EVENT_ENDED_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.EVENT_DELETE_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.EVENT_UPDATED_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.EVENT_DESTINATION_UPDATED_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.REMOVED_FROM_EVENT_BY_INITIATOR)
+						|| intent.getAction().equals(Veranstaltung.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR)
 						)
 				{
-					loadEventDetailHashmap(InternalCaching.getEventListFromCache(mContext));
+					loadEventDetailHashmap(InternalCaching.getEventListFromCache());
 					refreshEventFragments();
 				}
 			}
 		};
 
 		mFilter = new IntentFilter();
-		mFilter.addAction(Constants.EVENT_RECEIVED);
-		mFilter.addAction(Constants.EVENT_USER_RESPONSE);
-		mFilter.addAction(Constants.EVENT_OVER);
-		mFilter.addAction(Constants.EVENT_ENDED);
-		mFilter.addAction(Constants.EVENTS_REFRESHED);
-		mFilter.addAction(Constants.EVENT_EXTENDED_BY_INITIATOR);		
-		mFilter.addAction(Constants.EVENT_ENDED_BY_INITIATOR);
-		mFilter.addAction(Constants.EVENT_DELETE_BY_INITIATOR);	
-		mFilter.addAction(Constants.EVENT_UPDATED_BY_INITIATOR);
-		mFilter.addAction(Constants.EVENT_DESTINATION_UPDATED_BY_INITIATOR);		
-		mFilter.addAction(Constants.REMOVED_FROM_EVENT_BY_INITIATOR);
-		mFilter.addAction(Constants.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR);	
+		mFilter.addAction(Veranstaltung.EVENT_RECEIVED);
+		mFilter.addAction(Veranstaltung.EVENT_USER_RESPONSE);
+		mFilter.addAction(Veranstaltung.EVENT_OVER);
+		mFilter.addAction(Veranstaltung.EVENT_ENDED);
+		mFilter.addAction(Veranstaltung.EVENTS_REFRESHED);
+		mFilter.addAction(Veranstaltung.EVENT_EXTENDED_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.EVENT_ENDED_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.EVENT_DELETE_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.EVENT_UPDATED_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.EVENT_DESTINATION_UPDATED_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.REMOVED_FROM_EVENT_BY_INITIATOR);
+		mFilter.addAction(Veranstaltung.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 			finish();
 			break;
 		case R.id.action_track:
-			AppUtility.setPrefArrayList("Invitees", null, mContext);
+			PreffManager.setPrefArrayList("Invitees", null);
 			intent = new Intent(this, TrackLocationActivity.class);
 			intent.putExtra("EventTypeId", 6);
 			startActivity(intent);
@@ -212,9 +212,9 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 		case R.id.action_refresh:
 			showProgressBar(getResources().getString(R.string.message_general_progressDialog));
 			EventsRefreshHandler.removeCallbacks(EventsRefreshRunnable);
-			EventManager.refreshEventList(this, 
+			EventManager.refreshEventList(
 
-					new OnRefreshEventListCompleteListner() {			
+					new OnRefreshEventListCompleteListner() {
 				@Override
 				public void RefreshEventListComplete(List<EventDetail> eventDetailList) {
 					loadEventDetailHashmap(eventDetailList);
@@ -243,9 +243,9 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 	}
 
 	public void loadEventDetailHashmap(List<EventDetail>eventList){
-		EventHelper.SortListByStartDate(eventList);
+		EventService.SortListByStartDate(eventList);
 		if(mEventDetailHashmap ==  null){
-			mEventDetailHashmap = new HashMap<Constants.AcceptanceStatus, List<EventDetail>>();
+			mEventDetailHashmap = new HashMap<AcceptanceStatus, List<EventDetail>>();
 		}
 		else
 		{
@@ -256,7 +256,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 		ArrayList<EventDetail> dl =  new ArrayList<EventDetail>();
 		for(EventDetail ed : eventList){
 			if(Integer.parseInt(ed.getEventTypeId()) <= 100){
-			switch (ed.getCurrentMember().getAcceptanceStatus()) {
+			switch (ed.getCurrentParticipant().getAcceptanceStatus()) {
 			case ACCEPTED:
 				al.add(ed);
 				break;
@@ -296,7 +296,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 				//hold current color of status bar
 				mStatusBarColor = getWindow().getStatusBarColor();
 				//set your gray color
-				getWindow().setStatusBarColor(getResources().getColor(R.color.secondary_text));
+				getWindow().setStatusBarColor(getResources().getColor(R.color.secondaryText));
 			}
 			else{
 
@@ -354,21 +354,21 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 					item.setIcon(dr);					
 				}
 				
-				InternalCaching.saveEventToCache(eventDetail, mContext);
+				InternalCaching.saveEventToCache(eventDetail);
 
 				return true;
 
 			case R.id.context_action_accept:
 
-				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, mContext, eventDetail.getEventId(), 
+				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, eventDetail.getEventId(),
 						(EventsActivity)mContext, (EventsActivity)mContext);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.DECLINED, mContext, eventDetail.getEventId(), 
-						(EventsActivity)mContext, (EventsActivity)mContext);
+				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  eventDetail.getEventId(),
+						(ActionSuccessFailMessageActivity)mContext, (ActionSuccessFailMessageActivity)mContext);
 
 				mode.finish();
 				return true;
@@ -383,7 +383,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 				return true;
 			case R.id.context_action_delete:
 
-				if(AppUtility.isCurrentUserInitiator(eventDetail.getInitiatorId(), mContext)){
+				if(ParticipantService.isCurrentUserInitiator(eventDetail.getInitiatorId())){
 
 					AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
 					// adb.setView(alertDialogView);
@@ -394,7 +394,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 
 					adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							EventManager.deleteEvent(mContext, eventDetail, (EventsActivity)mContext, (EventsActivity)mContext);
+							EventManager.deleteEvent(eventDetail, (ActionSuccessFailMessageActivity)mContext, (ActionSuccessFailMessageActivity)mContext);
 						} });
 
 					adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -437,7 +437,7 @@ public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.F
 	@Override
 	public void actionComplete(Action action) {
 		if(action == Action.SAVEUSERRESPONSE){
-		loadEventDetailHashmap(InternalCaching.getEventListFromCache(mContext));
+		loadEventDetailHashmap(InternalCaching.getEventListFromCache());
 		}
 		refreshEventFragments();
 		super.actionComplete(action);

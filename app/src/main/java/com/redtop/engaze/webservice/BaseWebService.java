@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.app.AppContext;
 
 import org.json.JSONObject;
 
@@ -35,7 +36,7 @@ public abstract class BaseWebService {
         return mRequestQueue;
     }
 
-    protected static void callAPI(Context context, JSONObject jRequestobj, String url, int method,
+    protected static void callAPI(JSONObject jRequestobj, String url, int method,
                                   final OnAPICallCompleteListner listnerOnSuccess,
                                   final OnAPICallCompleteListner listnerOnFailure) {
 
@@ -66,23 +67,23 @@ public abstract class BaseWebService {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding request to request queue
-        addToRequestQueue(jsonObjReq, context);
+        addToRequestQueue(jsonObjReq, AppContext.context);
 
     }
 
-    protected static void getData(Context context, JSONObject jRequestobj, String url,
+    protected static void getData(JSONObject jRequestobj, String url,
                                   final OnAPICallCompleteListner listnerOnSuccess,
                                   final OnAPICallCompleteListner listnerOnFailure) {
 
-        callAPI(context, jRequestobj, url, Request.Method.GET, listnerOnSuccess, listnerOnFailure);
+        callAPI(jRequestobj, url, Request.Method.GET, listnerOnSuccess, listnerOnFailure);
 
     }
 
 
-    protected static void postData(Context context, JSONObject jRequestobj, String url,
+    protected static void postData(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListner listnerOnSuccess,
                                    final OnAPICallCompleteListner listnerOnFailure) {
-        callAPI(context, jRequestobj, url, Request.Method.POST, listnerOnSuccess, listnerOnFailure);
+        callAPI(jRequestobj, url, Request.Method.POST, listnerOnSuccess, listnerOnFailure);
     }
 
     protected static <T> void addToRequestQueue(Request<T> req, String tag, Context context) {

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dip"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/DurationOffset"
+        style="@style/CategoryHeader"
+        android:text="Set Duration" />
+
+    <View style="@style/Divider" />
+
+    <EditText
+        android:id="@+id/DurationValue"
+        style="@style/PrimaryTextStyle"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="number" >
+    </EditText>
+
+    <View style="@style/Divider" />
+
+    <TextView
+        android:id="@+id/DurationMinutes"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="minute"
+        android:text="@string/minutes" />
+
+    <TextView
+        android:id="@+id/DurationHours"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="hour"
+        android:text="@string/hours" />
+
+    <View style="@style/Divider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dip"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/save_event_duration"
+            style="@style/FlatButton"
+            android:text="DONE" />
+    </RelativeLayout>
+
+</LinearLayout>

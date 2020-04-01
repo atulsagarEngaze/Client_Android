@@ -24,7 +24,7 @@ import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.ContactAndGroupListManager;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.common.utility.Comparer;
@@ -121,7 +121,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 		mRunningEventBroadcastManager = new RunningEventBroadcastManager(mContext);
 		mEventId = this.getIntent().getStringExtra("EventId");
 		mEventTypeId = this.getIntent().getIntExtra("EventTypeId", 0);
-		mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+		mEvent = InternalCaching.getEventFromCache(mEventId);
 		if(mEvent!=null){
 			String eventTitle;
 			if(EventService.isEventTrackBuddyEventForCurrentuser(mEvent)){
@@ -131,10 +131,10 @@ public class RunningEventBase  extends BaseLocationActivity  {
 				eventTitle = mEvent.getName();
 			}
 			viewManager = new RunningEventViewManager(mContext, savedInstanceState, eventTitle);
-			mUserId = AppContext.getInstance().loginId;
+			mUserId = AppContext.context.loginId;
 			mGd = new GoogleDirection(mContext);		
 			initializeEventStartTimeForUI();
-			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
 		}
 	}
 

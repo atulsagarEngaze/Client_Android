@@ -30,6 +30,7 @@
     <string name="title_share_my_location">Share my location</string>
     <string name="title_track_buddies">Track buddies</string>
     <string name="title_running_event_track_buddies">Track buddies</string>
+    <string name="title_create_event">Create an Event</string>
 
 
     <string name="app_label">Engaze</string>
@@ -140,7 +141,8 @@
     <string name="weeks">Weeks</string>
 
     <string name="before">" before</string>
-    <!-- <string-array name="event_type_image">
+
+    <string-array name="event_type_image">
          <item>@drawable/ic_directions_car_black_24dp</item>
          <item>@drawable/ic_local_dining_black_24dp</item>
          <item>@drawable/ic_directions_run_black_24dp</item>
@@ -149,7 +151,7 @@
          <item>@drawable/ic_wc_black_24dp</item>
          <item>@drawable/ic_event_black_24dp</item>
          <item>@drawable/ic_cake_black_24dp</item>
-     </string-array>-->
+     </string-array>
 
 
     <string name="duration">" is the duration</string>

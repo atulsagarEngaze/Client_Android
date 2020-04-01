@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.redtop.engaze.CreateEventActivity" >
+
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/event_add"
+        android:orderInCategory="2"
+        android:title="Meet Later"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_track"
+        android:icon="@drawable/quik_event_add"
+        android:orderInCategory="1"
+        android:height="18dip"
+         android:width="18dip"
+        android:title="Meet Now"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="3"
+        android:title="Refresh"
+        app:showAsAction="collapseActionView">
+    </item>
+
+</menu>

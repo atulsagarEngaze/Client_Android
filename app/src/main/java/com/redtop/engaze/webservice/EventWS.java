@@ -14,7 +14,7 @@ public class EventWS extends BaseWebService {
 
     private final static String TAG = EventWS.class.getName();
 
-    public static void CreateEvent(Context context, JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = "";
             if (jsonObject.has("EventId")) {
@@ -23,7 +23,7 @@ public class EventWS extends BaseWebService {
                 url = MAP_API_URL + Routes.CREATE_EVENT;
             }
 
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
@@ -32,18 +32,18 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void saveUserResponse(final AcceptanceStatus acceptanceStatus, final Context context, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.RESPOND_INVITE;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("EventId", eventid);
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
             jsonObject.put("EventAcceptanceStateId", acceptanceStatus.getStatus());
             jsonObject.put("TrackingAccepted", "true");
 
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData( jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -52,15 +52,15 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void endEvent(final Context context, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void endEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.END_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
             jsonObject.put("EventId", eventID);
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -70,16 +70,16 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void leaveEvent(final Context context, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void leaveEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.LEAVE_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
             jsonObject.put("EventId", eventID);
 
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -89,16 +89,16 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void RefreshEventListFromServer(final Context context, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.EVENT_DETAIL;
 
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
 
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -107,17 +107,17 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void extendEventEndTime(final int i, final Context context, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.EXTEND_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
             jsonObject.put("EventId", eventID);
-            jsonObject.put("ExtendEventDuration", i);
+            jsonObject.put("ExtendEventDuration", duration);
 
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
@@ -125,13 +125,13 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void changeDestination(final EventPlace destinationPlace, final Context context, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.UPDATE_DESTINATION;
 
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
 
             if (destinationPlace != null) {
                 jsonObject.put("DestinationLatitude", destinationPlace.getLatLang().latitude);
@@ -147,7 +147,7 @@ public class EventWS extends BaseWebService {
             }
 
             jsonObject.put("EventId", eventId);
-            postData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -156,7 +156,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void getEventDetail(Context context, String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public static void getEventDetail(String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
 
         try {
 
@@ -164,9 +164,9 @@ public class EventWS extends BaseWebService {
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("EventId", eventid);
-            jsonObject.put("RequestorId", AppContext.getInstance().loginId);
+            jsonObject.put("RequestorId", AppContext.context.loginId);
 
-            getData(context, jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            getData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

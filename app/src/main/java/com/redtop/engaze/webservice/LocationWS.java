@@ -10,12 +10,13 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.app.AppContext;
 
 import org.json.JSONObject;
 
 public class LocationWS extends BaseWebService {
 
-    public static void updateLocation(Context context,JSONObject jRequestobj,
+    public static void updateLocation(JSONObject jRequestobj,
                                       final OnAPICallCompleteListner listnerOnSuccess,
                                       final OnAPICallCompleteListner listnerOnFailure) {
         try {
@@ -48,7 +49,7 @@ public class LocationWS extends BaseWebService {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             // Adding request to request queue
-            addToRequestQueue(jsonObjReq, context);
+            addToRequestQueue(jsonObjReq, AppContext.context);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();

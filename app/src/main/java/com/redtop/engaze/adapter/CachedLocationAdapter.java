@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.redtop.engaze.R;
-import com.redtop.engaze.entity.EventPlace;
+import com.redtop.engaze.domain.EventPlace;
 
 public class CachedLocationAdapter extends ArrayAdapter<EventPlace> {
 

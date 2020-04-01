@@ -17,7 +17,7 @@ public abstract class ActionSuccessFailMessageActivity extends BaseActivity1 imp
 	@Override
 	public void actionFailed(String msg, Action action) {
 		if(msg ==null){ 
-			msg= UserMessageHandler.getFailureMessage(action, mContext);
+			msg= UserMessageHandler.getFailureMessage(action);
 		}
 
 		hideProgressBar();
@@ -28,7 +28,7 @@ public abstract class ActionSuccessFailMessageActivity extends BaseActivity1 imp
 
 	@Override
 	public void actionComplete(Action action) {
-		String msg=UserMessageHandler.getSuccessMessage(action, mContext);
+		String msg=UserMessageHandler.getSuccessMessage(action);
 		hideProgressBar();
 		Toast.makeText(mContext,msg, Toast.LENGTH_SHORT).show();
 	}

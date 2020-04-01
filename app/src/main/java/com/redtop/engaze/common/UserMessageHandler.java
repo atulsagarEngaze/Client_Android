@@ -3,13 +3,14 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
 
 public class UserMessageHandler {
 	
-	public static String getFailureMessage(Action action, Context context){
+	public static String getFailureMessage(Action action){
 		String msg="";
-		Resources res = context.getResources();
+		Resources res = AppContext.context.getResources();
 		switch (action) {
 		case POKEALL://poke all
 			msg = res.getString(R.string.message_runningEvent_pokeAllFail);
@@ -74,9 +75,9 @@ public class UserMessageHandler {
 		return msg;
 	}
 	
-	public static String getSuccessMessage(Action action, Context context){
+	public static String getSuccessMessage(Action action){
 		String msg="";
-		Resources res = context.getResources();
+		Resources res = AppContext.context.getResources();
 		switch (action) {
 		case POKEALL://poke all
 			msg = res.getString(R.string.message_runningEvent_pokedAllSuccessfully);

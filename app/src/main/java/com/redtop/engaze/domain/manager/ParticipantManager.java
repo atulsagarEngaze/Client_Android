@@ -7,10 +7,12 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.webservice.ParticipantWS;
 
@@ -21,19 +23,19 @@ import java.util.List;
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
 
-    public static void pokeParticipants(final Context context, JSONObject pokeParticipantsJSON,
+    public static void pokeParticipants(JSONObject pokeParticipantsJSON,
                                         final OnActionCompleteListner onActionCompleteListner,
                                         final OnActionFailedListner onActionFailedListner) {
         String message ="";
-        if(!AppUtility.isNetworkAvailable(context))
+        if(!AppContext.context.isInternetEnabled)
         {
-            message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
+            message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             onActionFailedListner.actionFailed(message, Action.POKEALL);
             return ;
         }
 
-        ParticipantWS.pokeParticipants(context, pokeParticipantsJSON, new OnAPICallCompleteListner() {
+        ParticipantWS.pokeParticipants(pokeParticipantsJSON, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -69,17 +71,17 @@ public class ParticipantManager {
         });
     }
 
-    public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final Context context, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
+    public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
         String message ="";
-        if(!AppUtility.isNetworkAvailable(context))
+        if(!AppContext.context.isInternetEnabled)
         {
-            message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
+            message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             listenerOnFailure.actionFailed(message, Action.ADDREMOVEPARTICIPANTS);
             return ;
         }
 
-        ParticipantWS.addRemoveParticipants(addRemoveContactsJSON, context, new OnAPICallCompleteListner() {
+        ParticipantWS.addRemoveParticipants(addRemoveContactsJSON,  new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -89,9 +91,9 @@ public class ParticipantManager {
                     String Status = (String)response.getString("Status");
                     if (Status == "true")
                     {
-                        List<EventDetail> eventDetailList =  EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"), context);
+                        List<EventDetail> eventDetailList =  EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                         EventDetail event = eventDetailList.get(0);
-                        InternalCaching.saveEventToCache(event, context);
+                        InternalCaching.saveEventToCache(event);
                         listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
                     }
                     else
@@ -115,4 +117,6 @@ public class ParticipantManager {
         });
 
     }
+
+
 }

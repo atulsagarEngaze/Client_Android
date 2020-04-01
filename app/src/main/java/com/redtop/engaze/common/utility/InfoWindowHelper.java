@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.EventParticipantListWithNoCallSMS;
 import com.redtop.engaze.R;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.UsersLocationDetail;
 
@@ -26,7 +27,6 @@ public class InfoWindowHelper {
 
     private static String distance = "";
     private static String duration = "";
-    private static final int ROUTE_END_POINT_REQUEST_CODE = 9;
 
     public static void createAndshowInfoWindow(final Context context, Marker marker, GoogleMap map,
                                                final EventDetail ed, final LatLng destinationLatLng,
@@ -162,6 +162,6 @@ public class InfoWindowHelper {
         Intent intent = new Intent(context, EventParticipantListWithNoCallSMS.class);
         intent.putExtra("action", "loadroute");
         intent.putExtra("endpoints", endPoints);
-        ((BaseActivity1) context).startActivityForResult(intent, ROUTE_END_POINT_REQUEST_CODE);
+        ((BaseActivity1) context).startActivityForResult(intent, Constants.ROUTE_END_POINT_REQUEST_CODE);
     }
 }

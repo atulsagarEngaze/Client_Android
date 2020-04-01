@@ -2,12 +2,10 @@ package com.redtop.engaze.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
 
 public class AppContext extends Application {
@@ -16,20 +14,20 @@ public class AppContext extends Application {
 
     public boolean isFirstTimeLoading = false;
     public String loginId;
+    public String loginName;
     public Context activityContext = null;
     public Boolean isInternetEnabled = true;
-    private static AppContext mInstance;
+    public static AppContext context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mInstance = this;
+        context = this;
         ProgressBar.CreateProgressDialog(this);
+        isInternetEnabled = AppUtility.isNetworkAvailable(this);
+        loginId = PreffManager.getPref(Constants.LOGIN_ID);
+        if( loginId!=null){
+            loginName =  PreffManager.getPref(Constants.LOGIN_NAME);
+        }
     }
-
-    public static synchronized AppContext getInstance() {
-        return mInstance;
-    }
-
-
 }

@@ -1,6 +1,5 @@
 package com.redtop.engaze.common.utility;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,10 +14,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 
+import com.redtop.engaze.app.AppContext;
+
 import java.io.IOException;
 
 public class BitMapHelper {
-    public static Bitmap generateCircleBitmapForText(Context context, int circleColor, float diameterDP, String text){
+    public static Bitmap generateCircleBitmapForText(int circleColor, float diameterDP, String text){
         final int textColor = 0xffffffff;
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float diameterPixels = diameterDP * (metrics.densityDpi / 160f);
@@ -54,7 +55,7 @@ public class BitMapHelper {
         return output;
     }
 
-    public static Bitmap generateCircleBitmapForIcon(Context context, int circleColor, float diameterDP, Uri uri){
+    public static Bitmap generateCircleBitmapForIcon(int circleColor, float diameterDP, Uri uri){
         DisplayMetrics metrics =Resources.getSystem().getDisplayMetrics();
         float diameterPixels = diameterDP * (metrics.densityDpi / 160f);
         float radiusPixels = diameterPixels/2;
@@ -75,7 +76,7 @@ public class BitMapHelper {
 
         Bitmap bitmap=null;
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
+            bitmap = MediaStore.Images.Media.getBitmap(AppContext.context.getContentResolver(),uri);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -90,14 +91,14 @@ public class BitMapHelper {
         return output;
     }
 
-    public static Bitmap generateCircleBitmapForImage(Context context,  float diameterDP, Uri uri) {
+    public static Bitmap generateCircleBitmapForImage(float diameterDP, Uri uri) {
 
         DisplayMetrics metrics =Resources.getSystem().getDisplayMetrics();
         float diameterPixels = diameterDP * (metrics.densityDpi / 160f);
 
         Bitmap bitmap=null;
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
+            bitmap = MediaStore.Images.Media.getBitmap(AppContext.context.getContentResolver(),uri);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

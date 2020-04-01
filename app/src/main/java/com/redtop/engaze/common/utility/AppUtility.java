@@ -13,21 +13,7 @@ import android.util.DisplayMetrics;
 
 public class AppUtility {
 	private final static String TAG = AppUtility.class.getName();
-
-	private static  Context appContext;
-
 	public static int deviceDensity;
-
-
-
-	public static void setApplicationContext(Context context){
-		appContext =  context;
-	}
-	public static Context getApplicationContext(){
-		return appContext;
-	}
-
-
 
 	public static void showAlert(Context context, String title, String message) {
 		if (((Activity) context).isFinishing() == false) {
@@ -43,14 +29,11 @@ public class AppUtility {
 		}
 	}
 
-
-
 	public static int getRandamNumber() {
 		Random r = new Random(System.currentTimeMillis());
 		int x = 10000 + r.nextInt(20000);
 		return x;
 	}
-
 
 	public static String convertNullToEmptyString(String str) {
 		if (str == null) {
@@ -152,106 +135,11 @@ public class AppUtility {
 		}
 	}
 
-	public static boolean validateDurationInput(Duration duration, Context context) {
-		int userInput = duration.getTimeInterval(); 
-		switch(duration.getPeriod()){
-		case "minute" :
-			if(userInput >=context.getResources().getInteger(R.integer.event_creation_duration_min_minutes) && userInput <= context.getResources().getInteger(R.integer.event_creation_duration_max_minutes)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_durationMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		case "hour" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_creation_duration_max_hours)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_durationMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		return false;		
-	}
 
-	public static boolean validateTrackingInput(Duration duration, Context context) {	
-		int userInput = duration.getTimeInterval(); 
-		switch(duration.getPeriod()){
-		case "minute" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_tracking_start_max_minutes)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_trackingStartMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		case "hour" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_tracking_start_max_hours)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_trackingStartMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		return false;		
-	}
 
-	public static boolean validateReminderInput(Reminder reminder, Context context) {	
-		int userInput = reminder.getTimeInterval(); 
-		switch(reminder.getPeriod()){
-		case "minute" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_reminder_start_max_minutes)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_reminderMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		case "hour" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_reminder_start_max_hours)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_reminderMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		case "day" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_reminder_start_max_days)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_reminderMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		case "week" :
-			if(userInput >0 && userInput <= context.getResources().getInteger(R.integer.event_reminder_start_max_weeks)){
-				return true;
-			}
-			else{
-				Toast.makeText(context,							
-						context.getResources().getString(R.string.message_createEvent_reminderMaxAlert),
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		return false;		
-	}*//*
+
+
+	*//*
 
 	//	public static double getDistanceBetweenTwoLocations(Location initialLoc, Location finalLoc) {
 	//		//double theta =  lon1 - lon2;
@@ -271,42 +159,5 @@ public class AppUtility {
 	private static double rad2deg(double rad) {
 		return (rad * 180.0 / Math.PI);
 	}*/
-/*
 
-
-
-	public static void setBackgrounOfRecycleViewItem( CardView view, int colorId){
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {			
-			view.setCardBackgroundColor(colorId);
-			view.setRadius(0);	
-			view.setMaxCardElevation(0);
-			view.setPreventCornerOverlap(false);
-			view.setUseCompatPadding(false);
-			view.setContentPadding(-15, -15, -15, -15);
-		} else {
-			view.setBackgroundColor(colorId);
-		}
-	}
-	@SuppressLint("NewApi")
-
-	
-
-	public static ProgressDialog showProgressBar(String title, String message, Context context ){
-		ProgressDialog dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-		if(!(title==null || title.equals(""))){
-			dialog.setTitle(title);
-		}
-		dialog.setMessage(message);
-		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setCancelable(false);
-		dialog.setCanceledOnTouchOutside(false);
-		dialog.setIndeterminate(true);
-		dialog.show();
-		return dialog;
-	}
-	public static void hideProgressBar( ProgressDialog dialog){
-		if(dialog!=null && dialog.isShowing()){
-			dialog.dismiss();
-		}
-	}*/
 }

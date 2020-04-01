@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/colorBackground"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/eta_description"
+        style="@style/HeaderTextStyle"       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Choose distance to Remind at" />
+
+    <LinearLayout
+        android:id="@+id/wheel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/eta_description"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/padding"
+        android:paddingBottom="15dp" >
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/eta_values"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="gravity" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/eta_unit"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="gravity" />
+
+        <TextView
+            android:id="@+id/etaFrom"
+            style="@style/CategoryHeader"            
+            android:gravity="center_horizontal"
+            android:paddingRight="@dimen/padding"
+            android:paddingTop="30dp"
+            android:text="From"
+            android:textStyle="bold"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/primary_text_size" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/eta_from"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="gravity" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/eta_existing"
+        style="@style/SecondaryTextStyle"        
+        android:textColor="@color/primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding"
+        />
+
+    <LinearLayout
+        android:id="@+id/eta_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wheel"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="30dp" >
+
+        <Button
+            android:id="@+id/eta_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/wheel"
+            android:text="SET"
+            android:textColor="@color/icon" />
+
+        <Button
+            android:id="@+id/eta_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/wheel"
+            android:layout_toRightOf="@id/eta_set"
+            android:text="Cancel"
+            android:textColor="@color/icon" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -11,7 +11,7 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.common.ContactAndGroupListManager;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -39,9 +39,9 @@ public class ParticipantService {
     private final static String TAG = ParticipantService.class.getName();
 
 
-    public static void pokeParticipant(final String userId, String userName, final String eventId, final Context context){
+    public static void pokeParticipant(final String userId, String userName, final String eventId, ActionSuccessFailMessageActivity activity){
         try {
-            String lastPokedTime = PreffManager.getPref(userId, context);
+            String lastPokedTime = PreffManager.getPref(userId);
             if(lastPokedTime != null){
                 SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 Calendar lastCal = Calendar.getInstance();
@@ -50,15 +50,15 @@ public class ParticipantService {
                 long diff = (Calendar.getInstance().getTimeInMillis()- lastCal.getTimeInMillis())/60000;
                 long pendingfrPoke = Constants.POKE_INTERVAL- diff;
                 if(diff>= Constants.POKE_INTERVAL){
-                    pokeAlert(userId,userName, eventId, context);
+                    pokeAlert(userId,userName, eventId,activity);
                 }else {
-                    Toast.makeText(context,
-                            context.getResources().getString(R.string.message_runningEvent_pokeInterval)+ pendingfrPoke + " minutes.",
+                    Toast.makeText(AppContext.context,
+                            AppContext.context.getResources().getString(R.string.message_runningEvent_pokeInterval)+ pendingfrPoke + " minutes.",
                             Toast.LENGTH_LONG).show();
-                    ((ActionSuccessFailMessageActivity)context).actionCancelled(Action.POKEPARTICIPANT);
+                    activity.actionCancelled(Action.POKEPARTICIPANT);
                 }
             }else {
-                pokeAlert(userId,userName, eventId, context);
+                pokeAlert(userId,userName, eventId,activity);
             }
 
         } catch (ParseException e) {
@@ -67,9 +67,9 @@ public class ParticipantService {
         }
     }
 
-    public static void pokeAlert(final String userId, String userName, final String eventId, final Context context) {
+    public static void pokeAlert(final String userId, String userName, final String eventId, final ActionSuccessFailMessageActivity activity) {
         AlertDialog.Builder adb = null;
-        adb = new AlertDialog.Builder(context);
+        adb = new AlertDialog.Builder(AppContext.context);
 
         adb.setTitle("Poke");
         adb.setMessage("Do you want to poke " + userName + "?" +"\n"+ "You can poke again only after 15 minutes.");
@@ -78,52 +78,52 @@ public class ParticipantService {
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Call Poke API
-                pokeParticipants(userId, eventId, context);
+                pokeParticipants(userId, eventId, activity);
             } });
 
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                ((ActionSuccessFailMessageActivity)context).actionCancelled(Action.POKEPARTICIPANT);
+                activity.actionCancelled(Action.POKEPARTICIPANT);
             } });
         adb.show();
     }
 
-    private  static void pokeParticipants(final String userId, String eventId, final Context context) {
+    public  static void pokeParticipants(final String userId, String eventId, final ActionSuccessFailMessageActivity activity) {
         JSONObject jobj = new JSONObject();
         String[] userList = {userId};
         JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));
-        EventDetail ed = InternalCaching.getEventFromCache(eventId, context);
+        EventDetail ed = InternalCaching.getEventFromCache(eventId);
         try {
-            ProgressBar.showProgressBar(context.getString(R.string.message_general_progressDialog));
-            jobj.put("RequestorId", AppContext.getInstance().loginId);
-            jobj.put("RequestorName", AppContext.getInstance().loginId);
+            ProgressBar.showProgressBar(AppContext.context.getString(R.string.message_general_progressDialog));
+            jobj.put("RequestorId", AppContext.context.loginId);
+            jobj.put("RequestorName", AppContext.context.loginId);
             jobj.put("UserIdsForRemind", mJSONArray);
             jobj.put("EventName", ed.getName());
             jobj.put("EventId", ed.getEventId());
 
-            ParticipantManager.pokeParticipants(context,jobj, new OnActionCompleteListner() {
+            ParticipantManager.pokeParticipants(jobj, new OnActionCompleteListner() {
 
                 @Override
                 public void actionComplete(Action action) {
                     SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                     Date currentdate = Calendar.getInstance().getTime();
                     String currentTimestamp = originalformat.format(currentdate);
-                    PreffManager.setPref(userId, currentTimestamp, context);
-                    ((ActionSuccessFailMessageActivity)context).actionComplete(Action.POKEPARTICIPANT);
+                    PreffManager.setPref(userId, currentTimestamp);
+                    activity.actionComplete(Action.POKEPARTICIPANT);
                 }
             }, new OnActionFailedListner() {
 
                 @Override
                 public void actionFailed(String msg, Action action) {
-                   ((ActionSuccessFailMessageActivity)context).actionFailed(msg, Action.POKEPARTICIPANT);
+                   activity.actionFailed(msg, Action.POKEPARTICIPANT);
                 }
             });
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            ((ActionSuccessFailMessageActivity)context).actionFailed(null, Action.POKEPARTICIPANT);
+            activity.actionFailed(null, Action.POKEPARTICIPANT);
         }
     }
 
@@ -134,7 +134,7 @@ public class ParticipantService {
         return true;
     }
 
-    public static ArrayList<EventParticipant> parseMemberList(Context context, JSONArray jsonStr){
+    public static ArrayList<EventParticipant> parseMemberList(JSONArray jsonStr){
         EventParticipant mem = null;
         ArrayList<EventParticipant> list = new ArrayList<EventParticipant>();
         try {
@@ -147,7 +147,7 @@ public class ParticipantService {
                         AppUtility.convertNullToEmptyString(c.getString("MobileNumber")),
                         AcceptanceStatus.getStatus(c.getInt("EventAcceptanceStateId"))
                 );
-                ContactOrGroup cg = ContactAndGroupListManager.getContact(context, c.getString("UserId"));
+                ContactOrGroup cg = ContactAndGroupListManager.getContact(c.getString("UserId"));
                 if(cg!=null){
                     mem.setProfileName(cg.getName());
                     mem.setContact(cg);
@@ -167,14 +167,14 @@ public class ParticipantService {
     }
 
     public static boolean isCurrentUserInitiator(String initiatorId){
-        if(AppContext.getInstance().loginId.equalsIgnoreCase(initiatorId)){
+        if(AppContext.context.loginId.equalsIgnoreCase(initiatorId)){
             return true;
         }
         return false;
     }
 
     public static boolean isParticipantCurrentUser(String userId) {
-        if (AppContext.getInstance().loginId.equalsIgnoreCase(userId)) {
+        if (AppContext.context.loginId.equalsIgnoreCase(userId)) {
             return true;
         }
         // TODO Auto-generated method stub
@@ -241,7 +241,7 @@ public class ParticipantService {
 
             jobj.put("EventId", eventId);
             jobj.put("UserList", jsonarr);
-            jobj.put("RequestorId", AppContext.getInstance().loginId);
+            jobj.put("RequestorId", AppContext.context.loginId);
         }
         catch (Exception e) {
             // TODO: handle exception

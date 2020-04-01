@@ -110,8 +110,8 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 				String otp = mOtpText.getText().toString();
 				if(mOTP.equals(otp)){
 					PreffManager
-					.setPref(Constants.USER_AUTH_TOKEN, "1", mContext);
-					PreffManager.setPref(Constants.MOBILE_NUMBER, mMobileNumber,mContext);
+					.setPref(Constants.USER_AUTH_TOKEN, "1");
+					PreffManager.setPref(Constants.MOBILE_NUMBER, mMobileNumber);
 					countDownTimer.cancel();
 					LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
 					gotoProfilePage();
@@ -160,7 +160,7 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
 				String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-				PreffManager.setPref(Constants.EMAIL_ACCOUNT, accountName, mContext);
+				PreffManager.setPref(Constants.EMAIL_ACCOUNT, accountName);
 			}
 		}
 	}
@@ -308,7 +308,7 @@ public class MobileNumberVerificationActivity extends BaseActivity1 {
 		}
 		Log.d(TAG, "country " + countryCode);
 		PreffManager
-		.setPref(Constants.COUNTRY_CODE, countryCode , mContext);
+		.setPref(Constants.COUNTRY_CODE, countryCode );
 		return flag;
 	}	
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -13,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redtop.engaze.entity.Duration;
-import com.redtop.engaze.entity.Reminder;
-import com.redtop.engaze.utils.AppUtility;
+import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.domain.Duration;
+import com.redtop.engaze.domain.Reminder;
+
+import androidx.appcompat.widget.Toolbar;
 
 @SuppressWarnings("deprecation")
-public class EventSettingsActivity extends BaseActivity {
+public class EventSettingsActivity extends BaseActivity1 {
 
 	private ArrayList<TextView> reminderPeriods;	
 	private ArrayList<TextView>notificationTypes;
@@ -66,7 +67,7 @@ public class EventSettingsActivity extends BaseActivity {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus) {
-					AppUtility.hideKeyboard(v, mContext);
+					hideKeyboard(v);
 				}
 			}
 		});
@@ -78,7 +79,7 @@ public class EventSettingsActivity extends BaseActivity {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus) {
-					AppUtility.hideKeyboard(v, mContext);
+					hideKeyboard(v);
 				}
 			}
 		});
@@ -125,7 +126,7 @@ public class EventSettingsActivity extends BaseActivity {
 						TextView noti = notificationTypes.get(i);					
 						notificationTypeIcons.get(i);
 						notificationTypeIcons.get(i).setVisibility(View.GONE);
-						noti.setTextColor(getResources().getColorStateList(R.color.secondary_text));
+						noti.setTextColor(getResources().getColorStateList(R.color.secondaryText));
 
 						if(noti.getId()==clieckedView.getId())
 						{
@@ -135,7 +136,7 @@ public class EventSettingsActivity extends BaseActivity {
 					selectedIcon.setVisibility(View.VISIBLE);
 					mReminder.setNotificationType(clieckedView.getTag().toString());
 					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));	
-					AppUtility.setPref("ReminderNotification", clieckedView.getTag().toString(), getApplicationContext());
+					PreffManager.setPref("ReminderNotification", clieckedView.getTag().toString());
 
 				}
 			});
@@ -191,7 +192,7 @@ public class EventSettingsActivity extends BaseActivity {
 						if(duration.contains(getResources().getString(R.string.before)))
 						{
 							dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
-							dv.setTextColor(getResources().getColorStateList(R.color.secondary_text));
+							dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
 						}
 						if(dv.getId()==clieckedView.getId())
 						{
@@ -205,7 +206,7 @@ public class EventSettingsActivity extends BaseActivity {
 					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));
 					clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
 					mReminder.setPeriod(clieckedView.getTag().toString());					
-					AppUtility.setPref("ReminderPeriod", clieckedView.getTag().toString(), getApplicationContext());
+					PreffManager.setPref("ReminderPeriod", clieckedView.getTag().toString());
 				}
 			});					    
 		}
@@ -265,7 +266,7 @@ public class EventSettingsActivity extends BaseActivity {
 						if(duration.contains(getResources().getString(R.string.before)))
 						{
 							dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
-							dv.setTextColor(getResources().getColorStateList(R.color.secondary_text));
+							dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
 						}
 						if(dv.getId()==clieckedView.getId())
 						{
@@ -279,7 +280,7 @@ public class EventSettingsActivity extends BaseActivity {
 					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));
 					clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
 					mTracking.setPeriod(clieckedView.getTag().toString());					
-					AppUtility.setPref("TrackingPeriod", clieckedView.getTag().toString(), getApplicationContext());
+					PreffManager.setPref("TrackingPeriod", clieckedView.getTag().toString());
 				}
 			});					    
 		}		
@@ -294,9 +295,9 @@ public class EventSettingsActivity extends BaseActivity {
 			try{
 				mReminder.setTimeInterval(Integer.parseInt(reminder));
 				mTracking.setTimeInterval(Integer.parseInt(tracking));
-				if(AppUtility.validateReminderInput(mReminder, mContext) && AppUtility.validateTrackingInput(mTracking, mContext)){
-					AppUtility.setPref("ReminderInterval", reminder, getApplicationContext());						
-					AppUtility.setPref("TrackingInterval", tracking, getApplicationContext());
+				if(Reminder.validateReminderInput(mReminder) && Duration.validateTrackingInput(mTracking)){
+					PreffManager.setPref("ReminderInterval", reminder);
+					PreffManager.setPref("TrackingInterval", tracking);
 					this.finish();
 				}
 			}catch(NumberFormatException e){

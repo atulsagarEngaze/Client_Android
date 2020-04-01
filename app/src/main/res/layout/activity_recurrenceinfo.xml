@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.Android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/padding_double" >
+
+    <TextView
+        android:id="@+id/ChooseCategoryHeader"
+        style="@style/CategoryHeader"
+        android:text="@string/label_reccurrence_header" />
+
+    <View
+        style="@style/Divider"
+        android:layout_marginBottom="0dip"
+        android:layout_marginTop="0dip" />
+
+    <LinearLayout
+        android:id="@+id/rel_rec_patterns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding"
+        android:paddingTop="@dimen/padding" >
+
+        <TextView
+            android:id="@+id/pattern"
+            style="@style/PrimaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/paddinghalf"          
+            android:textSize="20sp" />
+
+        <TextView
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="0dp"
+            android:text="@string/label_reccurrence" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_daily_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding"
+        android:visibility="gone" >
+
+        <TextView
+            style="@style/SecondaryTextStyle"
+             android:id="@+id/day_frequency_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/label_daily_occurrences" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_weekly_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding" >
+
+        <TextView
+            android:id="@+id/week_frequency_input"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/padding" />
+
+        <TextView
+            android:id="@+id/txtDays"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_monthly_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding" >
+
+        <TextView
+            android:id="@+id/month_frequency_input"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/label_monthly_occurrences" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/occurece_input"
+        style="@style/SecondaryTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_end_after_occurrence" />
+
+</LinearLayout>

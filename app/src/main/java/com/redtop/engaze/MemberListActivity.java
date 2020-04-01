@@ -8,11 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.redtop.engaze.adapter.MemberAdapter;
-import com.redtop.engaze.entity.ContactOrGroup;
-import com.redtop.engaze.utils.ContactAndGroupListManager;
+import com.redtop.engaze.domain.ContactOrGroup;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
-public class MemberListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener{
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+public class MemberListActivity extends BaseActivity1 implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener{
 
 	ListView listView;
 	List<String> rowItems;
@@ -63,7 +64,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 
 		if(!accessingContactsFirstTime()){
 			//mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-			mAllMembers = ContactAndGroupListManager.getAllContacts(mContext);
+			mAllMembers = ContactAndGroupListManager.getAllContacts();
 			loadFriendList();
 		}	
 
@@ -128,7 +129,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 	@Override
 	protected void registeredMemberListCached(){
 		//mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-		mAllMembers = ContactAndGroupListManager.getAllContacts(mContext);
+		mAllMembers = ContactAndGroupListManager.getAllContacts();
 		loadFriendList();
 	}
 

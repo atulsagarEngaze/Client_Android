@@ -3,7 +3,6 @@ package com.redtop.engaze.service;
 import org.json.JSONObject;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,7 +18,7 @@ import com.google.android.gms.location.places.Places;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.DurationConstants;
@@ -36,15 +35,14 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	protected GoogleApiClient mGoogleApiClient;
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-	private static Context mContext = null;	
 	public static final String TAG = EventTrackerLocationService.class.getName();
 	private LocationRequest mLocationRequest;
 	private final Handler runningEventCheckHandler = new Handler();
 	private Runnable runningEventCheckRunnable = new Runnable() {
 		public void run() {	
 			Log.v(TAG, "Running event check callback. Checking for any running event");	
-			if(!EventService.isAnyEventInState(mContext, EventState.TRACKING_ON, true)){
-				mContext.stopService(new Intent(mContext, EventTrackerLocationService.class));
+			if(!EventService.isAnyEventInState(EventState.TRACKING_ON, true)){
+				AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
 			}
 			else{
 				runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
@@ -52,24 +50,24 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 			}
 		}	
 	};
-	public synchronized static void peroformSartStop(Context context){
+	public synchronized static void peroformSartStop(){
 
-		if(EventService.shouldShareLocation(context))
+		if(EventService.shouldShareLocation())
 		{
 			isFirstLocationRequiredForNewEvent = true;
-			if(AppUtility.isNetworkAvailable(context)){
-				context.startService(new Intent(context, EventTrackerLocationService.class));
+			if(AppContext.context.isInternetEnabled){
+				AppContext.context.startService(new Intent(AppContext.context, EventTrackerLocationService.class));
 			}
 		}
 		else
 		{
-			context.stopService(new Intent(context, EventTrackerLocationService.class));
+			AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
 		}
 	}
 
-	public synchronized static void peroformStop(Context context){
+	public synchronized static void peroformStop(){
 
-		context.stopService(new Intent(context, EventTrackerLocationService.class));		
+		AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
 	}
 
 	@Override
@@ -79,7 +77,6 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	public void onCreate() {
 		super.onCreate();
-		mContext = this;		
 		Log.v(TAG, "\n LocationUpdatorService created ");
 		createGoogleApiClient();
 		runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
@@ -124,7 +121,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 			if(lastLocation!=null){
 
 				if(isFirstLocationRequiredForNewEvent ||  lastLocation.distanceTo(location) > 
-				Integer.parseInt(mContext.getResources().getString(R.string.min_distance_in_meter_location_update))){
+				Integer.parseInt(AppContext.context.getResources().getString(R.string.min_distance_in_meter_location_update))){
 					updateLocationToServer(location);
 					isFirstLocationRequiredForNewEvent = false;
 				}
@@ -137,7 +134,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	private void updateLocationToServer(final Location location){
 		isUpdateInProgress = true;
-		LocationManager.updateLocationToServer(mContext, location, new OnAPICallCompleteListner() {
+		LocationManager.updateLocationToServer(location, new OnAPICallCompleteListner() {
 			@Override
 			public void apiCallComplete(JSONObject response) {
 				isUpdateInProgress = false;
@@ -172,7 +169,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 				if(lastLocation!=null)
 				{
 					if(lastLocation.distanceTo(location)> 
-					Integer.parseInt(mContext.getResources().getString(R.string.min_distance_in_meter_location_update))){
+					Integer.parseInt(AppContext.context.getResources().getString(R.string.min_distance_in_meter_location_update))){
 						isUpdateInProgress = true;
 						updateLocationToServer(location);
 					}

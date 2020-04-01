@@ -18,9 +18,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
-import com.redtop.engaze.common.ContactAndGroupListManager;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
@@ -32,8 +34,9 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.manager.ParticipantManager;
+import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.domain.service.ParticipantService;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -51,8 +54,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventParticipantUpdatedByInitiator() {
-        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        mEvent = InternalCaching.getEventFromCache(mEventId);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
         updateRecyclerViews();
         if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
             runningEventAlertDialog("Tracking Updated!", mEvent.GetInitiatorName() + " has updated the participants list.", true);
@@ -74,8 +77,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventDestinationUpdatedByInitiator(String changedDestination) {
-        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        mEvent = InternalCaching.getEventFromCache(mEventId);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
         if (!mEvent.getDestinationLatitude().equals("null")) {
             mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
         }
@@ -117,8 +120,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onParticipantLeft(String EventResponderName) {
-        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        mEvent = InternalCaching.getEventFromCache(mEventId);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
@@ -133,8 +136,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onUserResponse(int eventAcceptanceStateId, String eventResponderName) {
-        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        mEvent = InternalCaching.getEventFromCache(mEventId);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
@@ -160,8 +163,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventExtendedByInitiator(String extendEventDuration) {
-        mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants(), mContext);
+        mEvent = InternalCaching.getEventFromCache(mEventId);
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
         UpdateTimeLeftItemOfRunningEventDetailsDataSet();
         mEventDetailAdapter.notifyDataSetChanged();
 
@@ -203,7 +206,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onPokeAllParticipantsClicked() {
         try {
-            String lastPokedTime = PreffManager.getPref(mEventId, mContext);
+            String lastPokedTime = PreffManager.getPref(mEventId);
             if (lastPokedTime != null) {
                 SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 Calendar lastCal = Calendar.getInstance();
@@ -231,12 +234,12 @@ public class RunningEventActions extends RunningEventActivityResults {
     public void onLeaveEventClicked() {
         locationhandler.removeCallbacks(locationRunnable);
 
-        EventManager.leaveEvent(mContext, mEvent, new OnActionCompleteListner() {
+        EventManager.leaveEvent(mEvent, new OnActionCompleteListner() {
 
             @Override
             public void actionComplete(Action action) {
                 mEvent.getCurrentParticipant().setAcceptanceStatus(AcceptanceStatus.DECLINED);
-                ((BaseActivity1) mContext).actionComplete(action);
+                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
                 gotoPreviousPage();
 
             }
@@ -264,10 +267,10 @@ public class RunningEventActions extends RunningEventActivityResults {
         ArrayList<EventParticipant> members = mEvent.getParticipants();
         for (EventParticipant mem : members) {
             if (!mem.getUserId().equals(currentMemUserId))
-                contactList.add(ContactAndGroupListManager.getContact(mContext, mem.getUserId()));
+                contactList.add(ContactAndGroupListManager.getContact(mem.getUserId()));
         }
 
-        PreffManager.setPrefArrayList("Invitees", contactList, mContext);
+        PreffManager.setPrefArrayList("Invitees", contactList);
 
         Intent i = new Intent(RunningEventActions.this, ContactsListActivity.class);
         startActivityForResult(i, ADDREMOVE_INVITEES_REQUEST_CODE);
@@ -331,11 +334,11 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     private void endEventActions() {
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-        EventManager.endEvent(mContext, mEvent, new OnActionCompleteListner() {
+        EventManager.endEvent(mEvent, new OnActionCompleteListner() {
             @Override
             public void actionComplete(Action action) {
                 mEvent = null;
-                ((BaseActivity1) mContext).actionComplete(action);
+                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
                 gotoPreviousPage();
             }
         }, this);
@@ -343,17 +346,17 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     private void pokeAll() {
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-        JSONObject jObj = JsonSerializer.createPokeAllContactsJSON(mContext, mEvent);
-        ParticipantService.pokeParticipants(mEvent, new OnActionCompleteListner() {
+        JSONObject jObj = EventParser.createPokeAllContactsJSON(mEvent);
+        ParticipantManager.pokeParticipants(jObj, new OnActionCompleteListner() {
 
             @Override
             public void actionComplete(Action action) {
                 SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 Date currentdate = Calendar.getInstance().getTime();
                 String currentTimestamp = originalformat.format(currentdate);
-                AppUtility.setPref(mEventId, currentTimestamp, mContext);
-                ((BaseActivity) mContext).actionComplete(action);
+                PreffManager.setPref(mEventId, currentTimestamp);
+                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
             }
-        }, this);
+        } , this);
     }
 }

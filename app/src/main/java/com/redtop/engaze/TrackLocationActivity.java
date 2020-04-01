@@ -27,20 +27,17 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
-import com.redtop.engaze.common.ContactAndGroupListManager;
+import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
-import com.redtop.engaze.entity.ContactOrGroup;
-import com.redtop.engaze.entity.Duration;
-import com.redtop.engaze.entity.EventPlace;
-import com.redtop.engaze.entity.NameImageItem;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.Constants.Action;
-import com.redtop.engaze.utils.ContactAndGroupListManager;
-import com.redtop.engaze.utils.DateUtil;
+import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 import com.redtop.engaze.webservice.Routes;
 
@@ -92,11 +89,11 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 		if(this.getIntent().getParcelableExtra("DestinatonLocation")!=null)
 		{
 			mDestinationPlace = (EventPlace)this.getIntent().getParcelableExtra("DestinatonLocation");
-			mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(),Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));			
+			mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
 		}
 		if(!accessingContactsFirstTime()){
 			//mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-			mMembers = ContactAndGroupListManager.getAllContacts(mContext);
+			mMembers = ContactAndGroupListManager.getAllContacts();
 			if(mMembers!=null){
 				mAdapter = new ContactListAutoCompleteAdapter(mContext,R.layout.item_contact_group_list, mMembers);
 				viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);				
@@ -110,7 +107,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 	private void addIfAnyContactIsSeletedFromMemberListActivity() {
 		String memberId = this.getIntent().getStringExtra("meetNowUserID");
 		if(memberId !=null){
-			ContactOrGroup contact = ContactAndGroupListManager.getContact(mContext, memberId);
+			ContactOrGroup contact = ContactAndGroupListManager.getContact( memberId);
 			mAddedMembers.put(contact.getName(), contact);	
 			viewManager.createContactLayoutItem(contact);
 			viewManager.clearAutoCompleteInviteeTextView();
@@ -120,7 +117,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 	@Override
 	protected void registeredMemberListCached(){
 		//mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-		mMembers = ContactAndGroupListManager.getAllContacts(mContext);
+		mMembers = ContactAndGroupListManager.getAllContacts();
 		if(mMembers!=null){
 			mAdapter = new ContactListAutoCompleteAdapter(mContext,R.layout.item_contact_group_list, mMembers);
 			viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);				
@@ -145,20 +142,20 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 		switch(mEventTypeId){
 		case 100:
 			mCreateUpdateSuccessfulMessage = getResources().getString(R.string.sharemylocation_event_create_successful);
-			mEventName= "S_" + AppUtility.getPref(Constants.LOGIN_NAME, mContext) + "_";			
+			mEventName= "S_" + AppContext.context.loginName + "_";
 			mEventDescription  = "ShareMyLocationEvent";
 			mIsQuickEvent = "false";
 			break;
 		case 200:
 			mCreateUpdateSuccessfulMessage = getResources().getString(R.string.track_my_buddy_event_create_successful);
-			mEventName= "T_L_" + AppUtility.getPref(Constants.LOGIN_NAME, mContext) + "_B";
+			mEventName= "T_L_" + AppContext.context.loginName + "_B";
 			mEventDescription  = "TrackBuddy";
 			mIsQuickEvent = "false";
 			break;
 		default:
 			Calendar calendar_start = Calendar.getInstance();
 			mCreateUpdateSuccessfulMessage = getResources().getString(R.string.meet_now_event_create_successful);
-			mEventName= "Meet " + AppUtility.getPref(Constants.LOGIN_NAME, mContext) + " @"+ DateUtil.getTime(calendar_start);
+			mEventName= "Meet " + AppContext.context.loginName + " @"+ DateUtil.getTime(calendar_start);
 			mQuickEventName.setText(mEventName);
 			mEventDescription  = "QuickEvent";
 			mIsQuickEvent = "true";
@@ -212,7 +209,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 		}
 		mStartDate = calendar_start.getTime();
 
-		return super.createEventJson();	
+		return EventParser.createEventJson(mNewEvent);
 	}	
 
 	@Override

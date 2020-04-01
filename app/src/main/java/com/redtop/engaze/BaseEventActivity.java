@@ -74,6 +74,8 @@ public abstract class BaseEventActivity extends ActionSuccessFailMessageActivity
     protected ArrayList<Integer> mRecurrencedays;
     protected int mEventTypeId;
 
+    protected EventDetail mNewEvent;
+
     public EventDetail notificationselectedEvent;
 
     protected static final int REMINDER_REQUEST_CODE = 2;

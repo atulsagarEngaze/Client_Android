@@ -67,7 +67,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 			holder = (ViewHolder) convertView.getTag();
 		rowItem.getEventId();
 
-		if(ParticipantService.isCurrentUserInitiator(rowItem.getInitiatorId(), mContext)){
+		if(ParticipantService.isCurrentUserInitiator(rowItem.getInitiatorId())){
 			holder.txtLeave.setVisibility(View.GONE);
 			holder.txtEnd.setVisibility(View.VISIBLE);
 		}

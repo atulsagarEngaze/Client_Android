@@ -33,6 +33,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.enums.Action;
@@ -100,7 +101,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 			}
 		};
 		EditText email = (EditText) findViewById(R.id.Email);
-		String emailAccount = PreffManager.getPref(Constants.EMAIL_ACCOUNT, mContext);
+		String emailAccount = PreffManager.getPref(Constants.EMAIL_ACCOUNT);
 		if(emailAccount!=null && !emailAccount.equals("")){
 			email.setText(emailAccount);
 		}		
@@ -150,7 +151,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 		Save_Profile.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(mAppContext.isInternetEnabled){
+				if(AppContext.context.isInternetEnabled){
 					hideKeyboard(v);
 					creatJsonAndStartService();
 				}
@@ -158,7 +159,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 		});
 	}
 	private void startInitializationService() {
-		mAppContext.isFirstTimeLoading = true;
+		AppContext.context.isFirstTimeLoading = true;
 		Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 		startService(registeredContactsRefreshServiceIntent);		
 	}
@@ -243,9 +244,9 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 			mJRequestobj.put("ProfileName", profileName);
 			mJRequestobj.put("Email", ((EditText) findViewById(R.id.Email)).getText().toString().trim());
 			mJRequestobj.put("ImageUrl", encodedImage);
-			mJRequestobj.put("DeviceId", PreffManager.getPref(Constants.DEVICE_ID, mContext));
-			mJRequestobj.put("CountryCode", PreffManager.getPref(Constants.COUNTRY_CODE, mContext));
-			mJRequestobj.put("MobileNumber", PreffManager.getPref(Constants.MOBILE_NUMBER, mContext));
+			mJRequestobj.put("DeviceId", PreffManager.getPref(Constants.DEVICE_ID));
+			mJRequestobj.put("CountryCode", PreffManager.getPref(Constants.COUNTRY_CODE));
+			mJRequestobj.put("MobileNumber", PreffManager.getPref(Constants.MOBILE_NUMBER));
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -256,7 +257,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 	private void SaveProfile() {
 		try {
 			// get GCMID/DeviceID/MobileNumber from Preferences
-			mJRequestobj.put("GCMClientId", PreffManager.getPref(Constants.GCM_REGISTRATION_TOKEN, mContext));
+			mJRequestobj.put("GCMClientId", PreffManager.getPref(Constants.GCM_REGISTRATION_TOKEN));
 			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListner() {
 
 				@Override
@@ -264,7 +265,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 					if(mProgress.isShowing()){
 						mProgress.hide();
 					}
-					mAppContext.isFirstTimeLoading = true;
+					AppContext.context.isFirstTimeLoading = true;
 					Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 					startService(registeredContactsRefreshServiceIntent);				
 					

@@ -1,12 +1,10 @@
 package com.redtop.engaze.manager;
 
-import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.webservice.LocationWS;
 
@@ -16,10 +14,10 @@ public class LocationManager {
 
     private final static String TAG = LocationManager.class.getName();
 
-    public static void updateLocationToServer(Context context, final Location location, final OnAPICallCompleteListner listnerOnSuccess,
+    public static void updateLocationToServer(final Location location, final OnAPICallCompleteListner listnerOnSuccess,
                                               final OnActionFailedListner listnerOnFailure ) {
 
-        if(!AppUtility.isNetworkAvailable(context)){
+        if(!AppContext.context.isInternetEnabled){
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }
@@ -27,7 +25,7 @@ public class LocationManager {
         JSONObject jobj = new JSONObject();
 
         try {
-            jobj.put("UserId", AppContext.getInstance().loginId);
+            jobj.put("UserId", AppContext.context.loginId);
             jobj.put("Latitude", "" + location.getLatitude());
             jobj.put("Longitude", "" + location.getLongitude());
             jobj.put("ETA", "1.0");
@@ -37,7 +35,7 @@ public class LocationManager {
             Log.d(TAG, "Failed to update location");
         }
 
-        LocationWS.updateLocation(context,  jobj, new OnAPICallCompleteListner() {
+        LocationWS.updateLocation( jobj, new OnAPICallCompleteListner() {
             @Override
             public void apiCallComplete(JSONObject response) {
                 listnerOnSuccess.apiCallComplete(response);

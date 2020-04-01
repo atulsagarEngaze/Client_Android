@@ -20,6 +20,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
 public class ContactOrGroup  implements Parcelable, Serializable{
@@ -51,9 +52,9 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 	}
 
 
-	public static Drawable getAppUserIconDrawable(Context context)
+	public static Drawable getAppUserIconDrawable()
 	{
-		return new BitmapDrawable(context.getResources(),getAppUserIconBitmap(context));
+		return new BitmapDrawable(AppContext.context.getResources(),getAppUserIconBitmap());
 	}
 
 	public static void setAppUserIconBitmap(Bitmap bm)
@@ -64,16 +65,16 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 		appUserIconBitmap=Base64.encodeToString(b, Base64.DEFAULT);
 	}
 
-	public static Bitmap getAppUserIconBitmap(Context context)
+	public static Bitmap getAppUserIconBitmap()
 	{
 		try
 		{
 
 			if(appUserIconBitmap==null || appUserIconBitmap.equals(""))
 			{
-				Bitmap bm = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(context.getContentResolver(),Uri.parse("android.resource://com.redtop.engaze/drawable/profile27")),100,100, true);
+				Bitmap bm = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(AppContext.context.getContentResolver(),Uri.parse("android.resource://com.redtop.engaze/drawable/profile27")),100,100, true);
 				Paint paint = new Paint();
-				ColorFilter filter = new PorterDuffColorFilter(context.getResources().getColor(R.color.primaryLight), android.graphics.PorterDuff.Mode.SRC_ATOP );
+				ColorFilter filter = new PorterDuffColorFilter(AppContext.context.getResources().getColor(R.color.primaryLight), android.graphics.PorterDuff.Mode.SRC_ATOP );
 				paint.setColorFilter(filter);
 
 				Canvas canvas = new Canvas(bm);

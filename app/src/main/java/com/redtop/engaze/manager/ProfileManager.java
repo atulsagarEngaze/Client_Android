@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
@@ -22,7 +23,7 @@ public class ProfileManager {
 			final OnAPICallCompleteListner listnerOnSuccess, 
 			final OnActionFailedListner listnerOnFailure){
 
-		if(!AppUtility.isNetworkAvailable(context))
+		if(!AppContext.context.isInternetEnabled)
 		{
 			String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
 			Log.d(TAG, message);
@@ -44,8 +45,8 @@ public class ProfileManager {
 					{
 						String loginID = (String)response.getString("Id");
 						// save the loginid to preferences  
-						PreffManager.setPref(Constants.LOGIN_ID, loginID, context);
-						PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"), context);
+						PreffManager.setPref(Constants.LOGIN_ID, loginID);
+						PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
 						listnerOnSuccess.apiCallComplete(response);
 					}
 					else{

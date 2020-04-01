@@ -29,6 +29,7 @@ import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.UserMessageHandler;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
@@ -39,6 +40,7 @@ import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
 
 import androidx.core.app.NotificationCompat;
@@ -64,10 +66,10 @@ public class EventNotificationManager {
     private static Uri pokenotificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
     private static Ringtone ringtone;
 
-    public static void showReminderNotification(Context context, EventDetail event) {
+    public static void showReminderNotification(EventDetail event) {
 
-        notificationId = getIncrementedNotificationId(context);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        notificationId = getIncrementedNotificationId();
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
 
         DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         long minutes = 0;
@@ -89,13 +91,13 @@ public class EventNotificationManager {
             // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(EventsActivity.class);
             // Adds the Intent that starts the Activity to the top of the stack
-            Intent activityIntent = new Intent(context, EventsActivity.class);
+            Intent activityIntent = new Intent(AppContext.context, EventsActivity.class);
             stackBuilder.addNextIntent(activityIntent);
         } else {
             durationMessage = "is running";
             // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(RunningEventActivity.class);
-            Intent activityIntent = new Intent(context, RunningEventActivity.class);
+            Intent activityIntent = new Intent(AppContext.context, RunningEventActivity.class);
             activityIntent.putExtra("EventId", event.getEventId());
             stackBuilder.addNextIntent(activityIntent);
         }
@@ -103,14 +105,14 @@ public class EventNotificationManager {
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent snoozeResponseIntent = new Intent(context, notificationActionsListener.class);
+        Intent snoozeResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
         snoozeResponseIntent.putExtra("eventid", event.getEventId());
         snoozeResponseIntent.putExtra("responseCode", "snooze");
         PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), snoozeResponseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), snoozeResponseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
+                new NotificationCompat.Builder(AppContext.context)
                         .setSmallIcon(R.drawable.logo_notification)
                         .setContentTitle(event.getName())
                         .setContentText(durationMessage)
@@ -124,44 +126,44 @@ public class EventNotificationManager {
         }
 
         //if(!event.getCurrentMember().getUserId().equalsIgnoreCase(event.getInitiatorId()))
-        if (!EventParticipant.isCurrentUserInitiator(event.getInitiatorId())) {
-            Intent declineResponseIntent = new Intent(context, notificationActionsListener.class);
+        if (!ParticipantService.isCurrentUserInitiator(event.getInitiatorId())) {
+            Intent declineResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             declineResponseIntent.putExtra("eventid", event.getEventId());
             declineResponseIntent.putExtra("responseCode", "leave");
             PendingIntent declinePendingIntent =
-                    PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), declineResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), declineResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             mBuilder.addAction(R.drawable.ic_clear_black_18dp, "Leave", declinePendingIntent);
         } else {
-            Intent endResponseIntent = new Intent(context, notificationActionsListener.class);
+            Intent endResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             endResponseIntent.putExtra("eventid", event.getEventId());
             endResponseIntent.putExtra("responseCode", "end");
             PendingIntent endPendingIntent =
-                    PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), endResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), endResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             mBuilder.addAction(R.drawable.ic_clear_black_18dp, "End Event", endPendingIntent);
         }
 
         mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
 
         event.snoozeNotificationId = notificationId;
-        InternalCaching.saveEventToCache(event, context);
+        InternalCaching.saveEventToCache(event);
         mNotificationManager.notify(notificationId, mBuilder.build());
         currentNotificationEventId = event.getEventId();
         isNotificActive = true;
 
     }
 
-    public static void showEventInviteNotification(Context context, EventDetail event) {
+    public static void showEventInviteNotification(EventDetail event) {
         //int layoutId = R.layout.notification_event_invitation;
         String ns = Context.NOTIFICATION_SERVICE;
         NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(ns);
-        notificationId = getIncrementedNotificationId(context);
+                (NotificationManager) AppContext.context.getSystemService(ns);
+        notificationId = getIncrementedNotificationId();
         event.acceptNotificationid = notificationId;
-        InternalCaching.saveEventToCache(event, context);
+        InternalCaching.saveEventToCache(event);
 
         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         DateFormat newFormat = new SimpleDateFormat("EEE, dd MMM yyyy  hh:mm a");
@@ -174,7 +176,7 @@ public class EventNotificationManager {
             /* Add Big View Specific Configuration */
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context);
+                    new NotificationCompat.Builder(AppContext.context);
             String title = "";
             String[] events = new String[2];
             if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
@@ -204,23 +206,23 @@ public class EventNotificationManager {
             }
 
             mBuilder.setStyle(inboxStyle);
-            Intent acceptResponseIntent = new Intent(context, notificationActionsListener.class);
+            Intent acceptResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             acceptResponseIntent.putExtra("eventid", event.getEventId());
             acceptResponseIntent.putExtra("responseCode", "accept");
-            PendingIntent acceptIntent = PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), acceptResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent acceptIntent = PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), acceptResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
-            Intent rejectResponseIntent = new Intent(context, notificationActionsListener.class);
+            Intent rejectResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             rejectResponseIntent.putExtra("eventid", event.getEventId());
             rejectResponseIntent.putExtra("responseCode", "reject");
-            PendingIntent rejectIntent = PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), rejectResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent rejectIntent = PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), rejectResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             //remoteViews.setOnClickPendingIntent(R.id.btn_reject, rejectIntent);
 
             // Define that we have the intention of opening MoreInfoNotification
-            Intent moreInfoIntent = new Intent(context, EventsActivity.class);
+            Intent moreInfoIntent = new Intent(AppContext.context, EventsActivity.class);
 
             // Used to stack tasks across activites so we go to the proper place when back is clicked
-            TaskStackBuilder tStackBuilder = TaskStackBuilder.create(context);
+            TaskStackBuilder tStackBuilder = TaskStackBuilder.create(AppContext.context);
 
             // Add all parents of this activity to the stack
             tStackBuilder.addParentStack(EventsActivity.class);
@@ -262,7 +264,7 @@ public class EventNotificationManager {
         }
     }
 
-    public static void showEventExtendedNotification(Context context, EventDetail eventDetail) {
+    public static void showEventExtendedNotification(EventDetail eventDetail) {
         String notificationMessage = "";
         String title = "";
         if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
@@ -275,10 +277,10 @@ public class EventNotificationManager {
         } else {
             notificationMessage = eventDetail.GetInitiatorName() + " has extended the event " + eventDetail.getName();
         }
-        showGenericNotification(context, eventDetail, notificationMessage, title);
+        showGenericNotification(eventDetail, notificationMessage, title);
     }
 
-    public static void showDestinationChangedNotification(Context context, EventDetail eventDetail) {
+    public static void showDestinationChangedNotification(EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
         if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
@@ -289,10 +291,10 @@ public class EventNotificationManager {
             notificationMessage = eventDetail.GetInitiatorName() + " has changed the meeting place of the event " + eventDetail.getName();
         }
 
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
-    public static void showParticipantsUpdatedNotification(Context context, EventDetail eventDetail) {
+    public static void showParticipantsUpdatedNotification(EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
         if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
@@ -302,10 +304,10 @@ public class EventNotificationManager {
         } else {
             notificationMessage = eventDetail.GetInitiatorName() + " has added/removed participant(s) of the event " + eventDetail.getName();
         }
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
-    public static void showRemovedFromEventNotification(Context context, EventDetail eventDetail) {
+    public static void showRemovedFromEventNotification(EventDetail eventDetail) {
         String notificationMessage = "";
         String notificationTitle = "";
         if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
@@ -317,16 +319,16 @@ public class EventNotificationManager {
         } else {
             notificationMessage = eventDetail.GetInitiatorName() + " has removed you from the event " + eventDetail.getName();
         }
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
-    public static void showEventDeleteNotification(Context context, EventDetail eventDetail) {
+    public static void showEventDeleteNotification(EventDetail eventDetail) {
 
         String notificationMessage = eventDetail.GetInitiatorName() + " has cancelled " + eventDetail.getName();
-        showGenericNotification(context, eventDetail, notificationMessage, "");
+        showGenericNotification(eventDetail, notificationMessage, "");
     }
 
-    public static void showEventEndNotification(Context context, EventDetail eventDetail) {
+    public static void showEventEndNotification(EventDetail eventDetail) {
 
         String notificationMessage = "";
         String notificationTitle = "";
@@ -340,23 +342,23 @@ public class EventNotificationManager {
             notificationMessage = eventDetail.GetInitiatorName() + " has ended " + eventDetail.getName();
         }
 
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
     public static void pokeNotification(Context context, String mEventId) {
 
-        EventDetail eventDetail = InternalCaching.getEventFromCache(mEventId, context);
+        EventDetail eventDetail = InternalCaching.getEventFromCache(mEventId);
         String notificationMessage = eventDetail.GetInitiatorName() + " has poked you. Did you miss to respond to an invitation ?";
         String title = "You have been poked!";
         isPokeNotification = true;
         notificationType = "POKE";
-        showGenericNotification(context, eventDetail, notificationMessage, title);
+        showGenericNotification(eventDetail, notificationMessage, title);
     }
 
     public static void approachingAlertNotification(Context context, EventDetail mEvent, String notificationMessage) {
-        ringAlarm(context);
+        ringAlarm();
         notificationType = "APPROACHING";
-        showGenericNotification(context, mEvent, notificationMessage, "");
+        showGenericNotification(mEvent, notificationMessage, "");
     }
 
     public static void showEventResponseNotification(Context context, EventDetail eventDetail, String userName, int eventAcceptanceStateId) {
@@ -383,7 +385,7 @@ public class EventNotificationManager {
             notificationMessage = userName + " has rejected your request!";
         }
 
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
     public static void showEventLeftNotification(Context context, EventDetail eventDetail, String userName) {
@@ -398,65 +400,65 @@ public class EventNotificationManager {
             notificationMessage = userName + " has left " + eventDetail.getName();
         }
 
-        showGenericNotification(context, eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
     }
 
-    private static void saveResponse(final AcceptanceStatus status, final Context context, final String eventid) {
+    private static void saveResponse(final AcceptanceStatus status, final String eventid) {
         try {
             //responseInProcessEvents.
 
             if (responseInProcessEvents.contains(eventid)) {
-                Toast.makeText(context, context.getResources().getString(R.string.message_saveresponse_inprocess), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AppContext.context, AppContext.context.getResources().getString(R.string.message_saveresponse_inprocess), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             responseInProcessEvents.add(eventid);
             String msg = "";
-            EventManager.saveUserResponse(status, context, eventid, new OnActionCompleteListner() {
+            EventManager.saveUserResponse(status, eventid, new OnActionCompleteListner() {
 
                 @Override
                 public void actionComplete(Action action) {
                     responseInProcessEvents.remove(eventid);
                     Intent intent = new Intent(Veranstaltung.EVENT_USER_RESPONSE);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE, context);
-                    Toast.makeText(context, UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE, context), Toast.LENGTH_SHORT).show();
+                    LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
+                    UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE);
+                    Toast.makeText(AppContext.context, UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
                 }
             }, new OnActionFailedListner() {
 
                 @Override
                 public void actionFailed(String msg, Action action) {
                     responseInProcessEvents.remove(eventid);
-                    Toast.makeText(context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE, context), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppContext.context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception ex) {
-            Toast.makeText(context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE, context), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AppContext.context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
             responseInProcessEvents.remove(eventid);
         }
     }
 
-    private static void endEvent(final Context context, final EventDetail event) {
+    private static void endEvent(final EventDetail event) {
         try {
-            EventManager.endEvent(context, event, new OnActionCompleteListner() {
+            EventManager.endEvent(event, new OnActionCompleteListner() {
 
                 @Override
                 public void actionComplete(Action action) {
                     Intent intent = new Intent(Veranstaltung.EVENT_ENDED);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    String message = context.getResources().getString(R.string.message_general_event_end_success);
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                    LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
+                    String message = AppContext.context.getResources().getString(R.string.message_general_event_end_success);
+                    Toast.makeText(AppContext.context, message, Toast.LENGTH_LONG).show();
                     Log.d(TAG, message);
-                    UserMessageHandler.getSuccessMessage(Action.ENDEVENT, context);
+                    UserMessageHandler.getSuccessMessage(Action.ENDEVENT);
                 }
             }, new OnActionFailedListner() {
                 @Override
                 public void actionFailed(String msg, Action action) {
-                    UserMessageHandler.getFailureMessage(Action.ENDEVENT, context);
+                    UserMessageHandler.getFailureMessage(Action.ENDEVENT);
                 }
             });
         } catch (Exception ex) {
-            UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE, context);
+            UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE);
             Log.d(TAG, ex.toString());
 
         }
@@ -464,35 +466,35 @@ public class EventNotificationManager {
 
     public static class notificationActionsListener extends BroadcastReceiver {
         @Override
-        public void onReceive(final Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             final String eventid = intent.getExtras().getString("eventid");
             String responseCode = intent.getExtras().getString("responseCode");
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             switch (responseCode) {
                 case "accept":
-                    saveResponse(AcceptanceStatus.ACCEPTED, context, eventid);
+                    saveResponse(AcceptanceStatus.ACCEPTED, eventid);
                     break;
 
                 case "reject":
-                    saveResponse(AcceptanceStatus.DECLINED, context, eventid);
+                    saveResponse(AcceptanceStatus.DECLINED, eventid);
                     break;
 
                 case "leave":
-                    saveResponse(AcceptanceStatus.DECLINED, context, eventid);
+                    saveResponse(AcceptanceStatus.DECLINED, eventid);
                     break;
 
                 case "snooze":
-                    EventDetail ed = InternalCaching.getEventFromCache(eventid, context);
+                    EventDetail ed = InternalCaching.getEventFromCache(eventid);
                     if (ed != null) {
-                        setAlarm(context, "notification", eventid, 10);//reminder interval in minute
+                        setAlarm("notification", eventid, 10);//reminder interval in minute
                         notificationManager.cancel(ed.snoozeNotificationId);
                     }
                     break;
 
                 case "end":
-                    EventDetail eventD = InternalCaching.getEventFromCache(eventid, context);
-                    endEvent(context, eventD);
+                    EventDetail eventD = InternalCaching.getEventFromCache(eventid);
+                    endEvent(eventD);
 
                     break;
                 case "approachingAlarmDismiss":
@@ -507,9 +509,9 @@ public class EventNotificationManager {
         }
     }
 
-    public static void cancelAllNotifications(Context context, EventDetail eventDetailData) {
+    public static void cancelAllNotifications(EventDetail eventDetailData) {
         try {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
             // If the notification is still active close it
             notificationManager.cancel(eventDetailData.acceptNotificationid);
             notificationManager.cancel(eventDetailData.snoozeNotificationId);
@@ -521,9 +523,9 @@ public class EventNotificationManager {
         }
     }
 
-    public static void cancelNotification(Context context, EventDetail eventDetailData) {
+    public static void cancelNotification(EventDetail eventDetailData) {
         try {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             switch (eventDetailData.getCurrentParticipant().getAcceptanceStatus()) {
                 case ACCEPTED:
@@ -547,23 +549,23 @@ public class EventNotificationManager {
 
     }
 
-    public static void setAlarm(Context context, String reminderType, String eventId, int reminderInterval) {
+    public static void setAlarm(String reminderType, String eventId, int reminderInterval) {
         //eDetail.getReminderType()
         Calendar cal = Calendar.getInstance();
 
         cal.add(Calendar.MINUTE, reminderInterval);
         Date reminderDate = cal.getTime();
-        Intent intentAlarm = new Intent(context, EventTrackerAlarmReceiverService.class);
+        Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
         intentAlarm.putExtra("AlarmType", "Reminder");
         intentAlarm.putExtra("ReminderType", reminderType);
         intentAlarm.putExtra("EventId", eventId);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
         //set the alarm for particular time
-        alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(), PendingIntent.getBroadcast(context, Constants.ReminderBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.ReminderBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
 
     }
 
-    public static void ringAlarm(Context context) {
+    public static void ringAlarm() {
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {
             alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -572,7 +574,7 @@ public class EventNotificationManager {
             }
         }
 
-        ringtone = RingtoneManager.getRingtone(context, alert);
+        ringtone = RingtoneManager.getRingtone(AppContext.context, alert);
         if (!ringtone.isPlaying()) {
             ringtone.play();
         }
@@ -587,8 +589,8 @@ public class EventNotificationManager {
         }, distanceAlarmDuration);
     }
 
-    public static void showGenericNotification(Context context, EventDetail eventDetail, String msg, String title) {
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+    public static void showGenericNotification(EventDetail eventDetail, String msg, String title) {
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
         String notificationMessage = msg;
         if (title == "") {
             title = eventDetail.getName();
@@ -596,7 +598,7 @@ public class EventNotificationManager {
         // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(HomeActivity.class);
         // Adds the Intent that starts the Activity to the top of the stack
-        Intent activityIntent = new Intent(context, HomeActivity.class);
+        Intent activityIntent = new Intent(AppContext.context, HomeActivity.class);
         stackBuilder.addNextIntent(activityIntent);
 
 
@@ -604,7 +606,7 @@ public class EventNotificationManager {
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
+                new NotificationCompat.Builder(AppContext.context)
                         .setSmallIcon(R.drawable.logo_notification)
                         .setContentTitle(title)
                         .setContentText(notificationMessage)
@@ -625,11 +627,11 @@ public class EventNotificationManager {
                 mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
                 break;
             case "APPROACHING":
-                Intent approachingAlarmDismissIntent = new Intent(context, notificationActionsListener.class);
+                Intent approachingAlarmDismissIntent = new Intent(AppContext.context, notificationActionsListener.class);
                 approachingAlarmDismissIntent.putExtra("eventid", eventDetail.getEventId());
                 approachingAlarmDismissIntent.putExtra("responseCode", "approachingAlarmDismiss");
                 PendingIntent approachingAlarmPendingIntent =
-                        PendingIntent.getBroadcast(context, getIncrementedNotificationId(context), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                 mBuilder.addAction(R.drawable.ic_clear_black_18dp, "Dismiss", approachingAlarmPendingIntent);
                 break;
@@ -645,32 +647,30 @@ public class EventNotificationManager {
         mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
-        notificationId = getIncrementedNotificationId(context);
+        notificationId = getIncrementedNotificationId();
         eventDetail.notificationIds.add(notificationId);
-        InternalCaching.saveEventToCache(eventDetail, context);
+        InternalCaching.saveEventToCache(eventDetail);
         mNotificationManager.notify(notificationId, mBuilder.build());
         //currentNotificationEventId = event.getEventId();
         isNotificActive = true;
     }
 
-	public static int getIncrementedNotificationId(Context context) {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		int notificationId = preferences.getInt("notificationId",0);
-		if(notificationId == 0 || notificationId == 99999999 ){
-			notificationId =1;
-		}
-		else
-		{
-			notificationId = notificationId +1;
-		}
-		SharedPreferences.Editor editor = preferences.edit();
-		editor.putInt("notificationId", notificationId);
-		editor.commit();
+    public static int getIncrementedNotificationId() {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(AppContext.context);
+        int notificationId = preferences.getInt("notificationId", 0);
+        if (notificationId == 0 || notificationId == 99999999) {
+            notificationId = 1;
+        } else {
+            notificationId = notificationId + 1;
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("notificationId", notificationId);
+        editor.commit();
 
-		return notificationId;
-	}
+        return notificationId;
+    }
 }
 

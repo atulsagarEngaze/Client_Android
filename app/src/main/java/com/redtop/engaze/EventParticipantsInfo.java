@@ -13,10 +13,6 @@ import com.redtop.engaze.adapter.CustomParticipantsInfoList;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.entity.EventMember;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
-
 @SuppressWarnings("deprecation")
 public class EventParticipantsInfo extends BaseActivity1 {
 private TextView tvHeader;

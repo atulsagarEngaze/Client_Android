@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dip"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical" 
+     android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <TextView
+        android:id="@+id/CustomNotification"
+        style="@style/CategoryHeader"
+        android:text="Notify me" />
+
+    <View style="@style/Divider" />
+
+    <EditText
+        android:id="@+id/Value"
+        style="@style/PrimaryTextStyle"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="number" />
+
+    <View style="@style/Divider" />
+
+    <TextView
+        android:id="@+id/Minutes"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="minute"
+        android:text="@string/minutes" />
+
+    <TextView
+        android:id="@+id/Hours"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="hour"
+        android:text="@string/hours" />    
+
+    <View style="@style/Divider" />
+
+    <TextView
+        android:id="@+id/Notification"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="notification"
+        android:text="As notification" />
+
+    <TextView
+        android:id="@+id/Alarm"
+        style="@style/PrimaryTextStyle"
+        android:layout_width="fill_parent"
+        android:tag="alarm"
+        android:text="As alarm" />
+
+    <View style="@style/Divider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dip"
+        android:orientation="horizontal" >
+
+        <Button                       
+            android:id="@+id/save_event_reminder"
+            android:text="DONE"           
+            style="@style/FlatButton"
+             />
+    </RelativeLayout>
+
+</LinearLayout>
