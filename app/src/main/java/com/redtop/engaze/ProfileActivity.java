@@ -47,7 +47,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.redtop.engaze.manager.ProfileManager;
 
 
-public class ProfileActivity extends ActionSuccessFailMessageActivity {
+public class ProfileActivity extends BaseActivity1 {
 
 	private static String TAG = ProfileActivity.class.getName();
 	private Button Save_Profile;
@@ -165,7 +165,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 	}
 	@Override
 	protected void onResume() {
-		turnOnOfInternetAvailabilityMessage(this);
+		turnOnOfInternetAvailabilityMessage();
 		super.onResume();
 		LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
 				new IntentFilter(Constants.REGISTRATION_COMPLETE));
@@ -273,7 +273,7 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 					startActivity(intent);
 
 				}
-			}, this);
+			}, AppContext.actionHandler);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -351,8 +351,5 @@ public class ProfileActivity extends ActionSuccessFailMessageActivity {
 
 		mAlertDialog = alertDialogBuilder.create();
 	}
-	
-	@Override
-	public void actionFailed(String msg, Action action) {
-	}
+
 }

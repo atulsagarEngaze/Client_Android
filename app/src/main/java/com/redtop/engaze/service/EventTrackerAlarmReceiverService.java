@@ -25,37 +25,37 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver
 		switch(intent.getStringExtra("AlarmType"))
 		{
 		case Veranstaltung.EVENT_START:
-			EventManager.startEvent(context, eventId);
+			EventManager.startEvent(eventId);
 			break;
 		case Veranstaltung.EVENT_OVER:
-			EventManager.eventOver(context, eventId);
+			EventManager.eventOver(eventId);
 			Intent eventRemoved = new Intent(Veranstaltung.EVENT_OVER);
 			eventRemoved.putExtra("eventId", eventId);						
 			LocalBroadcastManager.getInstance(context).sendBroadcast(eventRemoved);
 
 			break;
 		case Veranstaltung.EVENT_REMINDER:
-			EventDetail eventDetailData = InternalCaching.getEventFromCache(eventId, context);
+			EventDetail eventDetailData = InternalCaching.getEventFromCache(eventId);
 			if(eventDetailData!=null){
 				String reminderType = intent.getStringExtra("ReminderType");
 				if(reminderType.equals("alarm")){				
-					EventNotificationManager.ringAlarm(context);
+					EventNotificationManager.ringAlarm();
 				}
 				else if(reminderType.equals("notification")){
-					EventNotificationManager.showReminderNotification(context, eventDetailData);
+					EventNotificationManager.showReminderNotification(eventDetailData);
 				}
 			}
 			break;
 		case Veranstaltung.TRACKING_STARTED:
-			EventManager.eventTrackingStart(context, eventId);
+			EventManager.eventTrackingStart(eventId);
 			Intent trackingStarted = new Intent(Veranstaltung.TRACKING_STARTED);
 			trackingStarted.putExtra("eventId", eventId);
 			LocalBroadcastManager.getInstance(context).sendBroadcast(trackingStarted);
 			break;
 		case Constants.CHECK_LOCATION_SERVICE:
 			 Log.d(TAG, "Alarm received to check location service");
-			EventTrackerLocationService.peroformSartStop(context.getApplicationContext());
-			EventService.setLocationServiceCheckAlarm(context);
+			EventTrackerLocationService.peroformSartStop();
+			EventService.setLocationServiceCheckAlarm();
 			break;
 		default :
 			break;

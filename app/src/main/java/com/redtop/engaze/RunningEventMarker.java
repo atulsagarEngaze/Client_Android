@@ -186,7 +186,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 						ud.setEta("");
 						mDistance ="No route";								
 					}	
-					mETADistanceMarkers.add(MarkerHelper.drawTimeDistanceMarker(marker.getPosition(), ud, mMap, mContext));							
+					mETADistanceMarkers.add(MarkerHelper.drawTimeDistanceMarker(marker.getPosition(), ud, mMap,RunningEventMarker.this));
 				}
 			});
 
@@ -267,7 +267,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 				mDestinationMarker.remove();
 				mMarkers.remove(mDestinationMarker);
 			}
-			mDestinationMarker = MarkerHelper.drawDestinationMarker(mDestinationlatlang, mMap, mContext);
+			mDestinationMarker = MarkerHelper.drawDestinationMarker(mDestinationlatlang, mMap);
 			markerUserLocation.put(mDestinationMarker, null);			
 			mMarkers.add(mDestinationMarker);			
 		}
@@ -328,7 +328,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 
 					if(!userLocationDetail.getLatitude().equals("")&&!userLocationDetail.getLongitude().equals("")){
 						latlang = new LatLng(Double.parseDouble(userLocationDetail.getLatitude()), Double.parseDouble(userLocationDetail.getLongitude()));
-						marker = MarkerHelper.drawParticipantMarker(latlang, userLocationDetail, mMap, mContext);
+						marker = MarkerHelper.drawParticipantMarker(latlang, userLocationDetail, mMap);
 						markerUserLocation.put(marker, userLocationDetail);
 						mMarkers.add(marker);
 					}

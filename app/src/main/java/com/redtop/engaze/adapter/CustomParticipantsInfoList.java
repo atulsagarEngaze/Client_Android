@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.ViewHelper;
@@ -119,7 +120,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 
 					@Override
 					public void onClick(View v) {
-						ParticipantService.pokeParticipant(member.getUserId(), member.getProfileName(), eventId, context);
+						ParticipantService.pokeParticipant(member.getUserId(), member.getProfileName(), eventId, AppContext.actionHandler);
 					}
 				});
 			} else {

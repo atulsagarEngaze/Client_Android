@@ -67,9 +67,9 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     public Boolean needLocation = true;
     public Boolean isGPSOn = false;
     public Boolean isImageSetToGray = false;
-    public LocationManager mLm;
+    public LocationManager mLocationManager;
 
-	private final static String TAG = LocationActivity.class.getName();
+    private final static String TAG = LocationActivity.class.getName();
 
     protected void createEventPlace() {
         Place place = mLh.getPlaceFromLatLang(mLatlong);
@@ -83,7 +83,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -95,14 +95,14 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
     @Override
     protected void onPause() {
-        mLm.removeUpdates(this);
+        mLocationManager.removeUpdates(this);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, (LocationListener) this);
-        if (mLm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, (LocationListener) this);
+        if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             isGPSOn = true;
         } else {
             isGPSOn = false;
@@ -184,7 +184,12 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         LatLngBounds bounds = mLh.getLatLongBounds(location);
         List<Integer> filterTypes = new ArrayList<Integer>();
 
-        Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, newQuery, bounds, AutocompleteFilter.create(filterTypes))
+        Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, newQuery,
+                bounds,
+                new AutocompleteFilter.Builder()
+                        //setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                        // .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                        .build())
                 .setResultCallback(
                         new ResultCallback<AutocompletePredictionBuffer>() {
                             @Override
@@ -203,7 +208,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         if (buffer.getStatus().isSuccess()) {
             for (AutocompletePrediction prediction : buffer) {
                 //Add as a new item to avoid IllegalArgumentsException when buffer is released
-                mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getDescription()));
+                mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getFullText(null).toString()));
             }
         }
 
@@ -232,7 +237,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             if (mEventPlace == null) {//when network is slow, or google service is down
                 turnOnOfInternetAvailabilityMessage();
 
-                turnOnOfLocationAvailabilityMessage( false);
+                turnOnOfLocationAvailabilityMessage(false);
 
 //				Toast.makeText(mContext,
 //						getResources().getString(R.string.unable_locate_address),

@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.redtop.engaze.ActionSuccessFailMessageActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.ProgressBar;
@@ -84,7 +84,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 			@Override
 			public void onClick(View v) {
 				ProgressBar.showProgressBar("Please wait");
-				EventManager.leaveEvent(mContext, rowItem, new OnActionCompleteListner() {
+				EventManager.leaveEvent(rowItem, new OnActionCompleteListner() {
 
 					@Override
 					public void actionComplete(Action action) {
@@ -94,7 +94,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 						}
 						ProgressBar.hideProgressBar();
 					}
-				}, (ActionSuccessFailMessageActivity)mContext);
+				}, AppContext.actionHandler);
 			}
 		});
 
@@ -103,7 +103,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 			@Override
 			public void onClick(View v) {
 				ProgressBar.showProgressBar("Please wait");
-				EventManager.endEvent(mContext, rowItem, new OnActionCompleteListner() {
+				EventManager.endEvent(rowItem, new OnActionCompleteListner() {
 					@Override
 					public void actionComplete(Action action) {
 						if(callback!=null){
@@ -111,7 +111,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 						}
 						ProgressBar.hideProgressBar();
 					}
-				},(ActionSuccessFailMessageActivity)mContext);
+				}, AppContext.actionHandler);
 			}
 		});
 

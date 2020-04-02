@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.utility.ActionHandler;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
 
@@ -19,6 +20,8 @@ public class AppContext extends Application {
     public Boolean isInternetEnabled = true;
     public static AppContext context;
 
+    public static ActionHandler actionHandler;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -26,8 +29,9 @@ public class AppContext extends Application {
         ProgressBar.CreateProgressDialog(this);
         isInternetEnabled = AppUtility.isNetworkAvailable(this);
         loginId = PreffManager.getPref(Constants.LOGIN_ID);
-        if( loginId!=null){
-            loginName =  PreffManager.getPref(Constants.LOGIN_NAME);
+        if (loginId != null) {
+            loginName = PreffManager.getPref(Constants.LOGIN_NAME);
         }
+        actionHandler = new ActionHandler();
     }
 }

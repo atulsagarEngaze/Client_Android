@@ -16,6 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.Interface.OnActionFailedListner;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
@@ -29,7 +31,7 @@ import com.redtop.engaze.domain.service.ParticipantService;
 
 @SuppressLint("ResourceAsColor")
 public class RunningEventActivityResults extends RunningEventLocationRefresh {
-    private ActionSuccessFailMessageActivity activity;
+    private BaseActivity1 activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +59,15 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                         public void actionComplete(Action action) {
                             UpdateTimeLeftItemOfRunningEventDetailsDataSet();
                             mEventDetailAdapter.notifyDataSetChanged();
-                            activity.actionComplete(action);
+                            AppContext.actionHandler.actionComplete(action);
                             locationhandler.post(locationRunnable);
                         }
-                    }, this);
+                    }, new OnActionFailedListner() {
+                        @Override
+                        public void actionFailed(String msg, Action action) {
+                            onActionFailed(msg, action);
+                        }
+                    });
 
                     break;
 
@@ -138,10 +145,15 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                             mEvent = InternalCaching.getEventFromCache(mEventId);
                             ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
                             updateRecyclerViews();
-                            activity.actionComplete(action);
+                            AppContext.actionHandler.actionComplete(action);
                             locationhandler.post(locationRunnable);
                         }
-                    }, this);
+                    }, new OnActionFailedListner() {
+                        @Override
+                        public void actionFailed(String msg, Action action) {
+                            onActionFailed(msg, action);
+                        }
+                    });
 
                     break;
                 case UPDATE_LOCATION_REQUEST_CODE:
@@ -158,10 +170,15 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                             createDestinationMarker();
                             mEnableAutoCameraAdjust = true;
                             showAllMarkers();
-                            activity.actionComplete(action);
+                            AppContext.actionHandler.actionComplete(action);
                             locationhandler.post(locationRunnable);
                         }
-                    }, this);
+                    }, new OnActionFailedListner() {
+                        @Override
+                        public void actionFailed(String msg, Action action) {
+                            onActionFailed(msg,action);
+                        }
+                    });
                     break;
             }
         }
@@ -169,12 +186,12 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
         fbHelper.getFBCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void actionFailed(String msg, Action action) {
+
+    private void onActionFailed(String msg, Action action) {
         if (action == Action.EXTENDEVENTENDTIME || action == Action.ADDREMOVEPARTICIPANTS
                 || action == Action.CHANGEDESTINATION) {
             locationhandler.post(locationRunnable);
         }
-        super.actionFailed(msg, action);
+        AppContext.actionHandler.actionFailed(msg, action);
     }
 }

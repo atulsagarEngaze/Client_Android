@@ -23,8 +23,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.EventsPagerAdapter;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
@@ -49,7 +51,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 @SuppressLint({ "NewApi", "Recycle" })
-public class EventsActivity extends ActionSuccessFailMessageActivity implements NavDrawerFragment.FragmentDrawerListener {
+public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.FragmentDrawerListener, IActionHandler {
 
 
 	private ViewPager pager;
@@ -361,14 +363,14 @@ public class EventsActivity extends ActionSuccessFailMessageActivity implements 
 			case R.id.context_action_accept:
 
 				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, eventDetail.getEventId(),
-						(EventsActivity)mContext, (EventsActivity)mContext);
+						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
 				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  eventDetail.getEventId(),
-						(ActionSuccessFailMessageActivity)mContext, (ActionSuccessFailMessageActivity)mContext);
+						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
@@ -394,7 +396,7 @@ public class EventsActivity extends ActionSuccessFailMessageActivity implements 
 
 					adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							EventManager.deleteEvent(eventDetail, (ActionSuccessFailMessageActivity)mContext, (ActionSuccessFailMessageActivity)mContext);
+							EventManager.deleteEvent(eventDetail, EventsActivity.this);
 						} });
 
 					adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -432,7 +434,7 @@ public class EventsActivity extends ActionSuccessFailMessageActivity implements 
 		if(action==Action.REFRESHEVENTLIST){
 			EventsRefreshHandler.post(EventsRefreshRunnable);
 		}
-		super.actionFailed(msg, action);		
+		AppContext.actionHandler.actionFailed(msg, action);
 	}
 	@Override
 	public void actionComplete(Action action) {
@@ -440,6 +442,11 @@ public class EventsActivity extends ActionSuccessFailMessageActivity implements 
 		loadEventDetailHashmap(InternalCaching.getEventListFromCache());
 		}
 		refreshEventFragments();
-		super.actionComplete(action);
+		AppContext.actionHandler.actionComplete(action);
+	}
+
+	@Override
+	public void actionCancelled(Action action) {
+
 	}
 }

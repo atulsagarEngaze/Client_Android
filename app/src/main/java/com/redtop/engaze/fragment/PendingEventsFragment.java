@@ -1,8 +1,6 @@
 package com.redtop.engaze.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,10 @@ import android.widget.LinearLayout;
 
 import com.redtop.engaze.EventsActivity;
 import com.redtop.engaze.R;
-import com.redtop.engaze.utils.Constants.AcceptanceStatus;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PendingEventsFragment extends EventsFragmentBase implements OnItemClickListener{
 	private static final String TAG = PendingEventsFragment.class.getName();	
@@ -25,7 +26,7 @@ public class PendingEventsFragment extends EventsFragmentBase implements OnItemC
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+							 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_pending_events, container, false);
 		rootView.setTag(TAG);
 		mLl_noevent = (LinearLayout)rootView.findViewById(R.id.rl_pending_help_text);

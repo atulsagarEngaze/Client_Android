@@ -24,7 +24,7 @@ public class ProfileWS extends BaseWebService {
         {
             String apiUrl = MAP_API_URL + Routes.ACCOUNT_REGISTER;
 
-            postData(context, jRequestobj,apiUrl, listnerOnSuccess, listnerOnFailure);
+            postData(jRequestobj,apiUrl, listnerOnSuccess, listnerOnFailure);
         }
         catch(Exception ex){
             Log.d(TAG, ex.toString());

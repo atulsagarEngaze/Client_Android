@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.redtop.engaze.ActionSuccessFailMessageActivity;
 import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
@@ -26,6 +25,7 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.SnoozeOffset;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -104,7 +104,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         holder.txtPoke.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), ed.getEventId(), mContext);
+                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), ed.getEventId(), AppContext.actionHandler);
             }
         });
 
@@ -133,7 +133,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     if (ed.getMemberCount() <= 2) {
                         //End the event since it is a 1 to 1 event
                         ProgressBar.showProgressBar("Please wait");
-                        EventManager.endEvent(mContext, ed, new OnActionCompleteListner() {
+                        EventManager.endEvent(ed, new OnActionCompleteListner() {
                             @Override
                             public void actionComplete(Action action) {
                                 if (callback != null) {
@@ -145,8 +145,8 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                             @Override
                             public void actionFailed(String msg, Action action) {
-                                EventManager.refreshEventList(mContext, null, null);
-                                ((ActionSuccessFailMessageActivity) mContext).actionFailed(msg, action);
+                                EventManager.refreshEventList(null, null);
+                                AppContext.actionHandler.actionFailed(msg, action);
                             }
                         });
 
@@ -156,7 +156,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                         ed.getContactOrGroups().remove(ed.getCurrentParticipant().getContact());
 
                         JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(ed.getContactOrGroups(), ed.getEventId());
-                        ParticipantManager.addRemoveParticipants(jObj, mContext, new OnActionCompleteListner() {
+                        ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {
                             @Override
                             public void actionComplete(Action action) {
                                 //updateRecyclerViews();
@@ -170,8 +170,8 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                             @Override
                             public void actionFailed(String msg, Action action) {
-                                EventManager.refreshEventList(mContext, null, null);
-                                ((ActionSuccessFailMessageActivity) mContext).actionFailed(msg, action);
+                                EventManager.refreshEventList(null, null);
+                                AppContext.actionHandler.actionFailed(msg, action);
                             }
                         });
                     }
@@ -180,7 +180,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     //Current user is just a participant, so he can only leave the event.
 
                     ProgressBar.showProgressBar("Please wait");
-                    EventManager.leaveEvent(mContext, ed, new OnActionCompleteListner() {
+                    EventManager.leaveEvent(ed, new OnActionCompleteListner() {
 
                         @Override
                         public void actionComplete(Action action) {
@@ -194,8 +194,8 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                         @Override
                         public void actionFailed(String msg, Action action) {
-                            EventManager.refreshEventList(mContext, null, null);
-                            ((ActionSuccessFailMessageActivity) mContext).actionFailed(msg, action);
+                            EventManager.refreshEventList(null, null);
+                            AppContext.actionHandler.actionFailed(msg, action);
 
                         }
                     });

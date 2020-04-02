@@ -45,7 +45,7 @@ public class RegistrationIntentService extends IntentService {
                 // [END get_token]
                 Log.i(TAG, "GCM Registration Token: " + token);
                 
-                PreffManager.setPref(Constants.GCM_REGISTRATION_TOKEN, token, this);
+                PreffManager.setPref(Constants.GCM_REGISTRATION_TOKEN, token);
             }
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);

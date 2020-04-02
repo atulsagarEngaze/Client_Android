@@ -10,7 +10,6 @@ import kankan.wheel.widget.adapters.ArrayWheelAdapter;
 import kankan.wheel.widget.adapters.NumericWheelAdapter;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
@@ -21,17 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.ReminderFrom;
 import com.redtop.engaze.domain.EventDetail;
 import com.redtop.engaze.domain.EventParticipant;
+import com.redtop.engaze.service.EventDistanceReminderService;
 
 @SuppressLint("NewApi")
 public class EtaDistanceAlertHelper {
 
-	private ActionSuccessFailMessageActivity mActivity;
 	private EventDetail mEvent;
 	private NumericWheelAdapter kmsAdapter;
 	private ArrayWheelAdapter<String> metersAdapter;
@@ -42,19 +43,19 @@ public class EtaDistanceAlertHelper {
 	private String mUserName;
 	private String mUserId;
 
-	public EtaDistanceAlertHelper(ActionSuccessFailMessageActivity activity, String eventId, String userName, String userId ){
-		mActivity = activity;
+	public EtaDistanceAlertHelper(String eventId, String userName, String userId, IActionHandler actionHandler){
+
 		mEvent = InternalCaching.getEventFromCache(eventId);
 		mUserName = userName;
 		mUserId = userId;
 	}	
 
-	@SuppressLint("NewApi")
+	@SuppressLint({"NewApi", "WrongConstant"})
 	public void showSetAlertDialog(){	
 
 		final WheelView from;		
 		//Create a custom dialog with the dialog_date.xml file
-		reminderDialog = new Dialog(mActivity);
+		reminderDialog = new Dialog(AppContext.context);
 		reminderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		reminderDialog.setContentView(R.layout.activity_etadistancereminder);		
 		final Button cancelRemove = (Button)reminderDialog.findViewById(R.id.eta_cancel);
@@ -74,7 +75,7 @@ public class EtaDistanceAlertHelper {
 
 		unit = (WheelView) reminderDialog.findViewById(R.id.eta_unit);
 		ArrayWheelAdapter<String> unitAdapter =
-				new ArrayWheelAdapter<String>(mActivity, new String[] {"Kms", "Mtrs"});
+				new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Kms", "Mtrs"});
 		unitAdapter.setItemResource(R.layout.wheel_text_item);
 		unitAdapter.setItemTextResource(R.id.wheel_text);
 		unit.setViewAdapter(unitAdapter);
@@ -85,11 +86,11 @@ public class EtaDistanceAlertHelper {
 		//Configure kms Column
 		kms = (WheelView) reminderDialog.findViewById(R.id.eta_values);
 		
-		metersAdapter =	new ArrayWheelAdapter<String>(mActivity, new String[] {"100","250","500","750"});
+		metersAdapter =	new ArrayWheelAdapter<String>(AppContext.context, new String[] {"100","250","500","750"});
 		metersAdapter.setItemResource(R.layout.wheel_item);
 		metersAdapter.setItemTextResource(R.id.distance_item);	
 		
-		kmsAdapter = new NumericWheelAdapter(mActivity, 1, 10);
+		kmsAdapter = new NumericWheelAdapter(AppContext.context, 1, 10);
 		kmsAdapter.setItemResource(R.layout.wheel_item);
 		kmsAdapter.setItemTextResource(R.id.distance_item);	
 		kms.setViewAdapter(kmsAdapter);    
@@ -101,10 +102,10 @@ public class EtaDistanceAlertHelper {
 				
 		if(mEvent.getDestinationAddress() != null && !mEvent.getDestinationAddress().isEmpty())
 		{
-			fromAdapter = new ArrayWheelAdapter<String>(mActivity, new String[] {"Me", "Dest"});
+			fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Me", "Dest"});
 		}
 		else{
-			fromAdapter = new ArrayWheelAdapter<String>(mActivity, new String[] {"Me"});
+			fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Me"});
 		}
 		fromAdapter.setItemResource(R.layout.wheel_text_item);
 		fromAdapter.setItemTextResource(R.id.wheel_text);
@@ -152,13 +153,13 @@ public class EtaDistanceAlertHelper {
 				}
 				}		
 
-				InternalCaching.saveEventToCache(mEvent, mActivity);
+				InternalCaching.saveEventToCache(mEvent);
 				reminderDialog.cancel();
-				mActivity.actionComplete(Action.SETTIMEBASEDALERT);
-				Intent eventDistanceReminderServiceIntent = new Intent(mContext, EventDistanceReminderService.class);
+				AppContext.actionHandler.actionComplete(Action.SETTIMEBASEDALERT);
+				Intent eventDistanceReminderServiceIntent = new Intent(AppContext.context, EventDistanceReminderService.class);
 				eventDistanceReminderServiceIntent.putExtra("EventId", mEvent.getEventId());
 				eventDistanceReminderServiceIntent.putExtra("MemberId", mUserId);
-				mContext.startService(eventDistanceReminderServiceIntent);
+				AppContext.context.startService(eventDistanceReminderServiceIntent);
 			}
 		});
 
@@ -167,15 +168,15 @@ public class EtaDistanceAlertHelper {
 				if(v.getTag() == null){
 					reminderDialog.cancel();
 				}else{
-					EventMember mem = mEvent.getReminderEnabledMembers().get(mEvent.getReminderEnabledMembers().indexOf(cancelRemove.getTag()));
+					EventParticipant mem = mEvent.getReminderEnabledMembers().get(mEvent.getReminderEnabledMembers().indexOf(cancelRemove.getTag()));
 					mEvent.getReminderEnabledMembers().remove(mem);
-					InternalCaching.saveEventToCache(mEvent, mActivity);
+					InternalCaching.saveEventToCache(mEvent);
 					reminderDialog.cancel();
-					Toast.makeText(mActivity,						
+					Toast.makeText(AppContext.context,
 							"Proximity Reminder removed!",
 							Toast.LENGTH_LONG).show();	
 				}
-				((BaseActivity)mActivity).actionCancelled(Action.SETTIMEBASEDALERT);
+				AppContext.actionHandler.actionCancelled(Action.SETTIMEBASEDALERT);
 			}
 		});
 		reminderDialog.show();		
@@ -229,7 +230,7 @@ public class EtaDistanceAlertHelper {
 		}else{
 			fromvalue = "Destination";
 		}
-		Toast.makeText(mActivity,						
+		Toast.makeText(AppContext.context,
 				"Sit back and Relax. We will remind you when " + username + " is around " + value + " " + units + " away from " + fromvalue +".",
 				Toast.LENGTH_LONG).show();		
 

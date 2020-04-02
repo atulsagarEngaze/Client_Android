@@ -10,6 +10,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -73,10 +74,10 @@ public class PickLocationActivity extends LocationActivity implements OnMapReady
 		else
 		{
 			if(mMyCoordinates==null){
-				mLatlong = new LatLng( Double.longBitsToDouble(PreffManager.getPrefLong("lat", mContext)),
-						Double.longBitsToDouble(PreffManager.getPrefLong("long", mContext)));
+				mLatlong = new LatLng( Double.longBitsToDouble(PreffManager.getPrefLong("lat")),
+						Double.longBitsToDouble(PreffManager.getPrefLong("long")));
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
-				if(mInternetStatus){				
+				if(AppContext.context.isInternetEnabled){
 					runGPSEnableThread();			
 				}			
 			}

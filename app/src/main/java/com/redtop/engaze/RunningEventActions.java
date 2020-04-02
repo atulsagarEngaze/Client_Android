@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.model.LatLng;
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
@@ -239,11 +241,11 @@ public class RunningEventActions extends RunningEventActivityResults {
             @Override
             public void actionComplete(Action action) {
                 mEvent.getCurrentParticipant().setAcceptanceStatus(AcceptanceStatus.DECLINED);
-                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
+                AppContext.actionHandler.actionComplete(action);
                 gotoPreviousPage();
 
             }
-        }, this);
+        }, AppContext.actionHandler);
     }
 
     public void onChangeEventDestinationClicked() {
@@ -338,10 +340,10 @@ public class RunningEventActions extends RunningEventActivityResults {
             @Override
             public void actionComplete(Action action) {
                 mEvent = null;
-                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
+                AppContext.actionHandler.actionComplete(action);
                 gotoPreviousPage();
             }
-        }, this);
+        }, AppContext.actionHandler);
     }
 
     private void pokeAll() {
@@ -355,8 +357,8 @@ public class RunningEventActions extends RunningEventActivityResults {
                 Date currentdate = Calendar.getInstance().getTime();
                 String currentTimestamp = originalformat.format(currentdate);
                 PreffManager.setPref(mEventId, currentTimestamp);
-                ((ActionSuccessFailMessageActivity) mContext).actionComplete(action);
+                AppContext.actionHandler.actionComplete(action);
             }
-        } , this);
+        }, AppContext.actionHandler);
     }
 }

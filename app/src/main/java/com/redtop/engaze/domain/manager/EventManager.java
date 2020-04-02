@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
@@ -38,6 +39,7 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.UsersLocationDetail;
+import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
@@ -150,7 +152,7 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
 
                     if (Status == "true") {
-                        EventDetail eventDetailData = EventService.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
+                        EventDetail eventDetailData = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
                         int eventTypeId = Integer.parseInt(eventDetailData.getEventTypeId());
                         EventService.setEndEventAlarm(eventDetailData);
                         if (isMeetNow) {
@@ -284,7 +286,7 @@ public class EventManager {
 
                     String Status = (String) response.getString("Status");
                     if (Status == "true") {
-                        List<EventDetail> eventDetailList = EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                        List<EventDetail> eventDetailList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                         EventDetail event = eventDetailList.get(0);
                         if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
                             event.setState(EventState.TRACKING_ON);
@@ -438,18 +440,18 @@ public class EventManager {
 
     }
 
-    public static void deleteEvent(final EventDetail event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void deleteEvent(final EventDetail event, final IActionHandler actionHandler) {
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
-            listnerOnFailure.actionFailed(message, Action.DELETEEVENT);
+            actionHandler.actionFailed(message, Action.DELETEEVENT);
             return;
         }
         if (event == null) {
             message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Log.d(TAG, message);
-            listnerOnFailure.actionFailed(message, Action.DELETEEVENT);
+            actionHandler.actionFailed(message, Action.DELETEEVENT);
             return;
         }
         final String eventid = event.getEventId();
@@ -469,14 +471,14 @@ public class EventManager {
                         Intent intent = new Intent(IntentConstants.EVENT_DELETE_BY_INITIATOR);
                         intent.putExtra("eventId", event.getEventId());
                         LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
-                        listnerOnSuccess.actionComplete(Action.DELETEEVENT);
+                        actionHandler.actionComplete(Action.DELETEEVENT);
                     } else {
-                        listnerOnFailure.actionFailed(null, Action.DELETEEVENT);
+                        actionHandler.actionFailed(null, Action.DELETEEVENT);
                     }
                 } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
                     ex.printStackTrace();
-                    listnerOnFailure.actionFailed(null, Action.DELETEEVENT);
+                    actionHandler.actionFailed(null, Action.DELETEEVENT);
                 }
 
             }
@@ -484,7 +486,7 @@ public class EventManager {
 
             @Override
             public void apiCallComplete(JSONObject response) {
-                listnerOnFailure.actionFailed(null, Action.DELETEEVENT);
+                actionHandler.actionFailed(null, Action.DELETEEVENT);
             }
         });
     }
@@ -820,7 +822,7 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
                     Log.d(TAG, "EventResponse status:" + Status);
                     if (Status == "true") {
-                        List<EventDetail> eventDetailList = EventService.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                        List<EventDetail> eventDetailList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                         EventService.RemovePastEvents(eventDetailList);
                         EventService.upDateEventStatus(eventDetailList);
                         InternalCaching.saveEventListToCache(eventDetailList);
@@ -926,7 +928,7 @@ public class EventManager {
             case "locationsIn":
                 for (EventDetail e : list) {
                     members = e.getParticipants();
-                    ContactAndGroupListManager.assignContactsToEventMembers(members, context);
+                    ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventTypeId = Integer.parseInt(e.getEventTypeId());
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
                     if (eventTypeId == 100 && !ParticipantService.isCurrentUserInitiator(e.getInitiatorId()) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {

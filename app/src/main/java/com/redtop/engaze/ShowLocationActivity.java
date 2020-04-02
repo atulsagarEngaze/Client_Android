@@ -16,7 +16,7 @@ import com.redtop.engaze.common.utility.MarkerHelper;
 import androidx.appcompat.widget.Toolbar;
 
 @SuppressLint("ResourceAsColor")
-public class ShowLocationActivity extends ActionSuccessFailMessageActivity implements OnMapReadyCallback{
+public class ShowLocationActivity extends BaseActivity1 implements OnMapReadyCallback{
 
 	static LatLng mLatlong = new LatLng(0, 0);
 	private String mLocation ;

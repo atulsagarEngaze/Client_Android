@@ -43,6 +43,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.redtop.engaze.fontawesome.TextFont;
 
 public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleViewAdapter.EventViewHolder> {
     public List<EventDetail> mEventList;

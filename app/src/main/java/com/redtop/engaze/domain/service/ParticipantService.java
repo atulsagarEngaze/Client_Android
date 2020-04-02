@@ -1,14 +1,12 @@
 package com.redtop.engaze.domain.service;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.ActionSuccessFailMessageActivity;
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
@@ -45,7 +43,7 @@ public class ParticipantService {
     private final static String TAG = ParticipantService.class.getName();
 
 
-    public static void pokeParticipant(final String userId, String userName, final String eventId, ActionSuccessFailMessageActivity activity){
+    public static void pokeParticipant(final String userId, String userName, final String eventId, IActionHandler actionHadler){
         try {
             String lastPokedTime = PreffManager.getPref(userId);
             if(lastPokedTime != null){
@@ -56,15 +54,15 @@ public class ParticipantService {
                 long diff = (Calendar.getInstance().getTimeInMillis()- lastCal.getTimeInMillis())/60000;
                 long pendingfrPoke = Constants.POKE_INTERVAL- diff;
                 if(diff>= Constants.POKE_INTERVAL){
-                    pokeAlert(userId,userName, eventId,activity);
+                    pokeAlert(userId,userName, eventId,actionHadler);
                 }else {
                     Toast.makeText(AppContext.context,
                             AppContext.context.getResources().getString(R.string.message_runningEvent_pokeInterval)+ pendingfrPoke + " minutes.",
                             Toast.LENGTH_LONG).show();
-                    activity.actionCancelled(Action.POKEPARTICIPANT);
+                    actionHadler.actionCancelled(Action.POKEPARTICIPANT);
                 }
             }else {
-                pokeAlert(userId,userName, eventId,activity);
+                pokeAlert(userId,userName, eventId,actionHadler);
             }
 
         } catch (ParseException e) {
@@ -73,7 +71,7 @@ public class ParticipantService {
         }
     }
 
-    public static void pokeAlert(final String userId, String userName, final String eventId, final ActionSuccessFailMessageActivity activity) {
+    public static void pokeAlert(final String userId, String userName, final String eventId, final IActionHandler actionHadler) {
         AlertDialog.Builder adb = null;
         adb = new AlertDialog.Builder(AppContext.context);
 
@@ -84,18 +82,18 @@ public class ParticipantService {
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Call Poke API
-                pokeParticipants(userId, eventId, activity);
+                pokeParticipants(userId, eventId, actionHadler);
             } });
 
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                activity.actionCancelled(Action.POKEPARTICIPANT);
+                actionHadler.actionCancelled(Action.POKEPARTICIPANT);
             } });
         adb.show();
     }
 
-    public  static void pokeParticipants(final String userId, String eventId, final ActionSuccessFailMessageActivity activity) {
+    public  static void pokeParticipants(final String userId, String eventId, final IActionHandler actionHadler) {
         JSONObject jobj = new JSONObject();
         String[] userList = {userId};
         JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));
@@ -116,20 +114,20 @@ public class ParticipantService {
                     Date currentdate = Calendar.getInstance().getTime();
                     String currentTimestamp = originalformat.format(currentdate);
                     PreffManager.setPref(userId, currentTimestamp);
-                    activity.actionComplete(Action.POKEPARTICIPANT);
+                    actionHadler.actionComplete(Action.POKEPARTICIPANT);
                 }
             }, new OnActionFailedListner() {
 
                 @Override
                 public void actionFailed(String msg, Action action) {
-                   activity.actionFailed(msg, Action.POKEPARTICIPANT);
+                    actionHadler.actionFailed(msg, Action.POKEPARTICIPANT);
                 }
             });
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            activity.actionFailed(null, Action.POKEPARTICIPANT);
+            actionHadler.actionFailed(null, Action.POKEPARTICIPANT);
         }
     }
 

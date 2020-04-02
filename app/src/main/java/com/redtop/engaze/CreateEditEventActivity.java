@@ -698,7 +698,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         } else {
             mIsRecurrence = "false";
         }
-        return EventParser.createEventJson(null);
+        return super.createEventJson();
     }
 
     public void createContactLayoutItem(ContactOrGroup cg) {

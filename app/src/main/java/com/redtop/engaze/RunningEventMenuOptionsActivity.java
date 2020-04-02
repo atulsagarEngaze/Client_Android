@@ -16,7 +16,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.adapter.NameImageAdapter;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
@@ -26,10 +28,11 @@ import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.service.ParticipantService;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 @SuppressWarnings("deprecation")
-public class RunningEventMenuOptionsActivity extends ActionSuccessFailMessageActivity implements OnItemClickListener {
+public class RunningEventMenuOptionsActivity extends BaseActivity1 implements OnItemClickListener, IActionHandler {
 
 	protected ArrayList<NameImageItem> mUserMenuItems;
 	private String mEventId;
@@ -155,31 +158,31 @@ public class RunningEventMenuOptionsActivity extends ActionSuccessFailMessageAct
 
 	public void onUserLocationItemMenuItemAlertClicked(){
 
-		EtaDistanceAlertHelper etaHelper = new EtaDistanceAlertHelper(this ,mEventId, mUserName, mUserId );
+		EtaDistanceAlertHelper etaHelper = new EtaDistanceAlertHelper(mEventId, mUserName, mUserId, this );
 		etaHelper.showSetAlertDialog();
 	}
 
 	public void onUserLocationItemMenuItemPokeClicked(){
 
-		ParticipantService.pokeParticipant(mUserId, mUserName,mEventId,this);
+		ParticipantService.pokeParticipant(mUserId, mUserName,mEventId, this);
 	}
 
 	@Override
 	public void actionFailed(String msg, Action action){
-		super.actionFailed(msg, action);
+		AppContext.actionHandler.actionFailed(msg, action);
 		this.finish();
 	}
 	@Override
 	public void actionComplete(Action action) {
 		if(action!=Action.SETTIMEBASEDALERT){
-			super.actionComplete(action);
+			AppContext.actionHandler.actionComplete(action);
 		}
 		this.finish();
 	}
 	@Override
 	public void actionCancelled(Action action){
 		if(action!=Action.SETTIMEBASEDALERT){
-			super.actionCancelled(action);
+			AppContext.actionHandler.actionCancelled(action);
 		}
 		this.finish();
 	}

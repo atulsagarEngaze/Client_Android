@@ -36,7 +36,7 @@ import com.redtop.engaze.domain.manager.EventManager;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
-public abstract class BaseEventActivity extends ActionSuccessFailMessageActivity {
+public abstract class BaseEventActivity extends BaseActivity1 {
     protected int mDurationTime = 0;
     protected int mDurationOffset;
     protected TextView mQuickEventName;
@@ -326,7 +326,7 @@ public abstract class BaseEventActivity extends ActionSuccessFailMessageActivity
                 }
             }
 
-        }, this);
+        }, AppContext.actionHandler);
 
     }
 
@@ -368,5 +368,108 @@ public abstract class BaseEventActivity extends ActionSuccessFailMessageActivity
                 finish();
             }
         });
+    }
+
+    protected JSONObject createEventJson()
+    {
+        String isUserLocationShared = "true";
+        if(mEventTypeId ==100){
+            isUserLocationShared = "false";
+        }
+        JSONObject jobj = new JSONObject();
+        JSONObject userListJobj;
+        JSONArray jsonarr = new JSONArray();
+        Date endDate = null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mStartDate);
+        calendar.add(Calendar.MINUTE, mDurationOffset);
+        endDate = calendar.getTime();
+
+        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String start  = DateUtil.convertToUtcDateTime(parseFormat.format(mStartDate),parseFormat); //parseFormat.format(mStartDate);
+        String end  = DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat);//parseFormat.format(endDate);
+        try {
+            String userId;
+            if(mContactsAndgroups!=null){
+                for(ContactOrGroup cg : mContactsAndgroups){
+                    userId = cg.getUserId();
+                    userListJobj = new JSONObject();
+                    if(userId != null && !userId.isEmpty()){
+                        userListJobj.put("UserId", userId);
+                        userListJobj.put("IsUserLocationShared", isUserLocationShared);
+                    }
+                    else{
+                        userListJobj.put("MobileNumber", cg.getMobileNumber());
+                    }
+                    jsonarr.put(userListJobj);
+                }
+            }
+
+            jobj.put("Name", mEventName);
+            jobj.put("Description", mEventDescription);
+            if(mEventId !=null)
+            {
+                jobj.put("EventId", mEventId);
+            }
+            jobj.put("UserList", jsonarr);
+            jobj.put("Duration", mDurationOffset);
+            jobj.put("InitiatorId", AppContext.context.loginId);
+            jobj.put("RequestorId", AppContext.context.loginId);
+            jobj.put("EventStateId", "1");
+            jobj.put("TrackingStateId", "1");
+            jobj.put("IsTrackingRequired", "True");
+            jobj.put("StartTime", start);
+            jobj.put("EndTime",end);
+
+            if(mDestinationPlace!=null)
+            {
+                jobj.put("DestinationLatitude", mDestinationPlace.getLatLang().latitude);
+                jobj.put("DestinationLongitude", mDestinationPlace.getLatLang().longitude);
+                jobj.put("DestinationAddress", mDestinationPlace.getAddress());
+                //jobj.put("DestinationName", mDestinationPlace.getName());
+                jobj.put( "DestinationName", mEventLocationTextView.getText());
+            }
+            else
+            {
+                jobj.put("DestinationLatitude", "");
+                jobj.put("DestinationLongitude", "");
+                jobj.put("DestinationAddress", "");
+                jobj.put("DestinationName", "");
+            }
+
+            setReminderOffset();
+            if(mReminder!=null){
+                jobj.put("ReminderType", mReminder.getNotificationType());
+            }
+            jobj.put("ReminderOffset", "" + mReminderOffset + "");
+            jobj.put("EventTypeId", "" + mEventTypeItem.getImageIndex());
+            jobj.put("TrackingStopTime", "");
+            setTrackingOffset();
+            jobj.put("TrackingStartOffset",""+ mTrackingOffset + "");
+            jobj.put("IsQuickEvent",mIsQuickEvent);
+            if(mIsRecurrence.equals("true")){
+                jobj.put("IsRecurring", true);
+                jobj.put("RecurrenceCount",mNumberOfOccurences);
+                jobj.put("RecurrenceFrequency",mFrequencyOfOcuurence);
+                jobj.put("RecurrenceFrequencyTypeId",mRecurrenceType);
+                if(mRecurrenceType.equals("2")){
+                    String days ="";
+                    for( int day : mRecurrencedays){
+                        days += "," + Integer.toString(day);
+                    }
+                    days = days.substring(1);
+                    jobj.put("RecurrenceDaysOfWeek",days);
+                }
+            }
+            else{
+                jobj.put("IsRecurring",false);
+            }
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return jobj;
     }
 }

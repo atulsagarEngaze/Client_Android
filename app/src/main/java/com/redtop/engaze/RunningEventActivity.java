@@ -54,7 +54,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 			return;
 		}
 
-		turnOnOfInternetAvailabilityMessage(mContext);	
+		turnOnOfInternetAvailabilityMessage();
 		SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		fragment.getMapAsync(this);
 	}
@@ -102,7 +102,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 						mRunningEventBroadcastManager.mFilter);
 				canRefreshUserLocation = true;
 				if(shouldExecuteOnResume && !((mUsersLocationDetailList==null || mUsersLocationDetailList.size()==0)) ){	
-					mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+					mEvent = InternalCaching.getEventFromCache(mEventId);
 					super.updateRecyclerViews();	
 					super.locationhandler.post(super.locationRunnable);
 				}
@@ -111,7 +111,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 				}
 
 				if(isEventPast()){					
-					EventManager.eventOver(mContext, mEventId);
+					EventManager.eventOver(mEventId);
 					Intent eventRemoved = new Intent(IntentConstants.EVENT_OVER);
 					eventRemoved.putExtra("eventId", mEventId);						
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventRemoved);
@@ -129,15 +129,15 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 	protected void onPause() {
 		if(!mIsActivityPauseForDialog){
 			isActivityRunning = false;
-			mEvent = InternalCaching.getEventFromCache(mEventId, mContext);
+			mEvent = InternalCaching.getEventFromCache(mEventId);
 			locationhandler.removeCallbacks(locationRunnable);
 			EventManager.saveUsersLocationDetailList(mContext,mEvent,mUsersLocationDetailList);
 			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mRunningEventBroadcastManager);
 			LocalBroadcastManager.getInstance(mContext).registerReceiver(mRunningEventBroadcastManager,
 					mRunningEventBroadcastManager.mFilterEventNotExist);
 			if(mMyCoordinates !=null){			
-				PreffManager.setPrefLong("lat", Double.doubleToLongBits(mMyCoordinates.latitude), mContext);
-				PreffManager.setPrefLong("long", Double.doubleToLongBits(mMyCoordinates.longitude), mContext);
+				PreffManager.setPrefLong("lat", Double.doubleToLongBits(mMyCoordinates.latitude));
+				PreffManager.setPrefLong("long", Double.doubleToLongBits(mMyCoordinates.longitude));
 			}
 			//hideProgressBar();
 		}

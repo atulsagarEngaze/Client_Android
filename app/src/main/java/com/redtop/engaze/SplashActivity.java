@@ -25,7 +25,6 @@ public class SplashActivity extends BaseActivity1 {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppUtility.setApplicationContext(this.getApplicationContext());
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
         String loginId = AppContext.context.loginId;

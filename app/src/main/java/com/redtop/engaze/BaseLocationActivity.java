@@ -19,7 +19,7 @@ import com.redtop.engaze.Interface.OnGpsSetOnListner;
 import com.redtop.engaze.common.AppLocationService;
 import com.redtop.engaze.common.constant.DurationConstants;
 
-public class BaseLocationActivity extends ActionSuccessFailMessageActivity implements GoogleApiClient.ConnectionCallbacks,
+public class BaseLocationActivity extends BaseActivity1 implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 	public static LatLng mMyCoordinates;
 	protected static String mDistance ="";
