@@ -5,31 +5,31 @@
         android:id="@+id/context_action_mute_unmute"
         android:icon="@drawable/event_unmute"
         android:orderInCategory="1"
-        android:showAsAction="always"
-        android:title="Mute"/>
+        android:title="Mute"
+        app:showAsAction="always" />
     <item
         android:id="@+id/context_action_accept"
         android:icon="@drawable/event_accept"
         android:orderInCategory="2"
-        android:showAsAction="always"
-        android:title="Accept"/>
+        android:title="Accept"
+        app:showAsAction="always" />
     <item
         android:id="@+id/context_action_decline"
         android:icon="@drawable/event_declined"
         android:orderInCategory="3"
-        android:showAsAction="always"
-        android:title="Decline"/>
+        android:title="Decline"
+        app:showAsAction="always" />
     <item
         android:id="@+id/context_action_edit"
         android:icon="@drawable/event_edit"
         android:orderInCategory="4"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="Edit"/>
     <item
         android:id="@+id/context_action_delete"
         android:icon="@drawable/event_delete"
         android:orderInCategory="5"
-        android:showAsAction="always"
-        android:title="Delete"/>
+        android:title="Delete"
+        app:showAsAction="always" />
 
 </menu>

@@ -20,6 +20,53 @@
 
     <color name="black_overlay">#66000000</color>
 
+
+
+
+    <!-- Need to be corrected after code compiles-->
+
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+
+    <color name="divider_secondary">#d3d3d3</color>
+    <color name="colorBackground_secondary">#f1f1f1</color>
+
+    <color name="marker_inner_red">#ff4d4d</color>
+    <color name="marker_outer_red">#ff4d4d</color>
+
+    <!-- <color name="colorPrimary">#F50057</color> -->
+
+    <color name="colorPrimarytextTransparent">#80009688</color>
+    <color name="colorBackground">#FAFAFA</color>
+    <color name="colorHintDisable">#42000000</color>
+    <color name="colorAccent">#03A9F4</color>
+    <color name="colorListBackground">#FFFFFF</color>
+    <color name="colorGreen">#8AC007</color>
+    <color name="colorPurple">#B452CD</color>
+    <color name="colorRed">#f44336</color>
+    <color name="colorDarkGreen">#006400</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">@color/material_blue_grey_800</color>
+    <color name="colorLightGreen">#8BC34A</color>
+    <color name="colorAmber">#FFC107</color>
+    <color name="colorBluegray">#607D8B</color>
+    <color name="colorTeal">#4DB6AC</color>
+
+    <!-- <color name="tabsScrollColor">#8a140e</color> -->
     <color name="tabsScrollColor">#ffffff</color>
+    <color name="eventsettingSelectedColor">#F44336</color>
+    <color name="header_text_color">#006843</color>
+    <color name="reminder_select_text_color">#006843</color>
+    <color name="eventsettingColor">#727272</color>
+    <color name="holo_blue">#FF33B5E5</color>
+    <color name="slide_bar">#303030</color>
+    <color name="window_text_color">#707070</color>
+    <color name="event_accepted">#8AC007</color>
+    <color name="event_pending">#cccc00</color>
+    <color name="event_declined">#F44336</color>
 
 </resources>

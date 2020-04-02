@@ -69,4 +69,27 @@
         <item name="android:layout_height">48dip</item>
         <item name="android:elevation">5dip</item>
     </style>
+
+    <style name="ETMaterialTheme.Toolbar">
+        <item name="android:elevation">5dip</item>
+        <item name="colorControlNormal">@color/colorBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/icon</item>
+    </style>
+
+    <style name="HomeMenuButton">
+        <item name="android:background">@drawable/ripple_gray</item>
+        <item name="android:layout_width">54dip</item>
+        <item name="android:layout_height">54dip</item>
+        <item name="android:padding">@dimen/paddinghalf</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/padding_menu_button</item>
+        <item name="android:layout_marginRight">@dimen/padding_menu_button</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:elevation">5dip</item>
+    </style>
+
 </resources>

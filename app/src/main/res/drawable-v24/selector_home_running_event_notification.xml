@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="false"><bitmap android:alpha="@integer/not_selected_alpha" android:src="@drawable/ic_event_white_24dp" />
+    </item>
+    <item android:drawable="@drawable/ic_event_white_24dp" android:state_selected="true"></item>
+
+</selector>

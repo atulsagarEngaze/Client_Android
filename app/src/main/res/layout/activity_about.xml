@@ -34,7 +34,8 @@
         android:padding="@dimen/padding"
         android:textAlignment="center"
         android:textColor="@color/icon"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:gravity="center_horizontal" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout_about"

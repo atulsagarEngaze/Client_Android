@@ -113,7 +113,8 @@
                 android:text="Re-Center"
                 android:textAlignment="center"
                 android:textColor="@color/primary"
-                android:textSize="@dimen/small_text_size" />
+                android:textSize="@dimen/small_text_size"
+                android:gravity="center_horizontal" />
 
             <include
                 android:id="@+id/internet_status"

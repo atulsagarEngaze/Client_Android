@@ -41,7 +41,8 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:paddingStart="0dip"
-                    android:text="Reminder" />
+                    android:text="Reminder"
+                    android:paddingLeft="0dip" />
             </TableRow>
 
             <TableRow>
@@ -248,7 +249,8 @@
                     android:layout_weight="8"
                     android:gravity="center_vertical"
                     android:paddingStart="0dip"
-                    android:text="Tracking" />
+                    android:text="Tracking"
+                    android:paddingLeft="0dip" />
 
                 <!-- <Switch -->
                 <!-- android:id="@+id/setting_tracking_switch" -->
