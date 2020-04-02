@@ -3,14 +3,19 @@ package com.redtop.engaze.domain.service;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.ActionSuccessFailMessageActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -33,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ParticipantService {
 
@@ -248,6 +254,76 @@ public class ParticipantService {
         }
 
         return jobj;
+    }
+
+    public static void updateUserListWithLocation(JSONArray userLocationJson, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang){
+        Location destLoc = null;
+        if(destinationLatLang!=null){
+            destLoc = new Location("");
+            destLoc.setLatitude(destinationLatLang.latitude);//your coords of course
+            destLoc.setLongitude(destinationLatLang.longitude);
+        }
+
+        try {
+            for (int i = 0; i < userLocationJson.length(); i++) {
+                JSONObject c = userLocationJson.getJSONObject(i);
+                for (UsersLocationDetail ud :  userLocationList){
+                    if(ud.getUserId().equalsIgnoreCase(c.getString("UserId"))){
+                        ud.setLatitude(c.getString("Latitude"));
+                        ud.setLongitude(c.getString("Longitude"));
+                        ud.setCreatedOn(DateUtil.convertUtcToLocalDateTime(c.getString("CreatedOn"),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
+                        ud.setEta(c.getString("ETA"));
+                        ud.setArrivalStatus(c.getString("ArrivalStatus"));
+                        if(c.has("LocationAddress") && c.getString("LocationAddress")!=null){
+                            ud.setCurrentAddress(c.getString("LocationAddress"));
+                            ud.setCurrentDisplayAddress(buildCurrentDisplayAddress(c.getString("LocationAddress")));
+                            if(destLoc!=null){
+                                Location loc = new Location("");//provider name is unecessary
+                                loc.setLatitude(Double.parseDouble(c.getString("Latitude")));//your coords of course
+                                loc.setLongitude(Double.parseDouble(c.getString("Longitude")));
+                                if(loc.distanceTo(destLoc)<= Constants.DESTINATION_RADIUS){
+                                    ud.setCurrentAddress("at destination");
+                                    ud.setCurrentAddress("at destination");
+                                    ud.setCurrentDisplayAddress("at destination");
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String buildCurrentDisplayAddress(String currentAddress){
+
+        String currentDisplayAddress ="";
+        if(currentAddress ==null || currentAddress.equals("")){
+            return currentDisplayAddress;
+        }
+
+        String[] arrAddress = currentAddress.split(",");
+
+        if(arrAddress.length > 1){
+
+            List<String> addressLines = new ArrayList<String>(Arrays.asList(arrAddress));
+            addressLines.remove(0);
+            StringBuilder builder = new StringBuilder();
+            builder.append(addressLines.get(0));
+            addressLines.remove(0);
+            for(String addressLine : addressLines) {
+                builder.append(", " + addressLine);
+            }
+            currentDisplayAddress =  builder.toString();
+        }
+        else{
+            currentDisplayAddress =  currentAddress;
+        }
+
+        return currentDisplayAddress;
     }
 
 }

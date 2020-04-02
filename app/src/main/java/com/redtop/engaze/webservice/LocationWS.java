@@ -16,45 +16,42 @@ import org.json.JSONObject;
 
 public class LocationWS extends BaseWebService {
 
-    public static void updateLocation(JSONObject jRequestobj,
+    public static void updateLocation(JSONObject jsonObject,
                                       final OnAPICallCompleteListner listnerOnSuccess,
                                       final OnAPICallCompleteListner listnerOnFailure) {
         try {
-            String apiUrl = MAP_API_URL + Routes.USER_LOCATION_UPLOAD;
+            String url = MAP_API_URL + Routes.USER_LOCATION_UPLOAD;
 
-            Log.d(TAG, "Calling URL:" + apiUrl);
+            Log.d(TAG, "Calling URL:" + url);
 
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                    apiUrl, jRequestobj, new Response.Listener<JSONObject>() {
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(TAG, response.toString());
-                    listnerOnSuccess.apiCallComplete(response);
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Volley Error: " + error.getMessage());
-                    listnerOnFailure.apiCallComplete(null);
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-            };
-            jsonObjReq.setRetryPolicy((RetryPolicy) new DefaultRetryPolicy(DEFAULT_MEDIUM_TIME_TIMEOUT,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            // Adding request to request queue
-            addToRequestQueue(jsonObjReq, AppContext.context);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
             listnerOnFailure.apiCallComplete(null);
         }
+    }
 
+    public static void getLocationsFromServer(String userId, String eventId,
+                                              final OnAPICallCompleteListner listnerOnSuccess,
+                                              final OnAPICallCompleteListner listnerOnFailure) {
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put("RequestorId", userId);
+            jsonObject.put("EventId", eventId);
+
+            String url = MAP_API_URL + Routes.USER_LOCATION;
+            Log.d(TAG, "Calling URL:" + url);
+
+            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+
+        } catch (Exception ex) {
+            Log.d(TAG, ex.toString());
+            ex.printStackTrace();
+            listnerOnFailure.apiCallComplete(null);
+        }
     }
 }

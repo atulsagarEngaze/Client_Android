@@ -23,7 +23,10 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.utility.LogReader;
+import com.redtop.engaze.webservice.FeedbackWS;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -132,50 +135,34 @@ public class FeedbackActivity extends BaseActivity1 {
 
 	protected void SaveFeedback() {
 		showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-		String JsonPostURL = Constants.MAP_API_URL + Constants.METHOD_SAVE_FEEDBACK;
-		createFeedbackJson();
-		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
-				JsonPostURL, jobj, new Response.Listener<JSONObject>() {
 
-			@Override
-			public void onResponse(JSONObject response) {
-				onSaveResponse(response)	;							
-			}
-
-
-		}, new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				VolleyLog.d(TAG, "Error: " + error.toString());			
-				Toast.makeText(getApplicationContext(),
-						getResources().getString(R.string.message_feedback_saveFailure), Toast.LENGTH_SHORT).show(); 	                   
-				hideProgressBar();
-			}
-		})
-		{
-			@Override
-			public String getBodyContentType() {
-				return "application/json; charset=utf-8";
-			}
-		};
-		jsonObjReq.setRetryPolicy((RetryPolicy) new DefaultRetryPolicy(Constants.DEFAULT_SHORT_TIME_TIMEOUT, 
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES, 
-				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-		// Adding request to request queue
-		VolleyAppController.getInstance().addToRequestQueue(jsonObjReq); 
-	}
-
-	/**
+		JSONObject jsonObject =  createFeedbackJson();
+		if(jsonObject!=null){
+			FeedbackWS.saveFeedback(jsonObject, new OnAPICallCompleteListner() {
+				@Override
+				public void apiCallComplete(JSONObject response) {
+					onSaveResponse(response);
+				}
+			}, new OnAPICallCompleteListner() {
+				@Override
+				public void apiCallComplete(JSONObject error) {
+					VolleyLog.d(TAG, "Error: " + error.toString());
+					Toast.makeText(AppContext.context,
+							getResources().getString(R.string.message_feedback_saveFailure), Toast.LENGTH_SHORT).show();
+					hideProgressBar();
+				}
+			});
+		}
+	}	/**
 	 * 
 	 */
-	private void createFeedbackJson() {
-		jobj = new JSONObject();								
+	private JSONObject  createFeedbackJson() {
+		jobj = new JSONObject();
 		try {
-			jobj.put("RequestorId", AppContext.getInstance().loginId);
+			jobj.put("RequestorId", AppContext.context.loginId);
 
 			if(logcat ){
-				jobj.put("Feedback", EngazeLogReader.getLog());
+				jobj.put("Feedback", LogReader.getLog());
 				jobj.put("FeedbackCategory", "Logcat");
 				alertTitle = "Logcat Saved!";
 				feedbackMessage = "Thanks for sharing your logcat!";
@@ -185,10 +172,15 @@ public class FeedbackActivity extends BaseActivity1 {
 				alertTitle = "Feedback Saved!";
 				feedbackMessage = getResources().getString(R.string.message_feedback_success);
 			}
+
+			return jobj;
+
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			return  null;
 		}
+
 	}
 
 	private void onSaveResponse(JSONObject response) {			

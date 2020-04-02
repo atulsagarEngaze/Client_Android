@@ -18,19 +18,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.manager.LocationManager;
+import com.redtop.engaze.webservice.LocationWS;
 
 import androidx.cardview.widget.CardView;
 
@@ -86,7 +83,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             return;
         }
 
-        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListner() {
+        LocationWS.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -163,12 +160,10 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
     private class populateLocationListWithAddress extends AsyncTask<JSONObject, Void, String> {
 
         @Override
-        protected String doInBackground(JSONObject... params) {
+        protected String doInBackground(JSONObject... jsonObjects) {
             try {
-                JSONObject response = params[0];
-                JsonParser parser = new JsonParser();
                 //mUsersLocationDetailList = (ArrayList<UsersLocationDetail>) parser.parseUserLocation(response.getJSONArray("ListOfUserLocation"));
-                parser.updateUserListWithLocation(response.getJSONArray("ListOfUserLocation"), mUsersLocationDetailList, mLh, mDestinationlatlang);
+                ParticipantService.updateUserListWithLocation(jsonObjects[0].getJSONArray("ListOfUserLocation"), mUsersLocationDetailList, mDestinationlatlang);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -224,15 +219,15 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         int size;
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_timer_gray, mEventStartTimeForUI, null));
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_hourglass_gray, getTimeLeft(), null));
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent.AcceptanceStatus.getStatus(1))).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.ACCEPTED)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_accepted, String.valueOf(size), AcceptanceStatus.getStatus(1))); // 1 is ACCEPTED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.getStatus(-1))).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.PENDING)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_pending, String.valueOf(size), AcceptanceStatus.getStatus(-1))); // -1 is DECLINED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.getStatus(0))).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.DECLINED)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_declined, String.valueOf(size), AcceptanceStatus.getStatus(0))); // 0 is PENDING
         }
@@ -362,16 +357,16 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         }).start(); // Start the operation
     }
 
-    private void setBackgrounOfRecycleViewItem( CardView view, int colorId){
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			view.setCardBackgroundColor(colorId);
-			view.setRadius(0);
-			view.setMaxCardElevation(0);
-			view.setPreventCornerOverlap(false);
-			view.setUseCompatPadding(false);
-			view.setContentPadding(-15, -15, -15, -15);
-		} else {
-			view.setBackgroundColor(colorId);
-		}
-	}
+    private void setBackgrounOfRecycleViewItem(CardView view, int colorId) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            view.setCardBackgroundColor(colorId);
+            view.setRadius(0);
+            view.setMaxCardElevation(0);
+            view.setPreventCornerOverlap(false);
+            view.setUseCompatPadding(false);
+            view.setContentPadding(-15, -15, -15, -15);
+        } else {
+            view.setBackgroundColor(colorId);
+        }
+    }
 }
