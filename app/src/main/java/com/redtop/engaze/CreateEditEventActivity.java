@@ -47,7 +47,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -89,9 +91,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
     private String mHintFriendText;
     private ImageView imgView;
 
-	private static final int START_TIME_DIALOG_ID = 2;
-	private static final int START_DATE_DIALOG_ID = 1;
-
+    private static final int START_TIME_DIALOG_ID = 2;
+    private static final int START_DATE_DIALOG_ID = 1;
 
     /**
      * Called when the activity is first created.
@@ -120,7 +121,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
         initializeElements();
         initializeClickEvents();
-        populateEventData();
+        populateControls();
 
         if (mTracking.getTrackingState() == false) {
             mTrackingStartOffeset.setVisibility(View.GONE);
@@ -384,6 +385,12 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mIsForEdit = Boolean.parseBoolean(strIsForEdit);
             if (mIsForEdit) {
                 mEventData = (Event) this.getIntent().getSerializableExtra("EventDetail");
+
+                currentNewOrUpdateEvend = AppContext.jsonParser.deserialize(
+                        AppContext.jsonParser.Serialize(mEventData),
+                        Event.class);
+            } else {
+                currentNewOrUpdateEvend = new Event();
             }
         }
         imgView = (ImageView) findViewById(R.id.icon_location_clear);
@@ -408,7 +415,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     }
 
-    private void populateEventData() {
+    private void populateControls() {
         mHintFriendText = getResources().getString(R.string.hint_add_friends);
         //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
         mMembers = ContactAndGroupListManager.getAllContacts();
@@ -616,7 +623,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     protected void SaveEvent() {
 
-        mEventJobj = createEventJSON();
+        populateEventData();
         if (!validateInputData()) {
             return;
         }
@@ -655,51 +662,47 @@ public class CreateEditEventActivity extends BaseEventActivity {
         return true;
     }
 
-    private JSONObject createEventJSON() {
+    @Override
+    protected void populateEventData() {
 
-        String start = mStartDateDisplay.getText() + " " + mStartTimeDisplay.getText();
         DateFormat writeFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a");
-
         try {
-            mStartDate = writeFormat.parse(start);
-
+            mStartDate = writeFormat.parse(mStartDateDisplay.getText() + " " + mStartTimeDisplay.getText());
         } catch (ParseException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 
-        if (mIsForEdit) {
-            mEventId = mEventData.getEventId();
-        }
-
-        mEventName = mEventtitle.getText().toString();
-        mEventDescription = mNote.getText().toString();
-        mIsQuickEvent = "false";
+        currentNewOrUpdateEvend.setName(mEventtitle.getText().toString());
+        currentNewOrUpdateEvend.setDescription(mNote.getText().toString());
+        currentNewOrUpdateEvend.setIsQuickEvent("false");
         //For Recurrence
         if (mChkrecurrence.isChecked()) {
-            mIsRecurrence = "true";
+            currentNewOrUpdateEvend.setIsRecurrence("true");
             if (mRdDaily.isChecked()) {
-                mRecurrenceType = "1";
-                mFrequencyOfOcuurence = ((TextView) findViewById(R.id.day_frequency_input)).getText().toString();
+                currentNewOrUpdateEvend.setRecurrenceType("1");
+                currentNewOrUpdateEvend.setFrequencyOfOcuurence(((TextView) findViewById(R.id.day_frequency_input)).getText().toString());
             } else if (mRdWeekly.isChecked()) {
-                mRecurrenceType = "2";
-                mFrequencyOfOcuurence = ((TextView) findViewById(R.id.week_frequency_input)).getText().toString();
-                mRecurrencedays = new ArrayList<Integer>();
+                currentNewOrUpdateEvend.setRecurrenceType("2");
+                currentNewOrUpdateEvend.setFrequencyOfOcuurence(((TextView) findViewById(R.id.week_frequency_input)).getText().toString());
+                ArrayList<Integer> reOccuranceDaysSelected = new ArrayList<Integer>();
                 for (int day : mWeekDaysChecboxList.keySet()) {
                     if (mWeekDaysChecboxList.get(day).isChecked()) {
-                        mRecurrencedays.add(day);
+                        reOccuranceDaysSelected.add(day);
                     }
                 }
+                currentNewOrUpdateEvend.setRecurrenceDays(reOccuranceDaysSelected);
             } else {
-                mRecurrenceType = "3";
-                mFrequencyOfOcuurence = ((TextView) findViewById(R.id.month_frequency_input)).getText().toString();
+                currentNewOrUpdateEvend.setRecurrenceType("3");
+                currentNewOrUpdateEvend.setFrequencyOfOcuurence(((TextView) findViewById(R.id.month_frequency_input)).getText().toString());
             }
-            mNumberOfOccurences = ((TextView) findViewById(R.id.occurece_input)).getText().toString();
+            currentNewOrUpdateEvend.setNumberOfOccurences(((TextView) findViewById(R.id.occurece_input)).getText().toString());
 
         } else {
-            mIsRecurrence = "false";
+            currentNewOrUpdateEvend.setIsRecurrence("false");
         }
-        return super.createEventJson();
+
+        super.populateEventData();
     }
 
     public void createContactLayoutItem(ContactOrGroup cg) {

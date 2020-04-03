@@ -9,7 +9,7 @@ import android.os.Handler;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 
 public class SplashActivity extends BaseActivity {

@@ -20,12 +20,11 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;

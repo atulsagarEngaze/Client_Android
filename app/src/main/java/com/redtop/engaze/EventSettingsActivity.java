@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
 

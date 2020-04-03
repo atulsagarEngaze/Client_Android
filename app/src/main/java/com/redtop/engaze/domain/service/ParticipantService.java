@@ -15,7 +15,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;

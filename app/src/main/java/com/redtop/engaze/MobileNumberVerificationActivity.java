@@ -32,7 +32,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
 

@@ -3,7 +3,8 @@ package com.redtop.engaze.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.JsonParser;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.ActionHandler;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -22,6 +23,8 @@ public class AppContext extends Application {
 
     public static ActionHandler actionHandler;
 
+    public static JsonParser jsonParser;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,5 +36,6 @@ public class AppContext extends Application {
             loginName = PreffManager.getPref(Constants.LOGIN_NAME);
         }
         actionHandler = new ActionHandler();
+        jsonParser = new JsonParser();
     }
 }

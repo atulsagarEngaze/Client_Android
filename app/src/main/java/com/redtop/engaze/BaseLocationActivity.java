@@ -16,7 +16,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
-import com.redtop.engaze.common.AppLocationService;
+import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.constant.DurationConstants;
 
 public class BaseLocationActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,

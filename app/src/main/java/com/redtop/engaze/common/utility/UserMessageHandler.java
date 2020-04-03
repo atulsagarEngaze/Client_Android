@@ -1,4 +1,4 @@
-package com.redtop.engaze.common;
+package com.redtop.engaze.common.utility;
 import android.content.Context;
 import android.content.res.Resources;
 

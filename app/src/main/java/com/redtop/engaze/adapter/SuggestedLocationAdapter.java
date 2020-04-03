@@ -21,7 +21,7 @@ import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.redtop.engaze.R;
-import com.redtop.engaze.common.AppLocationService;
+import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.domain.AutoCompletePlace;
 
 public class SuggestedLocationAdapter extends ArrayAdapter<AutoCompletePlace> {

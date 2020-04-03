@@ -26,7 +26,7 @@ import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
@@ -134,9 +134,9 @@ public class EventManager {
         checkForReccurrence(event);
     }
 
-    public static void saveEvent(final Context context, final JSONObject mEventJobj, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void saveEvent(final JSONObject mEventJobj, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
-        if (!AppUtility.isNetworkAvailable(context)) {
+        if (AppContext.context.isInternetEnabled) {
             String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.SAVEEVENT);

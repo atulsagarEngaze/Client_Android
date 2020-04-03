@@ -1,9 +1,10 @@
-package com.redtop.engaze.common;
+package com.redtop.engaze.common.utility;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.utility.ObjectSerializer;
 
 import java.io.IOException;
 import java.util.ArrayList;

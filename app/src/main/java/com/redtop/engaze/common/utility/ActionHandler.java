@@ -4,7 +4,6 @@ import android.widget.Toast;
 
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.UserMessageHandler;
 import com.redtop.engaze.common.enums.Action;
 
 public class ActionHandler implements IActionHandler {

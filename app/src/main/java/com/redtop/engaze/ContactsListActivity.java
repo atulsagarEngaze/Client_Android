@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactOrGroupListAdapter;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 
 import androidx.appcompat.widget.SearchView;

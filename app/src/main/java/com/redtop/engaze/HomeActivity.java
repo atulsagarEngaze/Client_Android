@@ -27,7 +27,7 @@ import com.redtop.engaze.adapter.HomeTrackLocationListAdapter;
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter.TrackLocationAdapterCallback;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;

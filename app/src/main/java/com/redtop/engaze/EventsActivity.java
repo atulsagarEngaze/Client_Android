@@ -27,7 +27,7 @@ import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.EventsPagerAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;

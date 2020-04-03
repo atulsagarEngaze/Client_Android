@@ -19,7 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;

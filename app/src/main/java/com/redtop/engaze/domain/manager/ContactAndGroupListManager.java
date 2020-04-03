@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -24,7 +23,7 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;

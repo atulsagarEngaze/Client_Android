@@ -10,7 +10,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 

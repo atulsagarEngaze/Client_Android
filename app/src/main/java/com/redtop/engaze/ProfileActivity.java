@@ -35,7 +35,7 @@ import android.widget.Toast;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.common.PreffManager;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.service.FirstTimeInitializationService;
 import com.redtop.engaze.service.RegistrationIntentService;
 

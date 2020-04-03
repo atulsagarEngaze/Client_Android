@@ -1,5 +1,6 @@
 package com.redtop.engaze;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +24,7 @@ import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.AppLocationService;
+import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
@@ -83,6 +84,8 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected static final int TRACKING_REQUEST_CODE = 3;
     protected static final int DURATION_REQUEST_CODE = 5;
     protected static final int LOCATION_REQUEST_CODE = 7;
+
+    protected Event currentNewOrUpdateEvend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,63 +273,70 @@ public abstract class BaseEventActivity extends BaseActivity {
     }
 
 
-
     private void setTrackingOffset() {
+
+        long trackingOffset = 0;
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(mStartDate);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
 
-        if (mTrackingOffset > diffMinutes) {
-            mTrackingOffset = diffMinutes;
+        if (trackingOffset > diffMinutes) {
+            trackingOffset = diffMinutes;
         }
+        currentNewOrUpdateEvend.setTrackingStartOffset(Double.toString(trackingOffset));
     }
 
     private void setReminderOffset() {
+        long reminderOffset = 0;
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(mStartDate);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
-        if (mReminderOffset > diffMinutes) {
-            mReminderOffset = diffMinutes;
-            mReminder = null;
+        if (reminderOffset > diffMinutes) {
+            reminderOffset = diffMinutes;
         }
+
+        currentNewOrUpdateEvend.setReminderOffset(Double.toString(reminderOffset));
     }
 
-    protected void saveEvent(final Boolean isMeetNow) {
+    protected void saveEvent(final Boolean isMeetNow)  {
 
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
+        try {
+            EventManager.saveEvent(new JSONObject(AppContext.jsonParser.Serialize(currentNewOrUpdateEvend)), isMeetNow, mReminder, new OnEventSaveCompleteListner() {
 
-        EventManager.saveEvent(mContext, mEventJobj, isMeetNow, mReminder, new OnEventSaveCompleteListner() {
+                 @Override
+                 public void eventSaveComplete(Event event) {
+                     Toast.makeText(getApplicationContext(),
+                             mCreateUpdateSuccessfulMessage,
+                             Toast.LENGTH_LONG).show();
+                     new Handler().post(new Runnable() {
+                         @Override
+                         public void run() {
+                             if (mDestinationPlace != null) {//when event is created without destination
+                                 DestinationCacher.cacheDestination(mDestinationPlace, mContext);
+                             }
+                         }
+                     });
+                     try {
+                         if (mEventJobj.getInt("EventTypeId") == 100) {
+                             gotoHomePage();
+                         } else if (mEventJobj.getInt("EventTypeId") == 200) {
+                             gotoTrackingPage(event.getEventId());
+                         } else if (isMeetNow) {
+                             gotoTrackingPage(event.getEventId());
+                         } else {
+                             gotoEventsPage();
+                         }
+                     } catch (JSONException e) {
+                         // TODO Auto-generated catch block
+                         e.printStackTrace();
+                     }
+                 }
 
-            @Override
-            public void eventSaveComplete(Event event) {
-                Toast.makeText(getApplicationContext(),
-                        mCreateUpdateSuccessfulMessage,
-                        Toast.LENGTH_LONG).show();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mDestinationPlace != null) {//when event is created without destination
-                            DestinationCacher.cacheDestination(mDestinationPlace, mContext);
-                        }
-                    }
-                });
-                try {
-                    if (mEventJobj.getInt("EventTypeId") == 100) {
-                        gotoHomePage();
-                    } else if (mEventJobj.getInt("EventTypeId") == 200) {
-                        gotoTrackingPage(event.getEventId());
-                    } else if (isMeetNow) {
-                        gotoTrackingPage(event.getEventId());
-                    } else {
-                        gotoEventsPage();
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-        }, AppContext.actionHandler);
+             }, AppContext.actionHandler);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -370,106 +380,35 @@ public abstract class BaseEventActivity extends BaseActivity {
         });
     }
 
-    protected JSONObject createEventJson()
-    {
-        String isUserLocationShared = "true";
-        if(mEventTypeId ==100){
-            isUserLocationShared = "false";
-        }
-        JSONObject jobj = new JSONObject();
-        JSONObject userListJobj;
-        JSONArray jsonarr = new JSONArray();
+    protected void  populateEventData() {
+        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+
+        currentNewOrUpdateEvend.setStartTime(DateUtil.convertToUtcDateTime(parseFormat.format(mStartDate), parseFormat));
+
         Date endDate = null;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mStartDate);
         calendar.add(Calendar.MINUTE, mDurationOffset);
         endDate = calendar.getTime();
+        currentNewOrUpdateEvend.setEndTime(DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat));//parseFormat.format(endDate);
 
-        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String start  = DateUtil.convertToUtcDateTime(parseFormat.format(mStartDate),parseFormat); //parseFormat.format(mStartDate);
-        String end  = DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat);//parseFormat.format(endDate);
-        try {
-            String userId;
-            if(mContactsAndgroups!=null){
-                for(ContactOrGroup cg : mContactsAndgroups){
-                    userId = cg.getUserId();
-                    userListJobj = new JSONObject();
-                    if(userId != null && !userId.isEmpty()){
-                        userListJobj.put("UserId", userId);
-                        userListJobj.put("IsUserLocationShared", isUserLocationShared);
-                    }
-                    else{
-                        userListJobj.put("MobileNumber", cg.getMobileNumber());
-                    }
-                    jsonarr.put(userListJobj);
-                }
-            }
+        currentNewOrUpdateEvend.setInitiatorId(AppContext.context.loginId);
+        currentNewOrUpdateEvend.setDuration(Integer.toString(mDurationOffset));
+        currentNewOrUpdateEvend.setState("1");
+        currentNewOrUpdateEvend.setTrackingState("1");
+        currentNewOrUpdateEvend.setIsTrackingRequired("True");
+        currentNewOrUpdateEvend.setEventTypeId(Integer.toString(mEventTypeItem.getImageIndex()));
+        currentNewOrUpdateEvend.setContactOrGroups(mContactsAndgroups);
+        setReminderOffset();
+        setTrackingOffset();
+        currentNewOrUpdateEvend.setReminderType(mReminder.getNotificationType());
 
-            jobj.put("Name", mEventName);
-            jobj.put("Description", mEventDescription);
-            if(mEventId !=null)
-            {
-                jobj.put("EventId", mEventId);
-            }
-            jobj.put("UserList", jsonarr);
-            jobj.put("Duration", mDurationOffset);
-            jobj.put("InitiatorId", AppContext.context.loginId);
-            jobj.put("RequestorId", AppContext.context.loginId);
-            jobj.put("EventStateId", "1");
-            jobj.put("TrackingStateId", "1");
-            jobj.put("IsTrackingRequired", "True");
-            jobj.put("StartTime", start);
-            jobj.put("EndTime",end);
-
-            if(mDestinationPlace!=null)
-            {
-                jobj.put("DestinationLatitude", mDestinationPlace.getLatLang().latitude);
-                jobj.put("DestinationLongitude", mDestinationPlace.getLatLang().longitude);
-                jobj.put("DestinationAddress", mDestinationPlace.getAddress());
-                //jobj.put("DestinationName", mDestinationPlace.getName());
-                jobj.put( "DestinationName", mEventLocationTextView.getText());
-            }
-            else
-            {
-                jobj.put("DestinationLatitude", "");
-                jobj.put("DestinationLongitude", "");
-                jobj.put("DestinationAddress", "");
-                jobj.put("DestinationName", "");
-            }
-
-            setReminderOffset();
-            if(mReminder!=null){
-                jobj.put("ReminderType", mReminder.getNotificationType());
-            }
-            jobj.put("ReminderOffset", "" + mReminderOffset + "");
-            jobj.put("EventTypeId", "" + mEventTypeItem.getImageIndex());
-            jobj.put("TrackingStopTime", "");
-            setTrackingOffset();
-            jobj.put("TrackingStartOffset",""+ mTrackingOffset + "");
-            jobj.put("IsQuickEvent",mIsQuickEvent);
-            if(mIsRecurrence.equals("true")){
-                jobj.put("IsRecurring", true);
-                jobj.put("RecurrenceCount",mNumberOfOccurences);
-                jobj.put("RecurrenceFrequency",mFrequencyOfOcuurence);
-                jobj.put("RecurrenceFrequencyTypeId",mRecurrenceType);
-                if(mRecurrenceType.equals("2")){
-                    String days ="";
-                    for( int day : mRecurrencedays){
-                        days += "," + Integer.toString(day);
-                    }
-                    days = days.substring(1);
-                    jobj.put("RecurrenceDaysOfWeek",days);
-                }
-            }
-            else{
-                jobj.put("IsRecurring",false);
-            }
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (mDestinationPlace != null) {
+            currentNewOrUpdateEvend.setDestinationAddress(mDestinationPlace.getAddress());
+            currentNewOrUpdateEvend.setDestinationName(mEventLocationTextView.getText().toString());
+            currentNewOrUpdateEvend.setDestinationLatitude(Double.toString(mDestinationPlace.getLatLang().latitude));
+            currentNewOrUpdateEvend.setDestinationLongitude(Double.toString(mDestinationPlace.getLatLang().longitude));
         }
-
-        return jobj;
     }
+
 }

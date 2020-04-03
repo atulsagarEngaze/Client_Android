@@ -30,7 +30,7 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.UserMessageHandler;
+import com.redtop.engaze.common.utility.UserMessageHandler;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;

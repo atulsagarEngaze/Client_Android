@@ -1,4 +1,4 @@
-package com.redtop.engaze.common;
+package com.redtop.engaze.common.utility;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

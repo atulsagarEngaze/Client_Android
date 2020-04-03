@@ -1,4 +1,4 @@
-package com.redtop.engaze.common;
+package com.redtop.engaze.common.utility;
 
 import java.io.IOException;
 import java.util.List;
