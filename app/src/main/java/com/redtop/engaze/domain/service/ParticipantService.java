@@ -22,7 +22,7 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.ParticipantManager;
 
@@ -97,7 +97,7 @@ public class ParticipantService {
         JSONObject jobj = new JSONObject();
         String[] userList = {userId};
         JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));
-        EventDetail ed = InternalCaching.getEventFromCache(eventId);
+        Event ed = InternalCaching.getEventFromCache(eventId);
         try {
             ProgressBar.showProgressBar(AppContext.context.getString(R.string.message_general_progressDialog));
             jobj.put("RequestorId", AppContext.context.loginId);
@@ -131,7 +131,7 @@ public class ParticipantService {
         }
     }
 
-    public static Boolean isNotifyUser( EventDetail event){
+    public static Boolean isNotifyUser( Event event){
         if(event!=null && event.getCurrentParticipant().getAcceptanceStatus()== AcceptanceStatus.DECLINED){
             return false;
         }
@@ -185,7 +185,7 @@ public class ParticipantService {
         return false;
     }
 
-    public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(EventDetail event, AcceptanceStatus acceptanceStatus){
+    public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus){
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
         ArrayList<EventParticipant> participants = event.getParticipants();
@@ -202,7 +202,7 @@ public class ParticipantService {
         return memStatus;
     }
 
-    public static Boolean isValidForLocationSharing(EventDetail event, EventParticipant mem) {
+    public static Boolean isValidForLocationSharing(Event event, EventParticipant mem) {
         Boolean isValid = true;
 
         Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.getInitiatorId());

@@ -22,16 +22,16 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.ProgressBar;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.service.EventService;
 
-public class HomePendingEventListAdapter extends ArrayAdapter<EventDetail> {
-	public List<EventDetail> items;	
+public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
+	public List<Event> items;
 	private Context mContext;
 
 
 	public HomePendingEventListAdapter(Context context, int resourceId,
-			List<EventDetail> items) {
+			List<Event> items) {
 		super(context, resourceId, items);		
 		this.mContext = context;	
 		this.items = items;
@@ -50,7 +50,7 @@ public class HomePendingEventListAdapter extends ArrayAdapter<EventDetail> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		ViewHolder holder = null;
-		EventDetail rowItem = getItem(position);
+		Event rowItem = getItem(position);
 
 		LayoutInflater mInflater = (LayoutInflater) mContext
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

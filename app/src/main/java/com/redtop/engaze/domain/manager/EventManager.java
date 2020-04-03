@@ -33,7 +33,7 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.Reminder;
@@ -53,12 +53,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 public class EventManager {
     private final static String TAG = EventManager.class.getName();
 
-    public static List<EventDetail> getRunningEventList() {
-        List<EventDetail> list = InternalCaching.getEventListFromCache();
+    public static List<Event> getRunningEventList() {
+        List<Event> list = InternalCaching.getEventListFromCache();
         //list = removePastEvents(context, list);
-        List<EventDetail> runningList = new ArrayList<EventDetail>();
+        List<Event> runningList = new ArrayList<Event>();
         if (list != null) {
-            for (EventDetail e : list) {
+            for (Event e : list) {
                 if (e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
                         && e.getState().equals(EventState.TRACKING_ON)) {
                     runningList.add(e);
@@ -69,14 +69,14 @@ public class EventManager {
         return runningList;
     }
 
-    public static List<EventDetail> getPendingEventList() {
-        List<EventDetail> pendingList = new ArrayList<EventDetail>();
-        List<EventDetail> list = InternalCaching.getEventListFromCache();
+    public static List<Event> getPendingEventList() {
+        List<Event> pendingList = new ArrayList<Event>();
+        List<Event> list = InternalCaching.getEventListFromCache();
         list.addAll(InternalCaching.getTrackEventListFromCache());
         if (list != null) {
             //list = removePastEvents(context, list);
             if (list != null) {
-                for (EventDetail e : list) {
+                for (Event e : list) {
                     if (e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
                             e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
                         pendingList.add(e);
@@ -89,7 +89,7 @@ public class EventManager {
     }
 
     public static void startEvent(String eventid) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
@@ -105,7 +105,7 @@ public class EventManager {
     }
 
     public static void eventTrackingStart(String eventid) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Toast.makeText(AppContext.context, message, Toast.LENGTH_SHORT).show();
@@ -120,7 +120,7 @@ public class EventManager {
     }
 
     public static void eventOver(String eventid) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Toast.makeText(AppContext.context, message, Toast.LENGTH_SHORT).show();
@@ -152,28 +152,28 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
 
                     if (Status == "true") {
-                        EventDetail eventDetailData = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
-                        int eventTypeId = Integer.parseInt(eventDetailData.getEventTypeId());
-                        EventService.setEndEventAlarm(eventDetailData);
+                        Event eventData = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
+                        int eventTypeId = Integer.parseInt(eventData.getEventTypeId());
+                        EventService.setEndEventAlarm(eventData);
                         if (isMeetNow) {
-                            eventDetailData.setState(EventState.TRACKING_ON);
-                            eventDetailData.isQuickEvent = "true";
+                            eventData.setState(EventState.TRACKING_ON);
+                            eventData.isQuickEvent = "true";
                         } else if (eventTypeId == 100 || eventTypeId == 200) {
                         } else {
-                            EventService.setTracking(eventDetailData);
-                            EventService.setEventStarAlarm(eventDetailData);
+                            EventService.setTracking(eventData);
+                            EventService.setEventStarAlarm(eventData);
                             if (reminder != null) {
-                                EventService.setEventReminder(eventDetailData);
+                                EventService.setEventReminder(eventData);
 
                             }
-                            EventService.setEventReminder(eventDetailData);
-                            eventDetailData.setState(EventState.EVENT_OPEN);
-                            eventDetailData.isQuickEvent = "false";
+                            EventService.setEventReminder(eventData);
+                            eventData.setState(EventState.EVENT_OPEN);
+                            eventData.isQuickEvent = "false";
                         }
-                        EventNotificationManager.cancelNotification(eventDetailData);
-                        InternalCaching.saveEventToCache(eventDetailData);
+                        EventNotificationManager.cancelNotification(eventData);
+                        InternalCaching.saveEventToCache(eventData);
                         EventTrackerLocationService.peroformSartStop();
-                        listnerOnSuccess.eventSaveComplete(eventDetailData);
+                        listnerOnSuccess.eventSaveComplete(eventData);
                     } else {
                         listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                     }
@@ -203,7 +203,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.SAVEUSERRESPONSE);
             return;
         }
-        final EventDetail event = InternalCaching.getEventFromCache(eventid);
+        final Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
@@ -286,8 +286,8 @@ public class EventManager {
 
                     String Status = (String) response.getString("Status");
                     if (Status == "true") {
-                        List<EventDetail> eventDetailList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
-                        EventDetail event = eventDetailList.get(0);
+                        List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                        Event event = eventList.get(0);
                         if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
                             event.setState(EventState.TRACKING_ON);
                         }
@@ -318,7 +318,7 @@ public class EventManager {
         });
     }
 
-    public static void leaveEvent(final EventDetail event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void leaveEvent(final Event event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
@@ -378,7 +378,7 @@ public class EventManager {
         });
     }
 
-    public static void endEvent(final EventDetail event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void endEvent(final Event event, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
@@ -440,7 +440,7 @@ public class EventManager {
 
     }
 
-    public static void deleteEvent(final EventDetail event, final IActionHandler actionHandler) {
+    public static void deleteEvent(final Event event, final IActionHandler actionHandler) {
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
@@ -492,7 +492,7 @@ public class EventManager {
     }
 
 
-    public static void changeDestination(final EventPlace destinationPlace, final Context context, final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void changeDestination(final EventPlace destinationPlace, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
         if (!AppUtility.isNetworkAvailable(context)) {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
@@ -541,7 +541,7 @@ public class EventManager {
 
     }
 
-    public static void extendEventEndTime(final int i, final Context context, final EventDetail event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void extendEventEndTime(final int i, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
         if (!AppUtility.isNetworkAvailable(context)) {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
@@ -600,7 +600,7 @@ public class EventManager {
     }
 
     public static void updateEventWithParticipantResponse(Context context, String eventid, String userId, String userName, int eventAcceptanceStateId, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = context.getResources().getString(R.string.message_general_event_null_error);
@@ -628,7 +628,7 @@ public class EventManager {
     }
 
     public static void updateEventWithParticipantLeft(Context context, String eventid, String userId, String userName, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = context.getResources().getString(R.string.message_general_event_null_error);
@@ -656,7 +656,7 @@ public class EventManager {
     }
 
     public static void eventEndedByInitiator(final Context context, final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = context.getResources().getString(R.string.message_general_event_null_error);
@@ -684,7 +684,7 @@ public class EventManager {
     }
 
     public static void eventExtendedByInitiator(final Context context, final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = context.getResources().getString(R.string.message_general_event_null_error);
@@ -710,7 +710,7 @@ public class EventManager {
     }
 
     public static void participantsUpdatedByInitiator(final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
@@ -731,7 +731,7 @@ public class EventManager {
     }
 
     public static void eventDeletedByInitiator(final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
@@ -756,7 +756,7 @@ public class EventManager {
     }
 
     public static void eventDestinationChangedByInitiator(final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
@@ -777,7 +777,7 @@ public class EventManager {
     }
 
     public static void currentparticipantRemovedByInitiator(final Context context, final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
-        EventDetail event = InternalCaching.getEventFromCache(eventid);
+        Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
             String message = context.getResources().getString(R.string.message_general_event_null_error);
@@ -822,13 +822,13 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
                     Log.d(TAG, "EventResponse status:" + Status);
                     if (Status == "true") {
-                        List<EventDetail> eventDetailList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
-                        EventService.RemovePastEvents(eventDetailList);
-                        EventService.upDateEventStatus(eventDetailList);
-                        InternalCaching.saveEventListToCache(eventDetailList);
+                        List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                        EventService.RemovePastEvents(eventList);
+                        EventService.upDateEventStatus(eventList);
+                        InternalCaching.saveEventListToCache(eventList);
                         EventTrackerLocationService.peroformSartStop();
                         if (listnerOnSuccess != null) {
-                            listnerOnSuccess.RefreshEventListComplete(eventDetailList);
+                            listnerOnSuccess.RefreshEventListComplete(eventList);
                         }
                     } else {
                         if (listnerOnFailure != null) {
@@ -859,7 +859,7 @@ public class EventManager {
         });
     }
 
-    public static void saveUsersLocationDetailList(Context context, EventDetail event,
+    public static void saveUsersLocationDetailList(Context context, Event event,
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
         if (event != null && event.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
@@ -869,13 +869,13 @@ public class EventManager {
 
     }
 
-    private static void checkForReccurrence(EventDetail event) {
+    private static void checkForReccurrence(Event event) {
         String strIsReccurrence = event.getIsRecurrence();
         if (strIsReccurrence != null && strIsReccurrence.equals("true")) {
             refreshEventList(new OnRefreshEventListCompleteListner() {
 
                 @Override
-                public void RefreshEventListComplete(List<EventDetail> eventDetailList) {
+                public void RefreshEventListComplete(List<Event> eventList) {
                     Intent eventRefreshed = new Intent(Veranstaltung.EVENTS_REFRESHED);
                     LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(eventRefreshed);
 
@@ -902,13 +902,13 @@ public class EventManager {
     public static List<TrackLocationMember> getListOfTrackingMembers(
             Context context, String inorOut) {
         ArrayList<TrackLocationMember> slist = new ArrayList<TrackLocationMember>();
-        List<EventDetail> list = getTrackingEventList(context);
+        List<Event> list = getTrackingEventList(context);
         int eventTypeId;
         ArrayList<EventParticipant> members;
 
         switch (inorOut) {
             case "LocationsOut":
-                for (EventDetail e : list) {
+                for (Event e : list) {
                     members = e.getParticipants();
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventTypeId = Integer.parseInt(e.getEventTypeId());
@@ -926,7 +926,7 @@ public class EventManager {
                 }
                 break;
             case "locationsIn":
-                for (EventDetail e : list) {
+                for (Event e : list) {
                     members = e.getParticipants();
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventTypeId = Integer.parseInt(e.getEventTypeId());
@@ -947,8 +947,8 @@ public class EventManager {
         return slist;
     }
 
-    public static List<EventDetail> getTrackingEventList(Context context) {
-        List<EventDetail> list = InternalCaching.getTrackEventListFromCache();
+    public static List<Event> getTrackingEventList(Context context) {
+        List<Event> list = InternalCaching.getTrackEventListFromCache();
         //removePastEvents(context, list);
         return list;
     }

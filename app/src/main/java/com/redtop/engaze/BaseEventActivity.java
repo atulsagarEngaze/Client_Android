@@ -28,7 +28,7 @@ import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
@@ -41,7 +41,7 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected int mDurationOffset;
     protected TextView mQuickEventName;
 
-    protected EventDetail mEventDetailData;
+    protected Event mEventData;
     protected TextView mEventLocationTextView;
     protected NameImageItem mEventTypeItem;
     protected Reminder mReminder;
@@ -74,9 +74,9 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected ArrayList<Integer> mRecurrencedays;
     protected int mEventTypeId;
 
-    protected EventDetail mNewEvent;
+    protected Event mNewEvent;
 
-    public EventDetail notificationselectedEvent;
+    public Event notificationselectedEvent;
 
     protected static final int REMINDER_REQUEST_CODE = 2;
     protected static final int EVENT_TYPE_REQUEST_CODE = 6;
@@ -298,7 +298,7 @@ public abstract class BaseEventActivity extends BaseActivity {
         EventManager.saveEvent(mContext, mEventJobj, isMeetNow, mReminder, new OnEventSaveCompleteListner() {
 
             @Override
-            public void eventSaveComplete(EventDetail eventDetail) {
+            public void eventSaveComplete(Event event) {
                 Toast.makeText(getApplicationContext(),
                         mCreateUpdateSuccessfulMessage,
                         Toast.LENGTH_LONG).show();
@@ -314,9 +314,9 @@ public abstract class BaseEventActivity extends BaseActivity {
                     if (mEventJobj.getInt("EventTypeId") == 100) {
                         gotoHomePage();
                     } else if (mEventJobj.getInt("EventTypeId") == 200) {
-                        gotoTrackingPage(eventDetail.getEventId());
+                        gotoTrackingPage(event.getEventId());
                     } else if (isMeetNow) {
-                        gotoTrackingPage(eventDetail.getEventId());
+                        gotoTrackingPage(event.getEventId());
                     } else {
                         gotoEventsPage();
                     }

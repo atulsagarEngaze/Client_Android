@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.redtop.engaze.adapter.EventReCycleViewAdapter;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,7 +33,7 @@ public class EventsFragmentBase extends Fragment implements OnItemClickListener{
 	protected RecyclerView mRecyclerView;
 	protected RecyclerView.LayoutManager mLayoutManager;
 	protected LayoutManagerType mCurrentLayoutManagerType;
-	public List<EventDetail> mEventDetailList;
+	public List<Event> mEventList;
 	public EventReCycleViewAdapter mAdapter;
 
 	@Override
@@ -58,7 +58,7 @@ public class EventsFragmentBase extends Fragment implements OnItemClickListener{
 		}
 
 		setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-		mAdapter = new EventReCycleViewAdapter(mEventDetailList,mContext);
+		mAdapter = new EventReCycleViewAdapter(mEventList,mContext);
 		// Set CustomAdapter as the adapter for RecyclerView.
 		mRecyclerView.setAdapter(mAdapter);
 		enableDisableNoEventLayout();
@@ -72,7 +72,7 @@ public class EventsFragmentBase extends Fragment implements OnItemClickListener{
 	}
 
 	private void enableDisableNoEventLayout(){
-		if(mEventDetailList!=null && mEventDetailList.size()>0){
+		if(mEventList !=null && mEventList.size()>0){
 
 			mLl_noevent.setVisibility(View.GONE);
 			mRecyclerView.setVisibility(View.VISIBLE);
@@ -83,9 +83,9 @@ public class EventsFragmentBase extends Fragment implements OnItemClickListener{
 		}
 	}
 
-	public void updateEventFragment(List<EventDetail> eventDetailList){	
-		mEventDetailList = eventDetailList;
-		mAdapter.mEventList = eventDetailList;
+	public void updateEventFragment(List<Event> eventList){
+		mEventList = eventList;
+		mAdapter.mEventList = eventList;
 		mAdapter.notifyDataSetChanged();
 		enableDisableNoEventLayout();
 	}	

@@ -35,7 +35,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.service.ParticipantService;
 
@@ -46,12 +46,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.redtop.engaze.fontawesome.TextFont;
 
 public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleViewAdapter.EventViewHolder> {
-    public List<EventDetail> mEventList;
+    public List<Event> mEventList;
     private static Context mContext;
     private static ProgressDialog pDialog;
 
     public EventReCycleViewAdapter(
-            List<EventDetail> items, Context context) {
+            List<Event> items, Context context) {
         mContext = context;
         this.mEventList = items;
 
@@ -65,8 +65,8 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         if (mEventList == null || mEventList.size() == 0) {
             return;
         }
-        final EventDetail ed = mEventList.get(i);
-        viewHolder.eventDetail = ed;
+        final Event ed = mEventList.get(i);
+        viewHolder.event = ed;
         ContactOrGroup cg = ContactAndGroupListManager.getContact(ed.getInitiatorId());
         if (cg != null) {
             viewHolder.profileImage.setBackground(cg.getIconImageDrawable(mContext));
@@ -242,7 +242,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         }
     }
 
-    private void setDescriptionLayout(EventDetail ed, EventViewHolder viewHolder) {
+    private void setDescriptionLayout(Event ed, EventViewHolder viewHolder) {
         if (ed.getDescription().isEmpty()) {
             viewHolder.llEventDescription.setVisibility(View.GONE);
         } else {
@@ -310,11 +310,11 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
                 public void onClick(View v) {
 
                     if (
-                            eventDetail.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED &&
+                            event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED &&
 
                                     trackingStatus) {
                         Intent intent = new Intent(mContext, RunningEventActivity.class);
-                        intent.putExtra("EventId", eventDetail.getEventId());
+                        intent.putExtra("EventId", event.getEventId());
                         mContext.startActivity(intent);
                         if (((EventsActivity) mContext).mActionMode != null) {
                             ((EventsActivity) mContext).mActionMode.finish();
@@ -367,7 +367,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             MenuItem itemEdit = menu.findItem(R.id.context_action_edit);
             MenuItem itemDelete = menu.findItem(R.id.context_action_delete);
             Drawable dr = null;
-            if (eventDetail.isMute != null && eventDetail.isMute) {
+            if (event.isMute != null && event.isMute) {
                 dr = ((EventsActivity) mContext).getResources().getDrawable(R.drawable.event_mute);
             } else {
                 dr = ((EventsActivity) mContext).getResources().getDrawable(R.drawable.event_unmute);
@@ -375,7 +375,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             itemMuteUnmute.setIcon(dr);
 
-            if (this.eventDetail.getCurrentParticipant().getUserId().equalsIgnoreCase(this.eventDetail.getInitiatorId())) {
+            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.getInitiatorId())) {
                 itemAccept.setVisible(false);
                 itemDeclined.setVisible(false);
                 if (this.runningStatus || this.trackingStatus) {
@@ -396,10 +396,10 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 //				{
 //					itemDelete.setVisible(true);
 //				}
-                if (this.eventDetail.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                if (this.event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
                     itemAccept.setVisible(false);
                     itemDeclined.setVisible(true);
-                } else if (this.eventDetail.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.PENDING) {
+                } else if (this.event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.PENDING) {
                     itemAccept.setVisible(true);
                     itemDeclined.setVisible(true);
                 } else {
@@ -416,7 +416,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             // Start the CAB using the ActionMode.Callback defined above
             Toolbar toolbar = (Toolbar) activity.findViewById(R.id.event_list_toolbar);
             activity.mActionMode = toolbar.startActionMode(activity.mActionModeCallback);
-            activity.mActionMode.setTag(eventDetail);
+            activity.mActionMode.setTag(event);
             activity.mActionMode.setTitle("");
             activity.mActionMode.setTitleOptionalHint(false);
             activity.mCurrentItem = itemView;
@@ -446,7 +446,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         public RelativeLayout rlDateSection;
 
         public RelativeLayout llEventDescription;
-        public EventDetail eventDetail;
+        public Event event;
         public ImageView imgParticipants;
         public ImageView imgEventTypeImage;
         public ImageView imgEventTrackingOn;

@@ -20,7 +20,7 @@ import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.EventParticipantListWithNoCallSMS;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.UsersLocationDetail;
 
 public class InfoWindowHelper {
@@ -29,7 +29,7 @@ public class InfoWindowHelper {
     private static String duration = "";
 
     public static void createAndshowInfoWindow(final Context context, Marker marker, GoogleMap map,
-                                               final EventDetail ed, final LatLng destinationLatLng,
+                                               final Event ed, final LatLng destinationLatLng,
                                                GoogleDirection gd, final HashMap<Marker, UsersLocationDetail> markerUserLocation, final boolean enableclick) {
 
 

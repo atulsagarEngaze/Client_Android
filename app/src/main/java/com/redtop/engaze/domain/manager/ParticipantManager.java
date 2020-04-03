@@ -1,6 +1,5 @@
 package com.redtop.engaze.domain.manager;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
@@ -8,12 +7,10 @@ import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.service.EventParser;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.webservice.ParticipantWS;
 
 import org.json.JSONObject;
@@ -91,8 +88,8 @@ public class ParticipantManager {
                     String Status = (String)response.getString("Status");
                     if (Status == "true")
                     {
-                        List<EventDetail> eventDetailList =  EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
-                        EventDetail event = eventDetailList.get(0);
+                        List<Event> eventList =  EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                        Event event = eventList.get(0);
                         InternalCaching.saveEventToCache(event);
                         listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
                     }

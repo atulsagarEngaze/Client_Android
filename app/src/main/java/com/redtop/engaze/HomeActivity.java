@@ -34,7 +34,7 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
@@ -48,8 +48,8 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 
     private List<TrackLocationMember> mShareMyLocationList;
     private List<TrackLocationMember> mTrackBuddyList;
-    private List<EventDetail> mRunningEventDetailList;
-    private List<EventDetail> mPendingEventDetailList;
+    private List<Event> mRunningEventList;
+    private List<Event> mPendingEventList;
     private HomeRunningEventListAdapter mRunningEventAdapter;
     private HomePendingEventListAdapter mPendingEventAdapter;
     private HomeTrackLocationListAdapter mShareMyLocationAdapter;
@@ -58,7 +58,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     private HomeViewManager homeViewManager = null;
     private Duration mSnooze;
     protected HomeBroadcastManager mBroadcastManager = null;
-    public EventDetail notificationselectedEvent;
+    public Event notificationselectedEvent;
 
     private static String TAG = HomeActivity.class.getName();
 
@@ -88,8 +88,8 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
         mBroadcastManager = new HomeBroadcastManager(mContext);
         Log.i(TAG, "density: " + AppUtility.deviceDensity);
         //mRunningEventAdapter = new HomeEventListAdapter(null, mContext);
-        mRunningEventAdapter = new HomeRunningEventListAdapter(mContext, R.layout.item_home_running_event_list, mRunningEventDetailList);
-        mPendingEventAdapter = new HomePendingEventListAdapter(mContext, R.layout.item_home_pending_event_list, mPendingEventDetailList);
+        mRunningEventAdapter = new HomeRunningEventListAdapter(mContext, R.layout.item_home_running_event_list, mRunningEventList);
+        mPendingEventAdapter = new HomePendingEventListAdapter(mContext, R.layout.item_home_pending_event_list, mPendingEventList);
         mSuggestedLocationAdapter = new NewSuggestedLocationAdapter(this, R.layout.item_suggested_location_list, mAutoCompletePlaces);
         //homeViewManager.setRunningEventRecycleViewAdapter(mRunningEventAdapter);
         homeViewManager.setLocationViewAdapter(mSuggestedLocationAdapter);
@@ -208,22 +208,22 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     }
 
     public void refreshRunningEventList() {
-        mRunningEventDetailList = EventManager.getRunningEventList();
-        mRunningEventAdapter = new HomeRunningEventListAdapter(mContext, R.layout.item_home_running_event_list, mRunningEventDetailList);
-        if (mRunningEventDetailList.size() == 0) {
+        mRunningEventList = EventManager.getRunningEventList();
+        mRunningEventAdapter = new HomeRunningEventListAdapter(mContext, R.layout.item_home_running_event_list, mRunningEventList);
+        if (mRunningEventList.size() == 0) {
             homeViewManager.hideRunningEventListAndButtonViewLayout();
         } else {
-            homeViewManager.showRunningEventListViewLayout(mRunningEventAdapter, mRunningEventDetailList.size());
+            homeViewManager.showRunningEventListViewLayout(mRunningEventAdapter, mRunningEventList.size());
         }
     }
 
     public void refreshPendingEventList() {
-        mPendingEventDetailList = EventManager.getPendingEventList();
-        mPendingEventAdapter = new HomePendingEventListAdapter(mContext, R.layout.item_home_pending_event_list, mPendingEventDetailList);
-        if (mPendingEventDetailList.size() == 0) {
+        mPendingEventList = EventManager.getPendingEventList();
+        mPendingEventAdapter = new HomePendingEventListAdapter(mContext, R.layout.item_home_pending_event_list, mPendingEventList);
+        if (mPendingEventList.size() == 0) {
             homeViewManager.hidePendingEventListAndButtonViewLayout();
         } else {
-            homeViewManager.showPendingEventListViewLayout(mPendingEventAdapter, mPendingEventDetailList.size());
+            homeViewManager.showPendingEventListViewLayout(mPendingEventAdapter, mPendingEventList.size());
         }
     }
 
@@ -352,7 +352,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     }
 
     @Override
-    public void RefreshEventListComplete(List<EventDetail> eventDetailList) {
+    public void RefreshEventListComplete(List<Event> eventList) {
         refreshPendingEventList();
         refreshRunningEventList();
         refreshShareMyLocationList();

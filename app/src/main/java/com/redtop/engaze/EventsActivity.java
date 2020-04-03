@@ -34,7 +34,7 @@ import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.customeviews.SlidingTabLayout;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
@@ -67,7 +67,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 	public ActionMode mActionMode;
 	public View mCurrentItem;
 	private LinearLayout mViewItemDetailRectangle;
-	public HashMap<AcceptanceStatus, List<EventDetail>> mEventDetailHashmap= new HashMap<AcceptanceStatus, List<EventDetail>>();
+	public HashMap<AcceptanceStatus, List<Event>> mEventDetailHashmap= new HashMap<AcceptanceStatus, List<Event>>();
 	private BroadcastReceiver mEventBroadcastReceiver;
 	private IntentFilter mFilter;
 
@@ -218,8 +218,8 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 					new OnRefreshEventListCompleteListner() {
 				@Override
-				public void RefreshEventListComplete(List<EventDetail> eventDetailList) {
-					loadEventDetailHashmap(eventDetailList);
+				public void RefreshEventListComplete(List<Event> eventList) {
+					loadEventDetailHashmap(eventList);
 					EventsRefreshHandler.post(EventsRefreshRunnable);
 					hideProgressBar();
 				}
@@ -244,19 +244,19 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		}	
 	}
 
-	public void loadEventDetailHashmap(List<EventDetail>eventList){
+	public void loadEventDetailHashmap(List<Event>eventList){
 		EventService.SortListByStartDate(eventList);
 		if(mEventDetailHashmap ==  null){
-			mEventDetailHashmap = new HashMap<AcceptanceStatus, List<EventDetail>>();
+			mEventDetailHashmap = new HashMap<AcceptanceStatus, List<Event>>();
 		}
 		else
 		{
 			mEventDetailHashmap.clear();
 		}
-		ArrayList<EventDetail> al =  new ArrayList<EventDetail>();
-		ArrayList<EventDetail> pl =  new ArrayList<EventDetail>();
-		ArrayList<EventDetail> dl =  new ArrayList<EventDetail>();
-		for(EventDetail ed : eventList){
+		ArrayList<Event> al =  new ArrayList<Event>();
+		ArrayList<Event> pl =  new ArrayList<Event>();
+		ArrayList<Event> dl =  new ArrayList<Event>();
+		for(Event ed : eventList){
 			if(Integer.parseInt(ed.getEventTypeId()) <= 100){
 			switch (ed.getCurrentParticipant().getAcceptanceStatus()) {
 			case ACCEPTED:
@@ -328,7 +328,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		// Called when the user selects a contextual menu item
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			final EventDetail eventDetail = (EventDetail)mode.getTag();
+			final Event event = (Event)mode.getTag();
 			if(item.getItemId()!=R.id.context_action_mute_unmute){
 				showProgressBar(getResources().getString(R.string.message_general_progressDialog));
 			}
@@ -338,12 +338,12 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 			case R.id.context_action_mute_unmute:
 
 				Drawable dr = null;
-				if(eventDetail.isMute){
-					eventDetail.isMute = false;
+				if(event.isMute){
+					event.isMute = false;
 					dr = getResources().getDrawable(R.drawable.event_unmute);
 				}
 				else{
-					eventDetail.isMute = true;
+					event.isMute = true;
 					dr = getResources().getDrawable(R.drawable.event_mute);
 				}
 
@@ -356,20 +356,20 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 					item.setIcon(dr);					
 				}
 				
-				InternalCaching.saveEventToCache(eventDetail);
+				InternalCaching.saveEventToCache(event);
 
 				return true;
 
 			case R.id.context_action_accept:
 
-				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, eventDetail.getEventId(),
+				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.getEventId(),
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  eventDetail.getEventId(),
+				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.getEventId(),
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
@@ -380,12 +380,12 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 				mode.finish();
 				Intent i = new Intent(mContext, CreateEditEventActivity.class); 
 				i.putExtra("IsForEdit", "true");
-				i.putExtra("EventDetail", eventDetail);
+				i.putExtra("EventDetail", event);
 				startActivity(i);
 				return true;
 			case R.id.context_action_delete:
 
-				if(ParticipantService.isCurrentUserInitiator(eventDetail.getInitiatorId())){
+				if(ParticipantService.isCurrentUserInitiator(event.getInitiatorId())){
 
 					AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
 					// adb.setView(alertDialogView);
@@ -396,7 +396,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 					adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							EventManager.deleteEvent(eventDetail, EventsActivity.this);
+							EventManager.deleteEvent(event, EventsActivity.this);
 						} });
 
 					adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

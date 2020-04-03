@@ -36,8 +36,7 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.domain.EventDetail;
-import com.redtop.engaze.domain.EventParticipant;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
@@ -66,7 +65,7 @@ public class EventNotificationManager {
     private static Uri pokenotificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
     private static Ringtone ringtone;
 
-    public static void showReminderNotification(EventDetail event) {
+    public static void showReminderNotification(Event event) {
 
         notificationId = getIncrementedNotificationId();
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
@@ -156,7 +155,7 @@ public class EventNotificationManager {
 
     }
 
-    public static void showEventInviteNotification(EventDetail event) {
+    public static void showEventInviteNotification(Event event) {
         //int layoutId = R.layout.notification_event_invitation;
         String ns = Context.NOTIFICATION_SERVICE;
         NotificationManager notificationManager =
@@ -264,110 +263,110 @@ public class EventNotificationManager {
         }
     }
 
-    public static void showEventExtendedNotification(EventDetail eventDetail) {
+    public static void showEventExtendedNotification(Event event) {
         String notificationMessage = "";
         String title = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
             title = "Tracking extended";
-            notificationMessage = eventDetail.GetInitiatorName() + " has extended sharing his/her location";
+            notificationMessage = event.GetInitiatorName() + " has extended sharing his/her location";
 
-        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             title = "Tracking extended";
-            notificationMessage = eventDetail.GetInitiatorName() + " has extended tracking your location";
+            notificationMessage = event.GetInitiatorName() + " has extended tracking your location";
         } else {
-            notificationMessage = eventDetail.GetInitiatorName() + " has extended the event " + eventDetail.getName();
+            notificationMessage = event.GetInitiatorName() + " has extended the event " + event.getName();
         }
-        showGenericNotification(eventDetail, notificationMessage, title);
+        showGenericNotification(event, notificationMessage, title);
     }
 
-    public static void showDestinationChangedNotification(EventDetail eventDetail) {
+    public static void showDestinationChangedNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
-                || EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)
+                || EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationTitle = "Tracking destination changed";
-            notificationMessage = eventDetail.GetInitiatorName() + " has changed the destination ";
+            notificationMessage = event.GetInitiatorName() + " has changed the destination ";
         } else {
-            notificationMessage = eventDetail.GetInitiatorName() + " has changed the meeting place of the event " + eventDetail.getName();
+            notificationMessage = event.GetInitiatorName() + " has changed the meeting place of the event " + event.getName();
         }
 
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
-    public static void showParticipantsUpdatedNotification(EventDetail eventDetail) {
+    public static void showParticipantsUpdatedNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)
-                || EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)
+                || EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationTitle = "Tracking participants updated";
-            notificationMessage = eventDetail.GetInitiatorName() + " has added/removed participant(s) ";
+            notificationMessage = event.GetInitiatorName() + " has added/removed participant(s) ";
         } else {
-            notificationMessage = eventDetail.GetInitiatorName() + " has added/removed participant(s) of the event " + eventDetail.getName();
+            notificationMessage = event.GetInitiatorName() + " has added/removed participant(s) of the event " + event.getName();
         }
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
-    public static void showRemovedFromEventNotification(EventDetail eventDetail) {
+    public static void showRemovedFromEventNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
             notificationTitle = "Removed from Tracking";
-            notificationMessage = eventDetail.GetInitiatorName() + " has stopped sharing location with you";
-        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+            notificationMessage = event.GetInitiatorName() + " has stopped sharing location with you";
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationTitle = "Removed from Tracking";
-            notificationMessage = eventDetail.GetInitiatorName() + " has stopped tracking your location";
+            notificationMessage = event.GetInitiatorName() + " has stopped tracking your location";
         } else {
-            notificationMessage = eventDetail.GetInitiatorName() + " has removed you from the event " + eventDetail.getName();
+            notificationMessage = event.GetInitiatorName() + " has removed you from the event " + event.getName();
         }
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
-    public static void showEventDeleteNotification(EventDetail eventDetail) {
+    public static void showEventDeleteNotification(Event event) {
 
-        String notificationMessage = eventDetail.GetInitiatorName() + " has cancelled " + eventDetail.getName();
-        showGenericNotification(eventDetail, notificationMessage, "");
+        String notificationMessage = event.GetInitiatorName() + " has cancelled " + event.getName();
+        showGenericNotification(event, notificationMessage, "");
     }
 
-    public static void showEventEndNotification(EventDetail eventDetail) {
+    public static void showEventEndNotification(Event event) {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
             notificationTitle = "Tracking ended";
-            notificationMessage = eventDetail.GetInitiatorName() + " has stopped sharing location";
-        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+            notificationMessage = event.GetInitiatorName() + " has stopped sharing location";
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationTitle = "Tracking ended";
-            notificationMessage = eventDetail.GetInitiatorName() + " has stopped tracking your location";
+            notificationMessage = event.GetInitiatorName() + " has stopped tracking your location";
         } else {
-            notificationMessage = eventDetail.GetInitiatorName() + " has ended " + eventDetail.getName();
+            notificationMessage = event.GetInitiatorName() + " has ended " + event.getName();
         }
 
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
     public static void pokeNotification(Context context, String mEventId) {
 
-        EventDetail eventDetail = InternalCaching.getEventFromCache(mEventId);
-        String notificationMessage = eventDetail.GetInitiatorName() + " has poked you. Did you miss to respond to an invitation ?";
+        Event event = InternalCaching.getEventFromCache(mEventId);
+        String notificationMessage = event.GetInitiatorName() + " has poked you. Did you miss to respond to an invitation ?";
         String title = "You have been poked!";
         isPokeNotification = true;
         notificationType = "POKE";
-        showGenericNotification(eventDetail, notificationMessage, title);
+        showGenericNotification(event, notificationMessage, title);
     }
 
-    public static void approachingAlertNotification(Context context, EventDetail mEvent, String notificationMessage) {
+    public static void approachingAlertNotification(Context context, Event mEvent, String notificationMessage) {
         ringAlarm();
         notificationType = "APPROACHING";
         showGenericNotification(mEvent, notificationMessage, "");
     }
 
-    public static void showEventResponseNotification(Context context, EventDetail eventDetail, String userName, int eventAcceptanceStateId) {
+    public static void showEventResponseNotification(Context context, Event event, String userName, int eventAcceptanceStateId) {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
             notificationTitle = "Tracking request";
-        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationTitle = "Tracking request";
         } else {
             notificationTitle = "";
@@ -385,22 +384,22 @@ public class EventNotificationManager {
             notificationMessage = userName + " has rejected your request!";
         }
 
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
-    public static void showEventLeftNotification(Context context, EventDetail eventDetail, String userName) {
+    public static void showEventLeftNotification(Context context, Event event, String userName) {
         String notificationTitle = "Tracking stopped";
         String notificationMessage = "";
-        if (EventService.isEventTrackBuddyEventForCurrentuser(eventDetail)) {
+        if (EventService.isEventTrackBuddyEventForCurrentuser(event)) {
             notificationMessage = userName + " has stopped sharing location";
-        } else if (EventService.isEventShareMyLocationEventForCurrentuser(eventDetail)) {
+        } else if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
             notificationMessage = userName + " has stopped viewing your location";
         } else {
             notificationTitle = "";
-            notificationMessage = userName + " has left " + eventDetail.getName();
+            notificationMessage = userName + " has left " + event.getName();
         }
 
-        showGenericNotification(eventDetail, notificationMessage, notificationTitle);
+        showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
     private static void saveResponse(final AcceptanceStatus status, final String eventid) {
@@ -438,7 +437,7 @@ public class EventNotificationManager {
         }
     }
 
-    private static void endEvent(final EventDetail event) {
+    private static void endEvent(final Event event) {
         try {
             EventManager.endEvent(event, new OnActionCompleteListner() {
 
@@ -485,7 +484,7 @@ public class EventNotificationManager {
                     break;
 
                 case "snooze":
-                    EventDetail ed = InternalCaching.getEventFromCache(eventid);
+                    Event ed = InternalCaching.getEventFromCache(eventid);
                     if (ed != null) {
                         setAlarm("notification", eventid, 10);//reminder interval in minute
                         notificationManager.cancel(ed.snoozeNotificationId);
@@ -493,7 +492,7 @@ public class EventNotificationManager {
                     break;
 
                 case "end":
-                    EventDetail eventD = InternalCaching.getEventFromCache(eventid);
+                    Event eventD = InternalCaching.getEventFromCache(eventid);
                     endEvent(eventD);
 
                     break;
@@ -509,13 +508,13 @@ public class EventNotificationManager {
         }
     }
 
-    public static void cancelAllNotifications(EventDetail eventDetailData) {
+    public static void cancelAllNotifications(Event eventData) {
         try {
             NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
             // If the notification is still active close it
-            notificationManager.cancel(eventDetailData.acceptNotificationid);
-            notificationManager.cancel(eventDetailData.snoozeNotificationId);
-            for (int notficationId : eventDetailData.notificationIds) {
+            notificationManager.cancel(eventData.acceptNotificationid);
+            notificationManager.cancel(eventData.snoozeNotificationId);
+            for (int notficationId : eventData.notificationIds) {
                 notificationManager.cancel(notficationId);
             }
         } catch (Exception e) {
@@ -523,19 +522,19 @@ public class EventNotificationManager {
         }
     }
 
-    public static void cancelNotification(EventDetail eventDetailData) {
+    public static void cancelNotification(Event eventData) {
         try {
             NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            switch (eventDetailData.getCurrentParticipant().getAcceptanceStatus()) {
+            switch (eventData.getCurrentParticipant().getAcceptanceStatus()) {
                 case ACCEPTED:
-                    notificationManager.cancel(eventDetailData.acceptNotificationid);
+                    notificationManager.cancel(eventData.acceptNotificationid);
                     break;
 
                 case DECLINED:
-                    notificationManager.cancel(eventDetailData.acceptNotificationid);
-                    notificationManager.cancel(eventDetailData.snoozeNotificationId);
-                    for (int notficationId : eventDetailData.notificationIds) {
+                    notificationManager.cancel(eventData.acceptNotificationid);
+                    notificationManager.cancel(eventData.snoozeNotificationId);
+                    for (int notficationId : eventData.notificationIds) {
                         notificationManager.cancel(notficationId);
                     }
                     break;
@@ -589,11 +588,11 @@ public class EventNotificationManager {
         }, distanceAlarmDuration);
     }
 
-    public static void showGenericNotification(EventDetail eventDetail, String msg, String title) {
+    public static void showGenericNotification(Event event, String msg, String title) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
         String notificationMessage = msg;
         if (title == "") {
-            title = eventDetail.getName();
+            title = event.getName();
         }
         // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(HomeActivity.class);
@@ -613,7 +612,7 @@ public class EventNotificationManager {
                         .setAutoCancel(true);
 
 
-        if (!eventDetail.isMute) {
+        if (!event.isMute) {
             if (isPokeNotification) {
                 mBuilder.setSound(pokenotificationSound);
             } else {
@@ -628,7 +627,7 @@ public class EventNotificationManager {
                 break;
             case "APPROACHING":
                 Intent approachingAlarmDismissIntent = new Intent(AppContext.context, notificationActionsListener.class);
-                approachingAlarmDismissIntent.putExtra("eventid", eventDetail.getEventId());
+                approachingAlarmDismissIntent.putExtra("eventid", event.getEventId());
                 approachingAlarmDismissIntent.putExtra("responseCode", "approachingAlarmDismiss");
                 PendingIntent approachingAlarmPendingIntent =
                         PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -650,8 +649,8 @@ public class EventNotificationManager {
                 (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
         notificationId = getIncrementedNotificationId();
-        eventDetail.notificationIds.add(notificationId);
-        InternalCaching.saveEventToCache(eventDetail);
+        event.notificationIds.add(notificationId);
+        InternalCaching.saveEventToCache(event);
         mNotificationManager.notify(notificationId, mBuilder.build());
         //currentNotificationEventId = event.getEventId();
         isNotificActive = true;

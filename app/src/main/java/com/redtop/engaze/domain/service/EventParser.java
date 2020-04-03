@@ -3,12 +3,7 @@ package com.redtop.engaze.domain.service;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
-import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.EventDetail;
-import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.domain.NameImageItem;
-import com.redtop.engaze.domain.Reminder;
+import com.redtop.engaze.domain.Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,13 +12,11 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class EventParser {
 
-    public static JSONObject createPokeAllContactsJSON(EventDetail ed) {
+    public static JSONObject createPokeAllContactsJSON(Event ed) {
         JSONObject jobj = new JSONObject();
 
         try {
@@ -40,14 +33,14 @@ public class EventParser {
         return jobj;
     }
 
-    public static List<EventDetail> parseEventDetailList(JSONArray jsonStr) {
+    public static List<Event> parseEventDetailList(JSONArray jsonStr) {
         JSONArray eventDetailJsonArray = jsonStr;
-        List<EventDetail> eventDetailList = new ArrayList<EventDetail>();
+        List<Event> eventList = new ArrayList<Event>();
         String loginUser = AppContext.context.loginId;
         try {
             for (int i = 0; i < eventDetailJsonArray.length(); i++) {
                 JSONObject c = eventDetailJsonArray.getJSONObject(i);
-                EventDetail dt = new EventDetail(
+                Event dt = new Event(
                         ParticipantService.parseMemberList(c.getJSONArray("UserList")),
                         AppUtility.convertNullToEmptyString(c.getString("EventId")),
                         AppUtility.convertNullToEmptyString(c.getString("Name")),
@@ -93,12 +86,12 @@ public class EventParser {
                     dt.setRecurrenceActualStartTime(DateUtil.convertUtcToLocalDateTime(c.getString("StartTime"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
                 }
 
-                eventDetailList.add(dt);
+                eventList.add(dt);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return eventDetailList;
+        return eventList;
     }
 
     /*public static JSONObject createEventJson(

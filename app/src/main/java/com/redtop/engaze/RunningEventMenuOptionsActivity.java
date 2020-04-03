@@ -23,7 +23,7 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.service.ParticipantService;
@@ -38,7 +38,7 @@ public class RunningEventMenuOptionsActivity extends BaseActivity implements OnI
 	private String mUserName;
 	private String mUserId;
 	private String mobileno;
-	private EventDetail mEvent;
+	private Event mEvent;
 	private EventParticipant member;
 
 	@SuppressWarnings("unchecked")

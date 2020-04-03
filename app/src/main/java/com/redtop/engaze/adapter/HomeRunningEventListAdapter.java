@@ -19,18 +19,18 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.ProgressBar;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.ParticipantService;
 
-public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
-	public List<EventDetail> items;	
+public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
+	public List<Event> items;
 	private Context mContext;
 	private RunningEventAdapterCallback callback;
 
 
 	public HomeRunningEventListAdapter(Context context, int resourceId,
-			List<EventDetail> items) {
+			List<Event> items) {
 		super(context, resourceId, items);		
 		this.mContext = context;	
 		this.items = items;
@@ -49,7 +49,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<EventDetail> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		ViewHolder holder = null;
-		final EventDetail rowItem = getItem(position);
+		final Event rowItem = getItem(position);
 
 		LayoutInflater mInflater = (LayoutInflater) mContext
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

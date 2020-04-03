@@ -17,7 +17,7 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.common.enums.ReminderFrom;
 import com.redtop.engaze.common.utility.GoogleDirection;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.manager.EventNotificationManager;
 import com.redtop.engaze.webservice.LocationWS;
@@ -34,7 +34,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
 GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	private Context mContext;
-	private EventDetail mEvent;
+	private Event mEvent;
 	private EventParticipant mMember;
 	private LatLng reminderStartLatLng;
 	private LatLng reminderEndLatLng;

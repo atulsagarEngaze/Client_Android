@@ -34,7 +34,7 @@ import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.manager.ParticipantManager;
@@ -71,7 +71,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         final TrackLocationMember rowItem = getItem(position);
-        final EventDetail ed = rowItem.getEvent();
+        final Event ed = rowItem.getEvent();
         final ContactOrGroup cg = rowItem.getMember().getContact();
         LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
@@ -224,7 +224,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
     }
 
     @SuppressWarnings("static-access")
-    private String getStartTimeAndTimeLeftText(EventDetail event, AcceptanceStatus acceptanceStatus) {
+    private String getStartTimeAndTimeLeftText(Event event, AcceptanceStatus acceptanceStatus) {
         String timeInfoTxt = "";
         if (acceptanceStatus == acceptanceStatus.ACCEPTED) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

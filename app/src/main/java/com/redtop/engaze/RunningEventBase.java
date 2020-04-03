@@ -33,7 +33,7 @@ import com.redtop.engaze.common.utility.FBShareHelper;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
@@ -55,7 +55,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 	protected List<UsersLocationDetail> mRunningEventDetailList;
 	protected String mEventId;
 	protected int mEventTypeId;
-	public EventDetail mEvent;
+	public Event mEvent;
 
 	protected ArrayList<Marker> mETADistanceMarkers;
 	protected LatLngBounds mBounds;

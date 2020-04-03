@@ -1,7 +1,6 @@
 package com.redtop.engaze.domain;
 
 import android.content.Context;
-import android.provider.Telephony;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -195,7 +194,7 @@ public class UsersLocationDetail implements Serializable {
                 + "]";
     }
 
-    public static List<UsersLocationDetail> createUserLocationListFromEventMembers(EventDetail event, Context context) {
+    public static List<UsersLocationDetail> createUserLocationListFromEventMembers(Event event, Context context) {
         ArrayList<EventParticipant> memberList = event.getParticipants();
         ArrayList<UsersLocationDetail> usersLocationDetailList = new ArrayList<UsersLocationDetail>();
         UsersLocationDetail uld = null;
@@ -208,7 +207,7 @@ public class UsersLocationDetail implements Serializable {
         return usersLocationDetailList;
     }
 
-    public static UsersLocationDetail createUserLocationListFromEventMember(EventDetail event, EventParticipant mem) {
+    public static UsersLocationDetail createUserLocationListFromEventMember(Event event, EventParticipant mem) {
 
         UsersLocationDetail uld = new UsersLocationDetail(mem.getUserId(), "", "", "false", "", "location unavailable", "", mem.getProfileName());
         ContactOrGroup cg = ContactAndGroupListManager.getContact(uld.getUserId());

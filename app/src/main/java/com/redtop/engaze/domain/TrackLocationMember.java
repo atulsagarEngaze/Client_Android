@@ -3,23 +3,23 @@ package com.redtop.engaze.domain;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 
 public class TrackLocationMember {
-	private EventDetail event;
+	private Event event;
 	private EventParticipant member;
 	private AcceptanceStatus acceptance;
 
 
-	public TrackLocationMember(EventDetail event, EventParticipant member, AcceptanceStatus acceptance) {
+	public TrackLocationMember(Event event, EventParticipant member, AcceptanceStatus acceptance) {
 		super();
 		this.event = event;
 		this.member = member;
 		this.acceptance = acceptance;
 	}
 
-	public EventDetail getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setEvent(EventDetail event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 

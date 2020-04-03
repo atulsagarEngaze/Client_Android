@@ -53,13 +53,12 @@ import com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.webservice.Routes;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -92,6 +91,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
 	private static final int START_TIME_DIALOG_ID = 2;
 	private static final int START_DATE_DIALOG_ID = 1;
+
+
     /**
      * Called when the activity is first created.
      */
@@ -382,7 +383,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         if (strIsForEdit != null) {
             mIsForEdit = Boolean.parseBoolean(strIsForEdit);
             if (mIsForEdit) {
-                mEventDetailData = (EventDetail) this.getIntent().getSerializableExtra("EventDetail");
+                mEventData = (Event) this.getIntent().getSerializableExtra("EventDetail");
             }
         }
         imgView = (ImageView) findViewById(R.id.icon_location_clear);
@@ -426,17 +427,17 @@ public class CreateEditEventActivity extends BaseEventActivity {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 //cal.setTime(sdf.parse(DateUtil.convertUtcToLocalDateTime(mEventDetailData.getStartTime(), sdf)));
-                cal.setTime(sdf.parse(mEventDetailData.getStartTime()));
+                cal.setTime(sdf.parse(mEventData.getStartTime()));
             } catch (ParseException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
-            mEventtitle.setText(mEventDetailData.getName());
-            mNote.setText(mEventDetailData.getDescription());
+            mEventtitle.setText(mEventData.getName());
+            mNote.setText(mEventData.getDescription());
             ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
-            String currentMemUserId = mEventDetailData.getCurrentParticipant().getUserId();
-            ArrayList<EventParticipant> members = mEventDetailData.getParticipants();
+            String currentMemUserId = mEventData.getCurrentParticipant().getUserId();
+            ArrayList<EventParticipant> members = mEventData.getParticipants();
             for (EventParticipant mem : members) {
                 if (!mem.getUserId().equals(currentMemUserId)) {
                     ContactOrGroup cg = ContactAndGroupListManager.getContact(mem.getUserId());
@@ -449,16 +450,16 @@ public class CreateEditEventActivity extends BaseEventActivity {
                 clearAutoCompleteInviteeTextView();
             }
 
-            mReminder = new Reminder(Integer.parseInt(mEventDetailData.getReminderOffset()), "minute", mEventDetailData.getReminderType());
-            mTracking = new Duration(Integer.parseInt(mEventDetailData.getTrackingStartOffset()), "minute", true);
-            mDuration = new Duration((int) Double.parseDouble(mEventDetailData.getDuration()), "minute", true);
-            mEventTypeItem = new NameImageItem(mEventTypeImages.getResourceId(Integer.parseInt(mEventDetailData.getEventTypeId()), -1), mEventTypeImages.getString(Integer.parseInt(mEventDetailData.getEventTypeId())), Integer.parseInt(mEventDetailData.getEventTypeId()));
-            if (!(mEventDetailData.getDestinationLatitude().equals("null") || mEventDetailData.getDestinationLatitude() == null || mEventDetailData.getDestinationLatitude().equals(""))) {
-                mDestinationPlace = new EventPlace(mEventDetailData.getDestinationName(), mEventDetailData.getDestinationAddress(), new LatLng(Double.parseDouble(mEventDetailData.getDestinationLatitude()), Double.parseDouble(mEventDetailData.getDestinationLongitude())));
+            mReminder = new Reminder(Integer.parseInt(mEventData.getReminderOffset()), "minute", mEventData.getReminderType());
+            mTracking = new Duration(Integer.parseInt(mEventData.getTrackingStartOffset()), "minute", true);
+            mDuration = new Duration((int) Double.parseDouble(mEventData.getDuration()), "minute", true);
+            mEventTypeItem = new NameImageItem(mEventTypeImages.getResourceId(Integer.parseInt(mEventData.getEventTypeId()), -1), mEventTypeImages.getString(Integer.parseInt(mEventData.getEventTypeId())), Integer.parseInt(mEventData.getEventTypeId()));
+            if (!(mEventData.getDestinationLatitude().equals("null") || mEventData.getDestinationLatitude() == null || mEventData.getDestinationLatitude().equals(""))) {
+                mDestinationPlace = new EventPlace(mEventData.getDestinationName(), mEventData.getDestinationAddress(), new LatLng(Double.parseDouble(mEventData.getDestinationLatitude()), Double.parseDouble(mEventData.getDestinationLongitude())));
                 mLh.displayPlace(mDestinationPlace, mEventLocationTextView);
             }
 
-            if (mEventDetailData.getIsRecurrence().equals("true")) {
+            if (mEventData.getIsRecurrence().equals("true")) {
                 populateEventRecurrenceData();
             }
         } else {
@@ -497,19 +498,19 @@ public class CreateEditEventActivity extends BaseEventActivity {
     private void populateEventRecurrenceData() {
         mIsRecurrence = "true";
         mChkrecurrence.setChecked(true);
-        mFrequencyOfOcuurence = mEventDetailData.getFrequencyOfOccurence();
-        if (mEventDetailData.getRecurrenceType().equals("1")) {
+        mFrequencyOfOcuurence = mEventData.getFrequencyOfOccurence();
+        if (mEventData.getRecurrenceType().equals("1")) {
             mRecurrenceType = "1";
             mRdDaily.setChecked(true);
             setDailyLayoutVisible();
             ((TextView) findViewById(R.id.day_frequency_input)).setText(mFrequencyOfOcuurence);
-        } else if (mEventDetailData.getRecurrenceType().equals("2")) {
+        } else if (mEventData.getRecurrenceType().equals("2")) {
             mRecurrenceType = "2";
             mRdWeekly.setChecked(true);
             ((TextView) findViewById(R.id.week_frequency_input)).setText(mFrequencyOfOcuurence);
             setWeeklyLayoutVisible();
             mRecurrencedays = new ArrayList<Integer>();
-            for (int day : mEventDetailData.getRecurrenceDays()) {
+            for (int day : mEventData.getRecurrenceDays()) {
                 mWeekDaysChecboxList.get(day).setChecked(true);
                 mRecurrencedays.add(day);
             }
@@ -519,7 +520,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             setMonthlyLayoutVisible();
             ((TextView) findViewById(R.id.month_frequency_input)).setText(mFrequencyOfOcuurence);
         }
-        mNumberOfOccurences = mEventDetailData.getNumberOfOccurences();
+        mNumberOfOccurences = mEventData.getNumberOfOccurences();
         ((TextView) findViewById(R.id.occurece_input)).setText(mNumberOfOccurences);
     }
 
@@ -668,7 +669,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         }
 
         if (mIsForEdit) {
-            mEventId = mEventDetailData.getEventId();
+            mEventId = mEventData.getEventId();
         }
 
         mEventName = mEventtitle.getText().toString();

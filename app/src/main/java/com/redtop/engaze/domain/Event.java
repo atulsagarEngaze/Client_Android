@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EventDetail implements DataModel {
+public class Event implements DataModel {
 
 	/**
 	 * 
@@ -62,14 +62,14 @@ public class EventDetail implements DataModel {
 	protected String mRecurrenceActualStartTime;
 
 
-	public EventDetail(String eventId, String name, String eventTypeId,
-			String description, String startTime, String endTime,
-			String duration, String initiatorId, String initiatorName, 
-			String stateId, String trackingStateId, 
-			String destinationLatitude, String destinationLongitude,
-			String destinationName,String destinationAddress,  String isTrackingRequired,
-			String reminderOffset, String reminderType, String trackingStartOffset, ArrayList<ContactOrGroup> contactOrGroups,
-			String isQuickEvent) {
+	public Event(String eventId, String name, String eventTypeId,
+                 String description, String startTime, String endTime,
+                 String duration, String initiatorId, String initiatorName,
+                 String stateId, String trackingStateId,
+                 String destinationLatitude, String destinationLongitude,
+                 String destinationName, String destinationAddress, String isTrackingRequired,
+                 String reminderOffset, String reminderType, String trackingStartOffset, ArrayList<ContactOrGroup> contactOrGroups,
+                 String isQuickEvent) {
 		super();
 		this.eventId = eventId;
 		this.name = name;
@@ -95,14 +95,14 @@ public class EventDetail implements DataModel {
 		this.notificationIds = new ArrayList<Integer>();
 	}
 
-	public EventDetail(ArrayList<EventParticipant> members,String eventId, String name, String eventTypeId,
-			String description, String startTime, String endTime,
-			String duration, String initiatorId, String initiatorName, 
-			String stateId, String trackingStateId, 
-			String destinationLatitude, String destinationLongitude,
-			String destinationName,String destinationAddress, String isTrackingRequired,
-			String reminderOffset, String reminderType, String trackingStartOffset,
-			String isQuickEvent) {
+	public Event(ArrayList<EventParticipant> members, String eventId, String name, String eventTypeId,
+                 String description, String startTime, String endTime,
+                 String duration, String initiatorId, String initiatorName,
+                 String stateId, String trackingStateId,
+                 String destinationLatitude, String destinationLongitude,
+                 String destinationName, String destinationAddress, String isTrackingRequired,
+                 String reminderOffset, String reminderType, String trackingStartOffset,
+                 String isQuickEvent) {
 		super();
 		this.eventId = eventId;
 		this.name = name;
@@ -128,7 +128,7 @@ public class EventDetail implements DataModel {
 		this.notificationIds = new ArrayList<Integer>();
 	}
 
-	public EventDetail() {
+	public Event() {
 		// TODO Auto-generated constructor stub
 		this.notificationIds = new ArrayList<Integer>();
 	}

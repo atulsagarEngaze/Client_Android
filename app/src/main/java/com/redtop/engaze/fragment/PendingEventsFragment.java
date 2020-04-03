@@ -21,7 +21,7 @@ public class PendingEventsFragment extends EventsFragmentBase implements OnItemC
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);				
 		mContext = getActivity();
-		mEventDetailList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.PENDING);
+		mEventList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.PENDING);
 	}
 
 	@Override

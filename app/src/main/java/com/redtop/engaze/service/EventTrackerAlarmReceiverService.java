@@ -3,7 +3,7 @@ package com.redtop.engaze.service;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.manager.EventNotificationManager;
@@ -35,14 +35,14 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver
 
 			break;
 		case Veranstaltung.EVENT_REMINDER:
-			EventDetail eventDetailData = InternalCaching.getEventFromCache(eventId);
-			if(eventDetailData!=null){
+			Event eventData = InternalCaching.getEventFromCache(eventId);
+			if(eventData !=null){
 				String reminderType = intent.getStringExtra("ReminderType");
 				if(reminderType.equals("alarm")){				
 					EventNotificationManager.ringAlarm();
 				}
 				else if(reminderType.equals("notification")){
-					EventNotificationManager.showReminderNotification(eventDetailData);
+					EventNotificationManager.showReminderNotification(eventData);
 				}
 			}
 			break;

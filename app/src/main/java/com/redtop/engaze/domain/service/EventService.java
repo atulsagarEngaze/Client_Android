@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,28 +17,22 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
-import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @SuppressLint("SimpleDateFormat")
 public class EventService {
 
     @SuppressLint("SimpleDateFormat")
-    public static void SortListByStartDate(List<EventDetail> list) {
+    public static void SortListByStartDate(List<Event> list) {
         final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Collections.sort(list, new Comparator<EventDetail>() {
-            public int compare(EventDetail ed1, EventDetail ed2) {
+        Collections.sort(list, new Comparator<Event>() {
+            public int compare(Event ed1, Event ed2) {
 
 
                 try {
@@ -58,13 +51,13 @@ public class EventService {
         });
     }
 
-    public static void setEndEventAlarm(List<EventDetail> eventDetailList) {
-        for (EventDetail event : eventDetailList) {
+    public static void setEndEventAlarm(List<Event> eventList) {
+        for (Event event : eventList) {
             setEndEventAlarm(event);
         }
     }
 
-    public static void setEndEventAlarm(EventDetail eDetail) {
+    public static void setEndEventAlarm(Event eDetail) {
         try {
 
             DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -87,7 +80,7 @@ public class EventService {
     }
 
     public static void setEventReminder(String eventid) {
-        EventDetail eDetail = InternalCaching.getEventFromCache(eventid);
+        Event eDetail = InternalCaching.getEventFromCache(eventid);
         setEventReminder(eDetail);
 
     }
@@ -107,7 +100,7 @@ public class EventService {
 
     }
 
-    public static void setEventStarAlarm(EventDetail eDetail) {
+    public static void setEventStarAlarm(Event eDetail) {
         try {
 
             DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -129,7 +122,7 @@ public class EventService {
         }
     }
 
-    public static void setEventReminder(EventDetail eDetail) {
+    public static void setEventReminder(Event eDetail) {
         try {
 
             DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -158,7 +151,7 @@ public class EventService {
         }
     }
 
-    public static void setTracking(EventDetail eDetail) {
+    public static void setTracking(Event eDetail) {
         try {
 
             long trackingAlarmOffset = 0;
@@ -195,12 +188,12 @@ public class EventService {
         }
     }
 
-    public static void upDateEventStatus(List<EventDetail> eventDetailList) {
+    public static void upDateEventStatus(List<Event> eventList) {
         try {
             SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date startDate = null;
             Calendar cal = null;
-            for (EventDetail ed : eventDetailList) {
+            for (Event ed : eventList) {
                 cal = Calendar.getInstance();
                 startDate = originalformat.parse(ed.getStartTime());
                 cal.setTime(startDate);
@@ -218,17 +211,17 @@ public class EventService {
         }
     }
 
-    public static void RemovePastEvents(List<EventDetail> eventDetailList) {
-        List<EventDetail> tobeRemoved = new ArrayList<EventDetail>();
-        for (EventDetail event : eventDetailList) {
+    public static void RemovePastEvents(List<Event> eventList) {
+        List<Event> tobeRemoved = new ArrayList<Event>();
+        for (Event event : eventList) {
             if (isEventPast(event)) {
                 tobeRemoved.add(event);
             }
         }
-        eventDetailList.removeAll(tobeRemoved);
+        eventList.removeAll(tobeRemoved);
     }
 
-    public static Boolean isEventPast(EventDetail ev) {
+    public static Boolean isEventPast(Event ev) {
 
         try {
             Calendar cal = Calendar.getInstance();
@@ -316,7 +309,7 @@ public class EventService {
         }
     }
 
-    public static boolean isEventTrackBuddyEventForCurrentuser(EventDetail mEvent) {
+    public static boolean isEventTrackBuddyEventForCurrentuser(Event mEvent) {
         int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
         boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId());
 
@@ -327,7 +320,7 @@ public class EventService {
         return false;
     }
 
-    public static boolean isEventShareMyLocationEventForCurrentuser(EventDetail mEvent) {
+    public static boolean isEventShareMyLocationEventForCurrentuser(Event mEvent) {
         int eventTypeId = Integer.parseInt(mEvent.getEventTypeId());
         boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId());
 
@@ -339,11 +332,11 @@ public class EventService {
     }
 
     public static Boolean isAnyEventInState(String state, Boolean checkOnlyWhenEventAccepted) {
-        List<EventDetail> events = InternalCaching.getEventListFromCache();
+        List<Event> events = InternalCaching.getEventListFromCache();
         if (events == null) {
             return false;
         }
-        for (EventDetail ed : events) {
+        for (Event ed : events) {
             if (ed.getState().equals(state)) {
                 if (checkOnlyWhenEventAccepted) {
 
@@ -361,12 +354,12 @@ public class EventService {
     }
 
     public static Boolean shouldShareLocation() {
-        List<EventDetail> events = InternalCaching.getEventListFromCache();
-        List<EventDetail> trackingEvents = InternalCaching.getTrackEventListFromCache();
+        List<Event> events = InternalCaching.getEventListFromCache();
+        List<Event> trackingEvents = InternalCaching.getTrackEventListFromCache();
         if (events == null) {
             return false;
         }
-        for (EventDetail ed : events) {
+        for (Event ed : events) {
             if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
                     && ed.getState().equals(EventState.TRACKING_ON)
             ) {
@@ -376,7 +369,7 @@ public class EventService {
         if (trackingEvents == null) {
             return false;
         }
-        for (EventDetail ed : trackingEvents) {
+        for (Event ed : trackingEvents) {
             if (isEventShareMyLocationEventForCurrentuser(ed)) {
                 return true;
             }

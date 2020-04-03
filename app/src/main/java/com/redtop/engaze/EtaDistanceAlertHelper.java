@@ -18,21 +18,20 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.redtop.engaze.R;
 
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.ReminderFrom;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.service.EventDistanceReminderService;
 
 @SuppressLint("NewApi")
 public class EtaDistanceAlertHelper {
 
-	private EventDetail mEvent;
+	private Event mEvent;
 	private NumericWheelAdapter kmsAdapter;
 	private ArrayWheelAdapter<String> metersAdapter;
 	private Dialog reminderDialog;

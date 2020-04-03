@@ -18,7 +18,7 @@ import com.redtop.engaze.EventParticipantsInfo;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.domain.EventDetail;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
@@ -30,12 +30,12 @@ import androidx.recyclerview.widget.RecyclerView;
 public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsOnMapAdapter.UserEventDetailsViewHolder> {
 	public List<UsersLocationDetail> items;
 	private Context mContext;
-	public EventDetail mEvent;
+	public Event mEvent;
 
 	private static String TAG = EventDetailsOnMapAdapter.class.getName();
 
 	public EventDetailsOnMapAdapter(List<UsersLocationDetail> dataSet,
-			Context context, EventDetail event) {
+			Context context, Event event) {
 		this.items = dataSet;
 		this.mContext = context;
 		this.mEvent = event;
