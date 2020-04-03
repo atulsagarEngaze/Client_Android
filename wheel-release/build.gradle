@@ -1,2 +1,2 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('wheel-rlease.aar'))
+configurations.create("default")
+artifacts.add("default", file('wheel-release.aar'))

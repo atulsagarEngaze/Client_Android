@@ -18,7 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.redtop.engaze.R;
 
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.app.AppContext;
@@ -75,8 +75,8 @@ public class EtaDistanceAlertHelper {
 		unit = (WheelView) reminderDialog.findViewById(R.id.eta_unit);
 		ArrayWheelAdapter<String> unitAdapter =
 				new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Kms", "Mtrs"});
-		unitAdapter.setItemResource(R.layout.wheel_text_item);
-		unitAdapter.setItemTextResource(R.id.wheel_text);
+		/*unitAdapter.setItemResource(R.layout.wheel_text_item);
+		unitAdapter.setItemTextResource(R.id.wheel_text);*/
 		unit.setViewAdapter(unitAdapter);
 		unit.setTextAlignment(Gravity.CENTER);
 
@@ -86,12 +86,12 @@ public class EtaDistanceAlertHelper {
 		kms = (WheelView) reminderDialog.findViewById(R.id.eta_values);
 		
 		metersAdapter =	new ArrayWheelAdapter<String>(AppContext.context, new String[] {"100","250","500","750"});
-		metersAdapter.setItemResource(R.layout.wheel_item);
-		metersAdapter.setItemTextResource(R.id.distance_item);
+		/*metersAdapter.setItemResource(R.layout.wheel_item);
+		metersAdapter.setItemTextResource(R.id.distance_item);*/
 		
 		kmsAdapter = new NumericWheelAdapter(AppContext.context, 1, 10);
-		kmsAdapter.setItemResource(R.layout.wheel_item);
-		kmsAdapter.setItemTextResource(R.id.distance_item);
+		/*kmsAdapter.setItemResource(R.layout.wheel_item);
+		kmsAdapter.setItemTextResource(R.id.distance_item);*/
 		kms.setViewAdapter(kmsAdapter);    
 		kms.setCyclic(true);
 
@@ -106,8 +106,8 @@ public class EtaDistanceAlertHelper {
 		else{
 			fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Me"});
 		}
-		fromAdapter.setItemResource(R.layout.wheel_item_time);
-		fromAdapter.setItemTextResource(R.id.wheel_text);
+	/*	fromAdapter.setItemResource(R.layout.wheel_item_time);
+		fromAdapter.setItemTextResource(R.id.wheel_text);*/
 		from.setViewAdapter(fromAdapter);
 		from.setTextAlignment(Gravity.CENTER);
 
