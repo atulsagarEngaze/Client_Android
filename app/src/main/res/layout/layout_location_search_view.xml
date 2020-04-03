@@ -2,7 +2,7 @@
     android:id="@+id/rl_location_search_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground_secondary"
+    android:background="@color/secondaryBackground"
     android:visibility="gone" >
 
     <RelativeLayout
@@ -12,7 +12,7 @@
         android:layout_marginLeft="@dimen/paddinghalf"
         android:layout_marginRight="@dimen/paddinghalf"
         android:layout_marginTop="@dimen/padding"
-        android:background="@color/colorBackground"
+        android:background="@color/primaryBackground"
         android:elevation="5dip"
         android:focusable="true"
         android:focusableInTouchMode="true" >
@@ -39,7 +39,7 @@
             android:dropDownVerticalOffset="@dimen/paddinghalf"
             android:hint="@string/location_search_bar_hint"
             android:inputType="textNoSuggestions"
-            android:textColorHint="@color/colorHintDisable"
+            android:textColorHint="@color/hintDisable"
             android:textSize="@dimen/small_text_size" >
         </EditText>
 
@@ -65,7 +65,7 @@
         android:layout_marginLeft="@dimen/paddinghalf"
         android:layout_marginRight="@dimen/paddinghalf"
         android:layout_marginTop="@dimen/padding"
-        android:background="@color/colorListBackground"
+        android:background="@color/listBackground"
         android:elevation="5dip" >
 
         <ListView

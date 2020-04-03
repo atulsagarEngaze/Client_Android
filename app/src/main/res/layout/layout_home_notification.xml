@@ -25,7 +25,7 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
-            android:background="@color/colorListBackground"
+            android:background="@color/listBackground"
             android:elevation="5dp" >
 
             <TextView
@@ -83,7 +83,7 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
-            android:background="@color/colorListBackground"
+            android:background="@color/listBackground"
             android:elevation="5dp" >
 
             <TextView
@@ -142,7 +142,7 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
-            android:background="@color/colorListBackground"
+            android:background="@color/listBackground"
             android:elevation="5dp" >
 
             <TextView
@@ -189,7 +189,7 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
-            android:background="@color/colorListBackground"
+            android:background="@color/listBackground"
             android:elevation="5dp" >
 
             <TextView

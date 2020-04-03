@@ -30,7 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class ContactsListActivity extends BaseActivity1 implements SwipeRefreshLayout.OnRefreshListener {
+public class ContactsListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 	private SearchView mSearchView;
 	private ListView mListView;    
 	public Handler mHandler;

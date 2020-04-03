@@ -1,10 +1,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_pressed="false"><shape>
-            <solid android:color="@color/colorListBackground" />
+            <solid android:color="@color/listBackground" />
         </shape></item>
     <item android:state_pressed="true"><shape>
-            <solid android:color="@color/colorBackground_secondary" />
+            <solid android:color="@color/secondaryBackground" />
         </shape></item>
 
 </selector>

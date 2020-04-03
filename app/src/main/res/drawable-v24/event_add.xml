@@ -2,4 +2,4 @@
 <bitmap
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/ic_event_add"   
-    android:tint="@color/windowBackground"></bitmap>
+    android:tint="@color/primaryBackground"></bitmap>

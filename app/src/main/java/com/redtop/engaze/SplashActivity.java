@@ -12,7 +12,7 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 
-public class SplashActivity extends BaseActivity1 {
+public class SplashActivity extends BaseActivity {
 
     private ProgressDialog mProgress;
 

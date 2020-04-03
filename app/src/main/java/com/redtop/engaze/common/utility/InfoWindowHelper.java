@@ -16,7 +16,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.redtop.engaze.BaseActivity1;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.EventParticipantListWithNoCallSMS;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.constant.Constants;
@@ -64,10 +64,10 @@ public class InfoWindowHelper {
                     userName = ed.getDestinationName();
                 }
 
-                View markerInfoWindow = ((BaseActivity1) context).getLayoutInflater().inflate(R.layout.custom_snippet, null);
+                View markerInfoWindow = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.custom_snippet, null);
 
                 DisplayMetrics dm = new DisplayMetrics();
-                ((BaseActivity1) context).getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                ((BaseActivity) context).getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
                 int width = dm.widthPixels;
 
                 int customWidth = (int) (width / 4) * 3;
@@ -117,7 +117,7 @@ public class InfoWindowHelper {
             public void onResponse(String status, Document doc,
                                    GoogleDirection gd) {
                 //				gd.animateDirection(mMap, gd.getDirection(doc), GoogleDirection.SPEED_FAST
-                //						, true, true, true, false, null, false, true, new PolylineOptions().width(5).color(mContext.getResources().getColor(R.color.primary_dark)));
+                //						, true, true, true, false, null, false, true, new PolylineOptions().width(5).color(mContext.getResources().getColor(R.color.primaryDark)));
 
                 try {
                     distance = gd.getTotalDistanceText(doc);
@@ -162,6 +162,6 @@ public class InfoWindowHelper {
         Intent intent = new Intent(context, EventParticipantListWithNoCallSMS.class);
         intent.putExtra("action", "loadroute");
         intent.putExtra("endpoints", endPoints);
-        ((BaseActivity1) context).startActivityForResult(intent, Constants.ROUTE_END_POINT_REQUEST_CODE);
+        ((BaseActivity) context).startActivityForResult(intent, Constants.ROUTE_END_POINT_REQUEST_CODE);
     }
 }

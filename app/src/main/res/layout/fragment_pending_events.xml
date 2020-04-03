@@ -28,7 +28,7 @@
             android:paddingLeft="@dimen/padding"
             android:paddingTop="@dimen/paddinghalf"
             android:text="@string/msgHeader_mySchedule_noPendingEvent"
-            android:textColor="@color/colorBackground"
+            android:textColor="@color/primaryBackground"
             android:textStyle="bold" />
 
         <LinearLayout

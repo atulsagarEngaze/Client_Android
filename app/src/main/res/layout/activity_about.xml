@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/link_userReg_termsOfService"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondaryText" />
 
             <TextView
                 android:id="@+id/textand_about"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text=" and "
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondaryText" />
 
             <TextView
                 android:id="@+id/linkprivacypolicy_about"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/link_userReg_privacyPolicy"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondaryText" />
         </LinearLayout>
     </RelativeLayout>
 

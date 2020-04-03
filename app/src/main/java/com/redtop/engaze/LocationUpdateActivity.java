@@ -17,10 +17,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
 import com.redtop.engaze.common.AppLocationService;
-import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.DurationConstants;
 
-public class LocationUpdateActivity extends BaseActivity1 implements GoogleApiClient.ConnectionCallbacks,
+public class LocationUpdateActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	private static final String TAG = LocationUpdateActivity.class.getName();

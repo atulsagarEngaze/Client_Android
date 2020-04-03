@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"
         android:layout_marginTop="0dp"
-        android:background="@color/colorBackground" >
+        android:background="@color/primaryBackground" >
 
         <RelativeLayout
             android:id="@+id/rl_status"
@@ -54,8 +54,8 @@
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_toLeftOf="@+id/img_call"
             android:background="@drawable/ic_poke_black"
-            android:backgroundTint="@color/secondary_text"
-            android:tint="@color/secondary_text" />
+            android:backgroundTint="@color/secondaryText"
+            android:tint="@color/secondaryText" />
 
         <ImageView
             android:id="@+id/img_call"
@@ -66,8 +66,8 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/padding_one_half"
             android:background="@drawable/ic_phone_in_talk_black_36dp"
-            android:backgroundTint="@color/secondary_text"
-            android:tint="@color/secondary_text" />
+            android:backgroundTint="@color/secondaryText"
+            android:tint="@color/secondaryText" />
 
         <!-- <ImageView -->
         <!-- android:id="@+id/img_sms" -->

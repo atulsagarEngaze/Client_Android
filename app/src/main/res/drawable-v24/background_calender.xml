@@ -2,5 +2,5 @@
 <bitmap
     xmlns:android="http://schemas.android.com/apk/res/android"      
     android:src="@drawable/ic_bg_calander"
-    android:tint="@color/primary_light"
+    android:tint="@color/primaryLight"
     android:gravity="center_vertical"></bitmap>

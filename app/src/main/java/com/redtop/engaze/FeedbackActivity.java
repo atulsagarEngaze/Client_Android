@@ -16,13 +16,7 @@ import android.view.ViewConfiguration;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request.Method;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.LogReader;
@@ -31,7 +25,7 @@ import com.redtop.engaze.webservice.FeedbackWS;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-public class FeedbackActivity extends BaseActivity1 {
+public class FeedbackActivity extends BaseActivity {
 	private static final String TAG = "FeedbackActivity";
 	private EditText mFeedbacktext ;
 	private JSONObject jobj;

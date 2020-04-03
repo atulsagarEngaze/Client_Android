@@ -80,7 +80,7 @@
                         android:layout_gravity="top"
                         android:gravity="top"
                         android:maxWidth="130dip"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@color/primaryText"
                         android:textSize="@dimen/small_text_size" />
 
                     <TextView
@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/user_currentKnownPlace"
                         android:maxWidth="120dip"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@color/secondaryText"
                         android:textSize="@dimen/extra_small_text_size"
                          />
                 </RelativeLayout>
@@ -108,7 +108,7 @@
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
                         android:text="@string/label_runningEvent_acceptedLocationUnavailable"
-                        android:textColor="@color/colorHintDisable"
+                        android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
                 </RelativeLayout>
 
@@ -126,7 +126,7 @@
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
                         android:text="@string/label_runningEvent_declined"
-                        android:textColor="@color/colorHintDisable"
+                        android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
                 </RelativeLayout>
 
@@ -144,7 +144,7 @@
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
                         android:text="@string/label_runningEvent_yetToRespond"
-                        android:textColor="@color/colorHintDisable"
+                        android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
                 </RelativeLayout>
             </LinearLayout>
@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding"
             android:layout_marginTop="@dimen/padding"
-            android:background="@color/divider_secondary" >
+            android:background="@color/dividerSecondary" >
         </View>
     </LinearLayout>
 

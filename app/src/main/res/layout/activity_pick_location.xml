@@ -41,7 +41,7 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="@dimen/padding"
-            android:background="@color/colorBackground"
+            android:background="@color/primaryBackground"
             android:elevation="5dip"
             android:focusable="true"
             android:focusableInTouchMode="true" >
@@ -66,7 +66,7 @@
                 android:background="@android:color/transparent"
                 android:hint="@string/location_search_bar_hint"
                 android:textAlignment="center"
-                android:textColorHint="@color/colorHintDisable"
+                android:textColorHint="@color/hintDisable"
                 android:textSize="@dimen/small_text_size" >
             </TextView>
         </RelativeLayout>
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/paddinghalf"
-            android:background="@color/colorBackground"
+            android:background="@color/primaryBackground"
             android:clipChildren="false"
             android:elevation="15dip" >
 
@@ -118,7 +118,7 @@
                 android:layout_marginLeft="@dimen/padding"
                 android:layout_marginRight="@dimen/padding"
                 android:layout_marginTop="24dip"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/primaryText"
                 android:textSize="@dimen/primary_text_size" />
 
             <TextView
@@ -129,7 +129,7 @@
                 android:layout_marginBottom="@dimen/padding"
                 android:layout_marginLeft="@dimen/padding"
                 android:layout_marginRight="@dimen/padding"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/secondaryText"
                 android:textSize="12sp" />
         </RelativeLayout>
     </RelativeLayout>

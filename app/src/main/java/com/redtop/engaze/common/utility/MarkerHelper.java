@@ -24,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
-import com.redtop.engaze.BaseActivity1;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.UsersLocationDetail;

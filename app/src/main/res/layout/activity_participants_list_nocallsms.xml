@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackground"
+    android:background="@color/primaryBackground"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackground_secondary"
+        android:background="@color/secondaryBackground"
         android:padding="@dimen/padding" >
 
         <TextView
@@ -24,7 +24,7 @@
         style="@style/Divider"
         android:layout_marginBottom="0dip"
         android:layout_marginTop="0dip" 
-        android:background="@color/divider_secondary"/>
+        android:background="@color/dividerSecondary"/>
 
     <ListView
         android:id="@+id/list_event_participants"

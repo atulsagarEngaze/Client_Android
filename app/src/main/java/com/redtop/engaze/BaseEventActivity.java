@@ -36,7 +36,7 @@ import com.redtop.engaze.domain.manager.EventManager;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
-public abstract class BaseEventActivity extends BaseActivity1 {
+public abstract class BaseEventActivity extends BaseActivity {
     protected int mDurationTime = 0;
     protected int mDurationOffset;
     protected TextView mQuickEventName;

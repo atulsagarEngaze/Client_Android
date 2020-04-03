@@ -3,7 +3,7 @@
     android:id="@+id/InviteeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/primaryBackground"
     android:clipChildren="false"
     android:orientation="vertical" >
 
@@ -56,7 +56,7 @@
             android:paddingLeft="@dimen/padding"
             android:paddingTop="@dimen/paddinghalf"
             android:text="@string/message_contacts_empty_header"
-            android:textColor="@color/colorBackground"
+            android:textColor="@color/primaryBackground"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -86,7 +86,7 @@
         android:layout_marginBottom="2dip"
         android:layout_marginTop="0dip"
         android:animateLayoutChanges="true"
-        android:background="@color/colorBackground_secondary"
+        android:background="@color/secondaryBackground"
         android:clipChildren="false"
         android:elevation="2dip"
         android:minHeight="56dip" >

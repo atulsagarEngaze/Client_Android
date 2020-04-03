@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.Duration;
 
-public class DurationOffset extends BaseActivity1 {
+public class DurationOffset extends BaseActivity {
 
     private ArrayList<TextView> periods;
     private Duration duration = null;

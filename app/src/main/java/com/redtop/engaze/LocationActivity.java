@@ -393,7 +393,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
                         try {
                             status.startResolutionForResult(
-                                    (BaseActivity1) mContext,
+                                    (BaseActivity) mContext,
                                     CHECK_SETTINGS_REQUEST_CODE);
                         } catch (SendIntentException e) {
                             // Ignore the error.

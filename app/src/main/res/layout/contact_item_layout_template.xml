@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/ic_clear_black_18dp" 
-        android:backgroundTint="@color/secondary_text"     
+        android:backgroundTint="@color/secondaryText"
         />           
 
 </LinearLayout>

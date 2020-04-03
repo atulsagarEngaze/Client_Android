@@ -14,7 +14,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventParticipant;
 @SuppressWarnings("deprecation")
-public class EventParticipantsInfo extends BaseActivity1 {
+public class EventParticipantsInfo extends BaseActivity {
 private TextView tvHeader;
 	private ArrayList<EventParticipant> eventMembers;
 	/** Called when the activity is first created. */

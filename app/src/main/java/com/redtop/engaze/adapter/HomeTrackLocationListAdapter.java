@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.redtop.engaze.BaseActivity1;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
@@ -119,7 +119,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                 ((BaseEventActivity) mContext).notificationselectedEvent = ed;
                 Intent intent = new Intent(mContext, SnoozeOffset.class);
                 intent.putExtra("FromHomeLayout", true);
-                ((BaseActivity1) mContext).startActivityForResult(intent, Constants.SNOOZING_REQUEST_CODE);
+                ((BaseActivity) mContext).startActivityForResult(intent, Constants.SNOOZING_REQUEST_CODE);
             }
         });
         holder.txtStop.setOnClickListener(new OnClickListener() {

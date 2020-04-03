@@ -1,6 +1,6 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:color="@color/primary_light" >
+    android:color="@color/primaryLight" >
 
     <item>
         <shape android:shape="rectangle" >

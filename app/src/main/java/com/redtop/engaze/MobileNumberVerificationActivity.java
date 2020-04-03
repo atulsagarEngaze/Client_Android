@@ -36,7 +36,7 @@ import com.redtop.engaze.common.PreffManager;
 import com.redtop.engaze.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
 
-public class MobileNumberVerificationActivity extends BaseActivity1 {
+public class MobileNumberVerificationActivity extends BaseActivity {
 	private EditText mMobileNumberEdittext;
 	private EditText mCountryCode;
 	private EditText mOtpText;

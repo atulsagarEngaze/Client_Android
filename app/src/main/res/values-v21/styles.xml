@@ -72,8 +72,8 @@
 
     <style name="ETMaterialTheme.Toolbar">
         <item name="android:elevation">5dip</item>
-        <item name="colorControlNormal">@color/colorBackground</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorControlNormal">@color/primaryBackground</item>
+        <item name="android:colorBackground">@color/primaryBackground</item>
         <item name="android:textColor">@color/icon</item>
     </style>
 

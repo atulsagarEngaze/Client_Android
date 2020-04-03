@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/primaryBackground"
     tools:context="com.redtop.engaze.FeedbackActivity" >
 
     <android.support.v7.widget.Toolbar
@@ -21,8 +21,8 @@
         android:padding="@dimen/padding"
         android:singleLine="false"
         android:textAlignment="textStart"
-        android:textColorHint="@color/colorHintDisable" 
-        android:textColor="@color/primary_text">
+        android:textColorHint="@color/hintDisable"
+        android:textColor="@color/primaryText">
         <requestFocus />
         </EditText>
 

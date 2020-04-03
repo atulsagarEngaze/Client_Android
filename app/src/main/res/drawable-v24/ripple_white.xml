@@ -4,7 +4,7 @@
     android:color="@color/icon" >
     <item>
         <shape android:shape="oval" >
-            <solid android:color="@color/colorBackground" />
+            <solid android:color="@color/primaryBackground" />
         </shape>
     </item>
 

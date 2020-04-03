@@ -31,7 +31,7 @@ import com.redtop.engaze.domain.service.ParticipantService;
 
 @SuppressLint("ResourceAsColor")
 public class RunningEventActivityResults extends RunningEventLocationRefresh {
-    private BaseActivity1 activity;
+    private BaseActivity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                                 final String distance = gd.getTotalDistanceText(doc);
                                 final String duration = gd.getTotalDurationText(doc);
                                 //						gd.animateDirection(mMap, gd.getDirection(doc), GoogleDirection.SPEED_VERY_FAST
-                                //								, true, true, true, false, null, false, true, new PolylineOptions().width(5).color(mContext.getResources().getColor(R.color.primary_dark)));
+                                //								, true, true, true, false, null, false, true, new PolylineOptions().width(5).color(mContext.getResources().getColor(R.color.primaryDark)));
                                 if (mPreviousPolyline != null) {
                                     mPreviousPolyline.remove();
                                 }

@@ -7,9 +7,9 @@
         android:height="40dip"
         android:width="40dp" >
     </size>
-    <solid  android:color="@color/divider_secondary"/>
+    <solid  android:color="@color/dividerSecondary"/>
     <stroke
         android:width="1px"
-        android:color="@color/divider_secondary" />
+        android:color="@color/dividerSecondary" />
 
 </shape>

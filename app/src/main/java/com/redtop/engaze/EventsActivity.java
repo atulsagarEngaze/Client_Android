@@ -51,7 +51,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 @SuppressLint({ "NewApi", "Recycle" })
-public class EventsActivity extends BaseActivity1 implements NavDrawerFragment.FragmentDrawerListener, IActionHandler {
+public class EventsActivity extends BaseActivity implements NavDrawerFragment.FragmentDrawerListener, IActionHandler {
 
 
 	private ViewPager pager;

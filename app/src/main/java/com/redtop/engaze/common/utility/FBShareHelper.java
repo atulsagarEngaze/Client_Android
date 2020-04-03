@@ -15,17 +15,17 @@ import com.facebook.login.LoginResult;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.redtop.engaze.BaseActivity1;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.R;
 
 public class FBShareHelper {
 
-	private BaseActivity1 mActivity;
+	private BaseActivity mActivity;
 	private  CallbackManager mCallbackManager;
 	private ShareDialog mShareDialog;
 	
 	public FBShareHelper(Context context){
-		mActivity = (BaseActivity1)context;
+		mActivity = (BaseActivity)context;
 	}
 	
 	public CallbackManager getFBCallbackManager(){

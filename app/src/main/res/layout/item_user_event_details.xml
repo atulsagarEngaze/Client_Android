@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/secondaryText"
             android:textSize="@dimen/small_text_size" />
     </LinearLayout>
 
@@ -40,6 +40,6 @@
         android:layout_height="wrap_content"       
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
-        android:background="@color/divider_secondary" >
+        android:background="@color/dividerSecondary" >
     </View>
 </android.support.v7.widget.CardView>

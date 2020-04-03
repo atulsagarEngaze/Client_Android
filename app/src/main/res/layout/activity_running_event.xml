@@ -4,7 +4,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground" >
+    android:background="@color/primaryBackground" >
 
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="34dp"
         android:layout_below="@+id/running_event_toolbar"
-        android:background="@color/colorBackground_secondary"
+        android:background="@color/secondaryBackground"
         android:clipChildren="false"
         android:elevation="3dp" >
 
@@ -108,7 +108,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="12dip"
                 android:layout_marginRight="12dip"
-                android:background="@color/colorBackground"
+                android:background="@color/primaryBackground"
                 android:elevation="5dip"
                 android:text="Re-Center"
                 android:textAlignment="center"
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="84dip"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorBackground"
+            android:background="@color/primaryBackground"
             android:clipChildren="false"
             android:elevation="25dip" >
 

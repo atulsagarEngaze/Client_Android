@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/paddingQuarter"
         android:gravity="left|center_vertical"
-        android:textColor="@color/primary_text" />
+        android:textColor="@color/primaryText" />
 
     <TextView
         android:id="@+id/distance_endpoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:textColor="@color/primary_text" />
+        android:textColor="@color/primaryText" />
 
 </LinearLayout>

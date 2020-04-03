@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.redtop.engaze.BaseActivity1;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.LocationActivity;
 import com.redtop.engaze.R;
 import com.redtop.engaze.adapter.CachedLocationAdapter;
@@ -197,7 +197,7 @@ public class LocationViewManager implements  OnItemClickListener, OnClickListene
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!hasFocus) {
-			((BaseActivity1)activity).hideKeyboard(v);
+			((BaseActivity)activity).hideKeyboard(v);
 		}		
 	}
 

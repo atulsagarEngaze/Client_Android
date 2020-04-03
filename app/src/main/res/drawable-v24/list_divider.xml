@@ -4,7 +4,7 @@
     android:insetRight="4dp" >
 
  <shape>
-    <solid android:color="@color/divider_secondary" />
+    <solid android:color="@color/dividerSecondary" />
     <corners android:radius="1.0dp" />
 </shape>
 

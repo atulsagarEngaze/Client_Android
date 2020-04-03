@@ -35,7 +35,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="@dimen/paddinghalf"
                 android:layout_marginTop="@dimen/paddinghalf"
-                android:textColor="@color/colorBackground"
+                android:textColor="@color/primaryBackground"
                 android:textSize="@dimen/primary_text_size" >
             </TextView>
 
@@ -48,7 +48,7 @@
                 android:layout_marginBottom="@dimen/paddinghalf"
                 android:layout_marginTop="0dip"
                 android:textAlignment="center"
-                android:textColor="@color/colorBackground"
+                android:textColor="@color/primaryBackground"
                 android:textSize="26sp"
                 android:gravity="center_horizontal">
             </TextView>
@@ -61,7 +61,7 @@
                 android:layout_below="@+id/txt_event_date"
                 android:layout_marginBottom="@dimen/paddinghalf"
                 android:layout_marginTop="0dip"
-                android:textColor="@color/colorBackground"
+                android:textColor="@color/primaryBackground"
                 android:textSize="@dimen/primary_text_size" >
             </TextView>
 
@@ -74,7 +74,7 @@
                 android:layout_marginTop="0dip"
                 android:paddingRight="12dip"
                 android:paddingLeft="12dip"
-                android:textColor="@color/colorBackground"
+                android:textColor="@color/primaryBackground"
                 android:textSize="@dimen/primary_text_size" >
             </TextView>
         </RelativeLayout>
@@ -154,7 +154,7 @@
                     android:layout_marginTop="0dip"
                     android:paddingBottom="0dip"
                     android:paddingTop="0dip"
-                    android:textColor="@color/primary_text" />
+                    android:textColor="@color/primaryText" />
 
                 <ImageView
                     android:id="@+id/img_event_type"

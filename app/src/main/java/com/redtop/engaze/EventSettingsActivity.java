@@ -19,7 +19,7 @@ import com.redtop.engaze.domain.Reminder;
 import androidx.appcompat.widget.Toolbar;
 
 @SuppressWarnings("deprecation")
-public class EventSettingsActivity extends BaseActivity1 {
+public class EventSettingsActivity extends BaseActivity {
 
 	private ArrayList<TextView> reminderPeriods;	
 	private ArrayList<TextView>notificationTypes;

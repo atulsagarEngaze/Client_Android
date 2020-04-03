@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground" >
+    android:background="@color/primaryBackground" >
 
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorBackground"
+        android:background="@color/primaryBackground"
         android:clipChildren="false"
         android:elevation="15dip" >
 
@@ -35,7 +35,7 @@
             android:layout_marginLeft="@dimen/padding"
             android:layout_marginRight="@dimen/padding"
             android:layout_marginTop="@dimen/padding"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/primaryText"
             android:textSize="@dimen/primary_text_size" />
 
         <TextView
@@ -46,7 +46,7 @@
             android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/padding"
             android:layout_marginRight="@dimen/padding"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/secondaryText"
             android:textSize="12sp" />
     </RelativeLayout>
 

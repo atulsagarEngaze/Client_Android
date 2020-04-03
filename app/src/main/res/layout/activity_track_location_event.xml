@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/primaryBackground"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical" >
@@ -47,7 +47,7 @@
                     android:paddingBottom="@dimen/paddinghalf"
                     android:paddingTop="@dimen/paddinghalf"
                     android:singleLine="false"
-                    android:textColorHint="@color/colorHintDisable" >
+                    android:textColorHint="@color/hintDisable" >
                 </EditText>
             </RelativeLayout>
 
@@ -160,7 +160,7 @@
                         android:layout_marginTop="@dimen/padding"
                         android:background="@android:color/transparent"
                         android:hint="@string/share_my_location_location_hint"
-                        android:textColorHint="@color/colorHintDisable" >
+                        android:textColorHint="@color/hintDisable" >
                     </TextView>
 
                     <ImageView
@@ -190,7 +190,7 @@
                 android:background="@drawable/ripple_event_save_buttton"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/share_my_location_text_start_button"
-                android:textColor="@color/colorBackground"
+                android:textColor="@color/primaryBackground"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>

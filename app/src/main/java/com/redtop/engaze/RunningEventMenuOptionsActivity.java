@@ -28,11 +28,10 @@ import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.service.ParticipantService;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 @SuppressWarnings("deprecation")
-public class RunningEventMenuOptionsActivity extends BaseActivity1 implements OnItemClickListener, IActionHandler {
+public class RunningEventMenuOptionsActivity extends BaseActivity implements OnItemClickListener, IActionHandler {
 
 	protected ArrayList<NameImageItem> mUserMenuItems;
 	private String mEventId;

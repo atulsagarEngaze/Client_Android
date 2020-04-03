@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:background="@color/colorBackground"
+    android:background="@color/primaryBackground"
     android:orientation="vertical" >
 
     <TextView
@@ -45,7 +45,7 @@
             android:paddingTop="30dp"
             android:text="From"
             android:textStyle="bold"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/secondaryText"
             android:textSize="@dimen/primary_text_size" />
 
         <kankan.wheel.widget.WheelView

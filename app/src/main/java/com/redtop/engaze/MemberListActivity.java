@@ -26,7 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MemberListActivity extends BaseActivity1 implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener{
+public class MemberListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener{
 
 	ListView listView;
 	List<String> rowItems;

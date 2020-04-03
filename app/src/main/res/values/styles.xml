@@ -49,8 +49,8 @@
 
     <style name="ETMaterialTheme.Toolbar">
         <item name="android:elevation">5dip</item>
-        <item name="colorControlNormal">@color/colorBackground</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorControlNormal">@color/primaryBackground</item>
+        <item name="android:colorBackground">@color/primaryBackground</item>
         <item name="android:textColor">@color/icon</item>
     </style>
 
@@ -101,7 +101,7 @@
 
     <style name="radionbutton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:button">@drawable/radiobutton_drawable</item>
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">@dimen/padding</item>
         <item name="android:paddingRight">@dimen/padding</item>
@@ -126,7 +126,7 @@
         <item name="android:layout_marginTop">@dimen/padding</item>
         <item name="android:layout_marginBottom">@dimen/padding</item>
         <item name="android:layout_marginLeft">@dimen/padding</item>
-        <item name="android:background">@color/whiteText</item>
+        <item name="android:background">@color/white</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
@@ -160,7 +160,7 @@
     <style name="DividerSecondary">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/divider_secondary</item>
+        <item name="android:background">@color/dividerSecondary</item>
         <item name="android:layout_marginBottom">@dimen/paddinghalf</item>
         <item name="android:layout_marginTop">@dimen/paddinghalf</item>
     </style>
@@ -523,7 +523,7 @@
 
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@color/blackOverlay</item>
     </style>
 
     <!--<style name="NewDialog" parent="Theme.AppCompat.Dialog">
