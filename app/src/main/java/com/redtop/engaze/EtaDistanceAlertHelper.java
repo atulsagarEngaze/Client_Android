@@ -3,7 +3,7 @@ package com.redtop.engaze;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import kankan.wheel.widget.OnWheelChangedListener;
+import  kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.ArrayWheelAdapter;
@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 
 import com.redtop.engaze.Interface.IActionHandler;
-import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
@@ -57,7 +56,7 @@ public class EtaDistanceAlertHelper {
 		//Create a custom dialog with the dialog_date.xml file
 		reminderDialog = new Dialog(AppContext.context);
 		reminderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		reminderDialog.setContentView(R.layout.activity_etadistancereminder);		
+		reminderDialog.setContentView(R.layout.activity_etadistancereminder);
 		final Button cancelRemove = (Button)reminderDialog.findViewById(R.id.eta_cancel);
 		TextView etaExisting = (TextView) reminderDialog.findViewById(R.id.eta_existing);
 		etaExisting.setVisibility(View.GONE);
@@ -88,11 +87,11 @@ public class EtaDistanceAlertHelper {
 		
 		metersAdapter =	new ArrayWheelAdapter<String>(AppContext.context, new String[] {"100","250","500","750"});
 		metersAdapter.setItemResource(R.layout.wheel_item);
-		metersAdapter.setItemTextResource(R.id.distance_item);	
+		metersAdapter.setItemTextResource(R.id.distance_item);
 		
 		kmsAdapter = new NumericWheelAdapter(AppContext.context, 1, 10);
 		kmsAdapter.setItemResource(R.layout.wheel_item);
-		kmsAdapter.setItemTextResource(R.id.distance_item);	
+		kmsAdapter.setItemTextResource(R.id.distance_item);
 		kms.setViewAdapter(kmsAdapter);    
 		kms.setCyclic(true);
 
@@ -107,7 +106,7 @@ public class EtaDistanceAlertHelper {
 		else{
 			fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[] {"Me"});
 		}
-		fromAdapter.setItemResource(R.layout.wheel_text_item);
+		fromAdapter.setItemResource(R.layout.wheel_item_time);
 		fromAdapter.setItemTextResource(R.id.wheel_text);
 		from.setViewAdapter(fromAdapter);
 		from.setTextAlignment(Gravity.CENTER);
