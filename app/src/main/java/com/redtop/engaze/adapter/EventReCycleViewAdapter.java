@@ -99,61 +99,66 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         setDescriptionLayout(ed, viewHolder);
 
         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            Date startDate = originalformat.parse(ed.StartTime);
+            Date endDate = originalformat.parse(ed.EndTime);
+            Date currentDate = Calendar.getInstance().getTime();
 
-        Date currentDate = Calendar.getInstance().getTime();
+            if (endDate.getTime() >= currentDate.getTime() && currentDate.getTime() > startDate.getTime()) {
+                viewHolder.runningStatus = true;
+            } else {
+                viewHolder.runningStatus = false;
+            }
 
-        if (ed.EndTime.getTime() >= currentDate.getTime() && currentDate.getTime() > ed.StartTime.getTime()) {
-            viewHolder.runningStatus = true;
-        } else {
-            viewHolder.runningStatus = false;
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+
+            viewHolder.eventStartDayOfWeek = DateUtil.getDayOfWeek(cal);
+            viewHolder.eventStartDayOfMonth = DateUtil.getDayOfMonth(cal);
+            viewHolder.eventStartMonth = DateUtil.getShortMonth(cal);
+            viewHolder.eventStartYear = DateUtil.getYear(cal);
+            viewHolder.eventStartTime = DateUtil.getTime(cal);
+
+            viewHolder.txtEventStartDayOfWeek.setText(viewHolder.eventStartDayOfWeek);
+            viewHolder.txtEventStartDayOfMonth.setText(viewHolder.eventStartDayOfMonth);
+            viewHolder.txtEventStartMonth.setText(viewHolder.eventStartMonth);
+            viewHolder.txtEventStartYear.setText(viewHolder.eventStartYear);
+            viewHolder.txtEventStartTime.setText(viewHolder.eventStartTime);
+
+            viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
+
+            cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
+
+
+            if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
+                viewHolder.trackingStatus = true;
+                viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.trackingStatus = false;
+                viewHolder.imgEventTrackingOn.setVisibility(View.GONE);
+            }
+
+            Calendar calEndDate = Calendar.getInstance();
+            calEndDate.setTime(endDate);
+
+            viewHolder.eventEndDayOfWeek = DateUtil.getDayOfWeek(calEndDate);
+            viewHolder.eventEndDayOfMonth = DateUtil.getDayOfMonth(calEndDate);
+            viewHolder.eventEndMonth = DateUtil.getShortMonth(calEndDate);
+            viewHolder.eventEndYear = DateUtil.getYear(calEndDate);
+            viewHolder.eventEndTime = DateUtil.getTime(calEndDate);
+            if (!(viewHolder.eventEndDayOfMonth.equals(viewHolder.eventStartDayOfMonth)
+                    && viewHolder.eventEndMonth.equals(viewHolder.eventStartMonth)
+                    && viewHolder.eventEndYear.equals(viewHolder.eventStartYear))) {
+                String dateToAppend = viewHolder.eventEndMonth + " " + viewHolder.eventEndDayOfMonth + " " + viewHolder.eventEndYear;
+                viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime + ", " + dateToAppend);
+            } else {
+                viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime);
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(ed.StartTime);
-
-        viewHolder.eventStartDayOfWeek = DateUtil.getDayOfWeek(cal);
-        viewHolder.eventStartDayOfMonth = DateUtil.getDayOfMonth(cal);
-        viewHolder.eventStartMonth = DateUtil.getShortMonth(cal);
-        viewHolder.eventStartYear = DateUtil.getYear(cal);
-        viewHolder.eventStartTime = DateUtil.getTime(cal);
-
-        viewHolder.txtEventStartDayOfWeek.setText(viewHolder.eventStartDayOfWeek);
-        viewHolder.txtEventStartDayOfMonth.setText(viewHolder.eventStartDayOfMonth);
-        viewHolder.txtEventStartMonth.setText(viewHolder.eventStartMonth);
-        viewHolder.txtEventStartYear.setText(viewHolder.eventStartYear);
-        viewHolder.txtEventStartTime.setText(viewHolder.eventStartTime);
-
-        viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
-
-        cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
-
-
-        if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
-            viewHolder.trackingStatus = true;
-            viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.trackingStatus = false;
-            viewHolder.imgEventTrackingOn.setVisibility(View.GONE);
-        }
-
-        Calendar calEndDate = Calendar.getInstance();
-        calEndDate.setTime(ed.EndTime);
-
-        viewHolder.eventEndDayOfWeek = DateUtil.getDayOfWeek(calEndDate);
-        viewHolder.eventEndDayOfMonth = DateUtil.getDayOfMonth(calEndDate);
-        viewHolder.eventEndMonth = DateUtil.getShortMonth(calEndDate);
-        viewHolder.eventEndYear = DateUtil.getYear(calEndDate);
-        viewHolder.eventEndTime = DateUtil.getTime(calEndDate);
-        if (!(viewHolder.eventEndDayOfMonth.equals(viewHolder.eventStartDayOfMonth)
-                && viewHolder.eventEndMonth.equals(viewHolder.eventStartMonth)
-                && viewHolder.eventEndYear.equals(viewHolder.eventStartYear))) {
-            String dateToAppend = viewHolder.eventEndMonth + " " + viewHolder.eventEndDayOfMonth + " " + viewHolder.eventEndYear;
-            viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime + ", " + dateToAppend);
-        } else {
-            viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime);
-        }
-
-
         if (ed.IsRecurrence.equals("true")) {
             viewHolder.btnRecurrence.setVisibility(View.VISIBLE);
             viewHolder.btnRecurrence.setOnClickListener(new OnClickListener() {

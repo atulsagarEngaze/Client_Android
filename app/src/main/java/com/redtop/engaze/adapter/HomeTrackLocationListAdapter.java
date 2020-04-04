@@ -230,20 +230,22 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         if (acceptanceStatus == acceptanceStatus.ACCEPTED) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
+            try {
+                calendar.setTime(sdf.parse(event.EndTime));
+                long diffMinutes = (calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
+                String timeLeft = DateUtil.getDurationText(diffMinutes);
 
-            calendar.setTime(event.EndTime);
-            long diffMinutes = (calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
-            String timeLeft = DateUtil.getDurationText(diffMinutes);
+                calendar = Calendar.getInstance();
+                
+                calendar.setTime(sdf.parse(event.StartTime));
+                String startTime = DateUtil.getTime(calendar);
 
-            calendar = Calendar.getInstance();
-
-            Date startParsedDate = event.StartTime;
-            calendar.setTime(startParsedDate);
-            String startTime = DateUtil.getTime(calendar);
-
-            timeInfoTxt = String.format(mContext.getResources().getString(R.string.track_location_timeinfo_text),
-                    startTime, timeLeft);
-
+                timeInfoTxt = String.format(mContext.getResources().getString(R.string.track_location_timeinfo_text),
+                        startTime, timeLeft);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
 
         } else {
             if (event.EventType == EventType.SHAREMYLOACTION) { // Share my Location
