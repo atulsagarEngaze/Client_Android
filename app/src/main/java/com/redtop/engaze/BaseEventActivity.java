@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +23,9 @@ import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventState;
+import com.redtop.engaze.common.enums.EventType;
+import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.utility.DateUtil;
@@ -42,40 +44,27 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected int mDurationOffset;
     protected TextView mQuickEventName;
 
-    protected Event mEventData;
+
     protected TextView mEventLocationTextView;
     protected NameImageItem mEventTypeItem;
-    protected Reminder mReminder;
-    protected Duration mTracking;
-    protected Duration mDuration;
-    protected TextView mDurationtext;
+
+
+    protected TextView mDurationTextView;
     protected EventPlace mDestinationPlace;
-    protected AppLocationService mLh;
+    protected AppLocationService appLocationService;
     protected ImageView mEventTypeView;
     protected ArrayList<ContactOrGroup> mContactsAndgroups;
     protected String TAG;
     protected AlertDialog mAlertDialog;
     protected long mTrackingOffset = 0;
     protected long mReminderOffset = 0;
-    protected Date mStartDate;
-    protected String mEventId = null;
-    protected String mEventName;
 
-    protected String mEventDescription;
-    protected String mCreateUpdateSuccessfulMessage;
-    protected String mCreateUpdateUrl;
-    protected String mIsQuickEvent;
+
     protected JSONObject mEventJobj;
     protected Boolean mFromEventsActivity = true;
     //For Recurrence
     protected String mIsRecurrence = "false";
-    protected String mRecurrenceType;
-    protected String mNumberOfOccurences;
-    protected String mFrequencyOfOcuurence;
-    protected ArrayList<Integer> mRecurrencedays;
-    protected int mEventTypeId;
 
-    protected Event mNewEvent;
 
     public Event notificationselectedEvent;
 
@@ -85,12 +74,15 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected static final int DURATION_REQUEST_CODE = 5;
     protected static final int LOCATION_REQUEST_CODE = 7;
 
-    protected Event currentNewOrUpdateEvend;
+    protected Event createOrUpdateEvent;
+    protected String mCreateUpdateSuccessfulMessage;
+
+    protected Date startDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLh = new AppLocationService(this, this);
+        appLocationService = new AppLocationService(this, this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -119,22 +111,22 @@ public abstract class BaseEventActivity extends BaseActivity {
                     break;
 
                 case REMINDER_REQUEST_CODE:
-                    mReminder = (Reminder) data.getParcelableExtra("com.redtop.engaze.entity.Reminder");
-                    SetReminderText(mReminder);
+                    createOrUpdateEvent.Reminder = (Reminder) data.getParcelableExtra("com.redtop.engaze.entity.Reminder");
+                    SetReminderText(createOrUpdateEvent.Reminder);
                     break;
                 case TRACKING_REQUEST_CODE:
-                    mTracking = (Duration) data.getParcelableExtra("com.redtop.engaze.entity.Tracking");
-                    SetTrackingText(mTracking);
+                    createOrUpdateEvent.Tracking = (Duration) data.getParcelableExtra("com.redtop.engaze.entity.Tracking");
+                    SetTrackingText(createOrUpdateEvent.Tracking);
                     break;
 
                 case DURATION_REQUEST_CODE:
-                    mDuration = (Duration) data.getParcelableExtra("com.redtop.engaze.entity.Duration");
-                    SetDurationText(mDuration);
+                    createOrUpdateEvent.Duration = (Duration) data.getParcelableExtra("com.redtop.engaze.entity.Duration");
+                    SetDurationText(createOrUpdateEvent.Duration);
                     break;
 
                 case LOCATION_REQUEST_CODE:
                     mDestinationPlace = data.getParcelableExtra("DestinatonPlace");
-                    mLh.displayPlace(mDestinationPlace, mEventLocationTextView);
+                    appLocationService.displayPlace(mDestinationPlace, mEventLocationTextView);
 
                     break;
 
@@ -169,7 +161,7 @@ public abstract class BaseEventActivity extends BaseActivity {
                 holder = holder.replace("mins", "minutes");
             }
 
-            mDurationtext.setText(holder);
+            mDurationTextView.setText(holder);
 
         } else {
             Log.d(TAG, "inside else");
@@ -277,63 +269,65 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         long trackingOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(mStartDate);
+        startCal.setTime(startDate);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
 
         if (trackingOffset > diffMinutes) {
             trackingOffset = diffMinutes;
         }
-        currentNewOrUpdateEvend.setTrackingStartOffset(Double.toString(trackingOffset));
+        createOrUpdateEvent.TrackingStartOffset = (int) trackingOffset;
     }
 
     private void setReminderOffset() {
+
         long reminderOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(mStartDate);
+        startCal.setTime(startDate);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
         if (reminderOffset > diffMinutes) {
             reminderOffset = diffMinutes;
         }
 
-        currentNewOrUpdateEvend.setReminderOffset(Double.toString(reminderOffset));
+        createOrUpdateEvent.ReminderOffset = (int) reminderOffset;
+
     }
 
-    protected void saveEvent(final Boolean isMeetNow)  {
+    protected void saveEvent(final Boolean isMeetNow) {
 
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
         try {
-            EventManager.saveEvent(new JSONObject(AppContext.jsonParser.Serialize(currentNewOrUpdateEvend)), isMeetNow, mReminder, new OnEventSaveCompleteListner() {
+            EventManager.saveEvent(new JSONObject(AppContext.jsonParser.Serialize(createOrUpdateEvent)), isMeetNow, createOrUpdateEvent.Reminder, new OnEventSaveCompleteListner() {
 
-                 @Override
-                 public void eventSaveComplete(Event event) {
-                     Toast.makeText(getApplicationContext(),
-                             mCreateUpdateSuccessfulMessage,
-                             Toast.LENGTH_LONG).show();
-                     new Handler().post(new Runnable() {
-                         @Override
-                         public void run() {
-                             if (mDestinationPlace != null) {//when event is created without destination
-                                 DestinationCacher.cacheDestination(mDestinationPlace, mContext);
-                             }
-                         }
-                     });
-                     try {
-                         if (mEventJobj.getInt("EventTypeId") == 100) {
-                             gotoHomePage();
-                         } else if (mEventJobj.getInt("EventTypeId") == 200) {
-                             gotoTrackingPage(event.getEventId());
-                         } else if (isMeetNow) {
-                             gotoTrackingPage(event.getEventId());
-                         } else {
-                             gotoEventsPage();
-                         }
-                     } catch (JSONException e) {
-                         // TODO Auto-generated catch block
-                         e.printStackTrace();
-                     }
-                 }
+                @Override
+                public void eventSaveComplete(Event event) {
+                    Toast.makeText(getApplicationContext(),
+                            mCreateUpdateSuccessfulMessage,
+                            Toast.LENGTH_LONG).show();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mDestinationPlace != null) {//when event is created without destination
+                                DestinationCacher.cacheDestination(mDestinationPlace, mContext);
+                            }
+                        }
+                    });
+                    try {
+                        if (mEventJobj.getInt("EventTypeId") == 100) {
+                            gotoHomePage();
+                        } else if (mEventJobj.getInt("EventTypeId") == 200) {
+                            gotoTrackingPage(event.EventId);
+                        } else if (isMeetNow) {
+                            gotoTrackingPage(event.EventId);
+                        } else {
+                            gotoEventsPage();
+                        }
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
 
-             }, AppContext.actionHandler);
+            }, AppContext.actionHandler);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -380,35 +374,31 @@ public abstract class BaseEventActivity extends BaseActivity {
         });
     }
 
-    protected void  populateEventData() {
+    protected void populateEventData() {
+
         SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 
-        currentNewOrUpdateEvend.setStartTime(DateUtil.convertToUtcDateTime(parseFormat.format(mStartDate), parseFormat));
+        createOrUpdateEvent.StartTime = DateUtil.convertToUtcDateTime(parseFormat.format(createOrUpdateEvent.StartTime), parseFormat);
 
         Date endDate = null;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mStartDate);
+        calendar.setTime(startDate);
         calendar.add(Calendar.MINUTE, mDurationOffset);
         endDate = calendar.getTime();
-        currentNewOrUpdateEvend.setEndTime(DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat));//parseFormat.format(endDate);
+        createOrUpdateEvent.EndTime = DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat);//parseFormat.format(endDate);
 
-        currentNewOrUpdateEvend.setInitiatorId(AppContext.context.loginId);
-        currentNewOrUpdateEvend.setDuration(Integer.toString(mDurationOffset));
-        currentNewOrUpdateEvend.setState("1");
-        currentNewOrUpdateEvend.setTrackingState("1");
-        currentNewOrUpdateEvend.setIsTrackingRequired("True");
-        currentNewOrUpdateEvend.setEventTypeId(Integer.toString(mEventTypeItem.getImageIndex()));
-        currentNewOrUpdateEvend.setContactOrGroups(mContactsAndgroups);
+        createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
+        createOrUpdateEvent.Duration.setTimeInterval(mDurationOffset);
+        createOrUpdateEvent.State = EventState.TRACKING_ON;
+        createOrUpdateEvent.TrackingState = EventState.TRACKING_ON;
+        createOrUpdateEvent.IsTrackingRequired = true;
+        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeItem.getImageIndex());
+        createOrUpdateEvent.ContactOrGroups = mContactsAndgroups;
         setReminderOffset();
         setTrackingOffset();
-        currentNewOrUpdateEvend.setReminderType(mReminder.getNotificationType());
-
-        if (mDestinationPlace != null) {
-            currentNewOrUpdateEvend.setDestinationAddress(mDestinationPlace.getAddress());
-            currentNewOrUpdateEvend.setDestinationName(mEventLocationTextView.getText().toString());
-            currentNewOrUpdateEvend.setDestinationLatitude(Double.toString(mDestinationPlace.getLatLang().latitude));
-            currentNewOrUpdateEvend.setDestinationLongitude(Double.toString(mDestinationPlace.getLatLang().longitude));
-        }
+        /*createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());
+        createOrUpdateEvent.Destination = mDestinationPlace;
+*/
     }
 
 }

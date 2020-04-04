@@ -67,11 +67,11 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 
 		} else 
 			holder = (ViewHolder) convertView.getTag();
-		final String eventId = rowItem.getEventId();
+		final String eventId = rowItem.EventId;
 		SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		Date startDate = null;
 		try {
-			startDate = originalformat.parse(rowItem.getStartTime());
+			startDate = originalformat.parse(rowItem.StartTime);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 				DateUtil.getShortMonth(cal), DateUtil.getYear(cal),
 				DateUtil.getTime(cal));
 		
-		holder.txtEventName.setText(rowItem.getName());
+		holder.txtEventName.setText(rowItem.Name);
 		holder.txtEventStartTime.setText(startTime);
-		holder.txtInitiator.setText("from "+ rowItem.GetInitiatorName());
+		holder.txtInitiator.setText("from "+ rowItem.InitiatorName);
 		holder.txtAccept.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -100,11 +100,11 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.DECLINED);
 			}
 		});
-		if(EventService.isEventShareMyLocationEventForCurrentuser(rowItem)){
+		if(EventService.isEventShareMyLocationEventForCurrentUser(rowItem)){
 			holder.txtView.setVisibility(View.GONE);
 			holder.txtEventName.setText(mContext.getResources().getString(R.string.share_my_location_notification));
 		}
-		else if(EventService.isEventTrackBuddyEventForCurrentuser(rowItem)){
+		else if(EventService.isEventTrackBuddyEventForCurrentUser(rowItem)){
 			holder.txtView.setVisibility(View.GONE);
 			holder.txtEventName.setText(mContext.getResources().getString(R.string.track_my_buddy_text_notification)); 
 		}

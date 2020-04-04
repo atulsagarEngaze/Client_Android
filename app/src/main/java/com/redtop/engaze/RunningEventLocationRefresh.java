@@ -279,7 +279,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         ArrayList<UsersLocationDetail> temUldList = new ArrayList<UsersLocationDetail>();
         UsersLocationDetail tUl = null;
         temUldList.addAll(mUsersLocationDetailList);
-        for (EventParticipant em : mEvent.getParticipants()) {
+        for (EventParticipant em : mEvent.Participants) {
             Boolean isExist = false;
             tUl = null;
             for (UsersLocationDetail uld : temUldList) {
@@ -320,7 +320,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         Intent intent = new Intent(mContext, RunningEventMenuOptionsActivity.class);
         intent.putExtra("UserName", uld.getUserName());
         intent.putExtra("UserId", uld.getUserId());
-        intent.putExtra("EventId", mEvent.getEventId());
+        intent.putExtra("EventId", mEvent.EventId);
         intent.putExtra("AcceptanceStatus", uld.getAcceptanceStatus().getStatus());
         mContext.startActivity(intent);
         canRefreshUserLocation = false;

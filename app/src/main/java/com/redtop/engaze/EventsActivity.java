@@ -27,6 +27,7 @@ import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.EventsPagerAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.DurationConstants;
@@ -257,7 +258,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		ArrayList<Event> pl =  new ArrayList<Event>();
 		ArrayList<Event> dl =  new ArrayList<Event>();
 		for(Event ed : eventList){
-			if(Integer.parseInt(ed.getEventTypeId()) <= 100){
+			if(ed.EventType!= EventType.TRACKBUDDY){
 			switch (ed.getCurrentParticipant().getAcceptanceStatus()) {
 			case ACCEPTED:
 				al.add(ed);
@@ -338,12 +339,12 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 			case R.id.context_action_mute_unmute:
 
 				Drawable dr = null;
-				if(event.isMute){
-					event.isMute = false;
+				if(event.IsMute){
+					event.IsMute = false;
 					dr = getResources().getDrawable(R.drawable.event_unmute);
 				}
 				else{
-					event.isMute = true;
+					event.IsMute = true;
 					dr = getResources().getDrawable(R.drawable.event_mute);
 				}
 
@@ -362,14 +363,14 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 			case R.id.context_action_accept:
 
-				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.getEventId(),
+				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.EventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.getEventId(),
+				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.EventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
@@ -385,7 +386,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 				return true;
 			case R.id.context_action_delete:
 
-				if(ParticipantService.isCurrentUserInitiator(event.getInitiatorId())){
+				if(ParticipantService.isCurrentUserInitiator(event.InitiatorId)){
 
 					AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
 					// adb.setView(alertDialogView);

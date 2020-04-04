@@ -1,25 +1,18 @@
 package com.redtop.engaze.common.enums;
 
-
-public class EventState{
-    public static final String TRACKING_ON = "1";
-    public static final String TRACKING_OFF = "2";
-    public static final String EVENT_END = "3";
-    public static final String EVENT_OPEN = "4";
-}
-
-/*public enum EventState {
+public enum EventState {
     TRACKING_ON(1), TRACKING_OFF(2), EVENT_END(3), EVENT_OPEN(4), EVENT_UNDEFINED(0);
 
-    private final int state;
+    private final int stateId;
 
-    private EventState(int state) {
-        this.state = state;
+    private EventState(int stateId) {
+        this.stateId = stateId;
     }
 
-    public int getEventState() {
-        return state;
+    public int GetStateId() {
+        return this.stateId;
     }
+
 
     public static EventState getStatus(int stateID) {
         switch (stateID) {
@@ -38,4 +31,4 @@ public class EventState{
                 return EventState.EVENT_UNDEFINED;
         }
     }
-}*/
+}

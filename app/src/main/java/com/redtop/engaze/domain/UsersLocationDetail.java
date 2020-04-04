@@ -195,7 +195,7 @@ public class UsersLocationDetail implements Serializable {
     }
 
     public static List<UsersLocationDetail> createUserLocationListFromEventMembers(Event event, Context context) {
-        ArrayList<EventParticipant> memberList = event.getParticipants();
+        ArrayList<EventParticipant> memberList = event.Participants;
         ArrayList<UsersLocationDetail> usersLocationDetailList = new ArrayList<UsersLocationDetail>();
         UsersLocationDetail uld = null;
         for (EventParticipant mem : memberList) {

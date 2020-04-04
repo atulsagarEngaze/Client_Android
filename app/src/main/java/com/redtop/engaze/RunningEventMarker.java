@@ -39,9 +39,9 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 		if(mEvent!=null){
 			mMarkers = new ArrayList<Marker>();		
 			mShowRouteLoadedView = false;
-			mETADistanceMarkers = new ArrayList<Marker>();	
-			if(!mEvent.getDestinationLatitude().equals("null")){
-				mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
+			mETADistanceMarkers = new ArrayList<Marker>();
+			if (mEvent.Destination!=null) {
+				mDestinationlatlang = new LatLng(mEvent.Destination.getLatitude(), mEvent.Destination.getLongitude());
 			}
 		}
 	}

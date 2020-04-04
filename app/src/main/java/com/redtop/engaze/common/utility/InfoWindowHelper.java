@@ -60,8 +60,8 @@ public class InfoWindowHelper {
                     address = ud.getCurrentAddress();
                     userName = ud.getUserName();
                 } else {
-                    address = ed.getDestinationAddress();
-                    userName = ed.getDestinationName();
+                    address = ed.Destination.getAddress();
+                    userName = ed.Destination.getName();
                 }
 
                 View markerInfoWindow = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.custom_snippet, null);

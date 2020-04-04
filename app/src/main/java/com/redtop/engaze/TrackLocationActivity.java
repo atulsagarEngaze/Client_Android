@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Hashtable;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,14 +30,15 @@ import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
-import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 import com.redtop.engaze.webservice.Routes;
 
@@ -60,11 +60,10 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         mContext = this;
         mEventTypeId = this.getIntent().getIntExtra("EventTypeId", mEventTypeId);
         viewManager = new TrackLocationViewManager(mContext, mEventTypeId);
-        mDurationtext = viewManager.getDurationTextView();//have to do this because code of populating this is written in eventbase activity
+        mDurationTextView = viewManager.getDurationTextView();//have to do this because code of populating this is written in eventbase activity
         mQuickEventName = viewManager.getEventNameView();
         mEventLocationTextView = viewManager.getLocationTextView();
-        mCreateUpdateUrl = Routes.CREATE_EVENT;
-        populateEventData();
+        populateControlsAndDeafultEvenData();
 
         imgView = (ImageView) findViewById(R.id.icon_track_location_clear);
         imgView.setOnClickListener(new OnClickListener() {
@@ -78,17 +77,17 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
     }
 
-    private void populateEventData() {
+
+    protected void populateControlsAndDeafultEvenData() {
+
         initializeBasedOnEventType();
-
-
         mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", mEventTypeId);
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mDuration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
-        SetDurationText(mDuration);
+        createOrUpdateEvent.Duration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
+        SetDurationText(createOrUpdateEvent.Duration);
         if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
-            mDestinationPlace = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
+            createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
         if (!accessingContactsFirstTime()) {
@@ -139,26 +138,26 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     private void initializeBasedOnEventType() {
-        switch (mEventTypeId) {
-            case 100:
+        switch (createOrUpdateEvent.EventType) {
+            case SHAREMYLOACTION:
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.sharemylocation_event_create_successful);
-                mEventName = "S_" + AppContext.context.loginName + "_";
-                mEventDescription = "ShareMyLocationEvent";
-                mIsQuickEvent = "false";
+                createOrUpdateEvent.Name = "S_" + AppContext.context.loginName + "_";
+                createOrUpdateEvent.Description = "ShareMyLocationEvent";
+                createOrUpdateEvent.IsQuickEvent = false;
                 break;
-            case 200:
+            case TRACKBUDDY:
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.track_my_buddy_event_create_successful);
-                mEventName = "T_L_" + AppContext.context.loginName + "_B";
-                mEventDescription = "TrackBuddy";
-                mIsQuickEvent = "false";
+                createOrUpdateEvent.Name = "T_L_" + AppContext.context.loginName + "_B";
+                createOrUpdateEvent.Description = "TrackBuddy";
+                createOrUpdateEvent.IsQuickEvent = false;
                 break;
             default:
                 Calendar calendar_start = Calendar.getInstance();
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.meet_now_event_create_successful);
-                mEventName = "Meet " + AppContext.context.loginName + " @" + DateUtil.getTime(calendar_start);
-                mQuickEventName.setText(mEventName);
-                mEventDescription = "QuickEvent";
-                mIsQuickEvent = "true";
+                createOrUpdateEvent.Name = "Meet " + AppContext.context.loginName + " @" + DateUtil.getTime(calendar_start);
+                mQuickEventName.setText(createOrUpdateEvent.Name);
+                createOrUpdateEvent.Description = "QuickEvent";
+                createOrUpdateEvent.IsQuickEvent = true;
                 break;
         }
     }
@@ -177,7 +176,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
     public void SaveEvent() {
 
-        mEventJobj = createEventJSON();
+        populateEventData();
+
         if (!validateInputData()) {
             return;
         }
@@ -201,14 +201,14 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         return true;
     }
 
-    private JSONObject createEventJSON() {
+    @Override
+    protected void populateEventData() {
         Calendar calendar_start = Calendar.getInstance();
-        if (mIsQuickEvent == "true") {
-            mEventName = mQuickEventName.getText().toString();
+        if (createOrUpdateEvent.IsQuickEvent) {
+            createOrUpdateEvent.Name = mQuickEventName.getText().toString();
         }
-        mStartDate = calendar_start.getTime();
-
-        return super.createEventJson();
+        startDate = calendar_start.getTime();
+        super.populateEventData();
     }
 
     @Override
@@ -248,7 +248,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
             case R.id.tracklocation_Duration_holder:
                 intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", mDuration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", createOrUpdateEvent.Duration);
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
                 break;
             case R.id.btn_tracking_start:

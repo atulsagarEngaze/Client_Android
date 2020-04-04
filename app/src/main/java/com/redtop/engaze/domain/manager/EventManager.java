@@ -25,6 +25,7 @@ import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -60,7 +61,7 @@ public class EventManager {
         if (list != null) {
             for (Event e : list) {
                 if (e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
-                        && e.getState().equals(EventState.TRACKING_ON)) {
+                        && e.State == EventState.TRACKING_ON) {
                     runningList.add(e);
                 }
             }
@@ -98,7 +99,7 @@ public class EventManager {
             return;
         }
 
-        event.setState(EventState.TRACKING_ON);
+        event.State = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
         EventTrackerLocationService.peroformSartStop();
 
@@ -113,7 +114,7 @@ public class EventManager {
             return;
         }
 
-        event.setState(EventState.TRACKING_ON);
+        event.State = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
         EventTrackerLocationService.peroformSartStop();
 
@@ -127,7 +128,7 @@ public class EventManager {
             Log.d(TAG, message);
             return;
         }
-        event.setState(EventState.EVENT_END);
+        event.State = EventState.EVENT_END;
         EventNotificationManager.cancelAllNotifications(event);
         EventTrackerLocationService.peroformSartStop();
         InternalCaching.removeEventFromCache(eventid);
@@ -153,12 +154,12 @@ public class EventManager {
 
                     if (Status == "true") {
                         Event eventData = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
-                        int eventTypeId = Integer.parseInt(eventData.getEventTypeId());
+                        EventType eventType = eventData.EventType;
                         EventService.setEndEventAlarm(eventData);
                         if (isMeetNow) {
-                            eventData.setState(EventState.TRACKING_ON);
-                            eventData.isQuickEvent = "true";
-                        } else if (eventTypeId == 100 || eventTypeId == 200) {
+                            eventData.State = EventState.TRACKING_ON;
+                            eventData.IsQuickEvent = true;
+                        } else if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
                         } else {
                             EventService.setTracking(eventData);
                             EventService.setEventStarAlarm(eventData);
@@ -167,8 +168,8 @@ public class EventManager {
 
                             }
                             EventService.setEventReminder(eventData);
-                            eventData.setState(EventState.EVENT_OPEN);
-                            eventData.isQuickEvent = "false";
+                            eventData.State = EventState.EVENT_OPEN;
+                            eventData.IsQuickEvent = false;
                         }
                         EventNotificationManager.cancelNotification(eventData);
                         InternalCaching.saveEventToCache(eventData);
@@ -229,10 +230,10 @@ public class EventManager {
                                     setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
                             SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-                            Date startDate = originalformat.parse(event.getStartTime());
+                            Date startDate = originalformat.parse(event.StartTime);
                             Date currentDate = Calendar.getInstance().getTime();
                             if (currentDate.getTime() >= startDate.getTime()) { //quick event
-                                event.setState(EventState.TRACKING_ON);
+                                event.State = EventState.TRACKING_ON;
                             } else {
                                 EventService.setEventStarAlarm(event);
                                 EventService.setEventReminder(event);
@@ -288,8 +289,8 @@ public class EventManager {
                     if (Status == "true") {
                         List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                         Event event = eventList.get(0);
-                        if (EventService.isEventShareMyLocationEventForCurrentuser(event)) {
-                            event.setState(EventState.TRACKING_ON);
+                        if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+                            event.State = EventState.TRACKING_ON;
                         }
                         InternalCaching.saveEventToCache(event);
                         EventService.setEndEventAlarm(event);
@@ -336,7 +337,7 @@ public class EventManager {
             return;
         }
 
-        final String eventid = event.getEventId();
+        final String eventid = event.EventId;
 
         EventWS.leaveEvent(eventid, new OnAPICallCompleteListner() {
 
@@ -394,9 +395,9 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.ENDEVENT);
             return;
         }
-        final String eventid = event.getEventId();
+        final String eventid = event.EventId;
 
-        EventWS.endEvent(event.getEventId(), new OnAPICallCompleteListner() {
+        EventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -412,7 +413,7 @@ public class EventManager {
 
                         // Remove the event related items from preferences
                         PreffManager.removePref(eventid);
-                        for (EventParticipant i : event.getParticipants()) {
+                        for (EventParticipant i : event.Participants) {
                             PreffManager.removePref(i.getUserId());
                         }
 
@@ -454,9 +455,9 @@ public class EventManager {
             actionHandler.actionFailed(message, Action.DELETEEVENT);
             return;
         }
-        final String eventid = event.getEventId();
+        final String eventid = event.EventId;
 
-        EventWS.endEvent(event.getEventId(), new OnAPICallCompleteListner() {
+        EventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -469,7 +470,7 @@ public class EventManager {
                         InternalCaching.removeEventFromCache(eventid);
                         //LocalBroadCast
                         Intent intent = new Intent(IntentConstants.EVENT_DELETE_BY_INITIATOR);
-                        intent.putExtra("eventId", event.getEventId());
+                        intent.putExtra("eventId", event.EventId);
                         LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
                         actionHandler.actionComplete(Action.DELETEEVENT);
                     } else {
@@ -507,7 +508,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.CHANGEDESTINATION);
             return;
         }
-        final String eventId = event.getEventId();
+        final String eventId = event.EventId;
 
         EventWS.changeDestination(destinationPlace, eventId, new OnAPICallCompleteListner() {
 
@@ -516,10 +517,7 @@ public class EventManager {
                 try {
                     String Status = (String) response.getString("Status");
                     if (Status == "true") {
-                        event.setDestinationLatitude(String.valueOf(destinationPlace.getLatitude()));
-                        event.setDestinationLongitude(String.valueOf(destinationPlace.getLongitude()));
-                        event.setDestinationName(destinationPlace.getName());
-                        event.setDestinationAddress(destinationPlace.getAddress());
+                        event.Destination = destinationPlace;
                         InternalCaching.saveEventToCache(event);
                         listenerOnSuccess.actionComplete(Action.CHANGEDESTINATION);
                     } else {
@@ -556,7 +554,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.EXTENDEVENTENDTIME);
             return;
         }
-        final String eventid = event.getEventId();
+        final String eventid = event.EventId;
 
         EventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListner() {
 
@@ -567,14 +565,14 @@ public class EventManager {
                     if (Status == "true") {
                         DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-                        Date endTime = writeFormat.parse(event.getEndTime());
+                        Date endTime = writeFormat.parse(event.EndTime);
                         Calendar cal = Calendar.getInstance();
 
                         cal.setTime(endTime);
                         cal.add(Calendar.MINUTE, i);
 
                         String newEndTime = writeFormat.format(cal.getTime());
-                        event.setEndTime(newEndTime);
+                        event.EndTime = newEndTime;
 
                         EventService.RemoveEndEventAlarm(eventid);
                         EventService.setEndEventAlarm(event);
@@ -609,13 +607,13 @@ public class EventManager {
             return;
         }
         try {
-            for (EventParticipant em : event.getParticipants()) {
+            for (EventParticipant em : event.Participants) {
                 if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
                     em.setAcceptanceStatus(AcceptanceStatus.getStatus(eventAcceptanceStateId));
                 }
             }
             InternalCaching.saveEventToCache(event);
-            if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.getInitiatorId())) {
+            if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
                 EventNotificationManager.showEventResponseNotification(context, event, userName, eventAcceptanceStateId);
             }
             listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
@@ -637,7 +635,7 @@ public class EventManager {
             return;
         }
         try {
-            for (EventParticipant em : event.getParticipants()) {
+            for (EventParticipant em : event.Participants) {
                 if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
                     em.setAcceptanceStatus(AcceptanceStatus.DECLINED);
                 }
@@ -665,7 +663,7 @@ public class EventManager {
             return;
         }
         try {
-            event.setState(EventState.EVENT_END);
+            event.State = EventState.EVENT_END;
             // Remove Event End Alarm and the entire event from cache
             EventService.RemoveEndEventAlarm(eventid);
             EventNotificationManager.cancelAllNotifications(event);
@@ -863,15 +861,15 @@ public class EventManager {
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
         if (event != null && event.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
-            event.setUsersLocationDetailList(usersLocationDetailList);
+            event.UsersLocationDetailList = usersLocationDetailList;
             InternalCaching.saveEventToCache(event);
         }
 
     }
 
     private static void checkForReccurrence(Event event) {
-        String strIsReccurrence = event.getIsRecurrence();
-        if (strIsReccurrence != null && strIsReccurrence.equals("true")) {
+        Boolean strIsReccurrence = event.IsRecurrence;
+        if (strIsReccurrence != null && strIsReccurrence == true) {
             refreshEventList(new OnRefreshEventListCompleteListner() {
 
                 @Override
@@ -903,40 +901,40 @@ public class EventManager {
             Context context, String inorOut) {
         ArrayList<TrackLocationMember> slist = new ArrayList<TrackLocationMember>();
         List<Event> list = getTrackingEventList(context);
-        int eventTypeId;
+        EventType eventType;
         ArrayList<EventParticipant> members;
 
         switch (inorOut) {
             case "LocationsOut":
                 for (Event e : list) {
-                    members = e.getParticipants();
+                    members = e.Participants;
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
-                    eventTypeId = Integer.parseInt(e.getEventTypeId());
+                    eventType = e.EventType;
                     //Out going locations - 100 - Share my location - current user is initiator - add all members except me
-                    if (eventTypeId == 100 && ParticipantService.isCurrentUserInitiator(e.getInitiatorId())) {
+                    if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
                         members.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }
                     }
                     //Out going locations 200 - Track Buddy - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    else if (eventTypeId == 200 && !ParticipantService.isCurrentUserInitiator(e.getInitiatorId()) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getMember(e.getInitiatorId()), AcceptanceStatus.ACCEPTED));
+                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                 }
                 break;
             case "locationsIn":
                 for (Event e : list) {
-                    members = e.getParticipants();
+                    members = e.Participants;
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
-                    eventTypeId = Integer.parseInt(e.getEventTypeId());
+                    eventType = e.EventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    if (eventTypeId == 100 && !ParticipantService.isCurrentUserInitiator(e.getInitiatorId()) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getMember(e.getInitiatorId()), AcceptanceStatus.ACCEPTED));
+                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                     //In coming locations - 200 - track buddy - Current user is initiator - add all members except me
-                    else if (eventTypeId == 200 && ParticipantService.isCurrentUserInitiator(e.getInitiatorId())) {
-                        e.getParticipants().remove(e.getCurrentParticipant());
+                    else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
+                        e.Participants.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }

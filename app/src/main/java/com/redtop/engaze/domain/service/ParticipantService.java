@@ -11,6 +11,7 @@ import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
@@ -103,8 +104,8 @@ public class ParticipantService {
             jobj.put("RequestorId", AppContext.context.loginId);
             jobj.put("RequestorName", AppContext.context.loginId);
             jobj.put("UserIdsForRemind", mJSONArray);
-            jobj.put("EventName", ed.getName());
-            jobj.put("EventId", ed.getEventId());
+            jobj.put("EventName", ed.Name);
+            jobj.put("EventId", ed.EventId);
 
             ParticipantManager.pokeParticipants(jobj, new OnActionCompleteListner() {
 
@@ -188,7 +189,7 @@ public class ParticipantService {
     public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus){
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
-        ArrayList<EventParticipant> participants = event.getParticipants();
+        ArrayList<EventParticipant> participants = event.Participants;
         if (participants !=null && participants.size()>0)
         {
             for (EventParticipant mem : participants) {
@@ -205,17 +206,17 @@ public class ParticipantService {
     public static Boolean isValidForLocationSharing(Event event, EventParticipant mem) {
         Boolean isValid = true;
 
-        Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.getInitiatorId());
-        if (Integer.parseInt(event.getEventTypeId()) == 200 &&
+        Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.InitiatorId);
+        if (event.EventType == EventType.TRACKBUDDY &&
                 isCurrentUserInitiator &&
                 isParticipantCurrentUser(mem.getUserId())
         ) {
             isValid = false;
         }
 
-        if (Integer.parseInt(event.getEventTypeId()) == 100 &&
+        if (event.EventType == EventType.SHAREMYLOACTION &&
                 !isCurrentUserInitiator &&
-                !mem.getUserId().equalsIgnoreCase(event.getInitiatorId())) {
+                !mem.getUserId().equalsIgnoreCase(event.InitiatorId)) {
             isValid = false;
         }
         return isValid;

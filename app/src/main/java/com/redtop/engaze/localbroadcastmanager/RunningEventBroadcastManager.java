@@ -40,7 +40,7 @@ public class RunningEventBroadcastManager  extends LocalBroadcastManager{
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String receivedEventId = intent.getStringExtra("eventId");
-		if(!(receivedEventId!=null && activity.mEvent!=null && receivedEventId.equals(activity.mEvent.getEventId()))){
+		if(!(receivedEventId!=null && activity.mEvent!=null && receivedEventId.equals(activity.mEvent.EventId))){
 			return;
 		}
 		switch (intent.getAction()){

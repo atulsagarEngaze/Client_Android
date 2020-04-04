@@ -84,8 +84,8 @@
                         android:completionThreshold="1"
                         android:dropDownAnchor="@+id/participant_layout"
                         android:dropDownWidth="match_parent"
-                        android:textColor="@color/secondary_text"
-                        android:textColorHint="@color/colorHintDisable"
+                        android:textColor="@color/secondaryText"
+                        android:textColorHint="@color/hintDisable"
                         android:textSize="@dimen/primary_text_size" />
                 </com.redtop.engaze.utils.FlowLayout>
             </RelativeLayout>
@@ -194,7 +194,7 @@
                     android:layout_marginLeft="@dimen/padding"
                     android:layout_toRightOf="@+id/label_recurrence"
                     android:checked="false"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/primaryText"
                     android:textSize="@dimen/primary_text_size"
                     app:buttonTint="@color/divider" />
             </RelativeLayout>
@@ -347,7 +347,7 @@
                                 android:layout_marginBottom="@dimen/paddinghalf"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Mon"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 android:textSize="@dimen/primary_text_size"
                                 app:buttonTint="@color/divider" />
 
@@ -357,7 +357,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Tues"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 android:textSize="@dimen/primary_text_size"
                                 app:buttonTint="@color/divider" />
 
@@ -367,7 +367,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Wed"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
                             <android.support.v7.widget.AppCompatCheckBox
@@ -377,7 +377,7 @@
                                 android:layout_marginBottom="@dimen/paddinghalf"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Thurs"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
                             <android.support.v7.widget.AppCompatCheckBox
@@ -386,7 +386,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Fri"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
                             <android.support.v7.widget.AppCompatCheckBox
@@ -395,7 +395,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Sat"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
                             <android.support.v7.widget.AppCompatCheckBox
@@ -404,7 +404,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Sun"
-                                android:textColor="@color/primary_text"
+                                android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
                         </GridLayout>
                     </LinearLayout>

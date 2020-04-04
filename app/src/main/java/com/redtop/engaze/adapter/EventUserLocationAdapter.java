@@ -193,7 +193,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
             //						Intent intent = new Intent(mContext, EventParticipantsInfo.class);
             //						intent.putExtra("EventMembers", new ArrayList<EventMember>(Arrays.asList(mem)));
             //						intent.putExtra("InitiatorID", ed.getInitiatorId());
-            //						intent.putExtra("EventId", ed.getEventId());
+            //						intent.putExtra("EventId", ed.EventId);
             //						mContext.startActivity(intent);
             //					}
             //					return true;

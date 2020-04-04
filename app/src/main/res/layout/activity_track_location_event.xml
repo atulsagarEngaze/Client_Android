@@ -90,8 +90,8 @@
                         android:completionThreshold="1"
                         android:dropDownAnchor="@+id/participant_layout"
                         android:dropDownWidth="match_parent"
-                        android:textColor="@color/secondary_text"
-                        android:textColorHint="@color/colorHintDisable"
+                        android:textColor="@color/secondaryText"
+                        android:textColorHint="@color/hintDisable"
                         android:textSize="@dimen/primary_text_size" />
                 </com.redtop.engaze.utils.FlowLayout>
             </RelativeLayout>

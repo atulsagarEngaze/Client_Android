@@ -30,6 +30,7 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.ProgressBar;
@@ -71,7 +72,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         final TrackLocationMember rowItem = getItem(position);
-        final Event ed = rowItem.getEvent();
+        final Event event = rowItem.getEvent();
         final ContactOrGroup cg = rowItem.getMember().getContact();
         LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
@@ -97,18 +98,18 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         //holder.txtName.setText(cg.getName());
         holder.txtName.setText(cg.getName());
         holder.imageView.setBackground(cg.getImageDrawable(mContext));
-        holder.txtTimeInfo.setText(getStartTimeAndTimeLeftText(ed, rowItem.getAcceptance()));
+        holder.txtTimeInfo.setText(getStartTimeAndTimeLeftText(event, rowItem.getAcceptance()));
         if (rowItem.getMember().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
             holder.txtPoke.setVisibility(View.GONE);
         }
         holder.txtPoke.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), ed.getEventId(), AppContext.actionHandler);
+                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), event.EventId, AppContext.actionHandler);
             }
         });
 
-        if (ParticipantService.isCurrentUserInitiator(ed.getInitiatorId())) {
+        if (ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
             holder.txtExtend.setVisibility(View.VISIBLE);
         }
 
@@ -116,7 +117,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
             @Override
             public void onClick(View v) {
-                ((BaseEventActivity) mContext).notificationselectedEvent = ed;
+                ((BaseEventActivity) mContext).notificationselectedEvent = event;
                 Intent intent = new Intent(mContext, SnoozeOffset.class);
                 intent.putExtra("FromHomeLayout", true);
                 ((BaseActivity) mContext).startActivityForResult(intent, Constants.SNOOZING_REQUEST_CODE);
@@ -128,12 +129,12 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             public void onClick(View v) {
 
                 ProgressBar.showProgressBar("Please wait");
-                if (ParticipantService.isCurrentUserInitiator(ed.getInitiatorId())) {
+                if (ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
                     //Current user is initiator...so he can either end the event or remove the member.
-                    if (ed.getMemberCount() <= 2) {
+                    if (event.getMemberCount() <= 2) {
                         //End the event since it is a 1 to 1 event
                         ProgressBar.showProgressBar("Please wait");
-                        EventManager.endEvent(ed, new OnActionCompleteListner() {
+                        EventManager.endEvent(event, new OnActionCompleteListner() {
                             @Override
                             public void actionComplete(Action action) {
                                 if (callback != null) {
@@ -153,9 +154,9 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     } else {
                         //remove the row item member alone since there are still other members in the event.
                         ProgressBar.showProgressBar("Please wait");
-                        ed.getContactOrGroups().remove(ed.getCurrentParticipant().getContact());
+                        event.ContactOrGroups.remove(event.getCurrentParticipant().getContact());
 
-                        JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(ed.getContactOrGroups(), ed.getEventId());
+                        JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.EventId);
                         ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {
                             @Override
                             public void actionComplete(Action action) {
@@ -180,7 +181,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     //Current user is just a participant, so he can only leave the event.
 
                     ProgressBar.showProgressBar("Please wait");
-                    EventManager.leaveEvent(ed, new OnActionCompleteListner() {
+                    EventManager.leaveEvent(event, new OnActionCompleteListner() {
 
                         @Override
                         public void actionComplete(Action action) {
@@ -210,8 +211,8 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             public void onClick(View v) {
                 ProgressBar.showProgressBar("Please wait");
                 Intent intent = new Intent(mContext, RunningEventActivity.class);
-                intent.putExtra("EventId", ed.getEventId());
-                intent.putExtra("EventTypeId", Integer.parseInt(ed.getEventTypeId()));
+                intent.putExtra("EventId", event.EventId);
+                intent.putExtra("EventTypeId", event.EventType);
                 mContext.startActivity(intent);
                 ProgressBar.hideProgressBar();
             }
@@ -229,26 +230,23 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         if (acceptanceStatus == acceptanceStatus.ACCEPTED) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
-            try {
-                calendar.setTime(sdf.parse(event.getEndTime()));
-                long diffMinutes = (calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
-                String timeLeft = DateUtil.getDurationText(diffMinutes);
 
-                calendar = Calendar.getInstance();
+            calendar.setTime(event.EndTime);
+            long diffMinutes = (calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
+            String timeLeft = DateUtil.getDurationText(diffMinutes);
 
-                Date startParsedDate = sdf.parse(event.getStartTime());
-                calendar.setTime(startParsedDate);
-                String startTime = DateUtil.getTime(calendar);
+            calendar = Calendar.getInstance();
 
-                timeInfoTxt = String.format(mContext.getResources().getString(R.string.track_location_timeinfo_text),
-                        startTime, timeLeft);
+            Date startParsedDate = event.StartTime;
+            calendar.setTime(startParsedDate);
+            String startTime = DateUtil.getTime(calendar);
 
-            } catch (ParseException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            timeInfoTxt = String.format(mContext.getResources().getString(R.string.track_location_timeinfo_text),
+                    startTime, timeLeft);
+
+
         } else {
-            if (Integer.parseInt(event.getEventTypeId()) == 100) { // Share my Location
+            if (event.EventType == EventType.SHAREMYLOACTION) { // Share my Location
                 timeInfoTxt = "Awaiting response to your Share My Location Request";
             } else {
                 timeInfoTxt = "Awaiting response to your Track Buddy Request";

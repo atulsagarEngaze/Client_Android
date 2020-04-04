@@ -13,10 +13,12 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
+import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
 
 import android.content.Context;
@@ -138,14 +140,14 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static void saveEventToCache(Event event) {
         Hashtable<String, Event> cachedEntries;
-        String eventTypeId = event.getEventTypeId();
-        if (eventTypeId.equals("100") || eventTypeId.equals("200")) {
+        EventType eventType = event.EventType;
+        if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
             cachedEntries = getcachedTrackEventsHashMap();
-            cachedEntries.put(event.getEventId(), event);
+            cachedEntries.put(event.EventId, event);
             writeObject(CACHE_TRACK_EVENTS, cachedEntries);
         } else {
             cachedEntries = getcachedEventsHashMap();
-            cachedEntries.put(event.getEventId(), event);
+            cachedEntries.put(event.EventId, event);
             writeObject(CACHE_EVENTS, cachedEntries);
         }
     }
@@ -191,7 +193,7 @@ public final class InternalCaching {
             List<String> tobeRemoved = new ArrayList<String>();
             for (Event event : eventList) {
                 if (EventService.isEventPast(event)) {
-                    tobeRemoved.add(event.getEventId());
+                    tobeRemoved.add(event.EventId);
                 }
             }
             if (tobeRemoved.size() < 0) {
@@ -209,24 +211,29 @@ public final class InternalCaching {
             Hashtable<String, Event> oldcachedEntriesForTE = getcachedTrackEventsHashMap();
             Hashtable<String, Event> cachedEntries = new Hashtable<String, Event>();
             Hashtable<String, Event> cachedEntriesForTE = new Hashtable<String, Event>();
-            int eventTypeId;
+            EventType eventType;
             for (Event event : events) {
-                eventId = event.getEventId();
-                eventTypeId = Integer.parseInt(event.getEventTypeId());
-                if (eventTypeId == 100 || eventTypeId == 200) {
+                eventId = event.EventId;
+                eventType = event.EventType;
+                if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
                     ed = oldcachedEntriesForTE.get(eventId);
                 } else {
                     ed = oldcachedEntries.get(eventId);
                 }
                 if (ed != null) {
-                    event.setUsersLocationDetailList(ed.getUsersLocationDetailList());
-                    event.acceptNotificationid = ed.acceptNotificationid;
-                    event.snoozeNotificationId = ed.snoozeNotificationId;
-                    event.notificationIds = ed.notificationIds;
-                    event.isMute = ed.isMute;
-                    event.isDistanceReminderSet = ed.isDistanceReminderSet;
+                    event.UsersLocationDetailList = new ArrayList<UsersLocationDetail>();
+                    for (UsersLocationDetail ud : ed.UsersLocationDetailList) {
+                        event.UsersLocationDetailList.add(
+                                AppContext.jsonParser.deserialize(AppContext.jsonParser.Serialize(ud), UsersLocationDetail.class));
+                    }
+
+                    event.AcceptNotificationId = ed.AcceptNotificationId;
+                    event.SnoozeNotificationId = ed.SnoozeNotificationId;
+                    event.NotificationIds = ed.NotificationIds;
+                    event.IsMute = ed.IsMute;
+                    event.IsDistanceReminderSet = ed.IsDistanceReminderSet;
                     ArrayList<EventParticipant> newMembers = new ArrayList<EventParticipant>();
-                    ArrayList<EventParticipant> reminderMems = ed.getReminderEnabledMembers();
+                    ArrayList<EventParticipant> reminderMems = ed.ReminderEnabledMembers;
                     if (reminderMems != null && reminderMems.size() > 0) {
                         for (EventParticipant mem : reminderMems) {
                             EventParticipant newMem = event.getMember(mem.getUserId());
@@ -238,12 +245,12 @@ public final class InternalCaching {
                             }
                         }
                         if (newMembers.size() > 0) {
-                            event.setReminderEnabledMembers(newMembers);
-                            event.isDistanceReminderSet = true;
+                            event.ReminderEnabledMembers = newMembers;
+                            event.IsDistanceReminderSet = true;
                         }
                     }
                 }
-                if (eventTypeId == 100 || eventTypeId == 200) {
+                if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
                     cachedEntriesForTE.put(eventId, event);
                 } else {
                     cachedEntries.put(eventId, event);

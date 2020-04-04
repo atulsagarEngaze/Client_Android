@@ -124,17 +124,17 @@ public class RunningEventBase  extends BaseLocationActivity  {
 		mEvent = InternalCaching.getEventFromCache(mEventId);
 		if(mEvent!=null){
 			String eventTitle;
-			if(EventService.isEventTrackBuddyEventForCurrentuser(mEvent)){
+			if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
 				eventTitle =  mContext.getResources().getString(R.string.title_running_event_track_buddies);
 			}
 			else{
-				eventTitle = mEvent.getName();
+				eventTitle = mEvent.Name;
 			}
 			viewManager = new RunningEventViewManager(mContext, savedInstanceState, eventTitle);
 			mUserId = AppContext.context.loginId;
 			mGd = new GoogleDirection(mContext);		
 			initializeEventStartTimeForUI();
-			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 
 		Calendar calendar = Calendar.getInstance();
 		try {						
-			Date startParsedDate =  sdf.parse(mEvent.getStartTime());			
+			Date startParsedDate =  sdf.parse(mEvent.StartTime);
 			calendar.setTime(startParsedDate);
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
@@ -163,7 +163,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 		}
 		switch (getTimeLeft()){
 		case "5 MINS" :
-			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId())){
+			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.InitiatorId)){
 				snoozeFlag  = 1;
 				Intent intent = new Intent(mContext, SnoozeOffset.class);			
 				startActivityForResult(intent, SNOOZING_REQUEST_CODE);					
@@ -175,7 +175,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 	public String getTimeLeft(){		
 		Calendar eventEnd = Calendar.getInstance();
 		try {
-			eventEnd.setTime(sdf.parse(mEvent.getEndTime()));
+			eventEnd.setTime(sdf.parse(mEvent.EndTime));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -2,6 +2,8 @@ package com.redtop.engaze.common.utility;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+
 public class JsonParser {
 
     private Gson gson;

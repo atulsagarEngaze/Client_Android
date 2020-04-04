@@ -143,7 +143,7 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                         @Override
                         public void actionComplete(Action action) {
                             mEvent = InternalCaching.getEventFromCache(mEventId);
-                            ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+                            ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
                             updateRecyclerViews();
                             AppContext.actionHandler.actionComplete(action);
                             locationhandler.post(locationRunnable);
@@ -163,8 +163,8 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                     EventManager.changeDestination(mDestinationPlace, mContext, mEvent, new OnActionCompleteListner() {
                         @Override
                         public void actionComplete(Action action) {
-                            if (!mEvent.getDestinationLatitude().equals("null")) {
-                                mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
+                            if (mEvent.Destination!=null) {
+                                mDestinationlatlang = new LatLng(mEvent.Destination.getLatitude(), mEvent.Destination.getLongitude());
                             }
                             removeRoute();
                             createDestinationMarker();

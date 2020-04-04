@@ -129,14 +129,14 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 							((RunningEventActivity)mContext).mIsActivityPauseForDialog = true;
 							ArrayList<EventParticipant> mems = new ArrayList<EventParticipant>();
 							mems.addAll(mEvent.getMembersbyStatus(ud.getAcceptanceStatus()));
-							if(EventService.isEventTrackBuddyEventForCurrentuser(mEvent)){
+							if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
 								mems.remove(mEvent.getCurrentParticipant());
 							}
 							Intent intent = new Intent(mContext, EventParticipantsInfo.class);
 							intent.putExtra("source", RunningEventActivity.class.getName());
 							intent.putExtra("EventMembers", mems);
-							intent.putExtra("InitiatorID", mEvent.getInitiatorId());
-							intent.putExtra("EventId", mEvent.getEventId());
+							intent.putExtra("InitiatorID", mEvent.InitiatorId);
+							intent.putExtra("EventId", mEvent.EventId);
 							mContext.startActivity(intent);
 						}
 						break;				

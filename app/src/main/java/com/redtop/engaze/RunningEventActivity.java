@@ -62,7 +62,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 	private boolean isEventPast() {
 		SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
-			Date endDate  = originalformat.parse(mEvent.getEndTime());
+			Date endDate  = originalformat.parse(mEvent.EndTime);
 			if(endDate.getTime()- Calendar.getInstance().getTimeInMillis() <0){
 				return true;
 			}
@@ -182,7 +182,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 		mMap.getUiSettings().setTiltGesturesEnabled(true);
 		mMap.getUiSettings().setCompassEnabled(true);
 		mMap.setTrafficEnabled(true);
-		mUsersLocationDetailList = mEvent.getUsersLocationDetailList();
+		mUsersLocationDetailList = mEvent.UsersLocationDetailList;
 
 		if (mUsersLocationDetailList==null || mUsersLocationDetailList.size()==0){			
 			super.createUserLocationList();			
@@ -240,7 +240,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu
 		if(mEvent!=null){
-			if (ParticipantService.isCurrentUserInitiator(mEvent.getInitiatorId())){
+			if (ParticipantService.isCurrentUserInitiator(mEvent.InitiatorId)){
 				getMenuInflater().inflate(R.menu.menu_running_event_initiator, menu);			
 				if((mEvent.getMembersbyStatus(AcceptanceStatus.getStatus(1))).size() > 1){
 					menu.removeItem(R.id.action_poke_all);			

@@ -43,6 +43,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.redtop.engaze.fontawesome.TextFont;
 
 public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleViewAdapter.EventViewHolder> {
@@ -67,112 +68,103 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         }
         final Event ed = mEventList.get(i);
         viewHolder.event = ed;
-        ContactOrGroup cg = ContactAndGroupListManager.getContact(ed.getInitiatorId());
+        ContactOrGroup cg = ContactAndGroupListManager.getContact(ed.InitiatorId);
         if (cg != null) {
             viewHolder.profileImage.setBackground(cg.getIconImageDrawable(mContext));
         } else {
             viewHolder.profileImage.setBackground(ContactOrGroup.getAppUserIconDrawable());
         }
-        if (ParticipantService.isCurrentUserInitiator(ed.getInitiatorId())) {
+        if (ParticipantService.isCurrentUserInitiator(ed.InitiatorId)) {
             viewHolder.txtInitiator.setText("You");
         } else {
-            viewHolder.txtInitiator.setText(ed.GetInitiatorName());
+            viewHolder.txtInitiator.setText(ed.InitiatorName);
         }
 
-        //viewHolder.txtEventID.setText(ed.getEventId());
-        if (ed.getDestinationName() == null || ed.getDestinationName().equals("")) {
+        //viewHolder.txtEventID.setText(ed.EventId);
+        if (ed.Destination == null) {
             viewHolder.rlLocationSection.setVisibility(View.GONE);
         } else {
             viewHolder.rlLocationSection.setVisibility(View.VISIBLE);
 
-            viewHolder.txtLocation.setText(AppUtility.createTextForDisplay(ed.getDestinationName(), Constants.EVENTS_ACTIVITY_LOCATION_TEXT_LENGTH));
+            viewHolder.txtLocation.setText(AppUtility.createTextForDisplay(ed.Destination.getName(), Constants.EVENTS_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
-        String title = ed.getName();
+        String title = ed.Name;
         title = title.substring(0, 1).toUpperCase() + title.substring(1);
         viewHolder.txtEventTile.setText(title);
 
 
         viewHolder.txtEventParticipant.setText(Integer.toString(ed.getMemberCount()));
-        viewHolder.imgEventTypeImage.setBackgroundResource(((EventsActivity) mContext).mEventTypeImages.getResourceId(Integer.parseInt(ed.getEventTypeId()), -1));
+        viewHolder.imgEventTypeImage.setBackgroundResource(((EventsActivity) mContext).mEventTypeImages.getResourceId(ed.EventType.GetEventTypeId(), -1));
 
         setDescriptionLayout(ed, viewHolder);
 
         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        try {
+        Date currentDate = Calendar.getInstance().getTime();
 
-            Date startDate = originalformat.parse(ed.getStartTime());
-            Date endDate = originalformat.parse(ed.getEndTime());
-            Date currentDate = Calendar.getInstance().getTime();
-
-            if (endDate.getTime() >= currentDate.getTime() && currentDate.getTime() > startDate.getTime()) {
-                viewHolder.runningStatus = true;
-            } else {
-                viewHolder.runningStatus = false;
-            }
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(startDate);
-
-            viewHolder.eventStartDayOfWeek = DateUtil.getDayOfWeek(cal);
-            viewHolder.eventStartDayOfMonth = DateUtil.getDayOfMonth(cal);
-            viewHolder.eventStartMonth = DateUtil.getShortMonth(cal);
-            viewHolder.eventStartYear = DateUtil.getYear(cal);
-            viewHolder.eventStartTime = DateUtil.getTime(cal);
-
-            viewHolder.txtEventStartDayOfWeek.setText(viewHolder.eventStartDayOfWeek);
-            viewHolder.txtEventStartDayOfMonth.setText(viewHolder.eventStartDayOfMonth);
-            viewHolder.txtEventStartMonth.setText(viewHolder.eventStartMonth);
-            viewHolder.txtEventStartYear.setText(viewHolder.eventStartYear);
-            viewHolder.txtEventStartTime.setText(viewHolder.eventStartTime);
-
-            viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
-
-            cal.add(Calendar.MINUTE, Integer.parseInt(ed.getTrackingStartOffset()) * -1);
-
-
-            if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
-                viewHolder.trackingStatus = true;
-                viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.trackingStatus = false;
-                viewHolder.imgEventTrackingOn.setVisibility(View.GONE);
-            }
-
-            Calendar calEndDate = Calendar.getInstance();
-            calEndDate.setTime(endDate);
-
-            viewHolder.eventEndDayOfWeek = DateUtil.getDayOfWeek(calEndDate);
-            viewHolder.eventEndDayOfMonth = DateUtil.getDayOfMonth(calEndDate);
-            viewHolder.eventEndMonth = DateUtil.getShortMonth(calEndDate);
-            viewHolder.eventEndYear = DateUtil.getYear(calEndDate);
-            viewHolder.eventEndTime = DateUtil.getTime(calEndDate);
-            if (!(viewHolder.eventEndDayOfMonth.equals(viewHolder.eventStartDayOfMonth)
-                    && viewHolder.eventEndMonth.equals(viewHolder.eventStartMonth)
-                    && viewHolder.eventEndYear.equals(viewHolder.eventStartYear))) {
-                String dateToAppend = viewHolder.eventEndMonth + " " + viewHolder.eventEndDayOfMonth + " " + viewHolder.eventEndYear;
-                viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime + ", " + dateToAppend);
-            } else {
-                viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime);
-            }
-
-
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (ed.EndTime.getTime() >= currentDate.getTime() && currentDate.getTime() > ed.StartTime.getTime()) {
+            viewHolder.runningStatus = true;
+        } else {
+            viewHolder.runningStatus = false;
         }
 
-        if (ed.getIsRecurrence().equals("true")) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(ed.StartTime);
+
+        viewHolder.eventStartDayOfWeek = DateUtil.getDayOfWeek(cal);
+        viewHolder.eventStartDayOfMonth = DateUtil.getDayOfMonth(cal);
+        viewHolder.eventStartMonth = DateUtil.getShortMonth(cal);
+        viewHolder.eventStartYear = DateUtil.getYear(cal);
+        viewHolder.eventStartTime = DateUtil.getTime(cal);
+
+        viewHolder.txtEventStartDayOfWeek.setText(viewHolder.eventStartDayOfWeek);
+        viewHolder.txtEventStartDayOfMonth.setText(viewHolder.eventStartDayOfMonth);
+        viewHolder.txtEventStartMonth.setText(viewHolder.eventStartMonth);
+        viewHolder.txtEventStartYear.setText(viewHolder.eventStartYear);
+        viewHolder.txtEventStartTime.setText(viewHolder.eventStartTime);
+
+        viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
+
+        cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
+
+
+        if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
+            viewHolder.trackingStatus = true;
+            viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.trackingStatus = false;
+            viewHolder.imgEventTrackingOn.setVisibility(View.GONE);
+        }
+
+        Calendar calEndDate = Calendar.getInstance();
+        calEndDate.setTime(ed.EndTime);
+
+        viewHolder.eventEndDayOfWeek = DateUtil.getDayOfWeek(calEndDate);
+        viewHolder.eventEndDayOfMonth = DateUtil.getDayOfMonth(calEndDate);
+        viewHolder.eventEndMonth = DateUtil.getShortMonth(calEndDate);
+        viewHolder.eventEndYear = DateUtil.getYear(calEndDate);
+        viewHolder.eventEndTime = DateUtil.getTime(calEndDate);
+        if (!(viewHolder.eventEndDayOfMonth.equals(viewHolder.eventStartDayOfMonth)
+                && viewHolder.eventEndMonth.equals(viewHolder.eventStartMonth)
+                && viewHolder.eventEndYear.equals(viewHolder.eventStartYear))) {
+            String dateToAppend = viewHolder.eventEndMonth + " " + viewHolder.eventEndDayOfMonth + " " + viewHolder.eventEndYear;
+            viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime + ", " + dateToAppend);
+        } else {
+            viewHolder.txtEventEndTime.setText(viewHolder.eventEndTime);
+        }
+
+
+        if (ed.IsRecurrence.equals("true")) {
             viewHolder.btnRecurrence.setVisibility(View.VISIBLE);
             viewHolder.btnRecurrence.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EventRecurrenceInfo.class);
-                    intent.putExtra("RecurrenceType", ed.getRecurrenceType());
-                    intent.putExtra("NumberOfOccurences", ed.getNumberOfOccurencesLeft());// ed.getNumberOfOccurences());
-                    intent.putExtra("FrequencyOfOcuurence", ed.getFrequencyOfOccurence());
-                    intent.putExtra("Recurrencedays", ed.getRecurrenceDays());
+                    intent.putExtra("RecurrenceType", ed.RecurrenceType);
+                    intent.putExtra("NumberOfOccurences", ed.NumberOfOccurencesLeft);// ed.getNumberOfOccurences());
+                    intent.putExtra("FrequencyOfOcuurence", ed.FrequencyOfOccurence);
+                    intent.putExtra("Recurrencedays", ed.RecurrenceDays);
                     intent.putExtra("RecurrenceDayOfMonth", viewHolder.eventStartDayOfMonth);
                     mContext.startActivity(intent);
 
@@ -187,10 +179,10 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext, ShowLocationActivity.class);
-                intent.putExtra("DestinatonLocation", ed.getDestinationName());
-                intent.putExtra("DestinatonAddress", ed.getDestinationAddress());
-                intent.putExtra("DestinatonLatitude", ed.getDestinationLatitude());
-                intent.putExtra("DestinatonLongitude", ed.getDestinationLongitude());
+                intent.putExtra("DestinatonLocation", ed.Destination.getName());
+                intent.putExtra("DestinatonAddress", ed.Destination.getAddress());
+                intent.putExtra("DestinatonLatitude", ed.Destination.getLatitude());
+                intent.putExtra("DestinatonLongitude", ed.Destination.getLongitude());
                 mContext.startActivity(intent);
 
                 if (((EventsActivity) mContext).mActionMode != null) {
@@ -202,11 +194,11 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         viewHolder.llParticipants.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ed.getParticipants() != null) {
+                if (ed.Participants != null) {
                     Intent intent = new Intent(mContext, EventParticipantsInfo.class);
-                    intent.putExtra("EventMembers", ed.getParticipants());
-                    intent.putExtra("InitiatorID", ed.getInitiatorId());
-                    intent.putExtra("EventId", ed.getEventId());
+                    intent.putExtra("EventMembers", ed.Participants);
+                    intent.putExtra("InitiatorID", ed.InitiatorId);
+                    intent.putExtra("EventId", ed.EventId);
                     mContext.startActivity(intent);
 
                     if (((EventsActivity) mContext).mActionMode != null) {
@@ -243,11 +235,11 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
     }
 
     private void setDescriptionLayout(Event ed, EventViewHolder viewHolder) {
-        if (ed.getDescription().isEmpty()) {
+        if (ed.Description.isEmpty()) {
             viewHolder.llEventDescription.setVisibility(View.GONE);
         } else {
             viewHolder.llEventDescription.setVisibility(View.VISIBLE);
-            final String description = ed.getDescription();
+            final String description = ed.Description;
             viewHolder.txtEventDesc.setText(description);
         }
     }
@@ -314,7 +306,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
                                     trackingStatus) {
                         Intent intent = new Intent(mContext, RunningEventActivity.class);
-                        intent.putExtra("EventId", event.getEventId());
+                        intent.putExtra("EventId", event.EventId);
                         mContext.startActivity(intent);
                         if (((EventsActivity) mContext).mActionMode != null) {
                             ((EventsActivity) mContext).mActionMode.finish();
@@ -367,7 +359,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             MenuItem itemEdit = menu.findItem(R.id.context_action_edit);
             MenuItem itemDelete = menu.findItem(R.id.context_action_delete);
             Drawable dr = null;
-            if (event.isMute != null && event.isMute) {
+            if (event.IsMute != null && event.IsMute) {
                 dr = ((EventsActivity) mContext).getResources().getDrawable(R.drawable.event_mute);
             } else {
                 dr = ((EventsActivity) mContext).getResources().getDrawable(R.drawable.event_unmute);
@@ -375,7 +367,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             itemMuteUnmute.setIcon(dr);
 
-            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.getInitiatorId())) {
+            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.InitiatorId)) {
                 itemAccept.setVisible(false);
                 itemDeclined.setVisible(false);
                 if (this.runningStatus || this.trackingStatus) {

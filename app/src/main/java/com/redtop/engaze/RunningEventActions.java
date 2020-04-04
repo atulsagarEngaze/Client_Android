@@ -56,21 +56,21 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventParticipantUpdatedByInitiator() {
         mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
         updateRecyclerViews();
-        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-            runningEventAlertDialog("Tracking Updated!", mEvent.GetInitiatorName() + " has updated the participants list.", true);
+        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            runningEventAlertDialog("Tracking Updated!", mEvent.InitiatorName + " has updated the participants list.", true);
         } else {
-            runningEventAlertDialog("Event Updated!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has updated the participants list.", true);
+            runningEventAlertDialog("Event Updated!", mEvent.Name + ": " + mEvent.InitiatorName + " has updated the participants list.", true);
         }
     }
 
     public void onUserRemovedFromEventByInitiator() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-                runningEventAlertDialog("Removed from Tracking!", mEvent.GetInitiatorName() + " has removed you from this tracking event.", false);
+            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                runningEventAlertDialog("Removed from Tracking!", mEvent.InitiatorName + " has removed you from this tracking event.", false);
             } else {
-                runningEventAlertDialog("Removed from Event!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has removed you from this event.", false);
+                runningEventAlertDialog("Removed from Event!", mEvent.Name + ": " + mEvent.InitiatorName + " has removed you from this event.", false);
             }
         }
         locationhandler.removeCallbacks(locationRunnable);
@@ -79,29 +79,29 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventDestinationUpdatedByInitiator(String changedDestination) {
         mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
-        if (!mEvent.getDestinationLatitude().equals("null")) {
-            mDestinationlatlang = new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude()));
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
+        if (mEvent.Destination != null) {
+            mDestinationlatlang = new LatLng(mEvent.Destination.getLatitude(), mEvent.Destination.getLongitude());
         }
         removeRoute();
         createDestinationMarker();
         mEnableAutoCameraAdjust = true;
         showAllMarkers();
-        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-            runningEventAlertDialog("Tracking Destination Changed!", mEvent.GetInitiatorName() + " has changed tracking Destination to " + changedDestination, true);
+        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            runningEventAlertDialog("Tracking Destination Changed!", mEvent.InitiatorName + " has changed tracking Destination to " + changedDestination, true);
         } else {
-            runningEventAlertDialog("Event Destination Changed!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has changed this events Destination to " + changedDestination, true);
+            runningEventAlertDialog("Event Destination Changed!", mEvent.Name + ": " + mEvent.InitiatorName + " has changed this events Destination to " + changedDestination, true);
         }
 
     }
 
     public void onEventEndedByInitiator() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-                runningEventAlertDialog("Tracking ended!", mEvent.GetInitiatorName() + " has stopped sharing location", false);
+            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                runningEventAlertDialog("Tracking ended!", mEvent.InitiatorName + " has stopped sharing location", false);
             } else {
 
-                runningEventAlertDialog("Event ended!", mEvent.getName() + " ended by " + mEvent.GetInitiatorName(), false);
+                runningEventAlertDialog("Event ended!", mEvent.Name + " ended by " + mEvent.InitiatorName, false);
             }
         }
         locationhandler.removeCallbacks(locationRunnable);
@@ -110,10 +110,10 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventOver() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-                runningEventAlertDialog("Tracking Over!", "Tracking ended at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
+            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                runningEventAlertDialog("Tracking Over!", "Tracking ended at " + DateUtil.getTimeInHHMMa(mEvent.EndTime, "yyyy-MM-dd'T'HH:mm:ss"), false);
             } else {
-                runningEventAlertDialog("Event Over!", mEvent.getName() + " finished at " + DateUtil.getTimeInHHMMa(mEvent.getEndTime(), "yyyy-MM-dd'T'HH:mm:ss"), false);
+                runningEventAlertDialog("Event Over!", mEvent.Name + " finished at " + DateUtil.getTimeInHHMMa(mEvent.EndTime, "yyyy-MM-dd'T'HH:mm:ss"), false);
             }
         }
         locationhandler.removeCallbacks(locationRunnable);
@@ -122,15 +122,15 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onParticipantLeft(String EventResponderName) {
         mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
             String alertmsg = "";
-            if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
                 alertmsg = EventResponderName + " has left stopped sharing location";
             } else {
-                alertmsg = EventResponderName + " has left " + mEvent.getName();
+                alertmsg = EventResponderName + " has left " + mEvent.Name;
             }
             runningEventAlertDialog("Response Received!", alertmsg, true);
         }
@@ -138,7 +138,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onUserResponse(int eventAcceptanceStateId, String eventResponderName) {
         mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
@@ -146,16 +146,16 @@ public class RunningEventActions extends RunningEventActivityResults {
 
             if (eventAcceptanceStateId != -1) {
                 if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.ACCEPTED) {
-                    if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                    if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
                         alertmsg = eventResponderName + " has accepted your tracking request";
                     } else {
-                        alertmsg = eventResponderName + " has accepted " + mEvent.getName();
+                        alertmsg = eventResponderName + " has accepted " + mEvent.Name;
                     }
                 } else {
-                    if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
+                    if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
                         alertmsg = eventResponderName + " has rejected your tracking request";
                     } else {
-                        alertmsg = eventResponderName + " has rejected " + mEvent.getName();
+                        alertmsg = eventResponderName + " has rejected " + mEvent.Name;
                     }
                 }
                 runningEventAlertDialog("Response Received!", alertmsg, true);
@@ -165,14 +165,14 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventExtendedByInitiator(String extendEventDuration) {
         mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.getParticipants());
+        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
         UpdateTimeLeftItemOfRunningEventDetailsDataSet();
         mEventDetailAdapter.notifyDataSetChanged();
 
-        if (EventService.isEventTrackBuddyEventForCurrentuser(mEvent)) {
-            runningEventAlertDialog("Tracking Extended!", mEvent.GetInitiatorName() + " has extended tracking by " + extendEventDuration + " minutes.", true);
+        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            runningEventAlertDialog("Tracking Extended!", mEvent.InitiatorName + " has extended tracking by " + extendEventDuration + " minutes.", true);
         } else {
-            runningEventAlertDialog("Event Extended!", mEvent.getName() + ": " + mEvent.GetInitiatorName() + " has extended this event by " + extendEventDuration + " minutes.", true);
+            runningEventAlertDialog("Event Extended!", mEvent.Name + ": " + mEvent.InitiatorName + " has extended this event by " + extendEventDuration + " minutes.", true);
         }
     }
 
@@ -250,8 +250,8 @@ public class RunningEventActions extends RunningEventActivityResults {
     public void onChangeEventDestinationClicked() {
         Intent intent;
         shouldExecuteOnResume = false;
-        if (!(mEvent.getDestinationLatitude().equals("null") || mEvent.getDestinationLatitude() == null || mEvent.getDestinationLatitude().equals(""))) {
-            mDestinationPlace = new EventPlace(mEvent.getDestinationName(), mEvent.getDestinationAddress(), new LatLng(Double.parseDouble(mEvent.getDestinationLatitude()), Double.parseDouble(mEvent.getDestinationLongitude())));
+        if (mEvent.Destination != null) {
+            mDestinationPlace = new EventPlace(mEvent.Destination.getName(), mEvent.Destination.getAddress(), new LatLng(mEvent.Destination.getLatitude(), mEvent.Destination.getLongitude()));
             //mLh.displayPlace( mDestinationPlace, mEventLocationTextView );
         }
         intent = new Intent(RunningEventActions.this, PickLocationActivity.class);
@@ -265,7 +265,7 @@ public class RunningEventActions extends RunningEventActivityResults {
         shouldExecuteOnResume = false;
         ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
         String currentMemUserId = mEvent.getCurrentParticipant().getUserId();
-        ArrayList<EventParticipant> members = mEvent.getParticipants();
+        ArrayList<EventParticipant> members = mEvent.Participants;
         for (EventParticipant mem : members) {
             if (!mem.getUserId().equals(currentMemUserId))
                 contactList.add(ContactAndGroupListManager.getContact(mem.getUserId()));
