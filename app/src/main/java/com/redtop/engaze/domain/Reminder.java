@@ -11,6 +11,8 @@ public class Reminder implements Parcelable {
     private int timeInterval;
     private String period;
     private String notificationType;
+    public long ReminderOffsetInMinute;
+
 
     public Reminder(int timeInterval, String period, String notificationType) {
         this.timeInterval = timeInterval;

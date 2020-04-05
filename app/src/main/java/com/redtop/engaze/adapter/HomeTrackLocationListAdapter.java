@@ -236,7 +236,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                 String timeLeft = DateUtil.getDurationText(diffMinutes);
 
                 calendar = Calendar.getInstance();
-                
+
                 calendar.setTime(sdf.parse(event.StartTime));
                 String startTime = DateUtil.getTime(calendar);
 

@@ -11,6 +11,7 @@ public class Duration implements Parcelable {
     private int timeInterval;
     private String period;
     private Boolean enabled;
+    public int OffsetInMinutes;
 
 
     public Duration(int timeInterval, String period, Boolean enabled) {

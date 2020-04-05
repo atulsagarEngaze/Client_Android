@@ -480,9 +480,9 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mEventTypeView.setBackground(originalDrawable);
         }
 
-        SetReminderText(createOrUpdateEvent.Reminder);
-        SetTrackingText(createOrUpdateEvent.Tracking);
-        SetDurationText(createOrUpdateEvent.Duration);
+        SetReminderText();
+        SetTrackingText();
+        SetDurationText();
         startHours = cal.get(Calendar.HOUR_OF_DAY);
         startMinutes = cal.get(Calendar.MINUTE);
         updateTime(mStartTimeDisplayView, startHours, startMinutes);

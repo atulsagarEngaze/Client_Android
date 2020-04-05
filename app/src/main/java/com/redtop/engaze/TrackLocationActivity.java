@@ -85,7 +85,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         createOrUpdateEvent.Duration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
-        SetDurationText(createOrUpdateEvent.Duration);
+        SetDurationText();
         if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
             createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));

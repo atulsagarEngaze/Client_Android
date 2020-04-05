@@ -17,7 +17,6 @@ public class AppContext extends Application {
     public boolean isFirstTimeLoading = false;
     public String loginId;
     public String loginName;
-    public Context activityContext = null;
     public Boolean isInternetEnabled = true;
     public static AppContext context;
 
