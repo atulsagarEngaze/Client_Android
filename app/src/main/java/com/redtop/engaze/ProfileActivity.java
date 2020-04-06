@@ -65,8 +65,8 @@ public class ProfileActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext= this;
+		startInitializationService();
 		setContentView(R.layout.activity_profile);
-		startInitializationService();		
 		TextView eulaTextView = (TextView)findViewById(R.id.linktermsandservice);
 		//checkbox.setText("");
 		eulaTextView.setOnClickListener(new OnClickListener() {
@@ -119,9 +119,9 @@ public class ProfileActivity extends BaseActivity {
 			}
 		});
 
-		EditText profilename = (EditText) findViewById(R.id.ProfileName);
+		EditText profileName = (EditText) findViewById(R.id.ProfileName);
 
-		profilename.addTextChangedListener(new TextWatcher() {			  
+		profileName.addTextChangedListener(new TextWatcher() {
 			@Override    
 			public void onTextChanged(CharSequence s, int start,
 					int before, int count) {							
@@ -158,7 +158,6 @@ public class ProfileActivity extends BaseActivity {
 		});
 	}
 	private void startInitializationService() {
-		AppContext.context.isFirstTimeLoading = true;
 		Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 		startService(registeredContactsRefreshServiceIntent);		
 	}
@@ -265,9 +264,7 @@ public class ProfileActivity extends BaseActivity {
 						mProgress.hide();
 					}
 
-					Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
-					startService(registeredContactsRefreshServiceIntent);				
-					
+					AppContext.context.isProfileSaved = true;
 					Intent intent = new Intent(mContext, SplashActivity.class);
 					startActivity(intent);
 

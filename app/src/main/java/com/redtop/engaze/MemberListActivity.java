@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.redtop.engaze.adapter.MemberAdapter;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
@@ -214,7 +215,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 		//			break;
 		case R.id.action_refresh_contactlist:
 			swipeRefreshLayout.setRefreshing(true);
-			refreshMemberList();
+			ContactAndGroupListManager.refreshMemberList();
 			break;
 		}        
 
@@ -225,7 +226,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 	public void onRefresh() {
 		// TODO Auto-generated method stub
 		swipeRefreshLayout.setRefreshing(true);
-		refreshMemberList();
+		ContactAndGroupListManager.refreshMemberList();
 		//swipeRefreshLayout.setRefreshing(false);
 	}
 

@@ -38,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        AppContext.context.currentActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (mDialog ==null){
@@ -200,7 +201,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
                     PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
                     hideProgressBar();
-                    //accessingContactsFirstTime();
                 }
             }, new OnRefreshMemberListCompleteListner() {
 
@@ -213,46 +213,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             });
         }
         else {
-            refreshMemberList();
+            ContactAndGroupListManager.refreshMemberList();
         }
     }
 
-    protected void refreshMemberList(){
-        if(AppContext.context.isInternetEnabled)
-        {
-
-            Thread thread= new Thread(){
-                @Override
-                public void run(){
-                    ContactAndGroupListManager.cacheContactAndGroupList(new OnRefreshMemberListCompleteListner() {
-
-                        @Override
-                        public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                            PreffManager.setPref(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, "true");
-                            memberListRefreshed_success(memberList);
-
-                        }
-                    }, new OnRefreshMemberListCompleteListner() {
-
-                        @Override
-                        public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                            memberListRefreshed_fail();
-                            Toast.makeText(mContext,
-                                    getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            };
-            thread.start();
-        }
-        else
-        {
-
-            Toast.makeText(mContext,
-                    getResources().getString(R.string.internet_not_available), Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     protected void registeredMemberListCached(){
 

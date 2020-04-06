@@ -4,20 +4,25 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 
+import com.redtop.engaze.app.AppContext;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 public class ProgressBar {
 
     private static ProgressDialog mDialog;
+    private static String  mCurrentActivityName;
 
-    public static void CreateProgressDialog(Context context){
-        if(mDialog==null){
-            mDialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-        }
-    }
     public static void showProgressBar(String message ){
         showProgressBar("",message);
     }
 
     public static void showProgressBar(String title, String message ){
+
+        if(mDialog==null || mCurrentActivityName.equals(AppContext.context.currentActivity.getClass().getSimpleName())){
+            mCurrentActivityName = AppContext.context.currentActivity.getClass().getSimpleName();
+            mDialog = new ProgressDialog(AppContext.context.currentActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+        }
 
         if(!(title==null || title.equals(""))){
             mDialog.setTitle(title);

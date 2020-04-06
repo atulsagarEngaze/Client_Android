@@ -27,12 +27,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
-        String loginId = AppContext.context.loginId;
+
 
         Intent intent = null;
 
-        if (loginId != null) {
-            if (AppContext.context.isFirstTimeLoading) {
+        if (AppContext.context.isProfileSaved) {
+            if (!accessingContactsFirstTime()) {
                 mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
                 mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
                 mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -69,6 +69,7 @@ public class SplashActivity extends BaseActivity {
             } else {
                 intent = new Intent(this, MobileNumberVerificationActivity.class);
             }
+            startActivity(intent);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.redtop.engaze;
 
+
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -8,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -32,9 +35,12 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.*;
 
 public class MobileNumberVerificationActivity extends BaseActivity {
 	private EditText mMobileNumberEdittext;
@@ -190,7 +196,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 
 		adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				sendSmsAndWait();
+				checkPermissionAndSendSMS();
 			} });
 
 		adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -265,9 +271,38 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		String otp = message.substring(message.lastIndexOf(" ")+1);
 		mOtpText.setText(otp);
 		mButtonValidateOTP.performClick();
-	}			
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case SEND_SMS: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					sendSmsAndWait();
+				} else {
+					finish();
+				}
+				return;
+			}
+			// other 'case' lines to check for other
+			// permissions this app might request.
+		}
+	}
+
+	private void checkPermissionAndSendSMS(){
+		if(countryCode.equals("+91")){
+			if(PermissionRequester.CheckPermission(Manifest.permission.SEND_SMS, SEND_SMS,this)){
+				sendSmsAndWait();
+			}
+		}
+	}
 	
-	private void sendSmsAndWait() {		
+	private void sendSmsAndWait() {
+
+
 		mOTP = String.valueOf(AppUtility.getRandamNumber());
 		String smsText = "OTP " + mOTP;
 		registerSmsReceiver();

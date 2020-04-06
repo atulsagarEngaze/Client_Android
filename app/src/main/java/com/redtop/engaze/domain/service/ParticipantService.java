@@ -6,6 +6,7 @@ import android.location.Location;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;

@@ -10,15 +10,20 @@ import com.redtop.engaze.common.utility.ActionHandler;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class AppContext extends Application {
     public static final String TAG = AppContext.class
             .getSimpleName();
 
     public boolean isFirstTimeLoading = false;
+    public boolean isProfileSaved = false;
     public String loginId;
     public String loginName;
     public Boolean isInternetEnabled = true;
+    public AppCompatActivity currentActivity;
     public static AppContext context;
+
 
     public static ActionHandler actionHandler;
 
@@ -28,7 +33,6 @@ public class AppContext extends Application {
     public void onCreate() {
         super.onCreate();
         context = this;
-        ProgressBar.CreateProgressDialog(this);
         isInternetEnabled = AppUtility.isNetworkAvailable(this);
         //for testing
 

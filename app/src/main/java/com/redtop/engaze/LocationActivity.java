@@ -98,12 +98,14 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
     @Override
     protected void onPause() {
-        mLocationManager.removeUpdates(this);
         super.onPause();
+        mLocationManager.removeUpdates(this);
+
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -124,7 +126,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             mCachedLocationAdapter.mItems = DestinationCacher.getDestinationsFromCache(mContext);
             locationViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
         }
-        super.onResume();
+
     }
 
     protected void bringPinToMyLocation() {

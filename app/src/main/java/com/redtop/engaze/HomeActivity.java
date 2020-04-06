@@ -65,18 +65,19 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
 
     @Override
     protected void onPause() {
+        super.onPause();
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mBroadcastManager);
         homeViewManager.hideAllListViewLayout();
-        super.onPause();
+
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
         turnOnOfInternetAvailabilityMessage();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastManager,
                 mBroadcastManager.getFilter());
         displayNotifications();
-        super.onResume();
     }
 
     @Override

@@ -47,11 +47,7 @@ public class ProfileManager {
                         listnerOnSuccess.apiCallComplete(response);
                     } else {
 
-                        PreffManager.setPref(Constants.LOGIN_ID, "94973d2a-614e-4b2c-8654-7e6b13cdc44e");
-                        PreffManager.setPref(Constants.LOGIN_NAME, "Atul");
-                        listnerOnSuccess.apiCallComplete(response);
-                        //for testting
-                        //listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+                        listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
                     }
 
                 } catch (Exception ex) {
@@ -65,7 +61,13 @@ public class ProfileManager {
 
             @Override
             public void apiCallComplete(JSONObject response) {
-                listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+                //for testing
+                //listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+                PreffManager.setPref(Constants.LOGIN_ID, "94973d2a-614e-4b2c-8654-7e6b13cdc44e");
+                PreffManager.setPref(Constants.LOGIN_NAME, "Atul");
+                AppContext.context.loginId = "94973d2a-614e-4b2c-8654-7e6b13cdc44e";
+                AppContext.context.loginName = "Atul";
+                listnerOnSuccess.apiCallComplete(response);
             }
         });
     }
