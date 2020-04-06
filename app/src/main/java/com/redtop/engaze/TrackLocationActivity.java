@@ -71,7 +71,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             @Override
             public void onClick(View v) {
                 mEventLocationTextView.setText("");
-                mDestinationPlace = null;
+                createOrUpdateEvent.Destination = null;
             }
         });
 
@@ -88,7 +88,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         SetDurationText();
         if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
             createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
-            mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
+            mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
         if (!accessingContactsFirstTime()) {
             //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
@@ -240,8 +240,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             case R.id.tracklocation_location:
 
                 intent = new Intent(TrackLocationActivity.this, PickLocationActivity.class);
-                if (mDestinationPlace != null) {
-                    intent.putExtra("DestinatonLocation", (Parcelable) mDestinationPlace);
+                if (createOrUpdateEvent.Destination != null) {
+                    intent.putExtra("DestinatonLocation", (Parcelable) createOrUpdateEvent.Destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
                 break;

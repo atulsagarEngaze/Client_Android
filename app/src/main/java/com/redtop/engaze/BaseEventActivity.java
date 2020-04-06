@@ -46,7 +46,7 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected TextView mEventLocationTextView;
     protected NameImageItem mEventTypeItem;
     protected TextView mDurationTextView;
-    protected EventPlace mDestinationPlace;
+
     protected AppLocationService appLocationService;
     protected ImageView mEventTypeView;
     protected ArrayList<ContactOrGroup> mContactsAndgroups;
@@ -117,8 +117,8 @@ public abstract class BaseEventActivity extends BaseActivity {
                     break;
 
                 case LOCATION_REQUEST_CODE:
-                    mDestinationPlace = data.getParcelableExtra("DestinatonPlace");
-                    appLocationService.displayPlace(mDestinationPlace, mEventLocationTextView);
+                    createOrUpdateEvent.Destination = data.getParcelableExtra("DestinatonPlace");
+                    appLocationService.displayPlace(createOrUpdateEvent.Destination, mEventLocationTextView);
 
                     break;
 
@@ -312,8 +312,8 @@ public abstract class BaseEventActivity extends BaseActivity {
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mDestinationPlace != null) {//when event is created without destination
-                                DestinationCacher.cacheDestination(mDestinationPlace, mContext);
+                            if (createOrUpdateEvent.Destination != null) {//when event is created without destination
+                                DestinationCacher.cacheDestination(createOrUpdateEvent.Destination, mContext);
                             }
                         }
                     });

@@ -151,8 +151,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEditEventActivity.this, PickLocationActivity.class);
-                if (mDestinationPlace != null) {
-                    intent.putExtra("DestinatonLocation", (Parcelable) mDestinationPlace);
+                if (createOrUpdateEvent.Destination != null) {
+                    intent.putExtra("DestinatonLocation", (Parcelable) createOrUpdateEvent.Destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
             }
@@ -171,7 +171,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             @Override
             public void onClick(View v) {
                 mEventLocationTextView.setText("");
-                mDestinationPlace = null;
+                createOrUpdateEvent.Destination = null;
             }
         });
 
@@ -364,7 +364,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
     private void initializeElements() {
         mFlowContainerView = (ViewGroup) findViewById(R.id.participant_layout);
         mAutoCompleteInviteeTextView = (CustomAutoCompleteTextView) findViewById(R.id.searchAutoComplete);
-        mDestinationPlace = null;
         mEventLocationTextView = (TextView) findViewById(R.id.EventLocation_Normal);
         mEventTitleView = (EditText) findViewById(R.id.Title);
         mNoteView = (EditText) findViewById(R.id.Note);
@@ -467,8 +466,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
             createOrUpdateEvent.Duration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
             if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
                 mFromEventsActivity = false;
-                mDestinationPlace = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
-                mEventLocationTextView.setText(AppUtility.createTextForDisplay(mDestinationPlace.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
+                createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
+                mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
             }
         }
         Drawable originalDrawable = getResources().getDrawable(mEventTypeItem.getImageId());
@@ -736,6 +735,5 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mAutoCompleteInviteeTextView.setHint(mHintFriendText);
             mAutoCompleteInviteeTextView.setWidth(AppUtility.dpToPx(250, mContext));
         }
-
     }
 }
