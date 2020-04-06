@@ -264,7 +264,7 @@ public class ProfileActivity extends BaseActivity {
 					if(mProgress.isShowing()){
 						mProgress.hide();
 					}
-					AppContext.context.isFirstTimeLoading = true;
+
 					Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
 					startService(registeredContactsRefreshServiceIntent);				
 					

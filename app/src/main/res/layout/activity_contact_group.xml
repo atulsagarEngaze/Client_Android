@@ -7,7 +7,7 @@
     android:clipChildren="false"
     android:orientation="vertical" >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/search_contact_toolbar"
@@ -91,14 +91,14 @@
         android:elevation="2dip"
         android:minHeight="56dip" >
 
-        <com.redtop.engaze.utils.FlowLayout
+        <com.redtop.engaze.common.customeviews.FlowLayout
             android:id="@+id/participant_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/paddinghalf"
             android:paddingLeft="@dimen/paddinghalf"
             android:paddingTop="@dimen/paddinghalf" >
-        </com.redtop.engaze.utils.FlowLayout>
+        </com.redtop.engaze.common.customeviews.FlowLayout>
     </RelativeLayout>
 
     <ImageButton

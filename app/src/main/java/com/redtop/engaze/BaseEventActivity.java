@@ -42,7 +42,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 public abstract class BaseEventActivity extends BaseActivity {
     protected int mDurationTime = 0;
 
-    protected TextView mQuickEventName;
+    protected TextView mQuickEventNameView;
     protected TextView mEventLocationTextView;
     protected NameImageItem mEventTypeItem;
     protected TextView mDurationTextView;

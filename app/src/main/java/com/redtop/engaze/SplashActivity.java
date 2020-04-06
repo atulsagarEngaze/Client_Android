@@ -28,6 +28,7 @@ public class SplashActivity extends BaseActivity {
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
         String loginId = AppContext.context.loginId;
+
         Intent intent = null;
 
         if (loginId != null) {

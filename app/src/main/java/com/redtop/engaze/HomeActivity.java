@@ -27,6 +27,7 @@ import com.redtop.engaze.adapter.HomeTrackLocationListAdapter;
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter.TrackLocationAdapterCallback;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -273,7 +274,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
             intent.putExtra("DestinatonLocation", (Parcelable) ((HomeActivity) mContext).mEventPlace);
             intent.putExtra("caller", HomeActivity.class.toString());
-            intent.putExtra("EventTypeId", 6);
+            intent.putExtra("EventTypeId", EventType.QUIK);
             startActivity(intent);
         }
     }
@@ -289,7 +290,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     public void onShareMyLocationClicked() {
         if (AppContext.context.isInternetEnabled) {
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
-            intent.putExtra("EventTypeId", 100);//EventType share my location
+            intent.putExtra("EventType", EventType.SHAREMYLOACTION);//EventType share my location
             startActivity(intent);
         }
     }
@@ -297,7 +298,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     public void onTrackBuddyClicked() {
         if (AppContext.context.isInternetEnabled) {
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
-            intent.putExtra("EventTypeId", 200);//EventType track buddy
+            intent.putExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());//EventType track buddy
             startActivity(intent);
         }
     }

@@ -33,6 +33,9 @@ public class DestinationCacher {
 
     public static ArrayList<EventPlace> getDestinationsFromCache(Context context) {
         ArrayList<EventPlace> eventPlaces = InternalCaching.getDestinationListFromCache();
+        if (eventPlaces == null) {
+            return new ArrayList<EventPlace>();
+        }
 
         for (EventPlace ep : eventPlaces) {
             ep.createLatLangFromLatLangField();

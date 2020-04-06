@@ -116,6 +116,7 @@ public class Event implements DataModel {
         this.NotificationIds = new ArrayList<Integer>();
     }
 
+
     public Event() {
         // TODO Auto-generated constructor stub
         this.NotificationIds = new ArrayList<Integer>();

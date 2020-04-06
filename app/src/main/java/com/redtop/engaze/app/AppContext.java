@@ -30,7 +30,10 @@ public class AppContext extends Application {
         context = this;
         ProgressBar.CreateProgressDialog(this);
         isInternetEnabled = AppUtility.isNetworkAvailable(this);
+        //for testing
+
         loginId = PreffManager.getPref(Constants.LOGIN_ID);
+        isFirstTimeLoading = true;
         if (loginId != null) {
             loginName = PreffManager.getPref(Constants.LOGIN_NAME);
         }

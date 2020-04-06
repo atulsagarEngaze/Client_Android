@@ -33,14 +33,13 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
-import com.redtop.engaze.common.utility.PreffManager;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
-import com.redtop.engaze.webservice.Routes;
 
 public class TrackLocationActivity extends BaseEventActivity implements OnItemClickListener, OnClickListener, OnKeyListener, IActionHandler {
 
@@ -58,10 +57,12 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         setContentView(R.layout.activity_track_location_event);
         TAG = TrackLocationActivity.class.getName();
         mContext = this;
-        mEventTypeId = this.getIntent().getIntExtra("EventTypeId", mEventTypeId);
+        createOrUpdateEvent  = new Event();
+        mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());
+        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
         viewManager = new TrackLocationViewManager(mContext, mEventTypeId);
         mDurationTextView = viewManager.getDurationTextView();//have to do this because code of populating this is written in eventbase activity
-        mQuickEventName = viewManager.getEventNameView();
+        mQuickEventNameView = viewManager.getEventNameView();
         mEventLocationTextView = viewManager.getLocationTextView();
         populateControlsAndDeafultEvenData();
 
@@ -155,7 +156,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 Calendar calendar_start = Calendar.getInstance();
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.meet_now_event_create_successful);
                 createOrUpdateEvent.Name = "Meet " + AppContext.context.loginName + " @" + DateUtil.getTime(calendar_start);
-                mQuickEventName.setText(createOrUpdateEvent.Name);
+                mQuickEventNameView.setText(createOrUpdateEvent.Name);
                 createOrUpdateEvent.Description = "QuickEvent";
                 createOrUpdateEvent.IsQuickEvent = true;
                 break;
@@ -205,7 +206,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     protected void populateEventData() {
         Calendar calendar_start = Calendar.getInstance();
         if (createOrUpdateEvent.IsQuickEvent) {
-            createOrUpdateEvent.Name = mQuickEventName.getText().toString();
+            createOrUpdateEvent.Name = mQuickEventNameView.getText().toString();
         }
         startDate = calendar_start.getTime();
         super.populateEventData();

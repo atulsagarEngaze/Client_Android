@@ -5,20 +5,22 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.redtop.engaze.entity.EventDetail;
-import com.redtop.engaze.interfaces.OnActionCompleteListner;
-import com.redtop.engaze.interfaces.OnActionFailedListner;
-import com.redtop.engaze.interfaces.OnRefreshEventListCompleteListner;
-import com.redtop.engaze.utils.AppUtility;
-import com.redtop.engaze.utils.Constants;
-import com.redtop.engaze.utils.EventManager;
-import com.redtop.engaze.utils.EventNotificationManager;
-import com.redtop.engaze.utils.InternalCaching;
-import com.redtop.engaze.utils.Constants.Action;
+import com.redtop.engaze.Interface.OnActionCompleteListner;
+import com.redtop.engaze.Interface.OnActionFailedListner;
+import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
+import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.Veranstaltung;
+import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.domain.Event;
+import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventNotificationManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class EventTrackerGcmListenerService extends GcmListenerService implements OnActionFailedListner {
 
@@ -35,15 +37,15 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 		mEventId = data.getString("EventId");		
 		if(mEventId!=null){	
 			if(message.equals("EventEnd") ||message.equals("EventDelete")||message.equals("RemovedFromEvent")){
-				InternalCaching.getEventFromCache(mEventId, mContext);
+				InternalCaching.getEventFromCache(mEventId);
 				actionsBasedOnGCMMessageTypes(message, data);
 			}
 			else
 			{
-				EventManager.refreshEventList(this, new OnRefreshEventListCompleteListner() {			
+				EventManager.refreshEventList(new OnRefreshEventListCompleteListner() {
 					@Override
-					public void RefreshEventListComplete(List<EventDetail> eventDetailList) {
-						InternalCaching.getEventFromCache(mEventId, mContext);
+					public void RefreshEventListComplete(List<Event> eventDetailList) {
+						InternalCaching.getEventFromCache(mEventId);
 						actionsBasedOnGCMMessageTypes(message, data);
 					}
 				}, this);	
@@ -56,7 +58,7 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 		switch(message)
 		{
 		case "EventUpdate":
-			intent = new Intent(Constants.EVENT_UPDATED_BY_INITIATOR);
+			intent = new Intent(Veranstaltung.EVENT_UPDATED_BY_INITIATOR);
 			intent.putExtra("eventId", mEventId);
 			LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 			break;
@@ -66,11 +68,11 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 			final String userId = data.getString("EventResponderId");
 			final String userName = data.getString("EventResponderName");
 			final int eventAcceptanceStateId = Integer.parseInt(data.getString("EventAcceptanceStateId"));
-			EventManager.updateEventWithParticipantResponse(mContext, mEventId, userId, userName,eventAcceptanceStateId, new OnActionCompleteListner() {
+			EventManager.updateEventWithParticipantResponse(mEventId, userId, userName,eventAcceptanceStateId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
-					Intent intent = new Intent(Constants.EVENT_USER_RESPONSE);
+					Intent intent = new Intent(Veranstaltung.EVENT_USER_RESPONSE);
 					intent.putExtra("eventId", mEventId);
 					intent.putExtra("userId", userId);
 					intent.putExtra("eventAcceptanceStateId", eventAcceptanceStateId);
@@ -90,7 +92,7 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 				@Override
 				public void actionComplete(Action action) {
-					Intent intent = new Intent(Constants.PARTICIPANT_LEFT_EVENT);
+					Intent intent = new Intent(Veranstaltung.PARTICIPANT_LEFT_EVENT);
 					intent.putExtra("eventId", mEventId);
 					intent.putExtra("userId", userId);					
 					intent.putExtra("EventResponderName", userName);
@@ -110,11 +112,11 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 			//code against that
 			break;
 		case "EventEnd":
-			EventManager.eventEndedByInitiator(mContext, mEventId, new OnActionCompleteListner() {
+			EventManager.eventEndedByInitiator(mEventId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
-					Intent intent = new Intent(Constants.EVENT_ENDED_BY_INITIATOR);
+					Intent intent = new Intent(Veranstaltung.EVENT_ENDED_BY_INITIATOR);
 					intent.putExtra("eventId", mEventId);
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
@@ -123,12 +125,12 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 		case "EventExtend":
 
-			EventManager.eventExtendedByInitiator(mContext, mEventId, new OnActionCompleteListner() {
+			EventManager.eventExtendedByInitiator(mEventId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
 					//LocalBroadCast
-					Intent intent = new Intent(Constants.EVENT_EXTENDED_BY_INITIATOR);
+					Intent intent = new Intent(Veranstaltung.EVENT_EXTENDED_BY_INITIATOR);
 					intent.putExtra("eventId", mEventId);
 					intent.putExtra("com.redtop.engaze.service.ExtendEventDuration", data.getString("ExtendEventDuration"));
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -140,12 +142,12 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 		case "EventDelete":
 
-			EventManager.eventDeletedByInitiator(mContext, mEventId, new OnActionCompleteListner() {
+			EventManager.eventDeletedByInitiator(mEventId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
 					//LocalBroadCast
-					Intent intent = new Intent(Constants.EVENT_DELETE_BY_INITIATOR);
+					Intent intent = new Intent(Veranstaltung.EVENT_DELETE_BY_INITIATOR);
 					intent.putExtra("eventId", mEventId);
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
@@ -156,12 +158,12 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 		case "EventUpdateLocation":	
 
-			EventManager.eventDestinationChangedByInitiator(mContext, mEventId, new OnActionCompleteListner() {
+			EventManager.eventDestinationChangedByInitiator(mEventId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
 					//LocalBroadCast
-					Intent intent = new Intent(Constants.EVENT_DESTINATION_UPDATED_BY_INITIATOR);
+					Intent intent = new Intent(Veranstaltung.EVENT_DESTINATION_UPDATED_BY_INITIATOR);
 					intent.putExtra("com.redtop.engaze.service.UpdatedDestination", data.getString("DestinationName"));
 					intent.putExtra("eventId", mEventId);					
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -175,7 +177,7 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 				@Override
 				public void actionComplete(Action action) {
 					//LocalBroadCast
-					Intent intent = new Intent(Constants.REMOVED_FROM_EVENT_BY_INITIATOR);
+					Intent intent = new Intent(Veranstaltung.REMOVED_FROM_EVENT_BY_INITIATOR);
 					intent.putExtra("eventId", mEventId);
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
@@ -184,12 +186,12 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 		case "EventUpdateParticipants" :
 
-			EventManager.participantsUpdatedByInitiator(mContext, mEventId, new OnActionCompleteListner() {
+			EventManager.participantsUpdatedByInitiator(mEventId, new OnActionCompleteListner() {
 
 				@Override
 				public void actionComplete(Action action) {
 					//LocalBroadCast
-					Intent intent = new Intent(Constants.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR);	
+					Intent intent = new Intent(Veranstaltung.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR);
 					intent.putExtra("eventId", mEventId);
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
@@ -198,8 +200,8 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 			break;
 
 		case "RemindContact":
-			EventDetail event = InternalCaching.getEventFromCache(mEventId, mContext);
-			if(AppUtility.isNotifyUser(event)){
+			Event event = InternalCaching.getEventFromCache(mEventId);
+			if(ParticipantService.isNotifyUser(event)){
 				EventNotificationManager.pokeNotification(mContext, mEventId);
 			}
 			break;
@@ -208,11 +210,11 @@ public class EventTrackerGcmListenerService extends GcmListenerService implement
 
 	private void getEventDetail(Bundle data)
 	{
-		EventManager.getEventDataFromServer(mContext, data.getString("EventId"), new OnActionCompleteListner() {
+		EventManager.getEventDataFromServer(data.getString("EventId"), new OnActionCompleteListner() {
 
 			@Override
 			public void actionComplete(Action action) {
-				Intent eventReceived = new Intent(Constants.EVENT_RECEIVED);				
+				Intent eventReceived = new Intent(Veranstaltung.EVENT_RECEIVED);
 				LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventReceived);	
 			}
 		}, this);		

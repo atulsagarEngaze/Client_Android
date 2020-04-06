@@ -5,7 +5,7 @@
     android:background="@color/primaryBackground"
     tools:context="com.redtop.engaze.FeedbackActivity" >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/feedback_toolbar"

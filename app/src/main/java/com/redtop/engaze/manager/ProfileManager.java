@@ -16,57 +16,59 @@ import com.redtop.engaze.webservice.ProfileWS;
 
 
 public class ProfileManager {
-	private final static String TAG = ProfileManager.class.getName();
+    private final static String TAG = ProfileManager.class.getName();
 
-	public static void saveProfile(final Context context,final JSONObject jRequestobj,
-			final OnAPICallCompleteListner listnerOnSuccess, 
-			final OnActionFailedListner listnerOnFailure){
+    public static void saveProfile(final Context context, final JSONObject jRequestobj,
+                                   final OnAPICallCompleteListner listnerOnSuccess,
+                                   final OnActionFailedListner listnerOnFailure) {
 
-		if(!AppContext.context.isInternetEnabled)
-		{
-			String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
-			Log.d(TAG, message);
-			listnerOnFailure.actionFailed(message, Action.SAVEPROFILE);
-			return ;
+        if (!AppContext.context.isInternetEnabled) {
+            String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
+            Log.d(TAG, message);
+            listnerOnFailure.actionFailed(message, Action.SAVEPROFILE);
+            return;
 
-		}
+        }
 
-		ProfileWS.saveProfile(context, jRequestobj, new OnAPICallCompleteListner() {
+        ProfileWS.saveProfile(context, jRequestobj, new OnAPICallCompleteListner() {
 
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				Log.d(TAG, "EventResponse:" + response.toString());
+            @Override
+            public void apiCallComplete(JSONObject response) {
+                Log.d(TAG, "EventResponse:" + response.toString());
 
-				try {								
-					String Status = (String)response.getString("Status");
+                try {
+                    String Status = (String) response.getString("Status");
 
-					if (Status == "true")
-					{
-						String loginID = (String)response.getString("Id");
-						// save the loginid to preferences  
-						PreffManager.setPref(Constants.LOGIN_ID, loginID);
-						PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
-						listnerOnSuccess.apiCallComplete(response);
-					}
-					else{
-						listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);						
-					}
+                    if (Status == "true") {
+                        String loginID = (String) response.getString("Id");
+                        // save the loginid to preferences
+                        PreffManager.setPref(Constants.LOGIN_ID, loginID);
+                        PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
+                        listnerOnSuccess.apiCallComplete(response);
+                    } else {
 
-				} catch (Exception ex) {
-					Log.d(TAG, ex.toString());
-					ex.printStackTrace();
-					listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
-				}		
+                        PreffManager.setPref(Constants.LOGIN_ID, "94973d2a-614e-4b2c-8654-7e6b13cdc44e");
+                        PreffManager.setPref(Constants.LOGIN_NAME, "Atul");
+                        listnerOnSuccess.apiCallComplete(response);
+                        //for testting
+                        //listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+                    }
 
-			}
-		}, new OnAPICallCompleteListner() {
+                } catch (Exception ex) {
+                    Log.d(TAG, ex.toString());
+                    ex.printStackTrace();
+                    listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+                }
 
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);				
-			}
-		});
-	}
+            }
+        }, new OnAPICallCompleteListner() {
+
+            @Override
+            public void apiCallComplete(JSONObject response) {
+                listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
+            }
+        });
+    }
 
 }
 

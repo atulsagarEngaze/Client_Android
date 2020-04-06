@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/track_location_event_toolbar"
@@ -72,7 +72,7 @@
                     android:text="@string/fa_user"
                     android:textSize="20sp" />
 
-                <com.redtop.engaze.utils.FlowLayout
+                <com.redtop.engaze.common.customeviews.FlowLayout
                     android:id="@+id/participant_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                     android:layout_marginRight="@dimen/padding"
                     android:layout_marginTop="@dimen/paddinghalf" >
 
-                    <com.redtop.engaze.utils.CustomAutoCompleteTextView
+                    <com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView
                         android:id="@+id/searchAutoComplete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                         android:textColor="@color/secondaryText"
                         android:textColorHint="@color/hintDisable"
                         android:textSize="@dimen/primary_text_size" />
-                </com.redtop.engaze.utils.FlowLayout>
+                </com.redtop.engaze.common.customeviews.FlowLayout>
             </RelativeLayout>
 
             <View

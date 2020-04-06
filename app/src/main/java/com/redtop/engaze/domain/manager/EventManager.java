@@ -597,11 +597,11 @@ public class EventManager {
 
     }
 
-    public static void updateEventWithParticipantResponse(Context context, String eventid, String userId, String userName, int eventAcceptanceStateId, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
+    public static void updateEventWithParticipantResponse(String eventid, String userId, String userName, int eventAcceptanceStateId, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
         Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
-            String message = context.getResources().getString(R.string.message_general_event_null_error);
+            String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
             return;
@@ -614,7 +614,7 @@ public class EventManager {
             }
             InternalCaching.saveEventToCache(event);
             if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
-                EventNotificationManager.showEventResponseNotification(context, event, userName, eventAcceptanceStateId);
+                EventNotificationManager.showEventResponseNotification(AppContext.context, event, userName, eventAcceptanceStateId);
             }
             listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
         } catch (Exception ex) {
@@ -653,11 +653,11 @@ public class EventManager {
 
     }
 
-    public static void eventEndedByInitiator(final Context context, final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
+    public static void eventEndedByInitiator(final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
         Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
-            String message = context.getResources().getString(R.string.message_general_event_null_error);
+            String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.EVENTEXTENDEDBYINITIATOR);
             return;
@@ -681,11 +681,11 @@ public class EventManager {
         }
     }
 
-    public static void eventExtendedByInitiator(final Context context, final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
+    public static void eventExtendedByInitiator(final String eventid, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
         Event event = InternalCaching.getEventFromCache(eventid);
         if (event == null) {
 
-            String message = context.getResources().getString(R.string.message_general_event_null_error);
+            String message = AppContext.context.getResources().getString(R.string.message_general_event_null_error);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.EVENTEXTENDEDBYINITIATOR);
             return;

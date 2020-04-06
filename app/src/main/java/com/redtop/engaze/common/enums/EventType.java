@@ -1,7 +1,7 @@
 package com.redtop.engaze.common.enums;
 
 public enum EventType {
-    SHAREMYLOACTION(100), TRACKBUDDY(200), GENERAL(300);
+    SHAREMYLOACTION(100), TRACKBUDDY(200), QUIK(300),GENERAL(400);
     private final int eventTypeId;
 
     private EventType(int eventTypeId) {
@@ -19,6 +19,8 @@ public enum EventType {
             case 200:
                 return EventType.TRACKBUDDY;
             case 300:
+                return EventType.QUIK;
+            case 400:
                 return EventType.GENERAL;
             default:
                 return EventType.GENERAL;

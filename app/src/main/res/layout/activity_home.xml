@@ -1,4 +1,4 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -7,7 +7,7 @@
     android:background="@color/primaryBackground"
     android:clipChildren="false" >
 
-    <RelativeLayout
+   <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -46,7 +46,7 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:local="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/home_toolbar"
@@ -62,7 +62,7 @@
                     android:layout_gravity="right"
                     layout="@layout/layout_home_menu_notification" >
                 </include>
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar >
 
             <RelativeLayout
                 android:id="@+id/ll_pick_location"
@@ -147,7 +147,7 @@
         </include>
     </RelativeLayout>
 
-    <fragment
+   <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="com.redtop.engaze.fragment.NavDrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
@@ -156,4 +156,4 @@
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

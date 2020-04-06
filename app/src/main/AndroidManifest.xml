@@ -1,6 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.redtop.engaze" >
+    package="com.redtop.engaze">
+
+    <application
+        android:name=".app.AppContext"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/NoActionBarDialog">
+
+        <activity
+            android:name="HomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"
+            android:windowSoftInputMode="stateVisible"></activity>
+
+        <activity
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity
+            android:name=".MobileNumberVerificationActivity"
+            android:label="@string/title_activity_login_message"
+            android:noHistory="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"
+            android:windowSoftInputMode="stateVisible"></activity>
+
+        <activity
+            android:name="ProfileActivity"
+            android:label="@string/title_activity_login_message"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"></activity>
+        <activity
+            android:name="EULAActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"></activity>
+        <activity
+            android:name="PrivacyPolicyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"></activity>
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name"
+            android:largeHeap="true"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="FeedbackActivity"
+            android:label="@string/app_name"
+            android:theme="@style/ETMaterialTheme"
+            android:windowSoftInputMode="stateAlwaysVisible"></activity>
+
+        <activity
+            android:name="AboutActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="CreateEditEventActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name="EventsActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name="TrackLocationActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name="ShowLocationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="RunningEventActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="MemberListActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name="EventSettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_access_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.maps.v2.API_KEY" -->
+        <!-- android:value="@string/google_map_access_key" /> -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.redtop.engaze" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.redtop.engaze.service.EventTrackerGcmListenerService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service android:name="com.redtop.engaze.service.EventTrackerInstanceIDListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service android:name="com.redtop.engaze.service.FirstTimeInitializationService" />
+        <service android:name="com.redtop.engaze.service.EventRefreshService" />
+        <service android:name="com.redtop.engaze.service.EventDistanceReminderService" />
+        <service android:name="com.redtop.engaze.service.RegistrationIntentService" />
+
+        <service
+            android:name="com.redtop.engaze.service.EventTrackerLocationService"
+            android:enabled="true"></service>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.redtop.engaze" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.redtop.engaze.service.EventTrackerAlarmReceiverService"
+            android:enabled="true" >
+        </receiver>
+        <receiver android:name="com.redtop.engaze.utils.AlertReceiver" />
+        <receiver android:name="com.redtop.engaze.utils.EventNotificationManager$notificationActionsListener" />
+        <receiver
+            android:name=".LocationReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.redtop.engaze.intent.action.LOCATION" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.redtop.engaze.utils.NetworkUpdateReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.redtop.engaze.utils.BootBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="com.redtop.engaze.service.PlaceProvider"
+            android:authorities="com.redtop.engaze.service.PlaceProvider" />
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider467933183411723"
+            android:exported="true" />
+
+    </application>
+
+    <permission
+        android:name="com.redtop.engaze.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -10,70 +201,11 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
-    <permission
-        android:name="com.redtop.engaze.gcm.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
     <uses-permission android:name="com.redtop.engaze.gcm.permission.C2D_MESSAGE" />
-
-
-    <application
-        android:name=".app.AppContext"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/NoActionBarDialog" >
-        <activity
-            android:name=".FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-        <activity
-            android:name=".MobileNumberVerificationActivity"
-            android:label="@string/title_activity_login_message"
-            android:noHistory="false"
-            android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="stateVisible"
-            android:theme="@style/ETMaterialTheme">
-        </activity>
-
-        <activity
-            android:name="ProfileActivity"
-            android:label="@string/title_activity_login_message"
-            android:noHistory="true"
-            android:screenOrientation="locked"
-            android:theme="@style/ETMaterialTheme">
-        </activity>
-        <activity
-            android:name="EULAActivity"
-            android:screenOrientation="locked"
-            android:theme="@style/ETMaterialTheme">
-        </activity>
-        <activity
-            android:name="PrivacyPolicyActivity"
-            android:screenOrientation="locked"
-            android:theme="@style/ETMaterialTheme">
-        </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name"
-            android:largeHeap="true"
-            android:noHistory="true"
-            android:theme="@style/ETMaterialTheme"
-            android:screenOrientation="fullSensor" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
 
 </manifest>
