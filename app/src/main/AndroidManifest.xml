@@ -159,21 +159,13 @@
             android:name="com.redtop.engaze.service.EventTrackerAlarmReceiverService"
             android:enabled="true" >
         </receiver>
-        <receiver android:name="com.redtop.engaze.utils.AlertReceiver" />
-        <receiver android:name="com.redtop.engaze.utils.EventNotificationManager$notificationActionsListener" />
-        <receiver
-            android:name=".LocationReceiver"
-            android:enabled="true" >
-            <intent-filter>
-                <action android:name="com.redtop.engaze.intent.action.LOCATION" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.redtop.engaze.utils.NetworkUpdateReceiver" >
+        <receiver android:name="com.redtop.engaze.manager.EventNotificationManager$notificationActionsListener" />
+        <receiver android:name="com.redtop.engaze.receiver.NetworkUpdateReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.redtop.engaze.utils.BootBroadcastReceiver" >
+        <receiver android:name="com.redtop.engaze.receiver.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
