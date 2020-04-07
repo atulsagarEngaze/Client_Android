@@ -11,11 +11,11 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ContactsWS extends BaseWebService {
+public class ContactsWS extends BaseWebService implements IContactsWS {
 
     private final static String TAG = ContactsWS.class.getName();
 
-    public static void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
+    public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
                                   final OnAPICallCompleteListner listnerOnFailure){
         try {
 
@@ -30,7 +30,7 @@ public class ContactsWS extends BaseWebService {
         }
     }
 
-    public static void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
+    public void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
                                                     final OnAPICallCompleteListner listnerOnSuccess,
                                                     final OnAPICallCompleteListner listnerOnFailure) {
         try {
@@ -46,7 +46,7 @@ public class ContactsWS extends BaseWebService {
         }
     }
 
-    private static JSONObject createContactsJSON(HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, JSONException {
+    private JSONObject createContactsJSON(HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, JSONException {
         // making json object request
         JSONObject jobj = new JSONObject();
         JSONArray jsonarr = new JSONArray();

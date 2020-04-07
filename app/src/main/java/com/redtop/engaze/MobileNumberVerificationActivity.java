@@ -294,7 +294,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 
 	private void checkPermissionAndSendSMS(){
 		if(countryCode.equals("+91")){
-			if(PermissionRequester.CheckPermission(Manifest.permission.SEND_SMS, SEND_SMS,this)){
+			if(PermissionRequester.CheckPermission(new String[]{Manifest.permission.SEND_SMS}, SEND_SMS,this)){
 				sendSmsAndWait();
 			}
 		}

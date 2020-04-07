@@ -57,7 +57,7 @@
                 android:layout_alignParentTop="true"
                 android:orientation="horizontal" >
 
-                <com.redtop.engaze.customeviews.CircularImageView
+                <com.redtop.engaze.common.customeviews.CircularImageView
                     android:id="@+id/user_location_profile_image"
                     android:layout_width="28dp"
                     android:layout_height="28dp"

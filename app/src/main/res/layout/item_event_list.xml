@@ -100,7 +100,7 @@
                 android:paddingBottom="0dip"
                 android:paddingTop="0dip" >
 
-                <com.redtop.engaze.customeviews.CircularImageView
+                <com.redtop.engaze.common.customeviews.CircularImageView
                     android:id="@+id/host_contact_icon"
                     style="@style/CircularEventHostStyle"
                     android:layout_alignParentLeft="true" />

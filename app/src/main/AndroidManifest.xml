@@ -100,6 +100,21 @@
             android:name="EventSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
+        <activity
+            android:name="PickLocationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme">
+        </activity>
+        <activity
+            android:name="DurationOffset"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme" >
+        </activity>
+        <activity
+            android:name="EventTypeList"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme">
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -114,16 +129,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.redtop.engaze" />
-            </intent-filter>
-        </receiver>
         <service
             android:name="com.redtop.engaze.service.EventTrackerGcmListenerService"
             android:enabled="true"
@@ -201,7 +206,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.redtop.engaze.gcm.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />

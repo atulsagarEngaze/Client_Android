@@ -24,6 +24,8 @@ import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.webservice.ContactsWS;
+import com.redtop.engaze.webservice.IContactsWS;
+import com.redtop.engaze.webservice.proxy.ContactsWSProxy;
 
 public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
 
@@ -31,7 +33,7 @@ public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
     List<ContactOrGroup> rowItems;
     List<ContactOrGroup> list;
     private JSONObject mInviteJasonObj;
-
+    private final static IContactsWS contactsWS = new ContactsWSProxy();
     public ContactOrGroupListAdapter(Context context, int resource,
                                      List<ContactOrGroup> data) {
         super(context, resource, data);
@@ -110,7 +112,7 @@ public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
     private void SendInvite() {
 
         //showProgressBar();
-        ContactsWS.sendInvite(mInviteJasonObj, new OnAPICallCompleteListner() {
+        contactsWS.sendInvite(mInviteJasonObj, new OnAPICallCompleteListner() {
             @Override
             public void apiCallComplete(JSONObject response) {
                 ProgressBar.hideProgressBar();

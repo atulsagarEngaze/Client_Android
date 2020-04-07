@@ -5,7 +5,7 @@
     android:background="@drawable/ripple_home_buttton"
     android:focusable="false" >
 
-    <com.redtop.engaze.customeviews.CircularImageView
+    <com.redtop.engaze.common.customeviews.CircularImageView
         android:id="@+id/contact_icon"
         style="@style/CircularProfileStyle" />
 

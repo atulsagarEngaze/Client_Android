@@ -186,7 +186,7 @@
                     android:layout_marginLeft="56dip"
                     android:text="Recurrence" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/chkrecurrence"
                     style="@style/SecondaryTextStyle"
                     android:layout_width="wrap_content"
@@ -340,7 +340,7 @@
                             android:paddingTop="@dimen/padding"
                             android:rowCount="3" >
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chkmonday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
                                 android:textSize="@dimen/primary_text_size"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chktuesday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -361,7 +361,7 @@
                                 android:textSize="@dimen/primary_text_size"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chkwednesday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -370,7 +370,7 @@
                                 android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chkthursday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -380,7 +380,7 @@
                                 android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chkfriday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -389,7 +389,7 @@
                                 android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chksaturday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -398,7 +398,7 @@
                                 android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
 
-                            <android.support.v7.widget.AppCompatCheckBox
+                            <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chksunday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

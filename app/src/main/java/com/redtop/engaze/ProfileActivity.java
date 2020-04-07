@@ -264,7 +264,6 @@ public class ProfileActivity extends BaseActivity {
 						mProgress.hide();
 					}
 
-					AppContext.context.isProfileSaved = true;
 					Intent intent = new Intent(mContext, SplashActivity.class);
 					startActivity(intent);
 

@@ -7,13 +7,13 @@
 
     <!-- #f1f1f1 -->
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/accepted_event_recycle_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/paddinghalf" 
         android:layout_marginTop="@dimen/paddinghalf">
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
     
     <LinearLayout
         android:id="@+id/rl_accepted_help_text"

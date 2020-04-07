@@ -19,7 +19,7 @@ public class ProgressBar {
 
     public static void showProgressBar(String title, String message ){
 
-        if(mDialog==null || mCurrentActivityName.equals(AppContext.context.currentActivity.getClass().getSimpleName())){
+        if(mDialog==null || !mCurrentActivityName.equals(AppContext.context.currentActivity.getClass().getSimpleName())){
             mCurrentActivityName = AppContext.context.currentActivity.getClass().getSimpleName();
             mDialog = new ProgressDialog(AppContext.context.currentActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }

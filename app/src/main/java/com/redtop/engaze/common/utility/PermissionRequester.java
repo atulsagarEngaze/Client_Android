@@ -13,14 +13,26 @@ import androidx.core.content.ContextCompat;
 
 public class PermissionRequester {
 
-    public static boolean CheckPermission(String permission, int requestCode, AppCompatActivity activity) {
-        if (ContextCompat.checkSelfPermission(activity,
-                permission)
-                != PackageManager.PERMISSION_GRANTED) {
+    public static boolean CheckPermission(String[] permissions, int requestCode, AppCompatActivity activity) {
+        String[]permissionsToBeAsked = null;
+        int index =0;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(activity,
+                    permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if(permissionsToBeAsked==null){
+                    permissionsToBeAsked = new String[permissions.length];
+                }
+                permissionsToBeAsked[index] =permission;
+                index++;
+            }
+        }
+
+        if (permissionsToBeAsked!=null) {
             //for time being we would directly ask for the permission
 
             ActivityCompat.requestPermissions(activity,
-                    new String[]{permission},
+                    permissionsToBeAsked,
                     requestCode);
 
             return false;
@@ -47,5 +59,16 @@ public class PermissionRequester {
         }
     }
     // Here, thisActivity is the current activity
+
+    public static boolean hasPermissions(String... permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(AppContext.context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 }

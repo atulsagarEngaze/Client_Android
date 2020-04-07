@@ -32,10 +32,14 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.webservice.ContactsWS;
+import com.redtop.engaze.webservice.IContactsWS;
+import com.redtop.engaze.webservice.proxy.ContactsWSProxy;
 
 public class ContactAndGroupListManager {
 
     private final static String TAG = ContactAndGroupListManager.class.getName();
+
+    private final static IContactsWS contactsWS = new ContactsWSProxy();
 
     public static void cacheContactAndGroupList(final OnRefreshMemberListCompleteListner listnerOnSuccess, final OnRefreshMemberListCompleteListner listnerOnFailure) {
 
@@ -138,7 +142,7 @@ public class ContactAndGroupListManager {
     private static void cacheRegisteredContacts(final HashMap<String, ContactOrGroup> contactsAndgroups,
                                                 final OnRefreshMemberListCompleteListner listnerOnSuccess,
                                                 final OnRefreshMemberListCompleteListner listnerOnFailure) {
-        if (AppContext.context.isInternetEnabled) {
+        if (!AppContext.context.isInternetEnabled) {
             String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             //Toast.makeText(mContext,	message, Toast.LENGTH_SHORT).show();
             Log.d(TAG, message);
@@ -146,7 +150,7 @@ public class ContactAndGroupListManager {
             return;
         }
 
-        ContactsWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListner() {
+        contactsWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListner() {
             @Override
             public void apiCallComplete(JSONObject response) {
                 try {
@@ -183,7 +187,7 @@ public class ContactAndGroupListManager {
     private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONObject response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
 
         Hashtable<String, ContactOrGroup> registeredContacts = new Hashtable<String, ContactOrGroup>();
-        JSONArray jUsers = (JSONArray) response.getJSONArray("ListOfRegisteredContacts");
+        JSONArray jUsers = response.getJSONArray("ListOfRegisteredContacts");
         if (jUsers.length() == 0) {
             return registeredContacts;
         }
@@ -305,7 +309,7 @@ public class ContactAndGroupListManager {
                     @Override
                     public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
 
-                        Toast.makeText(AppContext.context, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

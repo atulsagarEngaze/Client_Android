@@ -17,7 +17,6 @@ public class AppContext extends Application {
             .getSimpleName();
 
     public boolean isFirstTimeLoading = false;
-    public boolean isProfileSaved = false;
     public String loginId;
     public String loginName;
     public Boolean isInternetEnabled = true;

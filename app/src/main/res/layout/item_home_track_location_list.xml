@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <com.redtop.engaze.customeviews.CircularImageView
+    <com.redtop.engaze.common.customeviews.CircularImageView
         android:id="@+id/track_location_contact_icon"
         style="@style/CircularProfileStyle"
         android:layout_alignParentLeft="true"

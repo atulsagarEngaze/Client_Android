@@ -456,10 +456,9 @@ public class CreateEditEventActivity extends BaseEventActivity {
                 populateEventRecurrenceData();
             }
         } else {
-            getResources().getString(R.string.title_create_event);
 
-            mCreateUpdateSuccessfulMessage = getResources().getString(R.string.event_create_successful);
-
+            mCreateUpdateSuccessfulMessage = getResources().getString(R.string.title_create_event);
+            createOrUpdateEvent = new Event();
             mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
             createOrUpdateEvent.Reminder = new Reminder(Integer.parseInt(sharedPrefs.getString("ReminderInterval", getResources().getString(R.string.event_reminder_default_interval))), sharedPrefs.getString("ReminderPeriod", getResources().getString(R.string.event_reminder_default_period)), sharedPrefs.getString("ReminderNotification", getResources().getString(R.string.event_reminder_default_notification)));
             createOrUpdateEvent.Tracking = new Duration(Integer.parseInt(sharedPrefs.getString("TrackingInterval", getResources().getString(R.string.event_tracking_default_interval))), sharedPrefs.getString("TrackingPeriod", getResources().getString(R.string.event_tracking_default_period)), Boolean.parseBoolean(sharedPrefs.getString("TrackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));

@@ -5,11 +5,11 @@
     android:background="@drawable/background_map_pointer"
     android:orientation="vertical" >
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pending_event_recycle_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/rl_pending_help_text"
