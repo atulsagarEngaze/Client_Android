@@ -40,22 +40,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         AppContext.context.currentActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (mDialog ==null){
+      /*  View decorView = this.getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        decorView.setSystemUiVisibility(uiOptions);*/
+
+        if (mDialog == null) {
             mDialog = new ProgressDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
 
         mNetworkUpdateBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().equals(Constants.NETWORK_STATUS_UPDATE))
-                {
+                if (intent.getAction().equals(Constants.NETWORK_STATUS_UPDATE)) {
                     AppContext.context.isInternetEnabled = AppUtility.isNetworkAvailable(context);
                     turnOnOfInternetAvailabilityMessage();
-                    if(AppContext.context.isInternetEnabled){
+                    if (AppContext.context.isInternetEnabled) {
                         onInternetConnectionResume();
-                    }
-                    else{
+                    } else {
                         onInternetConnectionLost();
                     }
                 }
@@ -64,10 +65,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
     }
 
-    protected void onInternetConnectionResume(){
+    protected void onInternetConnectionResume() {
     }
 
-    protected void onInternetConnectionLost(){
+    protected void onInternetConnectionLost() {
 
     }
 
@@ -85,40 +86,34 @@ public abstract class BaseActivity extends AppCompatActivity {
         turnOnOfInternetAvailabilityMessage();
     }
 
-    protected void showProgressBar(String message ){
+    protected void showProgressBar(String message) {
         ProgressBar.showProgressBar(message);
     }
 
-    protected void showProgressBar(String title, String message ){
+    protected void showProgressBar(String title, String message) {
         ProgressBar.showProgressBar(title, message);
     }
 
-    protected void hideProgressBar(){
+    protected void hideProgressBar() {
         ProgressBar.hideProgressBar();
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    protected void turnOnOfInternetAvailabilityMessage()
-    {
+    protected void turnOnOfInternetAvailabilityMessage() {
         View v = findViewById(R.id.internet_status);
-        if(v!=null){
+        if (v != null) {
 
-            LinearLayout networkStatusLayout= (LinearLayout) v;
-            if(AppContext.context.isInternetEnabled)
-            {
-                if(networkStatusLayout!=null)
-                {
+            LinearLayout networkStatusLayout = (LinearLayout) v;
+            if (AppContext.context.isInternetEnabled) {
+                if (networkStatusLayout != null) {
                     networkStatusLayout.setVisibility(View.GONE);
                 }
-            }
-            else
-            {
-                if(networkStatusLayout!=null)
-                {
+            } else {
+                if (networkStatusLayout != null) {
                     networkStatusLayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -126,21 +121,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void displayView(int position) {
-        Intent intent = null ;
+        Intent intent = null;
         switch (position) {
             case 0:
-                if( this.getClass().getName().equals(EventsActivity.class.getName())){
+                if (this.getClass().getName().equals(EventsActivity.class.getName())) {
                     finish();
-                }
-                else if(this.getClass().getName().equals(HomeActivity.class.getName())){
+                } else if (this.getClass().getName().equals(HomeActivity.class.getName())) {
                     //do nothing
                 }
                 break;
             case 1:
-                if(this.getClass().getName().equals(HomeActivity.class.getName())){
+                if (this.getClass().getName().equals(HomeActivity.class.getName())) {
                     intent = new Intent(this, EventsActivity.class);
-                }
-                else if(this.getClass().getName().equals(EventsActivity.class.getName())){
+                } else if (this.getClass().getName().equals(EventsActivity.class.getName())) {
                     //do nothing
                 }
                 break;
@@ -167,12 +160,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             default:
                 break;
         }
-        if(intent != null){
+        if (intent != null) {
             startActivity(intent);
         }
     }
 
-    public void inviteFriend(){
+    public void inviteFriend() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.message_invitation_success));
@@ -180,8 +173,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.label_invitation_inviteUsing)));
     }
 
-    public Boolean accessingContactsFirstTime(){
-        if(AppContext.context.isFirstTimeLoading = true){
+    public Boolean accessingContactsFirstTime() {
+        if (AppContext.context.isFirstTimeLoading = true) {
             processMemberList();
             AppContext.context.isFirstTimeLoading = false;
             return true;
@@ -189,11 +182,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
-    private void processMemberList(){
-        if (PreffManager.getPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED)){
+    private void processMemberList() {
+        if (PreffManager.getPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED)) {
             registeredMemberListCached();
-        }
-        else if (PreffManager.getPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED)){
+        } else if (PreffManager.getPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED)) {
             showProgressBar(getResources().getString(R.string.message_general_progressDialog));
             ContactAndGroupListManager.initializedRegisteredUser(new OnRefreshMemberListCompleteListner() {
 
@@ -211,22 +203,21 @@ public abstract class BaseActivity extends AppCompatActivity {
                             getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else {
+        } else {
             ContactAndGroupListManager.refreshMemberList();
         }
     }
 
 
-    protected void registeredMemberListCached(){
+    protected void registeredMemberListCached() {
 
     }
 
-    protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList){
+    protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList) {
 
     }
 
-    protected void memberListRefreshed_fail(){
+    protected void memberListRefreshed_fail() {
 
     }
 

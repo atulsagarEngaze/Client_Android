@@ -18,8 +18,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/paddinghalf"
-                android:layout_marginTop="@dimen/paddinghalf"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_marginTop="@dimen/padding"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
@@ -27,7 +27,7 @@
                     android:id="@+id/item_icon"
                     android:layout_width="24dip"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/icon"
+                    android:backgroundTint="@color/darkGray"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/padding" />
 
@@ -39,14 +39,10 @@
                     android:paddingLeft="@dimen/padding"
                     android:text="Medium Text"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/icon"
+                    android:textColor="@color/darkGray"
                     android:textSize="@dimen/primary_text_size" />
             </LinearLayout>
 
-            <View
-                style="@style/Divider"
-                android:layout_marginLeft="40dip"
-                android:layout_marginRight="@dimen/paddinghalf" />
         </LinearLayout>
     </ScrollView>
 

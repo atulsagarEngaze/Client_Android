@@ -100,15 +100,15 @@
 
     <string name="create_an_event">Create an Event</string>
     <string name="name">Name</string>
-    <string name="nav_item_home">HOME</string>
-    <string name="nav_item_events">MY EVENTS</string>
-    <string name="nav_item_invite_friend">INVITE A FRIEND</string>
-    <string name="nav_item_friends">FRIENDS</string>
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_events">My Events</string>
+    <string name="nav_item_invite_friend">Invite your friend</string>
+    <string name="nav_item_friends">Friends</string>
     <!-- <string name="nav_item_create_group">CREATE A GROUP</string> -->
     <!-- <string name="nav_item_groups">GROUPS</string> -->
-    <string name="nav_item_default_setting">DEFAULT SETTINGS</string>
-    <string name="nav_item_about">ABOUT</string>
-    <string name="nav_item_feedback">FEEDBACK</string>
+    <string name="nav_item_default_setting">Default Settings</string>
+    <string name="nav_item_about">About</string>
+    <string name="nav_item_feedback">Feedback</string>
     <string name="nav_item_logout">LOGOUT</string>
     <string name="gcm_defaultSenderId">111568034099</string>
 

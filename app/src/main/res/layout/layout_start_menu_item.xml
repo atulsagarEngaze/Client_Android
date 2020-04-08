@@ -13,10 +13,10 @@
         android:paddingLeft="@dimen/padding"
         android:paddingBottom="@dimen/paddingQuarter"
         android:paddingTop="@dimen/paddingQuarter"
-        android:paddingRight="@dimen/padding"       
+        android:paddingRight="@dimen/padding"
         android:text="@string/action_start"
-        android:textAllCaps="true"
-        android:textColor="@android:color/white"
+
+        android:textColor="@color/darkGray"
         android:textSize="@dimen/small_text_size"
         android:textStyle="bold" />
 

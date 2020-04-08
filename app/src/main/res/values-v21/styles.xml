@@ -45,14 +45,15 @@
     </style>
 
     <style name="ETMaterialTheme.ActionBar">
-        <item name="android:titleTextStyle">@style/ETMaterialTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:titleTextStyle">@color/secondaryText</item>
         <item name="android:elevation">5dip</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:background">@color/primary</item>
-        <item name="colorControlNormal">@color/primaryBackground</item>
-        <item name="android:colorBackground">@color/primaryBackground</item>
+        <item name="android:background">#FAFAFA</item>
+        <item name="colorControlNormal">@color/secondaryText</item>
+        <item name="android:colorBackground">#FAFAFA</item>
+
     </style>
 
     <style name="ETMaterialTheme.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
@@ -72,9 +73,9 @@
 
     <style name="ETMaterialTheme.Toolbar">
         <item name="android:elevation">5dip</item>
-        <item name="colorControlNormal">@color/primaryBackground</item>
-        <item name="android:colorBackground">@color/primaryBackground</item>
-        <item name="android:textColor">@color/icon</item>
+        <item name="colorControlNormal">@color/secondaryText</item>
+        <item name="android:colorBackground">#FAFAFA</item>
+        <item name="android:textColor">@color/secondaryText</item>
     </style>
 
     <style name="HomeMenuButton">
