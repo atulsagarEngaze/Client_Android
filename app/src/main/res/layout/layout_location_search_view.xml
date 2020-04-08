@@ -52,7 +52,6 @@
             android:layout_marginLeft="@dimen/paddinghalf"
             android:layout_marginRight="@dimen/paddinghalf"
             android:background="@drawable/ic_clear_black_24dp"
-            android:backgroundTint="#4f4f4f"
             android:tint="@color/primary" />
     </RelativeLayout>
 

@@ -123,11 +123,11 @@ public class LocationViewManager implements  OnItemClickListener, OnClickListene
 	}
 
 	public void setGpsOnPinOnMyLocationDrawable(){
-		myLocationButton.setImageResource(R.drawable.pointer_on_gps_on);
+		myLocationButton.setImageResource(R.drawable.ic_gps_fixed_blue_24dp);
 	}
 
 	public void setGpsOnDrawable(){
-		myLocationButton.setImageResource(R.drawable.gps_on);
+		myLocationButton.setImageResource(R.drawable.ic_gps_fixed_black_24dp);
 	}
 
 	public void setGpsOffDrawable(){

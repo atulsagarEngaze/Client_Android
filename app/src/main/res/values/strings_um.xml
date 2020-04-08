@@ -153,7 +153,7 @@
     <string name="track_my_buddy_text_duration">how long you want to track</string>
     <string name="track_my_buddy_text_start_button">start</string>
     <string name="track_my_buddy_location_hint">place your friends are going</string>
-    <string name="track_my_buddy_add_friends_hint">Enter contacts whose location you want to track</string>
+    <string name="track_my_buddy_add_friends_hint">Type contacts name you wish to track</string>
     <string name="track_my_buddy_event_create_successful">Tracking is started. Notification sent to your buddies to share their location.</string>
     <string name="track_my_buddy_text_notification">Track buddy request</string>
     <string name="label_track_my_buddy_errorMessage">Unable to tracking! Please try again..</string>

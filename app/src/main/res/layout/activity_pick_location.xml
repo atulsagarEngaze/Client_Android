@@ -85,7 +85,7 @@
                 android:layout_marginBottom="32dip"
                 android:layout_marginRight="@dimen/padding"
                 android:padding="@dimen/paddinghalf"
-                android:src="@drawable/gps_on" />
+                android:src="@drawable/ic_gps_fixed_black_24dp" />
         </RelativeLayout>
 
         <RelativeLayout

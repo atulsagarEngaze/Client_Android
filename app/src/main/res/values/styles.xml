@@ -2,8 +2,8 @@
 
     <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionBar">true</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
@@ -19,10 +19,11 @@
         <item name="android:listPreferredItemPaddingRight">5dp</item>
     </style>
 
-    <style name="ETMaterialTheme.Base" parent="Theme.AppCompat.NoActionBar">
+    <style name="ETMaterialTheme.Base" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/primaryBackground</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowActionModeOverlay">true</item>
@@ -64,7 +65,6 @@
     </style>
 
 
-
     <!-- <style name="ETMaterialTheme.ActionBar.Light" parent="ETMaterialTheme.ActionBar">
          <item name="colorControlNormal">@color/icon</item>
          <item name="android:textColorSecondary">@color/icon</item>
@@ -88,12 +88,10 @@
         <item name="android:background">@drawable/ripple_gray</item>
         <item name="android:layout_width">54dip</item>
         <item name="android:layout_height">54dip</item>
-        <item name="android:padding">@dimen/paddinghalf</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">@dimen/padding_menu_button</item>
-        <item name="android:layout_marginRight">@dimen/padding_menu_button</item>
+        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginBottom">2dip</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:elevation">5dip</item>
@@ -301,6 +299,23 @@
         <item name="android:layout_height">30dip</item>
     </style>
 
+    <style name="CircularImageStyle">
+
+        <!-- <item name="android:elevation">4dp</item> -->
+
+        <item name="android:paddingRight">@dimen/padding</item>
+        <item name="android:paddingTop">@dimen/padding</item>
+        <item name="android:paddingBottom">@dimen/padding</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">36dip</item>
+        <item name="android:layout_height">36dip</item>
+        <item name="android:background">@drawable/ripple</item>
+        <item name="android:paddingLeft">@dimen/padding</item>
+        <item name="android:elevation">5dip</item>
+    </style>
+
     <!-- <style name="RightCircularImageAccentStyle" parent="CircularImageStyle">
           <item name="android:layout_alignParentRight">true</item>
           <item name="android:background">@drawable/ripple_accent</item>
@@ -332,12 +347,19 @@
     </style>
 
     <style name="HomeMenuText">
-        <item name="android:layout_width">75dip</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">@color/icon</item>
         <item name="android:textSize">@dimen/extra_small_text_size</item>
+    </style>
+
+    <style name="Icon">
+        <item name="android:layout_marginLeft">@dimen/padding</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_height">48dip</item>
     </style>
 
     <style name="IconStyle">

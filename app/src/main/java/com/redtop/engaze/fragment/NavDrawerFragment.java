@@ -31,9 +31,9 @@ public class NavDrawerFragment extends Fragment {
 	private NavDrawerAdapter adapter;
 	private View containerView;
 	private static String[] titles = null;
-	private static int[] titlesIcon  ={R.drawable.ic_home_white_24dp,R.drawable.ic_event_white_24dp,R.drawable.ic_person_add_white_24dp,
+	private static int[] titlesIcon  ={R.drawable.ic_home_24dp,R.drawable.ic_event_24dp,R.drawable.ic_person_add_24dp,
 		//R.drawable.ic_group_add_black_36dp,R.drawable.ic_group_black_36dp,
-		R.drawable.ic_person_white_24dp,R.drawable.ic_build_white_24dp,R.drawable.ic_comment_black_24dp, R.drawable.ic_info_outline_white_24dp};
+		R.drawable.ic_person_24dp,R.drawable.ic_settings_24dp,R.drawable.ic_feedback_black_24dp, R.drawable.ic_info_outline_24dp};
 	//private static int[] titlesIconFont  ={R.string.fa_home,R.string.fa_user,R.string.fa_group,R.string.fa_adjust,R.string.fa_adjust,R.string.fa_gear,R.string.fa_info};
 	private FragmentDrawerListener drawerListener;
 

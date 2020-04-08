@@ -120,8 +120,7 @@
                     android:layout_alignWithParentIfMissing="true"
                     android:layout_marginBottom="@dimen/padding"
                     android:layout_marginRight="12dip"
-                    android:padding="@dimen/paddinghalf"
-                    android:src="@drawable/pointer_on_gps_on" />
+                    android:src="@drawable/ic_gps_fixed_blue_24dp" />
 
                 <include
                     android:id="@+id/internet_status"
