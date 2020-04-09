@@ -277,7 +277,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
             intent.putExtra("DestinatonLocation", (Parcelable) ((HomeActivity) mContext).mEventPlace);
             intent.putExtra("caller", HomeActivity.class.toString());
-            intent.putExtra("EventTypeId", EventType.QUIK);
+            intent.putExtra("EventTypeId", EventType.QUIK.GetEventTypeId());
             startActivity(intent);
         }
     }
@@ -293,7 +293,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     public void onShareMyLocationClicked() {
         if (AppContext.context.isInternetEnabled) {
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
-            intent.putExtra("EventType", EventType.SHAREMYLOACTION);//EventType share my location
+            intent.putExtra("EventTypeId", EventType.SHAREMYLOACTION.GetEventTypeId());//EventType share my location
             startActivity(intent);
         }
     }
