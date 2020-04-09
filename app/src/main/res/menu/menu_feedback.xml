@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_feedback"
         android:height="18dip"
-        android:icon="@drawable/ic_send_white_24dp"
+        android:icon="@drawable/ic_send_black_24dp"
         android:orderInCategory="1"
         android:title="@string/action_settings"
         android:width="18dip"

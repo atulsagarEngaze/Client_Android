@@ -8,7 +8,7 @@
     </style>
 
     <style name="ETMaterialTheme.ActionBar.TabText">
-        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textColor">@color/icon</item>
     </style>
 
     <style name="ETMaterialThemeActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
@@ -24,7 +24,7 @@
         <item name="android:windowActionBar">true</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">#f5f5f5</item>
+        <item name="android:statusBarColor">@color/toolBarLight</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowBackground">@color/primaryBackground</item>

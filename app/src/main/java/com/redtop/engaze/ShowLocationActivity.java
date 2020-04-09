@@ -43,7 +43,7 @@ public class ShowLocationActivity extends BaseActivity implements OnMapReadyCall
 		Toolbar toolbar = (Toolbar) findViewById(R.id.show_location_toolbar);
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(mLocation);			
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 				@Override

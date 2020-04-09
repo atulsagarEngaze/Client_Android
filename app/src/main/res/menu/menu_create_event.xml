@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.redtop.engaze.CreateEventActivity" >
+    tools:context="com.redtop.engaze.CreateEventActivity">
 
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/event_add"
+        android:icon="@drawable/ic_note_add_black_24dp"
         android:orderInCategory="2"
         android:title="Meet Later"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_track"
-        android:icon="@drawable/quik_event_add"
+        android:icon="@drawable/ic_add_location_black_24dp"
         android:orderInCategory="1"
-        android:height="18dip"
-         android:width="18dip"
         android:title="Meet Now"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:orderInCategory="3"
         android:title="Refresh"
-        app:showAsAction="collapseActionView">
+        app:showAsAction="ifRoom">
+        <!--app:showAsAction="collapseActionView">-->
     </item>
 
 </menu>

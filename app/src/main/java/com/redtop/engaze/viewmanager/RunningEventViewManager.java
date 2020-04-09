@@ -57,7 +57,7 @@ public class RunningEventViewManager implements OnClickListener {
 		Toolbar toolbar = (Toolbar)activity.findViewById(R.id.running_event_toolbar);
 		if (toolbar != null) {
 			activity.setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			activity.getSupportActionBar().setTitle(toolbarTitle);			
 			toolbar.setNavigationOnClickListener(new OnClickListener() {
 				@Override

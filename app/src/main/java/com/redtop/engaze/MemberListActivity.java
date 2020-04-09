@@ -52,7 +52,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 		Toolbar toolbar = (Toolbar) findViewById(R.id.friend_toolbar);
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_friend_list);
 			//toolbar.setSubtitle(R.string.title_event);
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {

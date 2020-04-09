@@ -61,7 +61,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 		}
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_select_friends);							
 			toolbar.setNavigationOnClickListener(new OnClickListener() {
 				@Override

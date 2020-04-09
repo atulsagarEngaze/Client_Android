@@ -42,7 +42,7 @@ public class EventSettingsActivity extends BaseActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.event_setting_toolbar);
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_event_settings);
 			//toolbar.setSubtitle(R.string.title_event);
 			toolbar.setNavigationOnClickListener(new OnClickListener() {
@@ -135,7 +135,7 @@ public class EventSettingsActivity extends BaseActivity {
 					}
 					selectedIcon.setVisibility(View.VISIBLE);
 					mReminder.setNotificationType(clieckedView.getTag().toString());
-					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));	
+					clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 					PreffManager.setPref("ReminderNotification", clieckedView.getTag().toString());
 
 				}
@@ -203,7 +203,7 @@ public class EventSettingsActivity extends BaseActivity {
 					// TODO Auto-generated method stub
 					selectedIcon.setVisibility(View.VISIBLE);
 
-					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));
+					clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 					clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
 					mReminder.setPeriod(clieckedView.getTag().toString());					
 					PreffManager.setPref("ReminderPeriod", clieckedView.getTag().toString());
@@ -277,7 +277,7 @@ public class EventSettingsActivity extends BaseActivity {
 					// TODO Auto-generated method stub
 					selectedIcon.setVisibility(View.VISIBLE);
 
-					clieckedView.setTextColor(getResources().getColorStateList(R.color.primary));
+					clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 					clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
 					mTracking.setPeriod(clieckedView.getTag().toString());					
 					PreffManager.setPref("TrackingPeriod", clieckedView.getTag().toString());
@@ -341,7 +341,7 @@ public class EventSettingsActivity extends BaseActivity {
 		if(period.getTag().equals(mTracking.getPeriod()))
 		{		   
 			period.setText(period.getText().toString().concat(getResources().getString(R.string.before)));
-			period.setTextColor(getResources().getColorStateList(R.color.primary));
+			period.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 			icon.setVisibility(View.VISIBLE);
 		}	
 	}
@@ -350,7 +350,7 @@ public class EventSettingsActivity extends BaseActivity {
 		if(period.getTag().equals(mReminder.getPeriod()))
 		{		   
 			period.setText(period.getText().toString().concat(getResources().getString(R.string.before)));
-			period.setTextColor(getResources().getColorStateList(R.color.primary));
+			period.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 			icon.setVisibility(View.VISIBLE);
 		}	
 	}
@@ -359,7 +359,7 @@ public class EventSettingsActivity extends BaseActivity {
 		if(notificationType.getTag().equals(mReminder.getNotificationType()))
 		{
 			// TODO Auto-generated method stub
-			notificationType.setTextColor(getResources().getColorStateList(R.color.primary));
+			notificationType.setTextColor(getResources().getColorStateList(R.color.primaryDark));
 			icon.setVisibility(View.VISIBLE);
 		}
 	}

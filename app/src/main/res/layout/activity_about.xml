@@ -10,8 +10,8 @@
         android:id="@+id/about_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:theme="@style/ETMaterialTheme.Toolbar" />
+        style="@style/ETMaterialTheme.ActionBar" />
+
 
     <ImageView
         android:id="@+id/logo"
@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/padding"
-        android:layout_marginTop="@dimen/padding"
+        android:layout_marginTop="72dp"
         android:background="@drawable/logo" />
 
     <TextView

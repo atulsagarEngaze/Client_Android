@@ -16,7 +16,7 @@
         android:paddingRight="@dimen/padding"
         android:text="@string/action_start"
 
-        android:textColor="@color/darkGray"
+        android:textColor="@color/iconDark"
         android:textSize="@dimen/small_text_size"
         android:textStyle="bold" />
 

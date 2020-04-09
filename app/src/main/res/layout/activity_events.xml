@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app1="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/drawer_layout">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/events_list_pager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"></androidx.viewpager.widget.ViewPager>
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
+                style="@style/ETMaterialTheme.ActionBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.Toolbar
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:local="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/event_list_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:theme="@style/ETMaterialTheme.Toolbar" >
-                </androidx.appcompat.widget.Toolbar>
+                    app:layout_scrollFlags="scroll|enterAlways"></androidx.appcompat.widget.Toolbar>
 
                 <com.redtop.engaze.common.customeviews.SlidingTabLayout
                     android:id="@+id/events_list_tabs"
@@ -42,22 +44,14 @@
                     android:layout_marginBottom="0dp"
                     android:elevation="0dp" />
             </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/events_list_pager"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-            </androidx.viewpager.widget.ViewPager>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <include
             android:id="@+id/internet_status"
+            layout="@layout/internet_unavailable_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            layout="@layout/internet_unavailable_message" >
-        </include>
+            android:layout_alignParentBottom="true"></include>
     </RelativeLayout>
 
     <fragment

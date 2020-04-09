@@ -56,29 +56,32 @@
                 android:layout_marginLeft="72dip"
                 android:paddingLeft="72dip" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/rl_participant_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/paddinghalf"
-                android:layout_marginTop="@dimen/paddinghalf"
-                android:orientation="horizontal" >
+                android:layout_marginTop="@dimen/padding"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <com.redtop.engaze.fontawesome.TextFont
-                    android:id="@+id/invitees"
-                    style="@style/IconStyle"
-                    android:text="@string/fa_user"
-                    android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/padding_one_half"
+                    android:layout_marginRight="@dimen/padding"
+                    android:background="@drawable/ic_person_outline_black_24dp"></ImageView>
+
 
                 <com.redtop.engaze.common.customeviews.FlowLayout
                     android:id="@+id/participant_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="32dp"
+                    android:paddingTop="3dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="@dimen/padding"
-                    android:layout_marginLeft="72dp"
-                    android:layout_marginRight="@dimen/padding"
-                    android:layout_marginTop="@dimen/paddinghalf" >
+                    android:layout_marginRight="@dimen/padding">
 
                     <com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView
                         android:id="@+id/searchAutoComplete"
@@ -92,36 +95,44 @@
                         android:textColorHint="@color/hintDisable"
                         android:textSize="@dimen/primary_text_size" />
                 </com.redtop.engaze.common.customeviews.FlowLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 style="@style/Divider"
                 android:layout_marginLeft="72dip"
                 android:paddingLeft="72dip" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/row_start_at_label"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/paddinghalf"
                 android:orientation="horizontal" >
 
-                <com.redtop.engaze.fontawesome.TextFont
-                    android:id="@+id/watch"
-                    style="@style/IconStyle"
-                    android:text="@string/fa_clock_o"
-                    android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/padding_one_half"
+                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:background="@drawable/ic_access_time_black_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/Duration"
-                    style="@style/SecondaryTextStyle"
-                    android:layout_marginLeft="56dip" />
-            </RelativeLayout>
+                    android:width="0dp"
+                    android:layout_weight="1"
+                    android:layout_centerVertical="true"
+                    style="@style/SecondaryTextStyle" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tracklocation_Duration_holder"
                 style="@style/PrimaryTextStyleEvent"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="56dip"
+                android:layout_marginBottom="@dimen/padding"
                 android:ems="10" >
             </TextView>
 
@@ -130,18 +141,22 @@
                 android:layout_marginLeft="72dip"
                 android:paddingLeft="72dip" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/row_location"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/paddinghalf"
-                android:orientation="horizontal" >
+                android:layout_marginBottom="@dimen/padding"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <com.redtop.engaze.fontawesome.TextFont
-                    android:id="@+id/mapMarker"
-                    style="@style/IconStyle"
-                    android:text="@string/fa_map_marker"
-                    android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/padding_one_half"
+                    android:layout_marginRight="@dimen/padding"
+                    android:background="@drawable/ic_location_on_black_24dp"></ImageView>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -154,8 +169,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="56dip"
-                        android:layout_marginTop="@dimen/padding"
                         android:background="@android:color/transparent"
                         android:hint="@string/share_my_location_location_hint"
                         android:textColorHint="@color/hintDisable" >
@@ -172,7 +185,7 @@
                         android:background="@drawable/ic_clear_black_24dp"
                         android:tint="@color/primary" />
                 </RelativeLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:id="@+id/divider_location_end"

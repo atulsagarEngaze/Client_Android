@@ -20,17 +20,17 @@
         android:background="@android:color/transparent"
         android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/paddinghalf"
-            android:background="@color/primary"
-            android:paddingBottom="@dimen/paddinghalf"
-            android:paddingLeft="@dimen/padding"
-            android:paddingTop="@dimen/paddinghalf"
-            android:text="@string/msgHeader_mySchedule_noDeclinedEvent"
-            android:textColor="@color/primaryBackground"
-            android:textStyle="bold" />
+         <TextView
+             android:layout_gravity="center_horizontal"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/paddinghalf"
+             android:paddingBottom="@dimen/paddinghalf"
+             android:paddingTop="@dimen/paddinghalf"
+             android:textAlignment="center"
+             android:text="@string/msgHeader_mySchedule_noDeclinedEvent"
+             android:textColor="@color/primaryDark"
+             android:textSize="@dimen/large_text_size"/>
 
         <LinearLayout
             android:layout_width="match_parent"

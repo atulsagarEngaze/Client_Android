@@ -26,19 +26,20 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
 
-                <com.redtop.engaze.fontawesome.TextFont
-                    android:id="@+id/icon_reminder"
-                    style="@style/HeaderIconStyle"
-                    android:layout_weight="1"
-                    android:text="@string/fa_bell"
-                    android:textColor="@color/primary"
-                    android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/padding_one_half"
+                    android:layout_marginRight="@dimen/padding"
+                    android:background="@drawable/ic_notifications_black_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/label_reminder_heading"
                     style="@style/PrimaryTextStyle"
                     android:layout_span="2"
-                    android:layout_weight="9"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingStart="0dip"
                     android:text="Reminder"
@@ -113,9 +114,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" />
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp"/>
                 </RelativeLayout>
             </TableRow>
 
@@ -146,9 +146,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" />
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp" />
                 </RelativeLayout>
             </TableRow>
 
@@ -189,9 +188,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" />
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp"/>
                 </RelativeLayout>
             </TableRow>
 
@@ -222,9 +220,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" />
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp"/>
                 </RelativeLayout>
             </TableRow>
 
@@ -235,13 +232,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
 
-                <com.redtop.engaze.fontawesome.TextFont
-                    android:id="@+id/icon_tracking"
-                    style="@style/HeaderIconStyle"
-                    android:layout_weight="1"
-                    android:text="@string/fa_dot_circle_o"
-                    android:textColor="@color/primary"
-                    android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/padding_one_half"
+                    android:layout_marginRight="@dimen/padding"
+                    android:background="@drawable/ic_adjust_black_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/label_tracking_heading"
@@ -330,9 +328,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" />
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp" />
                 </RelativeLayout>
             </TableRow>
 
@@ -365,9 +362,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding"
-                        android:background="@drawable/ic_check_black_24dp"
-                        android:backgroundTint="@color/primary" >
+                        android:layout_marginRight="@dimen/padding_double"
+                        android:background="@drawable/ic_check_blue_24dp">
                     </ImageView>
                 </RelativeLayout>
             </TableRow>

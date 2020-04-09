@@ -12,8 +12,7 @@
         android:id="@+id/friend_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:theme="@style/ETMaterialTheme.Toolbar" />
+        style="@style/ETMaterialTheme.ActionBar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

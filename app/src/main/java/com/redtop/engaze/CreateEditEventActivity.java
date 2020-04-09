@@ -103,7 +103,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_event_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             //getSupportActionBar().setTitle(mActivityTitle);
             getSupportActionBar().setTitle(R.string.title_meet_later);
             toolbar.setNavigationOnClickListener(new OnClickListener() {

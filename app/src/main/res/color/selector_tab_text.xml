@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- SELECTED COLOR -->
-    <item android:state_selected="true" android:color="@color/primaryBackground"/>
+    <item android:state_selected="true" android:color="@color/primaryDark"/>
     <!-- UNSELECTED COLOR -->
-    <item android:state_selected="false" android:color="@color/primaryLight"/>
+    <item android:state_selected="false" android:color="@color/iconDark"/>
 
 </selector>

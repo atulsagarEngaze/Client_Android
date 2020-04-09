@@ -17,10 +17,12 @@
     <color name="primaryBackground">#FFFFFF</color>
     <color name="secondaryBackground">#f1f1f1</color>
 
+    <color name="toolBarLight">#FAFAFA</color>
     <color name="progressBar">#03A9F4</color>
 
     <color name="listBackground">@color/primaryBackground</color>
 
+    <color name="iconDark">@color/darkGray</color>
     <color name="icon">@color/secondaryText</color>
     <color name="whiteIcon">@color/white</color>
 
@@ -43,7 +45,7 @@
     <color name="colorTeal">#4DB6AC</color>
     <color name="holoBlue">#FF33B5E5</color>
 
-    <color name="tabsScrollColor">@color/white</color>
+    <color name="tabsScrollColor">@color/primaryDark</color>
 
     <color name="eventSettingSelectedColor">#F44336</color>
     <color name="eventSettingColor">#727272</color>

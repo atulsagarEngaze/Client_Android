@@ -630,7 +630,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
                     android:layout_marginRight="@dimen/padding"
-                    android:background="@drawable/ic_add_alert_black_24dp"></ImageView>
+                    android:background="@drawable/ic_notifications_black_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/setReminderOffset"

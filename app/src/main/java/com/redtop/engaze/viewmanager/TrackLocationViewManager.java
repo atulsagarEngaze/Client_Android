@@ -46,7 +46,7 @@ public class TrackLocationViewManager  {
 		Toolbar toolbar = (Toolbar) activity.findViewById(R.id.track_location_event_toolbar);
 		if (toolbar != null) {
 			activity.setSupportActionBar(toolbar);
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			activity.getSupportActionBar().setTitle(R.string.title_share_my_location);
 			//toolbar.setSubtitle(R.string.title_event);
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
