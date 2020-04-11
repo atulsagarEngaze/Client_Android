@@ -227,7 +227,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 				final Bundle bundle = intent.getExtras();
 
 				try {
-
+					 unregisterReceiver(mSMSReceiver);
 					if (bundle != null) {
 
 						final Object[] pdusObj = (Object[]) bundle.get("pdus");
@@ -425,11 +425,5 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 			counter.setText(text);
 		}
 	}
-	
-	@Override
-	protected void onStop()
-	{
-		LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
-	    super.onStop();
-	}
+
 }

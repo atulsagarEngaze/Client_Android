@@ -4,10 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 
-public class Duration implements Parcelable {
+public class Duration implements Parcelable, DataModel {
     private int timeInterval;
     private String period;
     private Boolean enabled;

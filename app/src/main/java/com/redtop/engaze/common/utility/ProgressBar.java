@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ProgressBar {
 
     private static ProgressDialog mDialog;
-    private static String  mCurrentActivityName;
+    private static String  mCurrentActivityName = "";
 
     public static void showProgressBar(String message ){
         showProgressBar("",message);

@@ -32,6 +32,7 @@ import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
+import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
@@ -49,7 +50,6 @@ public abstract class BaseEventActivity extends BaseActivity {
 
     protected AppLocationService appLocationService;
     protected ImageView mEventTypeView;
-    protected ArrayList<ContactOrGroup> mContactsAndgroups;
     protected String TAG;
     protected AlertDialog mAlertDialog;
     protected JSONObject mEventJobj;
@@ -275,7 +275,7 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         long trackingOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(startDate);
+        startCal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
 
         if (trackingOffset > diffMinutes) {
@@ -288,7 +288,7 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         long reminderOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(startDate);
+        startCal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
         if (reminderOffset > diffMinutes) {
             reminderOffset = diffMinutes;
@@ -301,42 +301,34 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected void saveEvent(final Boolean isMeetNow) {
 
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-        try {
-            EventManager.saveEvent(new JSONObject(AppContext.jsonParser.Serialize(createOrUpdateEvent)), isMeetNow, createOrUpdateEvent.Reminder, new OnEventSaveCompleteListner() {
 
-                @Override
-                public void eventSaveComplete(Event event) {
-                    Toast.makeText(getApplicationContext(),
-                            mCreateUpdateSuccessfulMessage,
-                            Toast.LENGTH_LONG).show();
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (createOrUpdateEvent.Destination != null) {//when event is created without destination
-                                DestinationCacher.cacheDestination(createOrUpdateEvent.Destination, mContext);
-                            }
+        EventManager.saveEvent(createOrUpdateEvent, isMeetNow, createOrUpdateEvent.Reminder, new OnEventSaveCompleteListner() {
+
+            @Override
+            public void eventSaveComplete(Event event) {
+                Toast.makeText(getApplicationContext(),
+                        mCreateUpdateSuccessfulMessage,
+                        Toast.LENGTH_LONG).show();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (createOrUpdateEvent.Destination != null) {//when event is created without destination
+                            DestinationCacher.cacheDestination(createOrUpdateEvent.Destination, mContext);
                         }
-                    });
-                    try {
-                        if (mEventJobj.getInt("EventTypeId") == 100) {
-                            gotoHomePage();
-                        } else if (mEventJobj.getInt("EventTypeId") == 200) {
-                            gotoTrackingPage(event.EventId);
-                        } else if (isMeetNow) {
-                            gotoTrackingPage(event.EventId);
-                        } else {
-                            gotoEventsPage();
-                        }
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
                     }
-                }
+                });
 
-            }, AppContext.actionHandler);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION) {
+                    gotoHomePage();
+                } else if (createOrUpdateEvent.EventType == EventType.TRACKBUDDY ||
+                        createOrUpdateEvent.EventType == EventType.QUIK) {
+                    gotoTrackingPage(event.EventId);
+                } else {
+                    gotoEventsPage();
+                }
+            }
+
+        }, AppContext.actionHandler);
 
     }
 
@@ -382,25 +374,26 @@ public abstract class BaseEventActivity extends BaseActivity {
 
     protected void populateEventData() {
 
-        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-
-        createOrUpdateEvent.StartTime = DateUtil.convertToUtcDateTime(parseFormat.format(createOrUpdateEvent.StartTime), parseFormat);
-
-        Date endDate = null;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
+        calendar.setTime(createOrUpdateEvent.StartTimeInDateFormat);
         calendar.add(Calendar.MINUTE, createOrUpdateEvent.Duration.OffsetInMinutes);
-        endDate = calendar.getTime();
-        createOrUpdateEvent.EndTime = DateUtil.convertToUtcDateTime(parseFormat.format(endDate), parseFormat);//parseFormat.format(endDate);
-
+        createOrUpdateEvent.EndTimeInDateFormat = calendar.getTime();
         createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
         createOrUpdateEvent.State = EventState.TRACKING_ON;
         createOrUpdateEvent.TrackingState = EventState.TRACKING_ON;
         createOrUpdateEvent.IsTrackingRequired = true;
+
         createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeItem.getImageIndex());
-        createOrUpdateEvent.ContactOrGroups = mContactsAndgroups;
+        EventParticipant participant = null;
         setReminderOffset();
         setTrackingOffset();
+        for (ContactOrGroup cg : createOrUpdateEvent.ContactOrGroups) {
+            participant = new EventParticipant();
+            participant.setUserId(cg.getUserId());
+            participant.setMobileNumber(cg.getMobileNumber());
+            createOrUpdateEvent.Participants.add(participant);
+        }
+
         /*createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());
         createOrUpdateEvent.Destination = mDestinationPlace;
 */

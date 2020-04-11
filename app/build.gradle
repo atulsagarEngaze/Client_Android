@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation project(':wheel-release')
+    implementation 'org.jetbrains:annotations-java5:15.0'
 
 
 }

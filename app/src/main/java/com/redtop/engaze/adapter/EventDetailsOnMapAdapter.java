@@ -130,7 +130,7 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 							ArrayList<EventParticipant> mems = new ArrayList<EventParticipant>();
 							mems.addAll(mEvent.getMembersbyStatus(ud.getAcceptanceStatus()));
 							if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
-								mems.remove(mEvent.getCurrentParticipant());
+								mems.remove(mEvent.CurrentParticipant);
 							}
 							Intent intent = new Intent(mContext, EventParticipantsInfo.class);
 							intent.putExtra("source", RunningEventActivity.class.getName());

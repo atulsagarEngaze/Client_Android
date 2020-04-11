@@ -34,11 +34,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
     protected BroadcastReceiver mNetworkUpdateBroadcastReceiver;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        AppContext.context.currentActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
       /*  View decorView = this.getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -81,6 +81,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        AppContext.context.currentActivity = this;
         LocalBroadcastManager.getInstance(this).registerReceiver(mNetworkUpdateBroadcastReceiver,
                 new IntentFilter(Constants.NETWORK_STATUS_UPDATE));
         turnOnOfInternetAvailabilityMessage();

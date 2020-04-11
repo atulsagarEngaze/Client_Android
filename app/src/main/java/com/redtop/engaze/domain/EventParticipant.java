@@ -5,6 +5,7 @@ package com.redtop.engaze.domain;
 
 import android.content.Context;
 
+import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -23,23 +24,40 @@ public class EventParticipant implements DataModel {
      *
      */
     private static final long serialVersionUID = -8550528718275826735L;
+    @Expose
     private String eventId;
+    @Expose
     private String userId;
+    @Expose
     private String profileName;
+    @Expose
     private String contactName;
+    @Expose
     private String mobileNumber;
+    @Expose
     private String gCMClientId;
-    private Boolean isEventAccepted;
+
+    @Expose
     private Boolean isTrackingAccepted;
+    @Expose
     private String trackingStartTime;
+    @Expose
     private String trackingEndTime;
+    @Expose
     private String trackingEndReason;
+    @Expose
     private String isTrackingActive;
+    @Expose
     private String userEventEndTime;
+    @Expose
     private AcceptanceStatus acceptanceStatus;
+    @Expose
     private int distanceReminderDistance;
+    @Expose
     private String distanceReminderId;
+    @Expose
     private ReminderFrom reminderFrom;
+    @Expose
     public Boolean isUserLocationShared;
     public ContactOrGroup contactOrGroup;
 
@@ -56,6 +74,12 @@ public class EventParticipant implements DataModel {
         this.profileName = profileName;
         this.mobileNumber = mobileNumber;
         this.acceptanceStatus = eventAcceptanceState;
+    }
+
+    public EventParticipant(){
+        this.isUserLocationShared = false;
+        this.isTrackingAccepted = false;
+        this.acceptanceStatus = AcceptanceStatus.PENDING;
     }
 
 
@@ -199,7 +223,7 @@ public class EventParticipant implements DataModel {
     public String toString() {
         return "UserList [eventId=" + eventId + ", userId=" + userId
                 + ", mobileNumber=" + mobileNumber + ", gCMClientId="
-                + gCMClientId + ", isEventAccepted=" + isEventAccepted
+                + gCMClientId
                 + ", isTrackingAccepted=" + isTrackingAccepted
                 + ", trackingStartTime=" + trackingStartTime
                 + ", trackingEndTime=" + trackingEndTime

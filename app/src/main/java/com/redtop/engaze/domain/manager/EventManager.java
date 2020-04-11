@@ -27,6 +27,8 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -46,6 +48,8 @@ import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
 import com.redtop.engaze.service.EventTrackerLocationService;
 import com.redtop.engaze.webservice.EventWS;
+import com.redtop.engaze.webservice.IEventWS;
+import com.redtop.engaze.webservice.proxy.EventWSProxy;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -54,13 +58,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 public class EventManager {
     private final static String TAG = EventManager.class.getName();
 
+    private final static IEventWS eventWS = new EventWSProxy();
+
     public static List<Event> getRunningEventList() {
         List<Event> list = InternalCaching.getEventListFromCache();
         //list = removePastEvents(context, list);
         List<Event> runningList = new ArrayList<Event>();
         if (list != null) {
             for (Event e : list) {
-                if (e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+                if (e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
                         && e.State == EventState.TRACKING_ON) {
                     runningList.add(e);
                 }
@@ -78,8 +84,8 @@ public class EventManager {
             //list = removePastEvents(context, list);
             if (list != null) {
                 for (Event e : list) {
-                    if (e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
-                            e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
+                    if (e.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
+                            e.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
                         pendingList.add(e);
                     }
                 }
@@ -135,64 +141,75 @@ public class EventManager {
         checkForReccurrence(event);
     }
 
-    public static void saveEvent(final JSONObject mEventJobj, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void saveEvent(final Event event, final Boolean isMeetNow, final Reminder reminder, final OnEventSaveCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+        try {
+            if (!AppContext.context.isInternetEnabled) {
+                String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
+                Log.d(TAG, message);
+                listnerOnFailure.actionFailed(message, Action.SAVEEVENT);
+                return;
+            }
 
-        if (AppContext.context.isInternetEnabled) {
-            String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
-            Log.d(TAG, message);
-            listnerOnFailure.actionFailed(message, Action.SAVEEVENT);
-            return;
-        }
-        EventWS.CreateEvent(mEventJobj, new OnAPICallCompleteListner() {
+            event.StartTime = DateUtil.convertToUtcDateTime(event.StartTimeInDateFormat, null);
+            event.EndTime = DateUtil.convertToUtcDateTime(event.EndTimeInDateFormat, null);//parseFormat.format(endDate);
 
-            @Override
-            public void apiCallComplete(JSONObject response) {
-                Log.d(TAG, "EventResponse:" + response.toString());
+            JSONObject jObject = new JSONObject(AppContext.jsonParser.Serialize(event));
 
-                try {
-                    String Status = (String) response.getString("Status");
+            eventWS.CreateEvent(jObject, new OnAPICallCompleteListner() {
 
-                    if (Status == "true") {
-                        Event eventData = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents")).get(0);
-                        EventType eventType = eventData.EventType;
-                        EventService.setEndEventAlarm(eventData);
-                        if (isMeetNow) {
-                            eventData.State = EventState.TRACKING_ON;
-                            eventData.IsQuickEvent = true;
-                        } else if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
-                        } else {
-                            EventService.setTracking(eventData);
-                            EventService.setEventStarAlarm(eventData);
-                            if (reminder != null) {
-                                EventService.setEventReminder(eventData);
+                @Override
+                public void apiCallComplete(JSONObject response) {
 
+
+                    try {
+                        Log.d(TAG, "EventResponse:" + response.toString());
+
+                        if (response != null) {
+                            Event eventData = new JsonParser().deserialize(response.toString(), Event.class);
+                            eventData.StartTime = DateUtil.convertUtcToLocalDateTime(event.StartTime, null);
+                            eventData.EndTime = DateUtil.convertUtcToLocalDateTime(event.EndTime, null);
+
+                            ParticipantService.attacheContactGroupToParticipants(eventData);
+                            eventData.Participants.add(eventData.CurrentParticipant);
+
+                            EventService.setEndEventAlarm(eventData);
+                            if (eventData.EventType == EventType.QUIK) {
+                                eventData.State = EventState.TRACKING_ON;
+                            } else if (eventData.EventType == EventType.GENERAL) {
+                                EventService.setTracking(eventData);
+                                EventService.setEventStarAlarm(eventData);
+                                if (reminder != null) {
+                                    EventService.setEventReminder(eventData);
+
+                                }
+                                eventData.State = EventState.EVENT_OPEN;
                             }
-                            EventService.setEventReminder(eventData);
-                            eventData.State = EventState.EVENT_OPEN;
-                            eventData.IsQuickEvent = false;
+
+                            EventNotificationManager.cancelNotification(eventData);
+                            InternalCaching.saveEventToCache(eventData);
+                            EventTrackerLocationService.peroformSartStop();
+                            listnerOnSuccess.eventSaveComplete(eventData);
+                        } else {
+                            listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                         }
-                        EventNotificationManager.cancelNotification(eventData);
-                        InternalCaching.saveEventToCache(eventData);
-                        EventTrackerLocationService.peroformSartStop();
-                        listnerOnSuccess.eventSaveComplete(eventData);
-                    } else {
+
+                    } catch (Exception ex) {
+                        Log.d(TAG, ex.toString());
+                        ex.printStackTrace();
                         listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                     }
 
-                } catch (Exception ex) {
-                    Log.d(TAG, ex.toString());
-                    ex.printStackTrace();
+                }
+            }, new OnAPICallCompleteListner() {
+
+                @Override
+                public void apiCallComplete(JSONObject response) {
                     listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                 }
-
-            }
-        }, new OnAPICallCompleteListner() {
-
-            @Override
-            public void apiCallComplete(JSONObject response) {
-                listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
-            }
-        });
+            });
+        } catch (JSONException e) {
+            listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
+        }
     }
 
     public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
@@ -214,7 +231,7 @@ public class EventManager {
         }
 
 
-        EventWS.saveUserResponse(userAcceptanceResponse, eventid, new OnAPICallCompleteListner() {
+        eventWS.saveUserResponse(userAcceptanceResponse, eventid, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -226,7 +243,7 @@ public class EventManager {
                     if (Status == "true") {
 
                         if (userAcceptanceResponse == AcceptanceStatus.ACCEPTED) {
-                            event.getCurrentParticipant().
+                            event.CurrentParticipant.
                                     setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
                             SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -240,7 +257,7 @@ public class EventManager {
                                 EventService.setTracking(event);
                             }
                         } else {
-                            event.getCurrentParticipant().
+                            event.CurrentParticipant.
                                     setAcceptanceStatus(AcceptanceStatus.DECLINED);
                         }
                         EventNotificationManager.cancelNotification(event);
@@ -278,7 +295,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.GETEVENTDATAFROMSERVER);
             return;
         }
-        EventWS.getEventDetail(eventid, new OnAPICallCompleteListner() {
+        eventWS.getEventDetail(eventid, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -339,7 +356,7 @@ public class EventManager {
 
         final String eventid = event.EventId;
 
-        EventWS.leaveEvent(eventid, new OnAPICallCompleteListner() {
+        eventWS.leaveEvent(eventid, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -349,7 +366,7 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
 
                     if (Status == "true") {
-                        event.getCurrentParticipant().
+                        event.CurrentParticipant.
                                 setAcceptanceStatus(AcceptanceStatus.DECLINED);
 
                         EventNotificationManager.cancelNotification(event);
@@ -397,7 +414,7 @@ public class EventManager {
         }
         final String eventid = event.EventId;
 
-        EventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
+        eventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -457,7 +474,7 @@ public class EventManager {
         }
         final String eventid = event.EventId;
 
-        EventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
+        eventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -510,7 +527,7 @@ public class EventManager {
         }
         final String eventId = event.EventId;
 
-        EventWS.changeDestination(destinationPlace, eventId, new OnAPICallCompleteListner() {
+        eventWS.changeDestination(destinationPlace, eventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -556,7 +573,7 @@ public class EventManager {
         }
         final String eventid = event.EventId;
 
-        EventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListner() {
+        eventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -811,7 +828,7 @@ public class EventManager {
             return;
         }
 
-        EventWS.RefreshEventListFromServer(new OnAPICallCompleteListner() {
+        eventWS.RefreshEventListFromServer(new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -859,7 +876,7 @@ public class EventManager {
 
     public static void saveUsersLocationDetailList(Context context, Event event,
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
-        if (event != null && event.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED
+        if (event != null && event.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.DECLINED
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
             event.UsersLocationDetailList = usersLocationDetailList;
             InternalCaching.saveEventToCache(event);
@@ -912,13 +929,13 @@ public class EventManager {
                     eventType = e.EventType;
                     //Out going locations - 100 - Share my location - current user is initiator - add all members except me
                     if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
-                        members.remove(e.getCurrentParticipant());
+                        members.remove(e.CurrentParticipant);
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }
                     }
                     //Out going locations 200 - Track Buddy - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
                         slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                 }
@@ -929,12 +946,12 @@ public class EventManager {
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventType = e.EventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
                         slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                     //In coming locations - 200 - track buddy - Current user is initiator - add all members except me
                     else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
-                        e.Participants.remove(e.getCurrentParticipant());
+                        e.Participants.remove(e.CurrentParticipant);
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }

@@ -45,26 +45,26 @@ public class ParticipantService {
     private final static String TAG = ParticipantService.class.getName();
 
 
-    public static void pokeParticipant(final String userId, String userName, final String eventId, IActionHandler actionHadler){
+    public static void pokeParticipant(final String userId, String userName, final String eventId, IActionHandler actionHadler) {
         try {
             String lastPokedTime = PreffManager.getPref(userId);
-            if(lastPokedTime != null){
+            if (lastPokedTime != null) {
                 SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 Calendar lastCal = Calendar.getInstance();
                 Date lastpokeDate = originalformat.parse(lastPokedTime);
                 lastCal.setTime(lastpokeDate);
-                long diff = (Calendar.getInstance().getTimeInMillis()- lastCal.getTimeInMillis())/60000;
-                long pendingfrPoke = Constants.POKE_INTERVAL- diff;
-                if(diff>= Constants.POKE_INTERVAL){
-                    pokeAlert(userId,userName, eventId,actionHadler);
-                }else {
+                long diff = (Calendar.getInstance().getTimeInMillis() - lastCal.getTimeInMillis()) / 60000;
+                long pendingfrPoke = Constants.POKE_INTERVAL - diff;
+                if (diff >= Constants.POKE_INTERVAL) {
+                    pokeAlert(userId, userName, eventId, actionHadler);
+                } else {
                     Toast.makeText(AppContext.context,
-                            AppContext.context.getResources().getString(R.string.message_runningEvent_pokeInterval)+ pendingfrPoke + " minutes.",
+                            AppContext.context.getResources().getString(R.string.message_runningEvent_pokeInterval) + pendingfrPoke + " minutes.",
                             Toast.LENGTH_LONG).show();
                     actionHadler.actionCancelled(Action.POKEPARTICIPANT);
                 }
-            }else {
-                pokeAlert(userId,userName, eventId,actionHadler);
+            } else {
+                pokeAlert(userId, userName, eventId, actionHadler);
             }
 
         } catch (ParseException e) {
@@ -78,24 +78,26 @@ public class ParticipantService {
         adb = new AlertDialog.Builder(AppContext.context);
 
         adb.setTitle("Poke");
-        adb.setMessage("Do you want to poke " + userName + "?" +"\n"+ "You can poke again only after 15 minutes.");
+        adb.setMessage("Do you want to poke " + userName + "?" + "\n" + "You can poke again only after 15 minutes.");
         adb.setIcon(android.R.drawable.ic_dialog_alert);
 
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Call Poke API
                 pokeParticipants(userId, eventId, actionHadler);
-            } });
+            }
+        });
 
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 actionHadler.actionCancelled(Action.POKEPARTICIPANT);
-            } });
+            }
+        });
         adb.show();
     }
 
-    public  static void pokeParticipants(final String userId, String eventId, final IActionHandler actionHadler) {
+    public static void pokeParticipants(final String userId, String eventId, final IActionHandler actionHadler) {
         JSONObject jobj = new JSONObject();
         String[] userList = {userId};
         JSONArray mJSONArray = new JSONArray(Arrays.asList(userList));
@@ -112,7 +114,7 @@ public class ParticipantService {
 
                 @Override
                 public void actionComplete(Action action) {
-                    SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                     Date currentdate = Calendar.getInstance().getTime();
                     String currentTimestamp = originalformat.format(currentdate);
                     PreffManager.setPref(userId, currentTimestamp);
@@ -133,14 +135,14 @@ public class ParticipantService {
         }
     }
 
-    public static Boolean isNotifyUser( Event event){
-        if(event!=null && event.getCurrentParticipant().getAcceptanceStatus()== AcceptanceStatus.DECLINED){
+    public static Boolean isNotifyUser(Event event) {
+        if (event != null && event.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
             return false;
         }
         return true;
     }
 
-    public static ArrayList<EventParticipant> parseMemberList(JSONArray jsonStr){
+    public static ArrayList<EventParticipant> parseMemberList(JSONArray jsonStr) {
         EventParticipant mem = null;
         ArrayList<EventParticipant> list = new ArrayList<EventParticipant>();
         try {
@@ -154,11 +156,10 @@ public class ParticipantService {
                         AcceptanceStatus.getStatus(c.getInt("EventAcceptanceStateId"))
                 );
                 ContactOrGroup cg = ContactAndGroupListManager.getContact(c.getString("UserId"));
-                if(cg!=null){
+                if (cg != null) {
                     mem.setProfileName(cg.getName());
                     mem.setContact(cg);
-                }
-                else{
+                } else {
                     mem.setProfileName("~" + mem.getProfileName());
                 }
                 mem.isUserLocationShared = c.getBoolean("IsUserLocationShared");
@@ -172,8 +173,8 @@ public class ParticipantService {
 
     }
 
-    public static boolean isCurrentUserInitiator(String initiatorId){
-        if(AppContext.context.loginId.equalsIgnoreCase(initiatorId)){
+    public static boolean isCurrentUserInitiator(String initiatorId) {
+        if (AppContext.context.loginId.equalsIgnoreCase(initiatorId)) {
             return true;
         }
         return false;
@@ -187,15 +188,37 @@ public class ParticipantService {
         return false;
     }
 
-    public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus){
+    public static boolean setCurrentParticipant(Event event) {
+        for (EventParticipant participant : event.Participants) {
+            if (participant.getUserId() == AppContext.context.loginId) {
+                event.CurrentParticipant = participant;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void attacheContactGroupToParticipants(Event event) {
+        for (EventParticipant participant : event.Participants) {
+            ContactOrGroup cg = ContactAndGroupListManager.getContact(participant.getUserId());
+            if(cg!=null){
+                participant.setProfileName(cg.getName());
+                participant.setContact(cg);
+            }
+            else{
+                participant.setProfileName("~" + participant.getProfileName());
+            }
+        }
+    }
+
+    public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus) {
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
         ArrayList<EventParticipant> participants = event.Participants;
-        if (participants !=null && participants.size()>0)
-        {
+        if (participants != null && participants.size() > 0) {
             for (EventParticipant mem : participants) {
-                if(isValidForLocationSharing(event, mem)){
-                    if(mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString()))	{
+                if (isValidForLocationSharing(event, mem)) {
+                    if (mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString())) {
                         memStatus.add(mem);
                     }
                 }
@@ -223,22 +246,21 @@ public class ParticipantService {
         return isValid;
     }
 
-    public static JSONObject createUpdateParticipantsJSON(ArrayList<ContactOrGroup> contactsAndgroups, String eventId){
+    public static JSONObject createUpdateParticipantsJSON(ArrayList<ContactOrGroup> contactsAndgroups, String eventId) {
         JSONObject userListJobj;
         JSONObject jobj = new JSONObject();
         JSONArray jsonarr = new JSONArray();
 
         String userId;
-        try{
-            if(contactsAndgroups!=null){
-                for(ContactOrGroup cg : contactsAndgroups){
+        try {
+            if (contactsAndgroups != null) {
+                for (ContactOrGroup cg : contactsAndgroups) {
                     userId = cg.getUserId();
                     userListJobj = new JSONObject();
-                    if(userId != null && !userId.isEmpty()){
+                    if (userId != null && !userId.isEmpty()) {
                         userListJobj.put("UserId", userId);
 
-                    }
-                    else{
+                    } else {
                         userListJobj.put("MobileNumber", cg.getNumbers().get(0));
                     }
                     jsonarr.put(userListJobj);
@@ -248,17 +270,16 @@ public class ParticipantService {
             jobj.put("EventId", eventId);
             jobj.put("UserList", jsonarr);
             jobj.put("RequestorId", AppContext.context.loginId);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // TODO: handle exception
         }
 
         return jobj;
     }
 
-    public static void updateUserListWithLocation(JSONArray userLocationJson, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang){
+    public static void updateUserListWithLocation(JSONArray userLocationJson, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang) {
         Location destLoc = null;
-        if(destinationLatLang!=null){
+        if (destinationLatLang != null) {
             destLoc = new Location("");
             destLoc.setLatitude(destinationLatLang.latitude);//your coords of course
             destLoc.setLongitude(destinationLatLang.longitude);
@@ -267,21 +288,21 @@ public class ParticipantService {
         try {
             for (int i = 0; i < userLocationJson.length(); i++) {
                 JSONObject c = userLocationJson.getJSONObject(i);
-                for (UsersLocationDetail ud :  userLocationList){
-                    if(ud.getUserId().equalsIgnoreCase(c.getString("UserId"))){
+                for (UsersLocationDetail ud : userLocationList) {
+                    if (ud.getUserId().equalsIgnoreCase(c.getString("UserId"))) {
                         ud.setLatitude(c.getString("Latitude"));
                         ud.setLongitude(c.getString("Longitude"));
-                        ud.setCreatedOn(DateUtil.convertUtcToLocalDateTime(c.getString("CreatedOn"),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
+                        ud.setCreatedOn(DateUtil.convertUtcToLocalDateTime(c.getString("CreatedOn"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
                         ud.setEta(c.getString("ETA"));
                         ud.setArrivalStatus(c.getString("ArrivalStatus"));
-                        if(c.has("LocationAddress") && c.getString("LocationAddress")!=null){
+                        if (c.has("LocationAddress") && c.getString("LocationAddress") != null) {
                             ud.setCurrentAddress(c.getString("LocationAddress"));
                             ud.setCurrentDisplayAddress(buildCurrentDisplayAddress(c.getString("LocationAddress")));
-                            if(destLoc!=null){
+                            if (destLoc != null) {
                                 Location loc = new Location("");//provider name is unecessary
                                 loc.setLatitude(Double.parseDouble(c.getString("Latitude")));//your coords of course
                                 loc.setLongitude(Double.parseDouble(c.getString("Longitude")));
-                                if(loc.distanceTo(destLoc)<= Constants.DESTINATION_RADIUS){
+                                if (loc.distanceTo(destLoc) <= Constants.DESTINATION_RADIUS) {
                                     ud.setCurrentAddress("at destination");
                                     ud.setCurrentAddress("at destination");
                                     ud.setCurrentDisplayAddress("at destination");
@@ -298,29 +319,28 @@ public class ParticipantService {
         }
     }
 
-    private static String buildCurrentDisplayAddress(String currentAddress){
+    private static String buildCurrentDisplayAddress(String currentAddress) {
 
-        String currentDisplayAddress ="";
-        if(currentAddress ==null || currentAddress.equals("")){
+        String currentDisplayAddress = "";
+        if (currentAddress == null || currentAddress.equals("")) {
             return currentDisplayAddress;
         }
 
         String[] arrAddress = currentAddress.split(",");
 
-        if(arrAddress.length > 1){
+        if (arrAddress.length > 1) {
 
             List<String> addressLines = new ArrayList<String>(Arrays.asList(arrAddress));
             addressLines.remove(0);
             StringBuilder builder = new StringBuilder();
             builder.append(addressLines.get(0));
             addressLines.remove(0);
-            for(String addressLine : addressLines) {
+            for (String addressLine : addressLines) {
                 builder.append(", " + addressLine);
             }
-            currentDisplayAddress =  builder.toString();
-        }
-        else{
-            currentDisplayAddress =  currentAddress;
+            currentDisplayAddress = builder.toString();
+        } else {
+            currentDisplayAddress = currentAddress;
         }
 
         return currentDisplayAddress;

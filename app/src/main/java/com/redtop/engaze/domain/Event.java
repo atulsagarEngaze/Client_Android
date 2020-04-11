@@ -3,6 +3,7 @@ package com.redtop.engaze.domain;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
@@ -15,37 +16,70 @@ public class Event implements DataModel {
      *
      */
     public static final long serialVersionUID = 1602715454105775832L;
+    @Expose
     public String EventId;
+
+    @Expose
     public String Name;
+
+    @Expose
     public EventType EventType;
+
+    @Expose
     public String Description;
+
+    @Expose
     public String StartTime;
+
+    @Expose
     public String EndTime;
+
+    @Expose
     public Duration Duration;
+
+    @Expose
     public Duration Tracking;
+
+    @Expose
     public EventState TrackingState;
+
+    @Expose
     public String InitiatorId;
+
+    @Expose
     public String InitiatorName;
-    public String[] AdminList;
+
+    @Expose
     public EventState State;
-    public String TrackingStateId;
-    public Date TrackingStopTime;
+
+    @Expose
     public EventPlace Destination;
+
+    @Expose
+    public Reminder Reminder;
+
+    @Expose
+    public ArrayList<EventParticipant> Participants = new ArrayList<>();
+
+    @Expose
+    public EventParticipant CurrentParticipant;
+
+    public Date StartTimeInDateFormat;
+    public Date EndTimeInDateFormat;
     public Boolean IsTrackingRequired;
     public Integer ReminderOffset;
     public String ReminderType;
     public Integer TrackingStartOffset;
-    public Reminder Reminder;
-    public EventParticipant CurrentParticipant;
-    public ArrayList<EventParticipant> Participants;
+
+    public String TrackingStateId;
+    public Date TrackingStopTime;
     public ArrayList<EventParticipant> ReminderEnabledMembers;
 
-    public ArrayList<ContactOrGroup> ContactOrGroups;
+    public ArrayList<ContactOrGroup> ContactOrGroups = new ArrayList<>();
     public ArrayList<UsersLocationDetail> UsersLocationDetailList;
     public ArrayList<Integer> NotificationIds;
     public int SnoozeNotificationId = 0;
     public int AcceptNotificationId = 0;
-    public Boolean IsQuickEvent;
     public Boolean IsMute = false;
     public Boolean IsDistanceReminderSet = false;
     public Boolean IsRecurrence = false;
@@ -55,6 +89,7 @@ public class Event implements DataModel {
     public Integer FrequencyOfOccurence;
     public ArrayList<Integer> RecurrenceDays;
     public String RecurrenceActualStartTime;
+    public String[] AdminList;
 
 
     public Event(String eventId, String name, EventType eventType,
@@ -82,7 +117,6 @@ public class Event implements DataModel {
         this.ReminderType = reminderType;
         this.TrackingStartOffset = trackingStartOffset;
         this.ContactOrGroups = contactOrGroups;
-        this.IsQuickEvent = isQuickEvent;
         this.NotificationIds = new ArrayList<Integer>();
     }
 
@@ -112,7 +146,6 @@ public class Event implements DataModel {
         this.ReminderType = reminderType;
         this.TrackingStartOffset = trackingStartOffset;
         this.Participants = members;
-        this.IsQuickEvent = isQuickEvent;
         this.NotificationIds = new ArrayList<Integer>();
     }
 
@@ -153,14 +186,6 @@ public class Event implements DataModel {
 
     @SuppressWarnings("null")
 
-
-    public EventParticipant getCurrentParticipant() {
-        return this.CurrentParticipant;
-    }
-
-    public void setCurrentParticipant(EventParticipant currentMem) {
-        this.CurrentParticipant = currentMem;
-    }
 
     public int getMemberCount() {
         if (this.Participants != null) {

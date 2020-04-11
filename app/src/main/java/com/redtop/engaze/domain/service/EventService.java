@@ -341,7 +341,7 @@ public class EventService {
             if (ed.State == state) {
                 if (checkOnlyWhenEventAccepted) {
 
-                    if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+                    if (ed.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
                     ) {
                         return true;
                     }
@@ -357,17 +357,17 @@ public class EventService {
     public static Boolean shouldShareLocation() {
         List<Event> events = InternalCaching.getEventListFromCache();
         List<Event> trackingEvents = InternalCaching.getTrackEventListFromCache();
-        if (events == null) {
+        if (events == null || events.size() == 0) {
             return false;
         }
         for (Event ed : events) {
-            if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+            if (ed.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
                     && ed.State == EventState.TRACKING_ON
             ) {
                 return true;
             }
         }
-        if (trackingEvents == null) {
+        if (trackingEvents == null || trackingEvents.size() == 0) {
             return false;
         }
         for (Event ed : trackingEvents) {

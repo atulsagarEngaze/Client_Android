@@ -33,24 +33,11 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
-
-
-        Intent intent = null;
-
-        if (AppContext.context.loginId != null) {//profile is saved
+        //firs time load ask for all the permissions needed
+        if (AppContext.context.loginId == null) {
             checkRequiredPermissions();
-
-
         } else {
-
-            String authToken = PreffManager.getPref(Constants.USER_AUTH_TOKEN);
-
-            if (authToken != null && authToken.equals("1")) {
-                intent = new Intent(this, ProfileActivity.class);
-            } else {
-                intent = new Intent(this, MobileNumberVerificationActivity.class);
-            }
-            startActivity(intent);
+            startHomeActivity();
         }
     }
 
@@ -61,7 +48,7 @@ public class SplashActivity extends BaseActivity {
             case ALL_NECCESSARY: {
                 // If request is cancelled, the result arrays are empty.
                 if (PermissionRequester.hasPermissions(permissions)) {
-                    startHomeActivity();
+                    initiateMobileRegistrationAndProfileCreationProcess();
                 } else {
                     finish();
                 }
@@ -72,13 +59,26 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
+    private void initiateMobileRegistrationAndProfileCreationProcess() {
+        String authToken = PreffManager.getPref(Constants.USER_AUTH_TOKEN);
+        Intent intent;
+        if (authToken != null && authToken.equals("1")) {
+            intent = new Intent(this, ProfileActivity.class);
+        } else {
+            intent = new Intent(this, MobileNumberVerificationActivity.class);
+        }
+        startActivity(intent);
+    }
+
     private void checkRequiredPermissions() {
         if (PermissionRequester.CheckPermission(
                 new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.READ_CONTACTS,
                 }, ALL_NECCESSARY, this)) {
-            startHomeActivity();
+
+            initiateMobileRegistrationAndProfileCreationProcess();
         }
     }
 

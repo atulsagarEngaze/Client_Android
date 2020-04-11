@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,7 +41,7 @@ public class TrackingOffset extends Activity {
 						tracking.setTimeInterval(userInput);
 						if(Duration.validateTrackingInput(tracking)){
 							Intent intent = new Intent();		
-							intent.putExtra("com.redtop.engaze.entity.Tracking", tracking); 			
+							intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable)tracking);
 							setResult(RESULT_OK, intent);  
 							finish();
 						}

@@ -300,7 +300,7 @@ public class ContactAndGroupListManager {
 
                     @Override
                     public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                        PreffManager.setPref(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, "true");
+                        PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
 
 
                     }

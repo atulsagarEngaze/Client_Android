@@ -50,7 +50,7 @@ public class EventParser {
             }
 
             for (Event ev : eventList) {
-                ev.setCurrentParticipant(ev.getMember(AppContext.context.loginId));
+                ParticipantService.setCurrentParticipant(ev);
             }
         } catch (Exception e) {
             e.printStackTrace();

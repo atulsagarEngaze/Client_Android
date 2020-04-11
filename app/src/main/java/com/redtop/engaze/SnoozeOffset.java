@@ -3,6 +3,7 @@ package com.redtop.engaze;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,7 +37,7 @@ public class SnoozeOffset extends Activity {
 							if(userInput >= getResources().getInteger(R.integer.runningevent_min_extend_minutes) && userInput <= getResources().getInteger(R.integer.runningevent_max_extend_minutes)){
 							snoozeDuration.setTimeInterval(userInput);				
 							Intent intent = new Intent();		
-							intent.putExtra("com.redtop.engaze.entity.Snooze", snoozeDuration); 			
+							intent.putExtra("com.redtop.engaze.entity.Snooze", (Parcelable)snoozeDuration);
 							setResult(RESULT_OK, intent);  
 							finish();
 						}

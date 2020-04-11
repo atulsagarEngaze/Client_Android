@@ -10,11 +10,11 @@ import com.redtop.engaze.domain.EventPlace;
 
 import org.json.JSONObject;
 
-public class EventWS extends BaseWebService {
+public class EventWS extends BaseWebService implements IEventWS {
 
     private final static String TAG = EventWS.class.getName();
 
-    public static void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = "";
             if (jsonObject.has("EventId")) {
@@ -32,7 +32,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.RESPOND_INVITE;
             // making json object request
@@ -52,7 +52,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void endEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void endEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.END_EVENT;
@@ -70,7 +70,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void leaveEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void leaveEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.LEAVE_EVENT;
@@ -89,7 +89,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.EVENT_DETAIL;
@@ -107,7 +107,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.EXTEND_EVENT;
             // making json object request
@@ -125,7 +125,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
             String url = MAP_API_URL + Routes.UPDATE_DESTINATION;
 
@@ -156,7 +156,7 @@ public class EventWS extends BaseWebService {
         }
     }
 
-    public static void getEventDetail(String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void getEventDetail(String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
 
         try {
 

@@ -130,7 +130,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
 
 
-            if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
+            if (ed.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
                 viewHolder.trackingStatus = true;
                 viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
             } else {
@@ -307,7 +307,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
                 public void onClick(View v) {
 
                     if (
-                            event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED &&
+                            event.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED &&
 
                                     trackingStatus) {
                         Intent intent = new Intent(mContext, RunningEventActivity.class);
@@ -372,7 +372,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             itemMuteUnmute.setIcon(dr);
 
-            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.InitiatorId)) {
+            if (this.event.CurrentParticipant.getUserId().equalsIgnoreCase(this.event.InitiatorId)) {
                 itemAccept.setVisible(false);
                 itemDeclined.setVisible(false);
                 if (this.runningStatus || this.trackingStatus) {
@@ -393,10 +393,10 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 //				{
 //					itemDelete.setVisible(true);
 //				}
-                if (this.event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                if (this.event.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
                     itemAccept.setVisible(false);
                     itemDeclined.setVisible(true);
-                } else if (this.event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.PENDING) {
+                } else if (this.event.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.PENDING) {
                     itemAccept.setVisible(true);
                     itemDeclined.setVisible(true);
                 } else {

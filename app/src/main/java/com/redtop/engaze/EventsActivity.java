@@ -259,7 +259,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		ArrayList<Event> dl =  new ArrayList<Event>();
 		for(Event ed : eventList){
 			if(ed.EventType!= EventType.TRACKBUDDY){
-			switch (ed.getCurrentParticipant().getAcceptanceStatus()) {
+			switch (ed.CurrentParticipant.getAcceptanceStatus()) {
 			case ACCEPTED:
 				al.add(ed);
 				break;

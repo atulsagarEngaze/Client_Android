@@ -194,7 +194,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CreateEditEventActivity.this, TrackingOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Tracking", createOrUpdateEvent.Tracking);
+                intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.Tracking);
 
                 startActivityForResult(intent, TRACKING_REQUEST_CODE);
             }
@@ -206,7 +206,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", createOrUpdateEvent.Duration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable)createOrUpdateEvent.Duration);
 
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
             }
@@ -434,7 +434,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mEventTitleView.setText(createOrUpdateEvent.Name);
             mNoteView.setText(createOrUpdateEvent.Description);
             ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
-            String currentMemUserId = createOrUpdateEvent.getCurrentParticipant().getUserId();
+            String currentMemUserId = createOrUpdateEvent.CurrentParticipant.getUserId();
             ArrayList<EventParticipant> members = createOrUpdateEvent.Participants;
             for (EventParticipant mem : members) {
                 if (!mem.getUserId().equals(currentMemUserId)) {
@@ -531,7 +531,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.common_action_save:
-                mContactsAndgroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
+                createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
                 this.SaveEvent();
                 break;
         }
@@ -660,7 +660,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
         createOrUpdateEvent.Name = mEventTitleView.getText().toString();
         createOrUpdateEvent.Description = mNoteView.getText().toString();
-        createOrUpdateEvent.IsQuickEvent = false;
         //For Recurrence
         if (mChkrecurrence.isChecked()) {
             createOrUpdateEvent.IsRecurrence = true;

@@ -154,7 +154,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     } else {
                         //remove the row item member alone since there are still other members in the event.
                         ProgressBar.showProgressBar("Please wait");
-                        event.ContactOrGroups.remove(event.getCurrentParticipant().getContact());
+                        event.ContactOrGroups.remove(event.CurrentParticipant.getContact());
 
                         JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.EventId);
                         ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {

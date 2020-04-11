@@ -239,7 +239,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
             @Override
             public void actionComplete(Action action) {
-                mEvent.getCurrentParticipant().setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                mEvent.CurrentParticipant.setAcceptanceStatus(AcceptanceStatus.DECLINED);
                 AppContext.actionHandler.actionComplete(action);
                 gotoPreviousPage();
 
@@ -264,7 +264,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     public void onEditParticipantsClicked() {
         shouldExecuteOnResume = false;
         ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
-        String currentMemUserId = mEvent.getCurrentParticipant().getUserId();
+        String currentMemUserId = mEvent.CurrentParticipant.getUserId();
         ArrayList<EventParticipant> members = mEvent.Participants;
         for (EventParticipant mem : members) {
             if (!mem.getUserId().equals(currentMemUserId))
