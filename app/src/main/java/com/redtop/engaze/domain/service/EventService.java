@@ -133,13 +133,13 @@ public class EventService {
             Calendar cal = Calendar.getInstance();
 
             cal.setTime(startDate);
-            cal.add(Calendar.MINUTE, event.ReminderOffset * -1);
+            cal.add(Calendar.MINUTE, (int)event.Reminder.ReminderOffsetInMinute * -1);
             Date reminderDate = cal.getTime();
             //if(reminderDate.getTime() > currentDate.getTime()){
 
             Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
             intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_REMINDER);
-            intentAlarm.putExtra("ReminderType", event.ReminderType);
+            intentAlarm.putExtra("ReminderType", event.Reminder.getNotificationType());
             intentAlarm.putExtra("EventId", event.EventId);
             AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
             //set the alarm for particular time
@@ -166,7 +166,7 @@ public class EventService {
             Date currentDate = cal.getTime();
             cal.setTime(startDate);
 
-            cal.add(Calendar.MINUTE, event.TrackingStartOffset * -1);
+            cal.add(Calendar.MINUTE, event.Tracking.getOffSetInMinutes() * -1);
             Date trackingStartDate = cal.getTime();
 
 
@@ -198,7 +198,7 @@ public class EventService {
                 cal = Calendar.getInstance();
                 startDate = originalformat.parse(ed.StartTime);
                 cal.setTime(startDate);
-                cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
+                cal.add(Calendar.MINUTE, ed.Tracking.getOffSetInMinutes() * -1);
                 Date currentDate = Calendar.getInstance().getTime();
                 if (cal.getTime().getTime() - currentDate.getTime() < 0) {
                     ed.State = EventState.TRACKING_ON;

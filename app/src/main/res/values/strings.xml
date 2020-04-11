@@ -213,8 +213,6 @@
         <item>@string/event_type_general</item>
         <item>@string/event_type_Birthday</item>
     </string-array>
-
-
     <string-array name="CountryCodes">
         <item>+93,AF</item>
         <item>+355,AL</item>
@@ -423,7 +421,6 @@
         <item>+260,ZM</item>
         <item>+263,ZW</item>
     </string-array>
-
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

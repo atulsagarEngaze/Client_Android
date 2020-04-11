@@ -94,7 +94,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
 
         viewHolder.txtEventParticipant.setText(Integer.toString(ed.getMemberCount()));
-        viewHolder.imgEventTypeImage.setBackgroundResource(((EventsActivity) mContext).mEventTypeImages.getResourceId(ed.EventType.GetEventTypeId(), -1));
+        viewHolder.imgEventTypeImage.setBackgroundResource(((EventsActivity) mContext).mEventTypeImages.getResourceId(5, -1));
 
         setDescriptionLayout(ed, viewHolder);
 
@@ -127,7 +127,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
 
-            cal.add(Calendar.MINUTE, ed.TrackingStartOffset * -1);
+            cal.add(Calendar.MINUTE, ed.Tracking.getOffSetInMinutes() * -1);
 
 
             if (ed.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {

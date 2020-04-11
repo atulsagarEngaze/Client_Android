@@ -2,6 +2,7 @@ package com.redtop.engaze.app;
 
 import android.app.Application;
 
+import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -43,16 +44,42 @@ public class AppContext extends Application {
         isFirstTimeLoading = true;
         if (loginId != null) {
             loginName = PreffManager.getPref(Constants.LOGIN_NAME);
-        }
+            actionHandler = new ActionHandler();
+            jsonParser = new JsonParser();
 
+            defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
+            defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
+            defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
+
+        }
+    }
+
+    public void setDefaultSetting(){
+        setDefaultTrackingSettings();
+        setDefaultReminderSettings();
         setDefaultDurationSettings();
-        actionHandler = new ActionHandler();
-        jsonParser = new JsonParser();
 
         defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
         defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
-
         defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
+    }
+
+    private void setDefaultReminderSettings() {
+        Reminder reminder = new Reminder(Constants.REMINDER_DEFAULT_INTERVAL,
+                Constants.REMINDER_DEFAULT_PERIOD,
+                Constants.REMINDER_DEFAULT_NOTIFICATION);
+        reminder.ReminderOffsetInMinute = Constants.REMINDER_DEFAULT_INTERVAL;
+
+        PreffManager.setPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, reminder);
+    }
+
+    private void setDefaultTrackingSettings() {
+
+        Duration duration = new Duration
+                (Constants.TRACKING_DEFAULT_INTERVAL,
+                        Constants.TRACKING_DEFAULT_PERIOD,
+                        Constants.TRACKING_DEFAULT_ENABLED);
+        PreffManager.setPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, duration);
     }
 
     private void setDefaultDurationSettings() {
@@ -61,8 +88,7 @@ public class AppContext extends Application {
                 (Constants.EVENT_DEFAULT_DURATION,
                         Constants.EVENT_DEFAULT_PERIOD,
                         true);
-        duration.OffsetInMinutes = 60;
-        PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
+       PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
     }
 
 }

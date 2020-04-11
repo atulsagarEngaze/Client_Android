@@ -12,7 +12,6 @@ public class Duration implements Parcelable, DataModel {
     private int timeInterval;
     private String period;
     private Boolean enabled;
-    public int OffsetInMinutes;
 
 
     public Duration(int timeInterval, String period, Boolean enabled) {
@@ -72,7 +71,6 @@ public class Duration implements Parcelable, DataModel {
         dest.writeInt(timeInterval);
         dest.writeString(period);
         dest.writeBoolean(enabled);
-        dest.writeInt(OffsetInMinutes);
 
     }
 
@@ -82,7 +80,6 @@ public class Duration implements Parcelable, DataModel {
     private void readFromParcel(Parcel in) {
         timeInterval = in.readInt();
         period = in.readString();
-        OffsetInMinutes = in.readInt();
         enabled = in.readBoolean();
     }
 
@@ -96,6 +93,26 @@ public class Duration implements Parcelable, DataModel {
         }
     };
 
+    public int getOffSetInMinutes() {
+
+        switch (getPeriod()) {
+
+            case "minute" :
+                return timeInterval;
+
+            case "hour":
+                return timeInterval * 60;
+
+            case "day":
+                return timeInterval * 60 * 24;
+
+            case "week":
+                return timeInterval * 60 * 24 * 7;
+
+            default:
+                return timeInterval;
+        }
+    }
     public static boolean validateDurationInput(Duration duration) {
         int userInput = duration.getTimeInterval();
         switch (duration.getPeriod()) {

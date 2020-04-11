@@ -90,10 +90,10 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static Event getEventFromCache(String eventId) {
         Event event = null;
-        Hashtable<String, Event> cachedEntries = getcachedEventsHashMap();
+        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
         event = cachedEntries.get(eventId);
         if (event == null) {
-            cachedEntries = getcachedTrackEventsHashMap();
+            cachedEntries = getCachedTrackEventHashMap();
             event = cachedEntries.get(eventId);
         }
         return event;
@@ -124,14 +124,14 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    private static Hashtable<String, Event> getcachedEventsHashMap() {
+    private static Hashtable<String, Event> getCachedEventHashMap() {
 
         Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_EVENTS);
         return cachedEntries;
     }
 
     @SuppressWarnings("unchecked")
-    private static Hashtable<String, Event> getcachedTrackEventsHashMap() {
+    private static Hashtable<String, Event> getCachedTrackEventHashMap() {
 
         Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_TRACK_EVENTS);
         return cachedEntries;
@@ -142,23 +142,23 @@ public final class InternalCaching {
         Hashtable<String, Event> cachedEntries;
         EventType eventType = event.EventType;
         if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
-            cachedEntries = getcachedTrackEventsHashMap();
+            cachedEntries = getCachedTrackEventHashMap();
             cachedEntries.put(event.EventId, event);
             writeObject(CACHE_TRACK_EVENTS, cachedEntries);
         } else {
-            cachedEntries = getcachedEventsHashMap();
+            cachedEntries = getCachedEventHashMap();
             cachedEntries.put(event.EventId, event);
             writeObject(CACHE_EVENTS, cachedEntries);
         }
     }
 
     public static void removeEventFromCache(String eventId) {
-        Hashtable<String, Event> cachedEntries = getcachedEventsHashMap();
+        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
         if (cachedEntries.containsKey(eventId)) {
             cachedEntries.remove(eventId);
             writeObject(CACHE_EVENTS, cachedEntries);
         } else {
-            cachedEntries = getcachedTrackEventsHashMap();
+            cachedEntries = getCachedTrackEventHashMap();
             if (cachedEntries.containsKey(eventId)) {
                 cachedEntries.remove(eventId);
                 writeObject(CACHE_TRACK_EVENTS, cachedEntries);
@@ -167,8 +167,8 @@ public final class InternalCaching {
     }
 
     public static void removeEventsFromCache(List<String> eventIdList) {
-        Hashtable<String, Event> cachedEntries = getcachedEventsHashMap();
-        Hashtable<String, Event> cachedEntriesForTE = getcachedTrackEventsHashMap();
+        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
+        Hashtable<String, Event> cachedEntriesForTE = getCachedTrackEventHashMap();
         int size = cachedEntries.size();
         int sizeTE = cachedEntriesForTE.size();
         for (String evenId : eventIdList) {
@@ -207,8 +207,8 @@ public final class InternalCaching {
         if (events != null && events.size() > 0) {
             Event ed;
             String eventId;
-            Hashtable<String, Event> oldcachedEntries = getcachedEventsHashMap();
-            Hashtable<String, Event> oldcachedEntriesForTE = getcachedTrackEventsHashMap();
+            Hashtable<String, Event> oldcachedEntries = getCachedEventHashMap();
+            Hashtable<String, Event> oldcachedEntriesForTE = getCachedTrackEventHashMap();
             Hashtable<String, Event> cachedEntries = new Hashtable<String, Event>();
             Hashtable<String, Event> cachedEntriesForTE = new Hashtable<String, Event>();
             EventType eventType;

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,7 +43,7 @@ public class CustomReminder extends Activity {
 						reminder.setTimeInterval(userInput);
 						if(Reminder.validateReminderInput(reminder)){
 							Intent intent = new Intent();		
-							intent.putExtra("com.redtop.engaze.entity.Reminder", reminder); 			
+							intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) reminder);
 							setResult(RESULT_OK, intent);        
 							finish();
 						}

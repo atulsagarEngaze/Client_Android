@@ -67,12 +67,8 @@ public class Event implements DataModel {
     public Date StartTimeInDateFormat;
     public Date EndTimeInDateFormat;
     public Boolean IsTrackingRequired;
-    public Integer ReminderOffset;
-    public String ReminderType;
-    public Integer TrackingStartOffset;
 
-    public String TrackingStateId;
-    public Date TrackingStopTime;
+
     public ArrayList<EventParticipant> ReminderEnabledMembers;
 
     public ArrayList<ContactOrGroup> ContactOrGroups = new ArrayList<>();
@@ -110,12 +106,8 @@ public class Event implements DataModel {
         this.InitiatorId = initiatorId;
         this.InitiatorName = initiatorName;
         this.State = state;
-        this.TrackingStateId = trackingStateId;
 
         this.IsTrackingRequired = isTrackingRequired;
-        this.ReminderOffset = reminderOffset;
-        this.ReminderType = reminderType;
-        this.TrackingStartOffset = trackingStartOffset;
         this.ContactOrGroups = contactOrGroups;
         this.NotificationIds = new ArrayList<Integer>();
     }
@@ -139,12 +131,7 @@ public class Event implements DataModel {
         this.InitiatorId = initiatorId;
         this.InitiatorName = initiatorName;
         this.State = state;
-        this.TrackingStateId = trackingStateId;
-
         this.IsTrackingRequired = isTrackingRequired;
-        this.ReminderOffset = reminderOffset;
-        this.ReminderType = reminderType;
-        this.TrackingStartOffset = trackingStartOffset;
         this.Participants = members;
         this.NotificationIds = new ArrayList<Integer>();
     }

@@ -34,6 +34,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
+import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
@@ -84,7 +85,14 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
                 defaultDuration.getPeriod(),
                 true);
-        createOrUpdateEvent.Duration.OffsetInMinutes = defaultDuration.OffsetInMinutes;
+        
+        Reminder defaultReminder = AppContext.context.defaultReminderSettings;
+        createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
+        createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
+
+        Duration defaultTracking = AppContext.context.defaultTrackingSettings;
+        createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
+
         createOrUpdateEvent.CurrentParticipant = new EventParticipant();
         createOrUpdateEvent.CurrentParticipant.setUserId(AppContext.context.loginId);
         createOrUpdateEvent.CurrentParticipant.setProfileName(AppContext.context.loginName);

@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -183,7 +184,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CreateEditEventActivity.this, CustomReminder.class);
-                intent.putExtra("com.redtop.engaze.entity.Reminder", createOrUpdateEvent.Reminder);
+                intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) createOrUpdateEvent.Reminder);
 
                 startActivityForResult(intent, REMINDER_REQUEST_CODE);
             }
@@ -382,9 +383,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mIsForEdit = Boolean.parseBoolean(strIsForEdit);
             if (mIsForEdit) {
                 createOrUpdateEvent = (Event) this.getIntent().getSerializableExtra("EventDetail");
-
-            } else {
-                createOrUpdateEvent = new Event();
             }
         }
         imgView = (ImageView) findViewById(R.id.icon_location_clear);
@@ -426,11 +424,11 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
             SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
             try {
-                startDate = parseFormat.parse(createOrUpdateEvent.StartTime);
+                createOrUpdateEvent.StartTimeInDateFormat = parseFormat.parse(createOrUpdateEvent.StartTime);
             } catch (ParseException ex) {
                 ex.printStackTrace();
             }
-            cal.setTime(startDate);
+            cal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
             mEventTitleView.setText(createOrUpdateEvent.Name);
             mNoteView.setText(createOrUpdateEvent.Description);
             ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
@@ -467,13 +465,11 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
             Duration defaultTracking = AppContext.context.defaultTrackingSettings;
             createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
-            createOrUpdateEvent.Tracking.OffsetInMinutes = defaultTracking.OffsetInMinutes;
 
             Duration defaultDuration = AppContext.context.defaultDurationSettings;
             createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
                     defaultDuration.getPeriod(),
                     true);
-            createOrUpdateEvent.Duration.OffsetInMinutes = defaultDuration.OffsetInMinutes;
 
             if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
                 mFromEventsActivity = false;
@@ -629,31 +625,24 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     private Boolean validateInputData() {
 
-        try {
-            if (mEventJobj.getString("Name").isEmpty()) {
-                setAlertDialog("Oops event title is blank !", "Kindly give a title to your event");
+        if (createOrUpdateEvent.Name == null || createOrUpdateEvent.Name.isEmpty()) {
+            setAlertDialog("Oops event title is blank !", "Kindly give a title to your event");
+            mAlertDialog.show();
+            return false;
+        }
+
+        if (createOrUpdateEvent.Participants.size() == 0) {
+            setAlertDialog("Oops no invitee has been selected !", "Kindly select atleast one invitee");
+            mAlertDialog.show();
+            return false;
+        }
+        if (createOrUpdateEvent.IsRecurrence.equals("true")) {
+            Integer mimmumOccurrences = getResources().getInteger(R.integer.minumim_reccurrence_value);
+            if (createOrUpdateEvent.NumberOfOccurences < mimmumOccurrences) {
+                setAlertDialog("Number of reoccurrences less than " + Integer.toOctalString(mimmumOccurrences), "Kindly select greater value");
                 mAlertDialog.show();
                 return false;
             }
-
-            if (mEventJobj.getJSONArray("UserList").length() == 0) {
-                setAlertDialog("Oops no invitee has been selected !", "Kindly select atleast one invitee");
-                mAlertDialog.show();
-                return false;
-            }
-            if (mIsRecurrence.equals("true")) {
-                Integer mimmumOccurrences = getResources().getInteger(R.integer.minumim_reccurrence_value);
-                if (createOrUpdateEvent.NumberOfOccurences < mimmumOccurrences) {
-                    setAlertDialog("Number of reoccurrences less than " + Integer.toOctalString(mimmumOccurrences), "Kindly select greater value");
-                    mAlertDialog.show();
-                    return false;
-                }
-            }
-
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
 
         return true;
@@ -664,7 +653,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
         DateFormat writeFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a");
         try {
-            startDate = writeFormat.parse(mStartDateDisplayView.getText() + " " + mStartTimeDisplayView.getText());
+            createOrUpdateEvent.StartTimeInDateFormat = writeFormat.parse(mStartDateDisplayView.getText() + " " + mStartTimeDisplayView.getText());
         } catch (ParseException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
