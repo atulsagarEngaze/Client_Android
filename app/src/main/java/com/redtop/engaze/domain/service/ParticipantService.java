@@ -136,7 +136,7 @@ public class ParticipantService {
     }
 
     public static Boolean isNotifyUser(Event event) {
-        if (event != null && event.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
+        if (event != null && event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
             return false;
         }
         return true;
@@ -191,7 +191,7 @@ public class ParticipantService {
     public static boolean setCurrentParticipant(Event event) {
         for (EventParticipant participant : event.Participants) {
             if (participant.getUserId() == AppContext.context.loginId) {
-                event.CurrentParticipant = participant;
+                event.setCurrentParticipant(participant);
                 return true;
             }
         }

@@ -3,7 +3,6 @@ package com.redtop.engaze.adapter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -131,7 +130,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                 ProgressBar.showProgressBar("Please wait");
                 if (ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
                     //Current user is initiator...so he can either end the event or remove the member.
-                    if (event.getMemberCount() <= 2) {
+                    if (event.getParticipantCount() <= 2) {
                         //End the event since it is a 1 to 1 event
                         ProgressBar.showProgressBar("Please wait");
                         EventManager.endEvent(event, new OnActionCompleteListner() {
@@ -154,7 +153,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     } else {
                         //remove the row item member alone since there are still other members in the event.
                         ProgressBar.showProgressBar("Please wait");
-                        event.ContactOrGroups.remove(event.CurrentParticipant.getContact());
+                        event.ContactOrGroups.remove(event.getCurrentParticipant().getContact());
 
                         JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.EventId);
                         ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {

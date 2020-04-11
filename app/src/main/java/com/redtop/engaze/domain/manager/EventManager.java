@@ -47,7 +47,6 @@ import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
 import com.redtop.engaze.service.EventTrackerLocationService;
-import com.redtop.engaze.webservice.EventWS;
 import com.redtop.engaze.webservice.IEventWS;
 import com.redtop.engaze.webservice.proxy.EventWSProxy;
 
@@ -65,10 +64,10 @@ public class EventManager {
         //list = removePastEvents(context, list);
         List<Event> runningList = new ArrayList<Event>();
         if (list != null) {
-            for (Event e : list) {
-                if (e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
-                        && e.State == EventState.TRACKING_ON) {
-                    runningList.add(e);
+            for (Event event : list) {
+                if (event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+                        && event.State == EventState.TRACKING_ON) {
+                    runningList.add(event);
                 }
             }
             EventService.SortListByStartDate(runningList);
@@ -84,8 +83,8 @@ public class EventManager {
             //list = removePastEvents(context, list);
             if (list != null) {
                 for (Event e : list) {
-                    if (e.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
-                            e.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
+                    if (e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
+                            e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
                         pendingList.add(e);
                     }
                 }
@@ -170,7 +169,7 @@ public class EventManager {
                             eventData.EndTime = DateUtil.convertUtcToLocalDateTime(event.EndTime, null);
 
                             ParticipantService.attacheContactGroupToParticipants(eventData);
-                            eventData.Participants.add(eventData.CurrentParticipant);
+                            eventData.Participants.add(eventData.getCurrentParticipant());
 
                             EventService.setEndEventAlarm(eventData);
                             if (eventData.EventType == EventType.QUIK) {
@@ -243,7 +242,7 @@ public class EventManager {
                     if (Status == "true") {
 
                         if (userAcceptanceResponse == AcceptanceStatus.ACCEPTED) {
-                            event.CurrentParticipant.
+                            event.getCurrentParticipant().
                                     setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
                             SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -257,7 +256,7 @@ public class EventManager {
                                 EventService.setTracking(event);
                             }
                         } else {
-                            event.CurrentParticipant.
+                            event.getCurrentParticipant().
                                     setAcceptanceStatus(AcceptanceStatus.DECLINED);
                         }
                         EventNotificationManager.cancelNotification(event);
@@ -366,7 +365,7 @@ public class EventManager {
                     String Status = (String) response.getString("Status");
 
                     if (Status == "true") {
-                        event.CurrentParticipant.
+                        event.getCurrentParticipant().
                                 setAcceptanceStatus(AcceptanceStatus.DECLINED);
 
                         EventNotificationManager.cancelNotification(event);
@@ -876,7 +875,7 @@ public class EventManager {
 
     public static void saveUsersLocationDetailList(Context context, Event event,
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
-        if (event != null && event.CurrentParticipant.getAcceptanceStatus() != AcceptanceStatus.DECLINED
+        if (event != null && event.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
             event.UsersLocationDetailList = usersLocationDetailList;
             InternalCaching.saveEventToCache(event);
@@ -929,14 +928,14 @@ public class EventManager {
                     eventType = e.EventType;
                     //Out going locations - 100 - Share my location - current user is initiator - add all members except me
                     if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
-                        members.remove(e.CurrentParticipant);
+                        members.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }
                     }
                     //Out going locations 200 - Track Buddy - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
+                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getParticipant(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                 }
                 break;
@@ -946,12 +945,12 @@ public class EventManager {
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventType = e.EventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.CurrentParticipant.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getMember(e.InitiatorId), AcceptanceStatus.ACCEPTED));
+                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getParticipant(e.InitiatorId), AcceptanceStatus.ACCEPTED));
                     }
                     //In coming locations - 200 - track buddy - Current user is initiator - add all members except me
                     else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
-                        e.Participants.remove(e.CurrentParticipant);
+                        e.Participants.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }

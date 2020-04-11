@@ -141,6 +141,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme" >
         </activity>
+        <activity
+            android:name="EventParticipantsInfo"
+            android:screenOrientation="portrait"
+            android:theme="@style/ETMaterialTheme" >
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

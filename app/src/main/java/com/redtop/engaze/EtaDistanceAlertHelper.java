@@ -134,7 +134,7 @@ public class EtaDistanceAlertHelper {
             public void onClick(View v) {
                 int finalMeters = readvalues(R.id.eta_unit, R.id.eta_values, mUserName, from.getCurrentItem());
 
-                EventParticipant mem = mEvent.getMember(mUserId);
+                EventParticipant mem = mEvent.getParticipant(mUserId);
                 mem.setDistanceReminderId(UUID.randomUUID().toString());
                 mem.setDistanceReminderDistance(finalMeters);
                 mem.setReminderFrom(ReminderFrom.getDistanceReminderFrom(from.getCurrentItem()));

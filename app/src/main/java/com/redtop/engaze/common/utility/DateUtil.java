@@ -251,24 +251,24 @@ public class DateUtil {
         int minutes = (int) diffMinutes % 60;
         if (days > 0) {
             if (days > 1) {
-                durationText += days + " DAYS ";
+                durationText += days + " days ";
             } else {
-                durationText += days + " DAY ";
+                durationText += days + " day ";
             }
         }
         if (Hours > 0) {
             if (Hours > 1) {
-                durationText += Hours + " HOURS ";
+                durationText += Hours + " hours ";
             } else {
-                durationText += Hours + " HOUR ";
+                durationText += Hours + " hour ";
             }
         }
 
         if (minutes > 0 && days == 0) {
             if (minutes > 1) {
-                durationText += minutes + " MINS";
+                durationText += minutes + " mins";
             } else {
-                durationText += minutes + " MIN";
+                durationText += minutes + " min";
             }
         } else if (durationText.equals(" ")) {
             durationText = "0";

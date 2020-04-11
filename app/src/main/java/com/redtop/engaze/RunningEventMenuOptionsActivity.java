@@ -51,7 +51,7 @@ public class RunningEventMenuOptionsActivity extends BaseActivity implements OnI
 		mEventId = this.getIntent().getStringExtra("EventId");
 
 		mEvent = InternalCaching.getEventFromCache(mEventId);
-		member = mEvent.getMember(mUserId);
+		member = mEvent.getParticipant(mUserId);
 		mobileno = member.getMobileNumber();
 
 		Integer acceptanceStatusId = this.getIntent().getIntExtra("AcceptanceStatus", 0);

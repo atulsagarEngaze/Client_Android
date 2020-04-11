@@ -69,7 +69,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
         try {
             mContext = this;
             mEvent = InternalCaching.getEventFromCache(intent.getStringExtra("EventId"));
-            mMember = mEvent.getMember(intent.getStringExtra("MemberId"));
+            mMember = mEvent.getParticipant(intent.getStringExtra("MemberId"));
             mReminderId = mMember.getDistanceReminderId();
             mDistancetCheckHandler.post(mDistancetCheckRunnable);
         } catch (Exception ex) {
@@ -223,7 +223,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
         if (mEvent == null) {
             return false;
         }
-        mMember = mEvent.getMember(mMember.getUserId());
+        mMember = mEvent.getParticipant(mMember.getUserId());
         if (mMember == null) {
             return false;
         }

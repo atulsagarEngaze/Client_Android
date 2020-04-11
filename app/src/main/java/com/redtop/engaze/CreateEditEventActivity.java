@@ -432,7 +432,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mEventTitleView.setText(createOrUpdateEvent.Name);
             mNoteView.setText(createOrUpdateEvent.Description);
             ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
-            String currentMemUserId = createOrUpdateEvent.CurrentParticipant.getUserId();
+            String currentMemUserId = createOrUpdateEvent.getCurrentParticipant().getUserId();
             ArrayList<EventParticipant> members = createOrUpdateEvent.Participants;
             for (EventParticipant mem : members) {
                 if (!mem.getUserId().equals(currentMemUserId)) {

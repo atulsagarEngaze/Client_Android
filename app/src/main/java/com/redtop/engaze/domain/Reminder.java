@@ -4,14 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 
 public class Reminder implements Parcelable, DataModel {
+
+    public static final long serialVersionUID = 1002715454105775832L;
+
+    @Expose
     private int timeInterval;
+    @Expose
     private String period;
+    @Expose
     private String notificationType;
+    @Expose
     public long ReminderOffsetInMinute;
 
 

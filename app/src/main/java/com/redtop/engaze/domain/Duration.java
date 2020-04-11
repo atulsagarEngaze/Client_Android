@@ -4,13 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 
 public class Duration implements Parcelable, DataModel {
+
+    public static final long serialVersionUID = 1001715454105775832L;
+    @Expose
     private int timeInterval;
+    @Expose
     private String period;
+    @Expose
     private Boolean enabled;
 
 
@@ -95,9 +101,9 @@ public class Duration implements Parcelable, DataModel {
 
     public int getOffSetInMinutes() {
 
-        switch (getPeriod()) {
+        switch (period) {
 
-            case "minute" :
+            case "minute":
                 return timeInterval;
 
             case "hour":
@@ -113,6 +119,7 @@ public class Duration implements Parcelable, DataModel {
                 return timeInterval;
         }
     }
+
     public static boolean validateDurationInput(Duration duration) {
         int userInput = duration.getTimeInterval();
         switch (duration.getPeriod()) {
@@ -134,22 +141,20 @@ public class Duration implements Parcelable, DataModel {
 
     public static boolean validateTrackingInput(Duration duration) {
         int userInput = duration.getTimeInterval();
-        switch(duration.getPeriod()){
-            case "minute" :
-                if(userInput >0 && userInput <= AppContext.context.getResources().getInteger(R.integer.event_tracking_start_max_minutes)){
+        switch (duration.getPeriod()) {
+            case "minute":
+                if (userInput > 0 && userInput <= AppContext.context.getResources().getInteger(R.integer.event_tracking_start_max_minutes)) {
                     return true;
-                }
-                else{
+                } else {
                     Toast.makeText(AppContext.context,
                             AppContext.context.getResources().getString(R.string.message_createEvent_trackingStartMaxAlert),
                             Toast.LENGTH_LONG).show();
                 }
                 break;
-            case "hour" :
-                if(userInput >0 && userInput <= AppContext.context.getResources().getInteger(R.integer.event_tracking_start_max_hours)){
+            case "hour":
+                if (userInput > 0 && userInput <= AppContext.context.getResources().getInteger(R.integer.event_tracking_start_max_hours)) {
                     return true;
-                }
-                else{
+                } else {
                     Toast.makeText(AppContext.context,
                             AppContext.context.getResources().getString(R.string.message_createEvent_trackingStartMaxAlert),
                             Toast.LENGTH_LONG).show();

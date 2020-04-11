@@ -236,7 +236,7 @@ public final class InternalCaching {
                     ArrayList<EventParticipant> reminderMems = ed.ReminderEnabledMembers;
                     if (reminderMems != null && reminderMems.size() > 0) {
                         for (EventParticipant mem : reminderMems) {
-                            EventParticipant newMem = event.getMember(mem.getUserId());
+                            EventParticipant newMem = event.getParticipant(mem.getUserId());
                             if (newMem != null) {
                                 newMem.setDistanceReminderDistance(mem.getDistanceReminderDistance());
                                 newMem.setDistanceReminderId(mem.getDistanceReminderId());

@@ -242,7 +242,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
 		if(mEvent!=null){
 			if (ParticipantService.isCurrentUserInitiator(mEvent.InitiatorId)){
 				getMenuInflater().inflate(R.menu.menu_running_event_initiator, menu);			
-				if((mEvent.getMembersbyStatus(AcceptanceStatus.getStatus(1))).size() > 1){
+				if((mEvent.getParticipantsbyStatus(AcceptanceStatus.getStatus(1))).size() > 1){
 					menu.removeItem(R.id.action_poke_all);			
 				}
 			}

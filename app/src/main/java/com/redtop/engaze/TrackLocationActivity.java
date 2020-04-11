@@ -6,10 +6,8 @@ import java.util.Hashtable;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -85,7 +83,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
                 defaultDuration.getPeriod(),
                 true);
-        
+
         Reminder defaultReminder = AppContext.context.defaultReminderSettings;
         createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
         createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
@@ -93,14 +91,15 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         Duration defaultTracking = AppContext.context.defaultTrackingSettings;
         createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
 
-        createOrUpdateEvent.CurrentParticipant = new EventParticipant();
-        createOrUpdateEvent.CurrentParticipant.setUserId(AppContext.context.loginId);
-        createOrUpdateEvent.CurrentParticipant.setProfileName(AppContext.context.loginName);
-        createOrUpdateEvent.CurrentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
+        EventParticipant currentParticipant = new EventParticipant();
+        currentParticipant.setUserId(AppContext.context.loginId);
+        currentParticipant.setProfileName(AppContext.context.loginName);
+        currentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
         if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION
                 || createOrUpdateEvent.EventType == EventType.QUIK) {
-            createOrUpdateEvent.CurrentParticipant.isUserLocationShared = true;
+            currentParticipant.isUserLocationShared = true;
         }
+        createOrUpdateEvent.setCurrentParticipant(currentParticipant);
 
     }
 
@@ -206,7 +205,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     private Boolean validateInputData() {
 
 
-        if (createOrUpdateEvent.getMemberCount() == 0) {
+        if (createOrUpdateEvent.getParticipantCount() == 0) {
             setAlertDialog("Oops no invitee has been selected !", "Kindly select atleast one invitee");
             mAlertDialog.show();
             return false;

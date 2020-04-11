@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.enums.EventType;
@@ -62,7 +63,7 @@ public class Event implements DataModel {
     public ArrayList<EventParticipant> Participants = new ArrayList<>();
 
     @Expose
-    public EventParticipant CurrentParticipant;
+    private EventParticipant CurrentParticipant;
 
     public Date StartTimeInDateFormat;
     public Date EndTimeInDateFormat;
@@ -142,7 +143,21 @@ public class Event implements DataModel {
         this.NotificationIds = new ArrayList<Integer>();
     }
 
-    public EventParticipant getMember(String userId) {
+    public void setCurrentParticipant(EventParticipant participant){
+        this.CurrentParticipant = participant;
+    }
+    public  EventParticipant getCurrentParticipant() {
+        if (CurrentParticipant == null) {
+            for (EventParticipant participant : this.Participants) {
+                if (participant.getUserId() == AppContext.context.loginId) {
+                    this.CurrentParticipant = participant;
+                }
+            }
+        }
+        return this.CurrentParticipant;
+    }
+
+    public EventParticipant getParticipant(String userId) {
 
         EventParticipant member = null;
         if (this.Participants != null && this.Participants.size() > 0) {
@@ -157,7 +172,7 @@ public class Event implements DataModel {
     }
 
     @SuppressWarnings("null")
-    public ArrayList<EventParticipant> getMembersbyStatus(AcceptanceStatus acceptanceStatus) {
+    public ArrayList<EventParticipant> getParticipantsbyStatus(AcceptanceStatus acceptanceStatus) {
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
 
@@ -174,7 +189,7 @@ public class Event implements DataModel {
     @SuppressWarnings("null")
 
 
-    public int getMemberCount() {
+    public int getParticipantCount() {
         if (this.Participants != null) {
             return this.Participants.size();
         } else {
