@@ -3,6 +3,7 @@ package com.redtop.engaze.common.utility;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.ObjectSerializer;
 
@@ -34,8 +35,18 @@ public class PreffManager {
         editor.commit();
     }
 
+    public static <TObject> TObject getPrefObject(String key, Class<TObject> classT) {
 
-    public static <T> void setPrefArrayList(String key, ArrayList<T> value)  {
+        return new Gson().fromJson(PreffManager.getPref(key), classT);
+    }
+
+    public static void setPrefObject(String key, Object object) {
+
+        PreffManager.setPref(key, new Gson().toJson(object));
+    }
+
+
+    public static <T> void setPrefArrayList(String key, ArrayList<T> value) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(AppContext.context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -54,7 +65,7 @@ public class PreffManager {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(AppContext.context);
         try {
-            return (ArrayList<T>)ObjectSerializer.deserialize(preferences.getString(key, null));
+            return (ArrayList<T>) ObjectSerializer.deserialize(preferences.getString(key, null));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -83,7 +94,7 @@ public class PreffManager {
     public static void removePref(String key) {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(AppContext.context);
-        if(preferences.getString(key, null) != null)
+        if (preferences.getString(key, null) != null)
             preferences.edit().remove(key).apply();
     }
 }

@@ -75,19 +75,22 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         });
     }
 
-    private void initializeEventWithDefaultValues(){
+    private void initializeEventWithDefaultValues() {
         createOrUpdateEvent = new Event();
         mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());
         createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        createOrUpdateEvent.Duration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
+        Duration defaultDuration = AppContext.context.defaultDurationSettings;
+        createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
+                defaultDuration.getPeriod(),
+                true);
+        createOrUpdateEvent.Duration.OffsetInMinutes = defaultDuration.OffsetInMinutes;
         createOrUpdateEvent.CurrentParticipant = new EventParticipant();
         createOrUpdateEvent.CurrentParticipant.setUserId(AppContext.context.loginId);
         createOrUpdateEvent.CurrentParticipant.setProfileName(AppContext.context.loginName);
         createOrUpdateEvent.CurrentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
-        if(createOrUpdateEvent.EventType== EventType.SHAREMYLOACTION
-                ||createOrUpdateEvent.EventType ==EventType.QUIK){
+        if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION
+                || createOrUpdateEvent.EventType == EventType.QUIK) {
             createOrUpdateEvent.CurrentParticipant.isUserLocationShared = true;
         }
 
@@ -97,7 +100,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
         initializeBasedOnEventType();
         mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", mEventTypeId);
-              SetDurationText();
+        SetDurationText();
         if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
             createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
@@ -251,7 +254,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
             case R.id.tracklocation_Duration_holder:
                 intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable)createOrUpdateEvent.Duration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.Duration);
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
                 break;
             case R.id.btn_tracking_start:

@@ -66,7 +66,7 @@
                  android:paddingRight="10dp"
                 android:layout_width="16dip"
                 android:layout_height="16dip"
-                android:background="@drawable/ripple_lightgreen" />
+                android:background="@drawable/ripple_teal" />
 
             <TextView
                 android:id="@+id/txt_running_events"
@@ -102,7 +102,7 @@
                 style="@style/HomeNotificationButton"
                 android:layout_width="16dip"
                 android:layout_height="16dip"               
-                android:background="@drawable/ripple_lightgreen" />
+                android:background="@drawable/ripple_teal" />
 
             <TextView
                 android:id="@+id/txt_sharing_location_events"
@@ -138,7 +138,7 @@
                 style="@style/HomeNotificationButton"
                 android:layout_width="16dip"
                 android:layout_height="16dip"
-                android:background="@drawable/ripple_lightgreen" />
+                android:background="@drawable/ripple_teal" />
 
             <TextView
                 android:id="@+id/txt_track_buddy_events"

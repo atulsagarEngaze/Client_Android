@@ -45,6 +45,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.RecurrenceType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -206,7 +207,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable)createOrUpdateEvent.Duration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.Duration);
 
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
             }
@@ -426,8 +427,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
             try {
                 startDate = parseFormat.parse(createOrUpdateEvent.StartTime);
-            }
-            catch (ParseException ex){
+            } catch (ParseException ex) {
                 ex.printStackTrace();
             }
             cal.setTime(startDate);
@@ -460,9 +460,21 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mCreateUpdateSuccessfulMessage = getResources().getString(R.string.title_create_event);
             createOrUpdateEvent = new Event();
             mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
-            createOrUpdateEvent.Reminder = new Reminder(Integer.parseInt(sharedPrefs.getString("ReminderInterval", getResources().getString(R.string.event_reminder_default_interval))), sharedPrefs.getString("ReminderPeriod", getResources().getString(R.string.event_reminder_default_period)), sharedPrefs.getString("ReminderNotification", getResources().getString(R.string.event_reminder_default_notification)));
-            createOrUpdateEvent.Tracking = new Duration(Integer.parseInt(sharedPrefs.getString("TrackingInterval", getResources().getString(R.string.event_tracking_default_interval))), sharedPrefs.getString("TrackingPeriod", getResources().getString(R.string.event_tracking_default_period)), Boolean.parseBoolean(sharedPrefs.getString("TrackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
-            createOrUpdateEvent.Duration = new Duration(Integer.parseInt(sharedPrefs.getString("defaultDuration", getResources().getString(R.string.event_default_duration))), sharedPrefs.getString("defaultPeriod", getResources().getString(R.string.event_default_period)), Boolean.parseBoolean(sharedPrefs.getString("trackingEnabled", getResources().getString(R.string.event_tracking_default_enabled))));
+
+            Reminder defaultReminder = AppContext.context.defaultReminderSettings;
+            createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
+            createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
+
+            Duration defaultTracking = AppContext.context.defaultTrackingSettings;
+            createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
+            createOrUpdateEvent.Tracking.OffsetInMinutes = defaultTracking.OffsetInMinutes;
+
+            Duration defaultDuration = AppContext.context.defaultDurationSettings;
+            createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
+                    defaultDuration.getPeriod(),
+                    true);
+            createOrUpdateEvent.Duration.OffsetInMinutes = defaultDuration.OffsetInMinutes;
+
             if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
                 mFromEventsActivity = false;
                 createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");

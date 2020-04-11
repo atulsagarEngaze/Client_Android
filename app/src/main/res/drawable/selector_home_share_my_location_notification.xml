@@ -1,7 +1,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_selected="false"><bitmap android:alpha="@integer/not_selected_alpha" android:src="@drawable/ic_trackme" />
+    <item android:state_selected="false">
+        <bitmap android:src="@drawable/ic_location_black_icon" />
     </item>
-    <item android:drawable="@drawable/ic_trackme" android:state_selected="true"></item>
+    <item android:drawable="@drawable/ic_location_black_icon" android:state_selected="true"></item>
 
 </selector>

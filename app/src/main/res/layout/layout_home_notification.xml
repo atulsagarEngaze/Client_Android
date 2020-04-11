@@ -39,16 +39,6 @@
                 android:paddingTop="@dimen/padding"
                 android:text="@string/header_home_notification_trackbuddy" />
 
-            <!-- <ImageButton -->
-            <!-- android:id="@+id/img_remove_tracking" -->
-            <!-- style="@style/RightCircularImageStyle" -->
-            <!-- android:layout_width="42dip" -->
-            <!-- android:layout_height="42dip" -->
-            <!-- android:layout_alignParentTop="true" -->
-            <!-- android:layout_marginRight="@dimen/padding" -->
-            <!-- android:layout_marginTop="@dimen/padding" -->
-            <!-- android:padding="@dimen/padding" -->
-            <!-- android:src="@drawable/ic_clear_white_18dp" /> -->
 
             <ListView
                 android:id="@+id/home_trackbuddy_list"
@@ -97,17 +87,7 @@
                 android:paddingTop="@dimen/padding"
                 android:text="@string/header_home_notification_sharemylocation" />
 
-            <!-- <ImageButton -->
-            <!-- android:id="@+id/img_remove_sharing" -->
-            <!-- style="@style/RightCircularImageStyle" -->
-            <!-- android:layout_width="42dp" -->
-            <!-- android:layout_height="42dp" -->
-            <!-- android:layout_alignParentTop="true" -->
-            <!-- android:layout_marginRight="@dimen/padding" -->
-            <!-- android:layout_marginTop="@dimen/padding" -->
-            <!-- android:padding="@dimen/padding" -->
-            <!-- android:paddingBottom="0dp" -->
-            <!-- android:src="@drawable/ic_clear_white_18dp" /> -->
+
 
             <ListView
                 android:id="@+id/home_sharemylocation_list"

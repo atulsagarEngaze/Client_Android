@@ -71,6 +71,8 @@ public class Duration implements Parcelable, DataModel {
         // TODO Auto-generated method stub
         dest.writeInt(timeInterval);
         dest.writeString(period);
+        dest.writeBoolean(enabled);
+        dest.writeInt(OffsetInMinutes);
 
     }
 
@@ -80,6 +82,8 @@ public class Duration implements Parcelable, DataModel {
     private void readFromParcel(Parcel in) {
         timeInterval = in.readInt();
         period = in.readString();
+        OffsetInMinutes = in.readInt();
+        enabled = in.readBoolean();
     }
 
     public static final Creator CREATOR = new Creator() {

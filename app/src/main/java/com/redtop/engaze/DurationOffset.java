@@ -21,7 +21,6 @@ public class DurationOffset extends BaseActivity {
 
     private ArrayList<TextView> periods;
     private Duration duration = null;
-    private Context mContext;
 
     /**
      * Called when the activity is first created.
