@@ -6,7 +6,7 @@
     <item
         android:id="@+id/common_action_save"
         android:layout_marginEnd="22dip"
-        android:icon="@drawable/ic_check_white_24dp"
+        android:icon="@drawable/ic_check_black_24dp"
         android:orderInCategory="1"
         android:paddingEnd="20dip"
         android:paddingStart="20dip"

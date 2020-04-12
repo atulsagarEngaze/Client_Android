@@ -13,15 +13,12 @@
         android:id="@+id/search_contact_toolbar"
         style="@style/ETMaterialTheme.ActionBar"
         android:layout_width="match_parent"
-        android:layout_height="54dip"
-        android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="0dip"
-        android:background="@color/primary"
         android:elevation="2dip"
         android:gravity="center_vertical" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_refresh_layout"
         android:layout_below="@+id/invitee_section"
@@ -36,7 +33,7 @@
             android:background="@drawable/contact_list_selector"
             android:divider="@null"
             android:dividerHeight="0dp" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/ll_contacts_help_text"
@@ -110,6 +107,6 @@
         android:layout_marginRight="@dimen/padding"
         android:layout_marginTop="-24dip"
         android:padding="@dimen/padding"
-        android:src="@drawable/ic_check_white_24dp" />
+        android:src="@drawable/ic_check_black_24dp" />
 
 </RelativeLayout>

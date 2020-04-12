@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -27,7 +31,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.webservice.LocationWS;
+import com.redtop.engaze.manager.LocationManager;
 
 import androidx.cardview.widget.CardView;
 
@@ -67,14 +71,14 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
                     turnOnOfInternetAvailabilityMessage();
                     actBasedOnTimeLeft();
                     //loadMyCoordinates();
-                    getLocationsFromServer();
+                    getCurrentLocationsFromServer();
                     startProgressBar();
                 }
             }
         };
     }
 
-    private void getLocationsFromServer() {
+    private void getCurrentLocationsFromServer() {
         if (!AppContext.context.isInternetEnabled) {
             Log.d(TAG, "No internet connection. Abortig fetching locations from server.");
             if (isActivityRunning) {
@@ -83,12 +87,16 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             return;
         }
 
-        LocationWS.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListner() {
+        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
                 if (isActivityRunning) {
-                    onSuccessLocationonResponse(response);
+                    try {
+                        onSuccessLocationResponse(response.getJSONArray("ListOfUserLocation"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }, new OnAPICallCompleteListner() {
@@ -102,27 +110,18 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         });
     }
 
-    private void onSuccessLocationonResponse(JSONObject response) {
+    private void onSuccessLocationResponse(JSONArray response) {
 
         //Log.d(TAG, response.toString());
         try {
-            String Status = (String) response.getString("Status");
-            if (Status == "true") {
-                new populateLocationListWithAddress().execute(response);
-            } else {
-                Log.d(TAG, "Location not returned from the server");
-                Toast.makeText(mContext,
-                        getResources().getString(R.string.unable_locate),
-                        Toast.LENGTH_LONG).show();
-            }
+
+            new populateLocationListWithAddress().execute(response);
 
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(mContext,
                     getResources().getString(R.string.message_general_exception),
                     Toast.LENGTH_LONG).show();
-        } finally {
-
         }
     }
 
@@ -157,13 +156,19 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
     }
 
 
-    private class populateLocationListWithAddress extends AsyncTask<JSONObject, Void, String> {
+    private class populateLocationListWithAddress extends AsyncTask<JSONArray, Void, String> {
 
         @Override
-        protected String doInBackground(JSONObject... jsonObjects) {
+        protected String doInBackground(JSONArray... jsonObjects) {
             try {
-                //mUsersLocationDetailList = (ArrayList<UsersLocationDetail>) parser.parseUserLocation(response.getJSONArray("ListOfUserLocation"));
-                ParticipantService.updateUserListWithLocation(jsonObjects[0].getJSONArray("ListOfUserLocation"), mUsersLocationDetailList, mDestinationlatlang);
+                JSONArray userLocationsJsonArray = jsonObjects[0];
+                ArrayList<UsersLocationDetail> userLocationsFromServer = new ArrayList<>();
+                for (int i = 0; i < jsonObjects.length; i++) {
+
+                    userLocationsFromServer.add(AppContext.jsonParser.deserialize(userLocationsJsonArray.getJSONObject(i).toString(), UsersLocationDetail.class));
+                }
+
+                ParticipantService.updateUserListWithLocation(userLocationsFromServer, mUsersLocationDetailList, mDestinationlatlang);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -198,8 +203,8 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         protected void onPreExecute() {
             for (UsersLocationDetail ud : mUsersLocationDetailList) {
                 if (ud != null) {
-                    if (ud.getCurrentAddress() == null || ud.getCurrentAddress() == "") {
-                        ud.setCurrentAddress("fetching location..");
+                    if (ud.currentAddress == null || ud.currentAddress == "") {
+                        ud.currentAddress = "fetching location..";
                     }
                 }
             }
@@ -241,7 +246,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent, mContext));
 
         for (UsersLocationDetail ud : mUsersLocationDetailList) {
-            if (ParticipantService.isParticipantCurrentUser(ud.getUserId())) {
+            if (ParticipantService.isParticipantCurrentUser(ud.userId)) {
                 currentUld = ud;
                 break;
             }
@@ -265,11 +270,11 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 
     public void upDateMyLocationDetails() {
         for (UsersLocationDetail ud : mUsersLocationDetailList) {
-            if (ud != null && ParticipantService.isParticipantCurrentUser(ud.getUserId())) {
-                ud.setLatitude(Double.toString(mMyCoordinates.latitude));
-                ud.setLongitude(Double.toString(mMyCoordinates.longitude));
+            if (ud != null && ParticipantService.isParticipantCurrentUser(ud.userId)) {
+                ud.latitude = mMyCoordinates.latitude;
+                ud.longitude = mMyCoordinates.longitude;
                 SimpleDateFormat Simpledf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                ud.setCreatedOn(Simpledf.format(Calendar.getInstance().getTime()));
+                ud.createdOn = Simpledf.format(Calendar.getInstance().getTime());
             }
         }
     }
@@ -284,8 +289,8 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             tUl = null;
             for (UsersLocationDetail uld : temUldList) {
 
-                if (uld != null && em.getUserId().equalsIgnoreCase(uld.getUserId())) {
-                    uld.setAcceptanceStatus(em.getAcceptanceStatus());
+                if (uld != null && em.getUserId().equalsIgnoreCase(uld.userId)) {
+                    uld.acceptanceStatus = em.getAcceptanceStatus();
                     tUl = uld;
                     isExist = true;
                     break;
@@ -318,10 +323,10 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
     public void userLocationMenuClicked(View v, UsersLocationDetail uld) {
         mIsActivityPauseForDialog = true;
         Intent intent = new Intent(mContext, RunningEventMenuOptionsActivity.class);
-        intent.putExtra("UserName", uld.getUserName());
-        intent.putExtra("UserId", uld.getUserId());
+        intent.putExtra("UserName", uld.userName);
+        intent.putExtra("UserId", uld.userId);
         intent.putExtra("EventId", mEvent.EventId);
-        intent.putExtra("AcceptanceStatus", uld.getAcceptanceStatus().getStatus());
+        intent.putExtra("AcceptanceStatus", uld.acceptanceStatus.getStatus());
         mContext.startActivity(intent);
         canRefreshUserLocation = false;
         mClickedUserLocationView = v;

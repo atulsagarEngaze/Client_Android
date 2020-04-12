@@ -14,9 +14,9 @@ import com.redtop.engaze.app.AppContext;
 
 import org.json.JSONObject;
 
-public class LocationWS extends BaseWebService {
+public class LocationWS extends BaseWebService implements ILocationWS {
 
-    public static void updateLocation(JSONObject jsonObject,
+    public void updateLocation(JSONObject jsonObject,
                                       final OnAPICallCompleteListner listnerOnSuccess,
                                       final OnAPICallCompleteListner listnerOnFailure) {
         try {
@@ -33,7 +33,7 @@ public class LocationWS extends BaseWebService {
         }
     }
 
-    public static void getLocationsFromServer(String userId, String eventId,
+    public void getLocationsFromServer(String userId, String eventId,
                                               final OnAPICallCompleteListner listnerOnSuccess,
                                               final OnAPICallCompleteListner listnerOnFailure) {
         try {

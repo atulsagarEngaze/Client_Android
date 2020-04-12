@@ -82,7 +82,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 	public boolean isMarkerExistForTheUser(String userId) {
 		Boolean isExist = false;		
 		for (UsersLocationDetail ud :  markerUserLocation.values()){
-			if(ud!=null && ud.getUserId().equalsIgnoreCase(userId)){
+			if(ud!=null && ud.userId.equalsIgnoreCase(userId)){
 				isExist = true;
 				break;
 			}
@@ -101,7 +101,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 		}
 		else
 		{
-			title = uld.getUserName();
+			title = uld.userName;
 		}
 		for (Marker marker : mMarkers) {
 			if(title.equals(marker.getTitle())){
@@ -114,7 +114,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 	public void keepMarkerInCenterAndShowInfoWindow(){	
 		mCurrentMarker.hideInfoWindow();
 		UsersLocationDetail ud = markerUserLocation.get(mCurrentMarker);
-		mCurrentMarker.setPosition(new LatLng( Double.parseDouble(ud.getLatitude()), Double.parseDouble(ud.getLongitude())));
+		mCurrentMarker.setPosition(new LatLng( ud.latitude, ud.longitude));
 		InfoWindowHelper.createAndshowInfoWindow(mContext, mCurrentMarker, mMap,
 				mEvent,mDestinationlatlang,mGd, markerUserLocation, canEnableMarkerClick() );
 		LatLng coordinate = mCurrentMarker.getPosition();
@@ -171,19 +171,19 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 					try 
 					{
 						if(status.equalsIgnoreCase("failed")){
-							ud.setDistance("unable to find");
-							ud.setEta("unable to find");
+							ud.distance = "unable to find";
+							ud.eta = "unable to find";
 							mDistance ="unable to find";	
 
 						}
 						else{
-							ud.setDistance(gd.getTotalDistanceText(doc));
-							ud.setEta(gd.getTotalDurationText(doc));
+							ud.distance = gd.getTotalDistanceText(doc);
+							ud.eta = gd.getTotalDurationText(doc);
 						}
 					}
 					catch(Exception ex){
-						ud.setDistance("No route");
-						ud.setEta("");
+						ud.distance = "No route";
+						ud.eta ="";
 						mDistance ="No route";								
 					}	
 					mETADistanceMarkers.add(MarkerHelper.drawTimeDistanceMarker(marker.getPosition(), ud, mMap,RunningEventMarker.this));
@@ -203,15 +203,15 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 
 		if(mRouteStartUd==null){//its a destination
 			latLangs.add(mDestinationlatlang);
-			latLangs.add(new LatLng(Double.parseDouble(mRouteEndUd.getLatitude()), Double.parseDouble(mRouteEndUd.getLongitude())));
+			latLangs.add(new LatLng(mRouteEndUd.latitude, mRouteEndUd.longitude));
 		}
 		else if(mRouteEndUd==null){
 			latLangs.add(mDestinationlatlang);
-			latLangs.add(new LatLng(Double.parseDouble(mRouteStartUd.getLatitude()), Double.parseDouble(mRouteStartUd.getLongitude())));
+			latLangs.add(new LatLng(mRouteStartUd.latitude, mRouteStartUd.longitude));
 		}
 		else{
-			latLangs.add(new LatLng(Double.parseDouble(mRouteStartUd.getLatitude()), Double.parseDouble(mRouteStartUd.getLongitude())));
-			latLangs.add(new LatLng(Double.parseDouble(mRouteEndUd.getLatitude()), Double.parseDouble(mRouteEndUd.getLongitude())));
+			latLangs.add(new LatLng(mRouteStartUd.latitude, mRouteStartUd.longitude));
+			latLangs.add(new LatLng(mRouteEndUd.latitude, mRouteEndUd.longitude));
 		}
 
 		adjustMap(latLangs);
@@ -322,12 +322,12 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 		for(UsersLocationDetail userLocationDetail : mUsersLocationDetailList )
 		{
 			marker = null;
-			if(userLocationDetail.getAcceptanceStatus()== AcceptanceStatus.ACCEPTED)
+			if(userLocationDetail.acceptanceStatus== AcceptanceStatus.ACCEPTED)
 			{
-				if (!isMarkerExistForTheUser(userLocationDetail.getUserId())){
+				if (!isMarkerExistForTheUser(userLocationDetail.userId)){
 
-					if(!userLocationDetail.getLatitude().equals("")&&!userLocationDetail.getLongitude().equals("")){
-						latlang = new LatLng(Double.parseDouble(userLocationDetail.getLatitude()), Double.parseDouble(userLocationDetail.getLongitude()));
+					if(!userLocationDetail.latitude.equals("")&&!userLocationDetail.longitude.equals("")){
+						latlang = new LatLng(userLocationDetail.latitude, userLocationDetail.longitude);
 						marker = MarkerHelper.drawParticipantMarker(latlang, userLocationDetail, mMap);
 						markerUserLocation.put(marker, userLocationDetail);
 						mMarkers.add(marker);

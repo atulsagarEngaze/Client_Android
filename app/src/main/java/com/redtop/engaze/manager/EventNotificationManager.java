@@ -240,9 +240,9 @@ public class EventNotificationManager {
                     // Dismiss Notification
                     .setAutoCancel(false)
                     //.setSound(notificationSound)
-                    .addAction(R.drawable.ic_check_black_18dp, "Accept", acceptIntent)
+                    .addAction(R.drawable.ic_check_black_24dp, "Accept", acceptIntent)
                     .setContentIntent(pendingIntent)
-                    .addAction(R.drawable.ic_clear_black_18dp, "Decline", rejectIntent);
+                    .addAction(R.drawable.ic_clear_black_24dp, "Decline", rejectIntent);
 
             if (!event.IsMute) {
                 mBuilder.setSound(notificationSound);

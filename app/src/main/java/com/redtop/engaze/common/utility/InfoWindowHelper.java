@@ -57,8 +57,8 @@ public class InfoWindowHelper {
                 String address = "";
                 String userName = "";
                 if (ud != null) {//destination address
-                    address = ud.getCurrentAddress();
-                    userName = ud.getUserName();
+                    address = ud.currentAddress;
+                    userName = ud.userName;
                 } else {
                     address = ed.Destination.getAddress();
                     userName = ed.Destination.getName();
@@ -152,7 +152,7 @@ public class InfoWindowHelper {
             if (!m.equals(marker)) {
                 UsersLocationDetail udlocal = markerUserLocation.get(m);
                 if (udlocal != null) {
-                    endPoints.put(udlocal.getUserName(), m.getPosition());
+                    endPoints.put(udlocal.userName, m.getPosition());
                 } else {
                     endPoints.put("Destination", m.getPosition());
                 }

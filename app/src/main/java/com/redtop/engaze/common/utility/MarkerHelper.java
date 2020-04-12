@@ -64,7 +64,7 @@ public class MarkerHelper {
             int circleSize = (int) AppContext.context.getResources().getDimension(R.dimen.marker_circle_size);
             int markerSize = (int) AppContext.context.getResources().getDimension(R.dimen.marker_size);
 
-            bitmap1 = BitMapHelper.getCroppedBitmap(Bitmap.createScaledBitmap(userLocationDetail.getContactOrGroup().getImageBitmap(AppContext.context), circleSize, circleSize, true));
+            bitmap1 = BitMapHelper.getCroppedBitmap(Bitmap.createScaledBitmap(userLocationDetail.contactOrGroup.getImageBitmap(AppContext.context), circleSize, circleSize, true));
 
             Bitmap bitmap2 = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(AppContext.context.getContentResolver(), Uri.parse("android.resource://com.redtop.engaze/drawable/marker")), markerSize, markerSize, true).copy(Bitmap.Config.ARGB_8888, true);
             Paint paint = new Paint();
@@ -83,7 +83,7 @@ public class MarkerHelper {
             e1.printStackTrace();
         }
 
-        return map.addMarker(generateMarker(latLng, shapeDrawable, shapeSize, shapeSize, .5f, .8f, userLocationDetail.getUserName()));
+        return map.addMarker(generateMarker(latLng, shapeDrawable, shapeSize, shapeSize, .5f, .8f, userLocationDetail.userName));
     }
 
 
@@ -96,7 +96,7 @@ public class MarkerHelper {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         etaMarker.setLayoutParams(params);
         TextView info = (TextView) etaMarker.findViewById(R.id.txt_info);
-        info.setText(ud.getDistance() + ", " + ud.getEta().replace("hour", "hr"));
+        info.setText(ud.distance+ ", " + ud.eta.replace("hour", "hr"));
         IconGenerator iconGen = new IconGenerator(AppContext.context);
         iconGen.setColor(AppContext.context.getResources().getColor(R.color.primary));
         iconGen.setContentView(etaMarker);

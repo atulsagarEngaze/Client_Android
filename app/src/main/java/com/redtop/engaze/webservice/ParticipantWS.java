@@ -6,11 +6,11 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 
 import org.json.JSONObject;
 
-public class ParticipantWS extends BaseWebService {
+public class ParticipantWS extends BaseWebService implements IParticipantWS {
 
     private final static String TAG = ParticipantWS.class.getName();
 
-    public static void pokeParticipants(JSONObject pokeAllContactsJSON,
+    public void pokeParticipants(JSONObject pokeAllContactsJSON,
                                         final OnAPICallCompleteListner listnerOnSuccess,
                                         final OnAPICallCompleteListner listnerOnFailure) {
         try {
@@ -27,7 +27,7 @@ public class ParticipantWS extends BaseWebService {
 
     }
 
-    public static void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + Routes.UPDATE_PARTICIPANTS;

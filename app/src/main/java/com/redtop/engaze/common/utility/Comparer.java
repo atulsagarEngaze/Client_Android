@@ -9,11 +9,11 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 
 	@Override
 	public int compare(UsersLocationDetail lhs, UsersLocationDetail rhs) {
-		if(lhs.getAcceptanceStatus()==rhs.getAcceptanceStatus()){
-			if (lhs.getAcceptanceStatus()== AcceptanceStatus.ACCEPTED ){
+		if(lhs.acceptanceStatus==rhs.acceptanceStatus){
+			if (lhs.acceptanceStatus== AcceptanceStatus.ACCEPTED ){
 				if(lhs.currentAddress!=null && lhs.currentAddress!=""){
 					if(rhs.currentAddress!=null && rhs.currentAddress!=""){
-						return  lhs.getUserName().compareToIgnoreCase(rhs.getUserName());
+						return  lhs.userName.compareToIgnoreCase(rhs.userName);
 					}
 					else {
 						return -1;
@@ -26,15 +26,15 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 					}
 					else
 					{
-						return  lhs.getUserName().compareToIgnoreCase(rhs.getUserName());
+						return  lhs.userName.compareToIgnoreCase(rhs.userName);
 					}
 				}
 			}
 
-			return  lhs.getUserName().compareToIgnoreCase(rhs.getUserName());
+			return  lhs.userName.compareToIgnoreCase(rhs.userName);
 		}
 		else {
-			if (lhs.getAcceptanceStatus()==AcceptanceStatus.ACCEPTED ){
+			if (lhs.acceptanceStatus==AcceptanceStatus.ACCEPTED ){
 				return -1;
 			}
 			else

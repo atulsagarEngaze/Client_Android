@@ -56,21 +56,21 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
         UsersLocationDetail ud = items.get(i);
         if (ud != null) {
             viewHolder.uld = ud;
-            viewHolder.userName.setText(ud.getUserName());
+            viewHolder.userName.setText(ud.userName);
             if (items.size() - 1 == i) {
                 viewHolder.divider.setVisibility(View.GONE);
             } else {
                 viewHolder.divider.setVisibility(View.VISIBLE);
 
             }
-            if (ParticipantService.isParticipantCurrentUser(ud.getUserId())) {
+            if (ParticipantService.isParticipantCurrentUser(ud.userId)) {
                 viewHolder.userOptionsImage.setVisibility(View.GONE);
             }
 
-            viewHolder.profileImage.setBackground(ud.getContactOrGroup().getImageDrawable(mContext));
+            viewHolder.profileImage.setBackground(ud.contactOrGroup.getImageDrawable(mContext));
 
-            if (ud.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                if (ud.getLatitude().equals("")) {
+            if (ud.acceptanceStatus== AcceptanceStatus.ACCEPTED) {
+                if (ud.latitude.equals("")) {
 
                     viewHolder.rlActiveWithNoLocationUser.setVisibility(View.VISIBLE);
                     viewHolder.locationImage.setVisibility(View.GONE);
@@ -87,13 +87,13 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                         viewHolder.rlDeclinedUser.setVisibility(View.GONE);
                         viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
 
-                        String displayText = ud.getCurrentDisplayAddress();
+                        String displayText = ud.currentDisplayAddress;
 
                         if (displayText == null || displayText.equals("")) {
                             displayText = mContext.getString(R.string.label_runningEvent_acceptedLocationNotFound);
                         } else {
-                            if (!ud.getCreatedOn().equals("")) {
-                                Date createdon = originalformat.parse(ud.getCreatedOn());
+                            if (!ud.createdOn.equals("")) {
+                                Date createdon = originalformat.parse(ud.createdOn);
                                 cal.setTime(createdon);
                                 viewHolder.lastSeenTime.setText("Last seen: " + DateUtil.getTime(cal));
                             }
@@ -113,7 +113,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                 viewHolder.rlNotRespondedUser.setVisibility(View.VISIBLE);
                 viewHolder.locationImage.setVisibility(View.GONE);
 
-                if (ud.getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
+                if (ud.acceptanceStatus == AcceptanceStatus.DECLINED) {
                     viewHolder.rlDeclinedUser.setVisibility(View.VISIBLE);
                     viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
                 }

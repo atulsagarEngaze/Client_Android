@@ -6,13 +6,18 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.domain.UsersLocationDetail;
+import com.redtop.engaze.webservice.ILocationWS;
 import com.redtop.engaze.webservice.LocationWS;
+import com.redtop.engaze.webservice.proxy.LocationWSProxy;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LocationManager {
 
     private final static String TAG = LocationManager.class.getName();
+    private final static ILocationWS locationWS = new LocationWSProxy();
 
     public static void updateLocationToServer(final Location location, final OnAPICallCompleteListner listnerOnSuccess,
                                               final OnActionFailedListner listnerOnFailure ) {
@@ -21,21 +26,21 @@ public class LocationManager {
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }
-        String tag_json_obj = "json_obj_post_user_location";
-        JSONObject jobj = new JSONObject();
 
+        LocationWSProxy.location = location;
+        UsersLocationDetail usersLocationDetail = new UsersLocationDetail(
+                AppContext.context.loginId,
+                location.getLatitude(),
+                location.getLongitude(), "1.0","0");
+
+        JSONObject jsonObject = null;
         try {
-            jobj.put("UserId", AppContext.context.loginId);
-            jobj.put("Latitude", "" + location.getLatitude());
-            jobj.put("Longitude", "" + location.getLongitude());
-            jobj.put("ETA", "1.0");
-            jobj.put("ArrivalStatus", "0");
-        } catch (Exception e) {
+            jsonObject = new JSONObject(AppContext.jsonParser.Serialize(usersLocationDetail));
+        } catch (JSONException e) {
             e.printStackTrace();
-            Log.d(TAG, "Failed to update location");
         }
 
-        LocationWS.updateLocation( jobj, new OnAPICallCompleteListner() {
+        locationWS.updateLocation( jsonObject, new OnAPICallCompleteListner() {
             @Override
             public void apiCallComplete(JSONObject response) {
                 listnerOnSuccess.apiCallComplete(response);
@@ -46,5 +51,25 @@ public class LocationManager {
                 listnerOnFailure.actionFailed(null, Action.SAVEEVENTSHAREMYLOCATION);
             }
         });
+    }
+
+    public static void getLocationsFromServer(String userId, String eventId,
+                                              final OnAPICallCompleteListner listnerOnSuccess,
+                                              final OnAPICallCompleteListner listnerOnFailure){
+
+
+
+        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListner() {
+            @Override
+            public void apiCallComplete(JSONObject response) {
+                listnerOnSuccess.apiCallComplete(response);
+            }
+        }, new OnAPICallCompleteListner() {
+            @Override
+            public void apiCallComplete(JSONObject response) {
+                listnerOnFailure.apiCallComplete(response);
+            }
+        });
+
     }
 }

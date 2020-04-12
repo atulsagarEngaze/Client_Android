@@ -214,6 +214,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 
 
 	private void initializeElements() {
+
 		mListView = (ListView) findViewById(R.id.list_contact_group_view);
 		mAddInvitees = (ImageButton)findViewById(R.id.img_add_invitees);
 		mFlowContainer = (ViewGroup) findViewById(R.id.participant_layout);
@@ -250,9 +251,9 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 		getMenuInflater().inflate(R.menu.menu_search, menu);
 	
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+		mSearchView= (SearchView) MenuItemCompat.getActionView(searchItem);
 		//*** setOnQueryTextFocusChangeListener ***
-		searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+		mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -260,7 +261,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 			}
 		});
 
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {

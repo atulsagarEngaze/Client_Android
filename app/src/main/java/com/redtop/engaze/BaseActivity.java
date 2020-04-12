@@ -39,6 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        AppContext.context.currentActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
       /*  View decorView = this.getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;

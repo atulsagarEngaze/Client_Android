@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!--Set application-wide security config using base-config tag.-->
+        <base-config cleartextTrafficPermitted="true"/>
+        <domain includeSubdomains="true">redtopdev.com(to be adjusted)</domain>
+        <base-config cleartextTrafficPermitted="true"/>
+    </domain-config>
+</network-security-config>

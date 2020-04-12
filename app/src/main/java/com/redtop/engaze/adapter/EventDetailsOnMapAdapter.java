@@ -45,12 +45,12 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 	public void onBindViewHolder(final UserEventDetailsViewHolder viewHolder, final int i) {
 		UsersLocationDetail ud = items.get(i);	
 		viewHolder.ud = ud;
-		viewHolder.imageView.setBackgroundResource(ud.getimageID());
-		viewHolder.dataText.setText(ud.getdataText());
+		viewHolder.imageView.setBackgroundResource(ud.imageID);
+		viewHolder.dataText.setText(ud.dataText);
 
 
-		if(ud.getAcceptanceStatus() != null){
-			Drawable background = mContext.getResources().getDrawable(ud.getimageID());
+		if(ud.acceptanceStatus != null){
+			Drawable background = mContext.getResources().getDrawable(ud.imageID);
 //			int color ;
 //			switch (ud.getAcceptanceStatus()) {
 //			case ACCEPTED:				
@@ -111,7 +111,7 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override public void onClick(View v) {					
 
-					switch (ud.getimageID()) {
+					switch (ud.imageID) {
 					case R.drawable.ic_timer_black_18dp:								
 						if(mContext instanceof RunningEventActivity){					
 							((RunningEventActivity)mContext).markerRecenter(null);
@@ -125,10 +125,10 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 					case R.drawable.ic_user_declined:
 					case R.drawable.ic_user_pending:
 					case R.drawable.ic_user_accepted:								
-						if(ud.getdataText() != "0"){
+						if(ud.dataText != "0"){
 							((RunningEventActivity)mContext).mIsActivityPauseForDialog = true;
 							ArrayList<EventParticipant> mems = new ArrayList<EventParticipant>();
-							mems.addAll(mEvent.getParticipantsbyStatus(ud.getAcceptanceStatus()));
+							mems.addAll(mEvent.getParticipantsbyStatus(ud.acceptanceStatus));
 							if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
 								mems.remove(mEvent.getCurrentParticipant());
 							}

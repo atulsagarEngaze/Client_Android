@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.BitMapHelper;
@@ -18,25 +19,43 @@ public class UsersLocationDetail implements Serializable {
      *
      */
     private static final long serialVersionUID = 648767313217529110L;
-    private String userId;
-    private String latitude;
-    private String longitude;
-    private String isDeleted;
-    private String createdOn;
-    private ContactOrGroup cg;
-    private String eta = "";
-    private String distance = "";
-    private String arrivalStatus;
-    private String userName;
+    @Expose
+    public String userId;
+    @Expose
+    public Double latitude;
+    @Expose
+    public Double longitude;
+    @Expose
+    public String eta = "";
+    @Expose
+    public String arrivalStatus;
+
+    public String isDeleted;
+    public String createdOn;
+    public ContactOrGroup contactOrGroup;
+    public String distance = "";
+    public String userName;
     public String currentKnownPlace;
     public String currentAddress;
-    private String currentDisplayAddress;
-    private AcceptanceStatus acceptanceStatus;
+    public String currentDisplayAddress;
+    public AcceptanceStatus acceptanceStatus;
     public Boolean showLocationOnMap = true;
+    public int imageID;
+    public String dataText;
     //private String distanceReminder;
 
-    public UsersLocationDetail(String userId, String latitude,
-                               String longitude, String isDeleted, String createdOn, String eta,
+    public UsersLocationDetail(String userId, Double latitude, Double longitude, String eta,
+                               String arrivalStatus) {
+        super();
+        this.userId = userId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.eta = eta;
+        this.arrivalStatus = arrivalStatus;
+    }
+
+    public UsersLocationDetail(String userId, Double latitude,
+                               Double longitude, String isDeleted, String createdOn, String eta,
                                String arrivalStatus, String userName) {
         super();
         this.userId = userId;
@@ -49,8 +68,6 @@ public class UsersLocationDetail implements Serializable {
         this.userName = userName;
     }
 
-    int imageID;
-    String dataText;
 
     public UsersLocationDetail(int imageID, String dataText, AcceptanceStatus acceptanceStatus) {
         this.imageID = imageID;
@@ -58,132 +75,6 @@ public class UsersLocationDetail implements Serializable {
         this.acceptanceStatus = acceptanceStatus;
     }
 
-    public String getdataText() {
-        return dataText;
-    }
-
-    public void setdataText(String dataText) {
-        this.dataText = dataText;
-    }
-
-    public int getimageID() {
-        return imageID;
-    }
-
-    public void setimageID(int imageID) {
-        this.imageID = imageID;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(String isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public String getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(String createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public String getEta() {
-        return eta;
-    }
-
-    public void setEta(String eta) {
-        this.eta = eta;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public String getCurrentAddress() {
-        return currentAddress;
-    }
-
-    public void setCurrentAddress(String ca) {
-        this.currentAddress = ca;
-    }
-
-    public String getCurrentDisplayAddress() {
-        return currentDisplayAddress;
-    }
-
-    public void setCurrentDisplayAddress(String ca) {
-        this.currentDisplayAddress = ca;
-    }
-
-    public String getArrivalStatus() {
-        return arrivalStatus;
-    }
-
-    public void setArrivalStatus(String arrivalStatus) {
-        this.arrivalStatus = arrivalStatus;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public AcceptanceStatus getAcceptanceStatus() {
-        return acceptanceStatus;
-    }
-
-    public void setAcceptanceStatus(AcceptanceStatus acceptanceStatus) {
-        this.acceptanceStatus = acceptanceStatus;
-    }
-
-    public ContactOrGroup getContactOrGroup() {
-        return cg;
-    }
-
-    public void setContactOrGroup(ContactOrGroup c) {
-        this.cg = c;
-    }
-//	public String getDistanceReminder() {
-//		return distanceReminder;
-//	}
-//
-//	public void setDistanceReminder(String distanceReminder) {
-//		this.distanceReminder = distanceReminder;
-//	}
 
     @Override
     public String toString() {
@@ -209,24 +100,24 @@ public class UsersLocationDetail implements Serializable {
 
     public static UsersLocationDetail createUserLocationListFromEventMember(Event event, EventParticipant mem) {
 
-        UsersLocationDetail uld = new UsersLocationDetail(mem.getUserId(), "", "", "false", "", "location unavailable", "", mem.getProfileName());
-        ContactOrGroup cg = ContactAndGroupListManager.getContact(uld.getUserId());
+        UsersLocationDetail uld = new UsersLocationDetail(mem.getUserId(), null, null, "false", "", "location unavailable", "", mem.getProfileName());
+        ContactOrGroup cg = ContactAndGroupListManager.getContact(uld.userId);
         Boolean isParticipantCurrentUser = ParticipantService.isParticipantCurrentUser(mem.getUserId());
         if (cg == null) {
             cg = new ContactOrGroup();
             cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-            if (isParticipantCurrentUser || uld.getUserName().startsWith("~")) {
-                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(1, 2).toUpperCase()));
+            if (isParticipantCurrentUser || uld.userName.startsWith("~")) {
+                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.userName), 40, uld.userName.substring(1, 2).toUpperCase()));
             } else {
-                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.getUserName()), 40, uld.getUserName().substring(0, 1).toUpperCase()));
+                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.userName), 40, uld.userName.substring(0, 1).toUpperCase()));
             }
         } else {
-            uld.setUserName(cg.getName());
+            uld.userName = cg.getName();
         }
-        uld.setContactOrGroup(cg);
-        uld.setAcceptanceStatus(mem.getAcceptanceStatus());
+        uld.contactOrGroup = cg;
+        uld.acceptanceStatus = mem.getAcceptanceStatus();
         if (isParticipantCurrentUser) {
-            uld.setUserName("You");
+            uld.userName = "You";
         }
 
         return uld;

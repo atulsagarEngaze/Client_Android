@@ -122,17 +122,17 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 				if(isFirstLocationRequiredForNewEvent ||  lastLocation.distanceTo(location) > 
 				Integer.parseInt(AppContext.context.getResources().getString(R.string.min_distance_in_meter_location_update))){
-					updateLocationToServer(location);
+					updateCurrentLocationToServer(location);
 					isFirstLocationRequiredForNewEvent = false;
 				}
 			}
 			else{
-				updateLocationToServer(location);
+				updateCurrentLocationToServer(location);
 			}
 		}
 	}
 
-	private void updateLocationToServer(final Location location){
+	private void updateCurrentLocationToServer(final Location location){
 		isUpdateInProgress = true;
 		LocationManager.updateLocationToServer(location, new OnAPICallCompleteListner() {
 			@Override
@@ -171,12 +171,12 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 					if(lastLocation.distanceTo(location)> 
 					Integer.parseInt(AppContext.context.getResources().getString(R.string.min_distance_in_meter_location_update))){
 						isUpdateInProgress = true;
-						updateLocationToServer(location);
+						updateCurrentLocationToServer(location);
 					}
 
 				}
 				else{
-					updateLocationToServer(location);										
+					updateCurrentLocationToServer(location);
 				}
 				//lastLocation = location;
 			}		

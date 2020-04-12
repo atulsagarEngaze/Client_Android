@@ -20,6 +20,7 @@ import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.manager.EventNotificationManager;
+import com.redtop.engaze.manager.LocationManager;
 import com.redtop.engaze.webservice.LocationWS;
 
 import android.app.IntentService;
@@ -137,7 +138,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
     }
 
     private void getParticipantLocationsFromServer() {
-        LocationWS.getLocationsFromServer(mMember.getUserId(), mEvent.EventId, new OnAPICallCompleteListner() {
+        LocationManager.getLocationsFromServer(mMember.getUserId(), mEvent.EventId, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {

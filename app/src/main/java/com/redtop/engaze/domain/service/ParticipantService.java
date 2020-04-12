@@ -201,11 +201,10 @@ public class ParticipantService {
     public static void attacheContactGroupToParticipants(Event event) {
         for (EventParticipant participant : event.Participants) {
             ContactOrGroup cg = ContactAndGroupListManager.getContact(participant.getUserId());
-            if(cg!=null){
+            if (cg != null) {
                 participant.setProfileName(cg.getName());
                 participant.setContact(cg);
-            }
-            else{
+            } else {
                 participant.setProfileName("~" + participant.getProfileName());
             }
         }
@@ -277,46 +276,47 @@ public class ParticipantService {
         return jobj;
     }
 
-    public static void updateUserListWithLocation(JSONArray userLocationJson, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang) {
-        Location destLoc = null;
-        if (destinationLatLang != null) {
-            destLoc = new Location("");
-            destLoc.setLatitude(destinationLatLang.latitude);//your coords of course
-            destLoc.setLongitude(destinationLatLang.longitude);
-        }
-
+    public static void updateUserListWithLocation(ArrayList<UsersLocationDetail> userLocationsFromServer, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang) {
         try {
-            for (int i = 0; i < userLocationJson.length(); i++) {
-                JSONObject c = userLocationJson.getJSONObject(i);
+            Location destLoc = null;
+            if (destinationLatLang != null) {
+                destLoc = new Location("");
+                destLoc.setLatitude(destinationLatLang.latitude);//your coords of course
+                destLoc.setLongitude(destinationLatLang.longitude);
+            }
+
+            for (UsersLocationDetail userLocation : userLocationsFromServer)
+
                 for (UsersLocationDetail ud : userLocationList) {
-                    if (ud.getUserId().equalsIgnoreCase(c.getString("UserId"))) {
-                        ud.setLatitude(c.getString("Latitude"));
-                        ud.setLongitude(c.getString("Longitude"));
-                        ud.setCreatedOn(DateUtil.convertUtcToLocalDateTime(c.getString("CreatedOn"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
-                        ud.setEta(c.getString("ETA"));
-                        ud.setArrivalStatus(c.getString("ArrivalStatus"));
-                        if (c.has("LocationAddress") && c.getString("LocationAddress") != null) {
-                            ud.setCurrentAddress(c.getString("LocationAddress"));
-                            ud.setCurrentDisplayAddress(buildCurrentDisplayAddress(c.getString("LocationAddress")));
+                    if (ud.userId.equalsIgnoreCase(userLocation.userId)) {
+                        ud.latitude = userLocation.latitude;
+                        ud.longitude = userLocation.longitude;
+                        ud.createdOn = DateUtil.convertUtcToLocalDateTime(userLocation.createdOn, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
+                        ud.eta = userLocation.eta;
+                        ud.arrivalStatus = userLocation.arrivalStatus;
+                        if (userLocation.currentAddress != null && userLocation.currentAddress != "") {
+                            ud.currentAddress = userLocation.currentAddress;
+                            ud.currentDisplayAddress = buildCurrentDisplayAddress(userLocation.currentAddress);
                             if (destLoc != null) {
                                 Location loc = new Location("");//provider name is unecessary
-                                loc.setLatitude(Double.parseDouble(c.getString("Latitude")));//your coords of course
-                                loc.setLongitude(Double.parseDouble(c.getString("Longitude")));
+                                loc.setLatitude(userLocation.latitude);//your coords of course
+                                loc.setLongitude(userLocation.longitude);
                                 if (loc.distanceTo(destLoc) <= Constants.DESTINATION_RADIUS) {
-                                    ud.setCurrentAddress("at destination");
-                                    ud.setCurrentAddress("at destination");
-                                    ud.setCurrentDisplayAddress("at destination");
+                                    ud.currentAddress = "at destination";
+                                    ud.currentDisplayAddress = "at destination";
                                 }
                             }
                         }
-
                         break;
                     }
+
+
                 }
-            }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private static String buildCurrentDisplayAddress(String currentAddress) {

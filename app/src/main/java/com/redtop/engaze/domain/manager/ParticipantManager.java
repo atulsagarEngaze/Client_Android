@@ -11,7 +11,9 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.service.EventParser;
+import com.redtop.engaze.webservice.IParticipantWS;
 import com.redtop.engaze.webservice.ParticipantWS;
+import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
 
 import org.json.JSONObject;
 
@@ -20,34 +22,28 @@ import java.util.List;
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
 
+    private final static IParticipantWS participantWS = new ParticipantWSProxy();
+
     public static void pokeParticipants(JSONObject pokeParticipantsJSON,
                                         final OnActionCompleteListner onActionCompleteListner,
                                         final OnActionFailedListner onActionFailedListner) {
-        String message ="";
-        if(!AppContext.context.isInternetEnabled)
-        {
+        String message = "";
+        if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             onActionFailedListner.actionFailed(message, Action.POKEALL);
-            return ;
+            return;
         }
 
-        ParticipantWS.pokeParticipants(pokeParticipantsJSON, new OnAPICallCompleteListner() {
+        participantWS.pokeParticipants(pokeParticipantsJSON, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
                 Log.d(TAG, "PokeAllResponse:" + response.toString());
 
                 try {
-                    String Status = (String)response.getString("Status");
 
-                    if (Status == "true")
-                    {
-                        onActionCompleteListner.actionComplete(Action.POKEALL);
-                    }
-                    else{
-                        onActionFailedListner.actionFailed(null, Action.POKEALL);
-                    }
+                    onActionCompleteListner.actionComplete(Action.POKEALL);
 
                 } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
@@ -60,7 +56,7 @@ public class ParticipantManager {
 
             @Override
             public void apiCallComplete(JSONObject response) {
-                if(response!=null){
+                if (response != null) {
                     Log.d(TAG, "EventResponse:" + response.toString());
                 }
                 onActionFailedListner.actionFailed(null, Action.POKEALL);
@@ -69,36 +65,28 @@ public class ParticipantManager {
     }
 
     public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
-        String message ="";
-        if(!AppContext.context.isInternetEnabled)
-        {
+        String message = "";
+        if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             listenerOnFailure.actionFailed(message, Action.ADDREMOVEPARTICIPANTS);
-            return ;
+            return;
         }
 
-        ParticipantWS.addRemoveParticipants(addRemoveContactsJSON,  new OnAPICallCompleteListner() {
+        participantWS.addRemoveParticipants(addRemoveContactsJSON, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
-                try{
+                try {
 
-                    String Status = (String)response.getString("Status");
-                    if (Status == "true")
-                    {
-                        List<Event> eventList =  EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
-                        Event event = eventList.get(0);
-                        InternalCaching.saveEventToCache(event);
-                        listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
-                    }
-                    else
-                    {
-                        listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);
-                    }
-                }
-                catch(Exception ex){
+
+                  /*  List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                    Event event = eventList.get(0);
+                    InternalCaching.saveEventToCache(event);*/
+                    listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
+
+                } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
                     ex.printStackTrace();
                     listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);
