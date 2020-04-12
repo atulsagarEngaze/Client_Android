@@ -69,9 +69,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 @SuppressWarnings("deprecation")
 public class CreateEditEventActivity extends BaseEventActivity {
 
-    private ArrayList<ContactOrGroup> mMembers = new ArrayList<ContactOrGroup>();
-    private ContactListAutoCompleteAdapter mAdapter;
-    private Hashtable<String, ContactOrGroup> mAddedMembers;
     private ViewGroup mFlowContainerView;
     private TextView mStartDateDisplayView;
     private TextView mStartTimeDisplayView;
@@ -101,7 +98,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.activity_create_edit_event);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_event_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -117,7 +113,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
             });
             PreffManager.setPrefArrayList("Invitees", null);
         }
-
         initializeElements();
         initializeClickEvents();
         populateControls();
@@ -326,7 +321,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
                                 Toast.LENGTH_LONG).show();
                         chkBox.setChecked(true);
                     }
-
                 }
             });
         }
@@ -456,20 +450,10 @@ public class CreateEditEventActivity extends BaseEventActivity {
         } else {
 
             mCreateUpdateSuccessfulMessage = getResources().getString(R.string.title_create_event);
-            createOrUpdateEvent = new Event();
+
+            mEventTypeId = EventType.GENERAL.GetEventTypeId();
+            initializeEventWithDefaultValues();
             mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
-
-            Reminder defaultReminder = AppContext.context.defaultReminderSettings;
-            createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
-            createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
-
-            Duration defaultTracking = AppContext.context.defaultTrackingSettings;
-            createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
-
-            Duration defaultDuration = AppContext.context.defaultDurationSettings;
-            createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
-                    defaultDuration.getPeriod(),
-                    true);
 
             if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
                 mFromEventsActivity = false;

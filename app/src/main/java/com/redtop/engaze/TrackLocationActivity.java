@@ -43,11 +43,8 @@ import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 public class TrackLocationActivity extends BaseEventActivity implements OnItemClickListener, OnClickListener, OnKeyListener, IActionHandler {
 
     static final int PLACE_PICKER_REQUEST = 1;
-    ArrayList<ContactOrGroup> mMembers = new ArrayList<ContactOrGroup>();
-    ContactListAutoCompleteAdapter mAdapter;
-    Hashtable<String, ContactOrGroup> mAddedMembers;
     private TrackLocationViewManager viewManager = null;
-    private int mEventTypeId;
+
     private ImageView imgView;
 
     @Override
@@ -56,6 +53,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         setContentView(R.layout.activity_track_location_event);
         TAG = TrackLocationActivity.class.getName();
         mContext = this;
+        mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());
         initializeEventWithDefaultValues();
         viewManager = new TrackLocationViewManager(mContext, mEventTypeId);
         mDurationTextView = viewManager.getDurationTextView();//have to do this because code of populating this is written in eventbase activity
@@ -72,35 +70,6 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 createOrUpdateEvent.Destination = null;
             }
         });
-    }
-
-    private void initializeEventWithDefaultValues() {
-        createOrUpdateEvent = new Event();
-        mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());
-        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
-        mAddedMembers = new Hashtable<String, ContactOrGroup>();
-        Duration defaultDuration = AppContext.context.defaultDurationSettings;
-        createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
-                defaultDuration.getPeriod(),
-                true);
-
-        Reminder defaultReminder = AppContext.context.defaultReminderSettings;
-        createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
-        createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
-
-        Duration defaultTracking = AppContext.context.defaultTrackingSettings;
-        createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
-
-        EventParticipant currentParticipant = new EventParticipant();
-        currentParticipant.setUserId(AppContext.context.loginId);
-        currentParticipant.setProfileName(AppContext.context.loginName);
-        currentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
-        if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION
-                || createOrUpdateEvent.EventType == EventType.QUIK) {
-            currentParticipant.isUserLocationShared = true;
-        }
-        createOrUpdateEvent.setCurrentParticipant(currentParticipant);
-
     }
 
     private void populateControlsAndDefaultEvenData() {
@@ -203,7 +172,6 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     private Boolean validateInputData() {
-
 
         if (createOrUpdateEvent.getParticipantCount() == 0) {
             setAlertDialog("Oops no invitee has been selected !", "Kindly select atleast one invitee");

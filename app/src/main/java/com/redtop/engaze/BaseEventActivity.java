@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
+import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.TrackingType;
@@ -64,7 +67,11 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected static final int LOCATION_REQUEST_CODE = 7;
 
     protected Event createOrUpdateEvent;
+    protected int mEventTypeId;
     protected String mCreateUpdateSuccessfulMessage;
+    protected Hashtable<String, ContactOrGroup> mAddedMembers;
+    ArrayList<ContactOrGroup> mMembers = new ArrayList<ContactOrGroup>();
+    ContactListAutoCompleteAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,13 +342,41 @@ public abstract class BaseEventActivity extends BaseActivity {
         });
     }
 
+    protected void initializeEventWithDefaultValues() {
+        createOrUpdateEvent = new Event();
+        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
+        createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
+        mAddedMembers = new Hashtable<String, ContactOrGroup>();
+        Duration defaultDuration = AppContext.context.defaultDurationSettings;
+        createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
+                defaultDuration.getPeriod(),
+                true);
+
+        Reminder defaultReminder = AppContext.context.defaultReminderSettings;
+        createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
+        createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
+
+        Duration defaultTracking = AppContext.context.defaultTrackingSettings;
+        createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
+
+        EventParticipant currentParticipant = new EventParticipant();
+        currentParticipant.setUserId(AppContext.context.loginId);
+        currentParticipant.setProfileName(AppContext.context.loginName);
+        currentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
+        if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION
+                || createOrUpdateEvent.EventType == EventType.QUIK) {
+            currentParticipant.isUserLocationShared = true;
+        }
+        createOrUpdateEvent.setCurrentParticipant(currentParticipant);
+
+    }
+
     protected void populateEventData() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(createOrUpdateEvent.StartTimeInDateFormat);
         calendar.add(Calendar.MINUTE, createOrUpdateEvent.Duration.getOffSetInMinutes());
         createOrUpdateEvent.EndTimeInDateFormat = calendar.getTime();
-        createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
         createOrUpdateEvent.State = EventState.TRACKING_ON;
         createOrUpdateEvent.TrackingState = EventState.TRACKING_ON;
         createOrUpdateEvent.IsTrackingRequired = true;
