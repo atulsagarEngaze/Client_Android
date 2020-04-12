@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -174,7 +175,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 	private void validateAndSendSMS(){
 		mMobileNumber = mMobileNumberEdittext.getText().toString();
 		if (validateNo()) {
-			if(AppUtility.isNetworkAvailable(mContext))
+			if(AppContext.context.isInternetEnabled)
 			{				
 				confirmMobileNumber();
 			}

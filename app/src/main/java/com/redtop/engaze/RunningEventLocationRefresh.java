@@ -48,7 +48,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
     @Override
     protected void onResume() {
         if (mClickedUserLocationView != null) {
-            setBackgrounOfRecycleViewItem((CardView) mClickedUserLocationView, Color.TRANSPARENT);
+            setBackgroundOfRecycleViewItem((CardView) mClickedUserLocationView, Color.TRANSPARENT);
             mClickedUserLocationView = null;
         }
         super.onResume();
@@ -163,7 +163,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             try {
                 JSONArray userLocationsJsonArray = jsonObjects[0];
                 ArrayList<UsersLocationDetail> userLocationsFromServer = new ArrayList<>();
-                for (int i = 0; i < jsonObjects.length; i++) {
+                for (int i = 0; i < userLocationsJsonArray.length(); i++) {
 
                     userLocationsFromServer.add(AppContext.jsonParser.deserialize(userLocationsJsonArray.getJSONObject(i).toString(), UsersLocationDetail.class));
                 }
@@ -330,7 +330,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         mContext.startActivity(intent);
         canRefreshUserLocation = false;
         mClickedUserLocationView = v;
-        setBackgrounOfRecycleViewItem((CardView) mClickedUserLocationView, this.getResources().getColor(R.color.divider));
+        setBackgroundOfRecycleViewItem((CardView) mClickedUserLocationView, this.getResources().getColor(R.color.divider));
     }
 
     public void userLocationItemClicked(View v, UsersLocationDetail uld) {
@@ -362,7 +362,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         }).start(); // Start the operation
     }
 
-    private void setBackgrounOfRecycleViewItem(CardView view, int colorId) {
+    private void setBackgroundOfRecycleViewItem(CardView view, int colorId) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             view.setCardBackgroundColor(colorId);
             view.setRadius(0);

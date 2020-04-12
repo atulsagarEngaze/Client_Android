@@ -18,7 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.webservice.LocationWS;
+import com.redtop.engaze.webservice.proxy.LocationWSProxy;
 
+//updates current user address on the map
 public class BaseLocationActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 	public static LatLng mMyCoordinates;
@@ -129,7 +132,9 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 		}
 	}
 
-	protected void onMyLocationFound(Location location) {			
+	protected void onMyLocationFound(Location location) {
+		//for testing
+		LocationWSProxy.location = location;
 		mMyCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
 	}	
 }

@@ -54,7 +54,7 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver
 			break;
 		case Constants.CHECK_LOCATION_SERVICE:
 			 Log.d(TAG, "Alarm received to check location service");
-			EventTrackerLocationService.peroformSartStop();
+			UploadLocationToServerService.performSartStop();
 			EventService.setLocationServiceCheckAlarm();
 			break;
 		default :

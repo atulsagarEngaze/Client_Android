@@ -31,12 +31,18 @@ public class UsersLocationDetail implements Serializable {
     public String arrivalStatus;
 
     public String isDeleted;
+
+    //for testing only
+    @Expose
     public String createdOn;
+    @Expose
+    public String currentAddress;
+
     public ContactOrGroup contactOrGroup;
     public String distance = "";
     public String userName;
     public String currentKnownPlace;
-    public String currentAddress;
+
     public String currentDisplayAddress;
     public AcceptanceStatus acceptanceStatus;
     public Boolean showLocationOnMap = true;

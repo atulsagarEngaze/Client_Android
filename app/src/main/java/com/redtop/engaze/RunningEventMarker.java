@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -61,7 +62,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 	}
 
 	public void createEtaDurationMarkers() {
-		if(!AppUtility.isNetworkAvailable(mContext)){
+		if(!AppContext.context.isInternetEnabled){
 			return;
 		}
 		Handler h = new Handler();
@@ -134,7 +135,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 	}
 
 	private void bringMarkerOncenterAndShowinfoWindow(Marker marker){
-		if(AppUtility.isNetworkAvailable(mContext)){
+		if(!AppContext.context.isInternetEnabled){
 			Toast.makeText(mContext, getResources().getString(R.string.message_general_no_internet_message), Toast.LENGTH_SHORT)
 			.show();
 			return;

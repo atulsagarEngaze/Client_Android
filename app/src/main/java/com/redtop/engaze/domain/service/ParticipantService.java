@@ -288,6 +288,8 @@ public class ParticipantService {
             for (UsersLocationDetail userLocation : userLocationsFromServer)
 
                 for (UsersLocationDetail ud : userLocationList) {
+                    //for testing
+                    ud.acceptanceStatus = AcceptanceStatus.ACCEPTED;
                     if (ud.userId.equalsIgnoreCase(userLocation.userId)) {
                         ud.latitude = userLocation.latitude;
                         ud.longitude = userLocation.longitude;

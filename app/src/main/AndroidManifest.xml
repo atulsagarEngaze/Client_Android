@@ -199,7 +199,7 @@
 
         <service android:name=".service.RegistrationIntentService" />
         <service
-            android:name=".service.EventTrackerLocationService"
+            android:name=".service.UploadLocationToServerService"
             android:enabled="true" />
     </application>
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.webservice.SmsWS;
@@ -60,7 +61,7 @@ public class SMSManager {
             mJRequestobj.put("CountryCodeForSMS", "+91");
             mJRequestobj.put("ContactNumberForSMS", mobileNumber);
             mJRequestobj.put("MessageForSMS", smsText);
-            if(!AppUtility.isNetworkAvailable(context))
+            if(!AppContext.context.isInternetEnabled)
             {
                 String message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
                 Log.d(TAG, message);

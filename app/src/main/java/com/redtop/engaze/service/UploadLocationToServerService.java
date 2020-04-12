@@ -25,7 +25,8 @@ import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.manager.LocationManager;
 
-public class EventTrackerLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, 
+//this service upload the current address to server to be available to other users in the event
+public class UploadLocationToServerService extends Service implements GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	private Location location;
@@ -35,14 +36,14 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 	protected GoogleApiClient mGoogleApiClient;
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-	public static final String TAG = EventTrackerLocationService.class.getName();
+	public static final String TAG = UploadLocationToServerService.class.getName();
 	private LocationRequest mLocationRequest;
 	private final Handler runningEventCheckHandler = new Handler();
 	private Runnable runningEventCheckRunnable = new Runnable() {
 		public void run() {	
 			Log.v(TAG, "Running event check callback. Checking for any running event");	
 			if(!EventService.isAnyEventInState(EventState.TRACKING_ON, true)){
-				AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
+				AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
 			}
 			else{
 				runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
@@ -50,24 +51,24 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 			}
 		}	
 	};
-	public synchronized static void peroformSartStop(){
+	public synchronized static void performSartStop(){
 
 		if(EventService.shouldShareLocation())
 		{
 			isFirstLocationRequiredForNewEvent = true;
 			if(AppContext.context.isInternetEnabled){
-				AppContext.context.startService(new Intent(AppContext.context, EventTrackerLocationService.class));
+				AppContext.context.startService(new Intent(AppContext.context, UploadLocationToServerService.class));
 			}
 		}
 		else
 		{
-			AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
+			AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
 		}
 	}
 
-	public synchronized static void peroformStop(){
+	public synchronized static void performStop(){
 
-		AppContext.context.stopService(new Intent(AppContext.context, EventTrackerLocationService.class));
+		AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
 	}
 
 	@Override

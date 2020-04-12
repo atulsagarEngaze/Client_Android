@@ -1,7 +1,6 @@
 package com.redtop.engaze.domain.manager;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +45,7 @@ import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
-import com.redtop.engaze.service.EventTrackerLocationService;
+import com.redtop.engaze.service.UploadLocationToServerService;
 import com.redtop.engaze.webservice.IEventWS;
 import com.redtop.engaze.webservice.proxy.EventWSProxy;
 
@@ -106,7 +105,7 @@ public class EventManager {
 
         event.State = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
-        EventTrackerLocationService.peroformSartStop();
+        UploadLocationToServerService.performSartStop();
 
     }
 
@@ -121,7 +120,7 @@ public class EventManager {
 
         event.State = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
-        EventTrackerLocationService.peroformSartStop();
+        UploadLocationToServerService.performSartStop();
 
     }
 
@@ -135,7 +134,7 @@ public class EventManager {
         }
         event.State = EventState.EVENT_END;
         EventNotificationManager.cancelAllNotifications(event);
-        EventTrackerLocationService.peroformSartStop();
+        UploadLocationToServerService.performSartStop();
         InternalCaching.removeEventFromCache(eventid);
         checkForReccurrence(event);
     }
@@ -186,7 +185,7 @@ public class EventManager {
 
                             EventNotificationManager.cancelNotification(eventData);
                             InternalCaching.saveEventToCache(eventData);
-                            EventTrackerLocationService.peroformSartStop();
+                            UploadLocationToServerService.performSartStop();
                             listnerOnSuccess.eventSaveComplete(eventData);
                         } else {
                             listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
@@ -258,7 +257,7 @@ public class EventManager {
                     }
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
-                    EventTrackerLocationService.peroformSartStop();
+                    UploadLocationToServerService.performSartStop();
                     listnerOnSuccess.actionComplete(Action.SAVEUSERRESPONSE);
 
 
@@ -361,7 +360,7 @@ public class EventManager {
 
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
-                    EventTrackerLocationService.peroformSartStop();
+                    UploadLocationToServerService.performSartStop();
                     listnerOnSuccess.actionComplete(Action.LEAVEEVENT);
 
                 } catch (Exception ex) {
@@ -411,7 +410,7 @@ public class EventManager {
 
                     EventNotificationManager.cancelAllNotifications(event);
                     EventService.RemoveEndEventAlarm(eventid);
-                    EventTrackerLocationService.peroformSartStop();
+                    UploadLocationToServerService.performSartStop();
                     InternalCaching.removeEventFromCache(eventid);
 
                     // Remove the event related items from preferences
@@ -493,7 +492,7 @@ public class EventManager {
 
     public static void changeDestination(final EventPlace destinationPlace, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
-        if (!AppUtility.isNetworkAvailable(context)) {
+        if (!AppContext.context.isInternetEnabled) {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.CHANGEDESTINATION);
@@ -534,7 +533,7 @@ public class EventManager {
 
     public static void extendEventEndTime(final int i, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
-        if (!AppUtility.isNetworkAvailable(context)) {
+        if (!AppContext.context.isInternetEnabled) {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             listnerOnFailure.actionFailed(message, Action.EXTENDEVENTENDTIME);
@@ -661,7 +660,7 @@ public class EventManager {
             if (ParticipantService.isNotifyUser(event)) {
                 EventNotificationManager.showEventEndNotification(event);
             }
-            EventTrackerLocationService.peroformSartStop();
+            UploadLocationToServerService.performSartStop();
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.EVENTEXTENDEDBYINITIATOR);
             checkForReccurrence(event);
@@ -688,7 +687,7 @@ public class EventManager {
             //Remove old End Event Alarm and set new one
             EventService.RemoveEndEventAlarm(eventid);
             EventService.setEndEventAlarm(event);
-            EventTrackerLocationService.peroformSartStop();
+            UploadLocationToServerService.performSartStop();
 
             listnerOnSuccess.actionComplete(Action.EVENTEXTENDEDBYINITIATOR);
         } catch (Exception ex) {
@@ -734,7 +733,7 @@ public class EventManager {
                 EventNotificationManager.showEventDeleteNotification(event);
             }
             EventService.RemoveEndEventAlarm(eventid);
-            EventTrackerLocationService.peroformSartStop();
+            UploadLocationToServerService.performSartStop();
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.EVENTDELETEDBYINITIATOR);
         } catch (Exception ex) {
@@ -780,7 +779,7 @@ public class EventManager {
                 EventNotificationManager.showRemovedFromEventNotification(event);
             }
             EventService.RemoveEndEventAlarm(eventid);
-            EventTrackerLocationService.peroformSartStop();
+            UploadLocationToServerService.performSartStop();
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.CURRENTPARTICIPANTREMOVEDBYINITIATOR);
         } catch (Exception ex) {
@@ -813,7 +812,7 @@ public class EventManager {
                     EventService.RemovePastEvents(eventList);
                     EventService.upDateEventStatus(eventList);
                     InternalCaching.saveEventListToCache(eventList);
-                    EventTrackerLocationService.peroformSartStop();
+                    UploadLocationToServerService.performSartStop();
                     if (listnerOnSuccess != null) {
                         listnerOnSuccess.RefreshEventListComplete(eventList);
                     }
