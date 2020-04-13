@@ -5,16 +5,23 @@ import org.json.JSONObject;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
@@ -25,19 +32,24 @@ import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.manager.LocationManager;
 
+import androidx.annotation.NonNull;
+
 //this service upload the current address to server to be available to other users in the event
-public class UploadLocationToServerService extends Service implements GoogleApiClient.ConnectionCallbacks,
-GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class UploadLocationToServerService extends Service {
 
 	private Location location;
 	private static Boolean isUpdateInProgress = false;
 	private static Boolean isFirstLocationRequiredForNewEvent = false;
 	private static Location lastLocation= null;
 
-	protected GoogleApiClient mGoogleApiClient;
+	private FusedLocationProviderClient fusedLocationClient;
+	private LocationCallback locationCallback;
+	private LocationRequest locationRequest;
+
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	public static final String TAG = UploadLocationToServerService.class.getName();
-	private LocationRequest mLocationRequest;
+
+
 	private final Handler runningEventCheckHandler = new Handler();
 	private Runnable runningEventCheckRunnable = new Runnable() {
 		public void run() {	
@@ -51,7 +63,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 			}
 		}	
 	};
-	public synchronized static void performSartStop(){
+	public synchronized static void performStartStop(){
 
 		if(EventService.shouldShareLocation())
 		{
@@ -79,30 +91,63 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 	public void onCreate() {
 		super.onCreate();
 		Log.v(TAG, "\n LocationUpdatorService created ");
-		createGoogleApiClient();
 		runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
 		runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+		createLocationRequest();
+		locationCallback = new LocationCallback() {
+			@Override
+			public void onLocationResult(LocationResult locationResult) {
+				if (locationResult == null) {
+					return;
+				}
+				for (Location location : locationResult.getLocations()) {
+					// Update UI with location data
+					// ...
+				}
+			}
+		};
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {		
 		Log.v(TAG, "Location Updator Service started");
-		if(mLocationRequest==null){
-			mLocationRequest = LocationRequest.create()
-					.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-					.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL)        // 10 seconds, in milliseconds
-					.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST); // 5 second, in milliseconds
-		}
-		if (mGoogleApiClient == null) {
-			createGoogleApiClient();
-			Log.v(TAG, "Recreating google api client");
-		}
-		else if (!mGoogleApiClient.isConnected()){
-			mGoogleApiClient.connect();
-			Log.v(TAG, "Reconnecting google api client");
-		}
+
+		fusedLocationClient.requestLocationUpdates(locationRequest,
+				locationCallback,
+				Looper.getMainLooper());
 
 		return START_STICKY ;
+	}
+
+
+	protected void  createLocationRequest() {
+		locationRequest = LocationRequest.create();
+		locationRequest.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL);
+		locationRequest.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST);
+		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+				.addLocationRequest(locationRequest);
+
+		SettingsClient client = LocationServices.getSettingsClient(AppContext.context);
+		Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+		task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+			@Override
+			public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+				// All location settings are satisfied. The client can initialize
+				// location requests here.
+				// ...
+			}
+		});
+
+		task.addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+
+			}
+		});
 	}
 
 	public void onDestroy() {
@@ -149,55 +194,4 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 		});
 	}
 
-	@Override
-	public void onConnectionFailed(ConnectionResult connectionResult) {
-		if (connectionResult.hasResolution()) {
-			Log.i(TAG, "Location services has a resolution " + connectionResult.getErrorCode());
-			// Start an Activity that tries to resolve the error
-			//connectionResult.startResolutionForResult(mContext, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-		} else {
-			Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
-		}
-	}	
-
-	@Override
-	public void onConnected(Bundle arg0) {
-		LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-		if (location != null) {
-			if(!isUpdateInProgress){
-
-				if(lastLocation!=null)
-				{
-					if(lastLocation.distanceTo(location)> 
-					Integer.parseInt(AppContext.context.getResources().getString(R.string.min_distance_in_meter_location_update))){
-						isUpdateInProgress = true;
-						updateCurrentLocationToServer(location);
-					}
-
-				}
-				else{
-					updateCurrentLocationToServer(location);
-				}
-				//lastLocation = location;
-			}		
-		}	
-		Log.i(TAG, "Location services connected.");
-	}
-
-	@Override
-	public void onConnectionSuspended(int arg0) {
-		Log.i(TAG, "Location services suspended. Please reconnect.");
-	}
-
-	private void createGoogleApiClient(){		
-		mGoogleApiClient = 
-				new GoogleApiClient.Builder(this)
-		.addConnectionCallbacks(this)
-		.addOnConnectionFailedListener(this)
-		.addApi(LocationServices.API)
-		.addApi( Places.GEO_DATA_API )
-		.addApi( Places.PLACE_DETECTION_API ).build();	
-		mGoogleApiClient.connect();		
-	}
 }
