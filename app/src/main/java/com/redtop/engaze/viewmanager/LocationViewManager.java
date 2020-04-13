@@ -179,7 +179,7 @@ public class LocationViewManager implements  OnItemClickListener, OnClickListene
 
 	@Override
 	public void onTextChanged(CharSequence query, int start, int before, int count) {		
-		activity.getAutoCompletePlacePridictions(query);
+		activity.getAutoCompletePlacePredictions(query);
 		if(mTxtSearchLocation.getText().toString().equals("")){
 			mIconSearchClear.setVisibility(View.GONE);
 			if(mFavouriteLocationListView.getAdapter()!=null && mFavouriteLocationListView.getAdapter().getCount() !=0){

@@ -1,15 +1,14 @@
 package com.redtop.engaze;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +20,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -29,18 +29,19 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.redtop.engaze.Interface.OnSelectLocationCompleteListner;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.redtop.engaze.adapter.CachedLocationAdapter;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
@@ -50,8 +51,6 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.AutoCompletePlace;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.viewmanager.LocationViewManager;
-
-import androidx.core.app.ActivityCompat;
 
 
 public abstract class LocationActivity extends BaseLocationActivity implements LocationListener {
@@ -72,6 +71,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     public Boolean isGPSOn = false;
     public Boolean isImageSetToGray = false;
     public LocationManager mLocationManager;
+    protected PlacesClient placesClient = null;
 
     private final static String TAG = LocationActivity.class.getName();
 
@@ -82,6 +82,11 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             mEventPlace = new EventPlace(place.getName().toString(),
                     place.getAddress().toString(), place.getLatLng());
         }
+
+        Places.initialize(getApplicationContext(), getResources().getString(R.string.google_map_access_key));
+        // Create a new Places client instance.
+        placesClient = Places.createClient(this);
+
     }
 
     @Override
@@ -180,7 +185,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         });
     }
 
-    public void getAutoCompletePlacePridictions(CharSequence query) {
+    public void getAutoCompletePlacePredictions(CharSequence query) {
         if (!AppContext.context.isInternetEnabled) {
             return;
         }
@@ -188,39 +193,46 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         Location location = new Location("");
         location.setLatitude(mLatlong.latitude);
         location.setLongitude(mLatlong.longitude);
-        LatLngBounds bounds = mLh.getLatLongBounds(location);
-        List<Integer> filterTypes = new ArrayList<Integer>();
 
-        Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, newQuery,
-                bounds,
-                new AutocompleteFilter.Builder()
-                        //setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
-                        // .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
-                        .build())
-                .setResultCallback(
-                        new ResultCallback<AutocompletePredictionBuffer>() {
-                            @Override
-                            public void onResult(AutocompletePredictionBuffer buffer) {
-                                OnAutocomleteSuccess(buffer);
-                            }
-                        }, 60, TimeUnit.SECONDS);
+
+        // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
+// and once again when the user makes a selection (for example when calling fetchPlace()).
+        AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+// Create a RectangularBounds object.
+        RectangularBounds bounds = mLh.getLatLongBounds(location);
+// Use the builder to create a FindAutocompletePredictionsRequest.
+        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+// Call either setLocationBias() OR setLocationRestriction().
+                .setLocationBias(bounds)
+                //.setLocationRestriction(bounds)
+                .setSessionToken(token)
+                .setQuery(query.toString())
+                .build();
+
+
+        placesClient.findAutocompletePredictions(request).addOnSuccessListener(
+                (response) -> {
+                    OnAutoCompleteSuccess(response.getAutocompletePredictions());
+                }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+            }
+        });
 
     }
 
-    private void OnAutocomleteSuccess(AutocompletePredictionBuffer buffer) {
-        if (buffer == null)
+    private void OnAutoCompleteSuccess(List<AutocompletePrediction> predictions) {
+        if (predictions == null || predictions.size() == 0)
             return;
         mAutoCompletePlaces.clear();
 
-        if (buffer.getStatus().isSuccess()) {
-            for (AutocompletePrediction prediction : buffer) {
-                //Add as a new item to avoid IllegalArgumentsException when buffer is released
-                mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getFullText(null).toString()));
-            }
+
+        for (AutocompletePrediction prediction : predictions) {
+            //Add as a new item to avoid IllegalArgumentsException when buffer is released
+            mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getFullText(null).toString()));
         }
 
-        //Prevent memory leak by releasing buffer
-        buffer.release();
         mSuggestedLocationAdapter.mItems = mAutoCompletePlaces;
         mSuggestedLocationAdapter.notifyDataSetChanged();
     }
@@ -322,6 +334,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CHECK_SETTINGS_REQUEST_CODE:
                 switch (resultCode) {
@@ -418,12 +431,27 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     }//overridden in pick location activity
 
     public void onListItemClicked(AutoCompletePlace item) {
-        mLh.findPlaceById(item.getPlaceId(), mGoogleApiClient, new OnSelectLocationCompleteListner() {
-            @Override
-            public void OnSelectLocationComplete(Place place) {
-                mEventPlace = new EventPlace(place.getName().toString(),
-                        place.getAddress().toString(), place.getLatLng());
-                moveToSelectedLocation(mEventPlace);
+
+// Specify the fields to return.
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+// Construct a request object, passing the place ID and fields array.
+        FetchPlaceRequest request = FetchPlaceRequest.builder(item.getPlaceId(), placeFields)
+                .build();
+
+        // Add a listener to handle the response.
+                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            Place place = response.getPlace();
+                    mEventPlace = new EventPlace(place.getName(),
+                            place.getAddress(), place.getLatLng());
+                    moveToSelectedLocation(mEventPlace);
+            Log.i(TAG, "Place found: " + place.getName());
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                int statusCode = apiException.getStatusCode();
+                // Handle error with given status code.
+                Log.e(TAG, "Place not found: " + exception.getMessage());
             }
         });
     }

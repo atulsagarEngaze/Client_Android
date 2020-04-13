@@ -12,7 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
@@ -30,7 +29,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 	protected GoogleMap mMap;
 	protected AppLocationService mLh;
 	protected Geocoder mGeocoder;
-	protected GoogleApiClient mGoogleApiClient;	
+	protected GoogleApiClient mGoogleApiClient;
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	//protected int markerCenterImageResId;
 	protected final static int CHECK_SETTINGS_REQUEST_CODE = 8;
@@ -48,21 +47,11 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener  {
 				.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL)   //in milliseconds
 				.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST); //in milliseconds
 		//markerCenterImageResId =	R.drawable.ic_home;
-		createGoogleApiClient();
 		mLh = new AppLocationService(this, BaseLocationActivity.this);
 		mGeocoder = new Geocoder(this, Locale.getDefault());		
 	}
 
-	protected void createGoogleApiClient(){		
-		mGoogleApiClient= 
-				new GoogleApiClient.Builder(this)
-		.addConnectionCallbacks(this)
-		.addOnConnectionFailedListener(this)
-		.addApi(LocationServices.API)
-		.addApi( Places.GEO_DATA_API )
-		.addApi( Places.PLACE_DETECTION_API ).build();	
-		mGoogleApiClient.connect();		
-	}
+
 
 
 	protected void stopLocationUpdates() {

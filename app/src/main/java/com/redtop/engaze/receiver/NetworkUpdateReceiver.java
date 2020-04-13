@@ -3,7 +3,7 @@ package com.redtop.engaze.receiver;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.service.UploadLocationToServerService;
+import com.redtop.engaze.service.MyCurrentLocationToServerUploader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,11 +26,11 @@ public class NetworkUpdateReceiver extends BroadcastReceiver{
 		
 		if(internetStatus){
 			Log.v(TAG, "Performing start/stop operation of Location service as network is back");
-			UploadLocationToServerService.performSartStop();
+			MyCurrentLocationToServerUploader.performStartStop();
 		}
 		else{
 			Log.v(TAG, "Stopping Location service as network is not available back");
-			UploadLocationToServerService.performStop();
+			MyCurrentLocationToServerUploader.performStop();
 		}
 
     }    

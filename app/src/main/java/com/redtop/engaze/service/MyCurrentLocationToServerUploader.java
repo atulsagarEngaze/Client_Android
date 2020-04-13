@@ -1,7 +1,5 @@
 package com.redtop.engaze.service;
 
-import org.json.JSONObject;
-
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -12,7 +10,6 @@ import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -22,11 +19,8 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
-import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.domain.service.EventService;
@@ -35,7 +29,7 @@ import com.redtop.engaze.domain.manager.LocationManager;
 import androidx.annotation.NonNull;
 
 //this service upload the current address to server to be available to other users in the event
-public class UploadLocationToServerService extends Service {
+public class MyCurrentLocationToServerUploader extends Service {
 
 	private Location location;
 	private static Boolean isUpdateInProgress = false;
@@ -47,7 +41,7 @@ public class UploadLocationToServerService extends Service {
 	private LocationRequest locationRequest;
 
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-	public static final String TAG = UploadLocationToServerService.class.getName();
+	public static final String TAG = MyCurrentLocationToServerUploader.class.getName();
 
 
 	private final Handler runningEventCheckHandler = new Handler();
@@ -55,7 +49,7 @@ public class UploadLocationToServerService extends Service {
 		public void run() {	
 			Log.v(TAG, "Running event check callback. Checking for any running event");	
 			if(!EventService.isAnyEventInState(EventState.TRACKING_ON, true)){
-				AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
+				AppContext.context.stopService(new Intent(AppContext.context, MyCurrentLocationToServerUploader.class));
 			}
 			else{
 				runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
@@ -69,18 +63,17 @@ public class UploadLocationToServerService extends Service {
 		{
 			isFirstLocationRequiredForNewEvent = true;
 			if(AppContext.context.isInternetEnabled){
-				AppContext.context.startService(new Intent(AppContext.context, UploadLocationToServerService.class));
+				AppContext.context.startService(new Intent(AppContext.context, MyCurrentLocationToServerUploader.class));
 			}
 		}
 		else
 		{
-			AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
+			AppContext.context.stopService(new Intent(AppContext.context, MyCurrentLocationToServerUploader.class));
 		}
 	}
 
 	public synchronized static void performStop(){
-
-		AppContext.context.stopService(new Intent(AppContext.context, UploadLocationToServerService.class));
+		AppContext.context.stopService(new Intent(AppContext.context, MyCurrentLocationToServerUploader.class));
 	}
 
 	@Override
@@ -101,10 +94,7 @@ public class UploadLocationToServerService extends Service {
 				if (locationResult == null) {
 					return;
 				}
-				for (Location location : locationResult.getLocations()) {
-					// Update UI with location data
-					// ...
-				}
+				onLocationChanged(locationResult.getLocations().get(0));
 			}
 		};
 	}
@@ -119,7 +109,6 @@ public class UploadLocationToServerService extends Service {
 
 		return START_STICKY ;
 	}
-
 
 	protected void  createLocationRequest() {
 		locationRequest = LocationRequest.create();
@@ -152,16 +141,12 @@ public class UploadLocationToServerService extends Service {
 
 	public void onDestroy() {
 		super.onDestroy();
-		Log.v(TAG, "Destroy Location Updator Service");		
-		if (mGoogleApiClient.isConnected()){
-			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-			mGoogleApiClient.disconnect();
-		}
+		Log.v(TAG, "Destroy Location Updator Service");
+		fusedLocationClient.removeLocationUpdates(locationCallback);
 		runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
 		Log.v(TAG, "Destroy Running event check callback");	
 	}
 
-	@Override
 	public void onLocationChanged(Location location) {
 		if(!isUpdateInProgress){
 			if(lastLocation!=null){
@@ -177,21 +162,11 @@ public class UploadLocationToServerService extends Service {
 			}
 		}
 	}
-
 	private void updateCurrentLocationToServer(final Location location){
 		isUpdateInProgress = true;
-		LocationManager.updateLocationToServer(location, new OnAPICallCompleteListner() {
-			@Override
-			public void apiCallComplete(JSONObject response) {
-				isUpdateInProgress = false;
-				lastLocation = location;
-			}
-		}, new OnActionFailedListner() {
-			@Override
-			public void actionFailed(String msg, Action action) {
-				isUpdateInProgress = false;
-			}
-		});
+		LocationManager.updateLocationToServer(location, response -> {
+			isUpdateInProgress = false;
+			lastLocation = location;
+		}, (msg, action) -> isUpdateInProgress = false);
 	}
-
 }

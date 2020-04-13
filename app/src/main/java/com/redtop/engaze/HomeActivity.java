@@ -3,7 +3,6 @@ package com.redtop.engaze;
 import java.util.List;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -60,7 +59,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     private HomeViewManager homeViewManager = null;
     private Duration mSnooze;
     protected HomeBroadcastManager mBroadcastManager = null;
-    public Event notificationselectedEvent;
+    public Event notificationSelectedEvent;
 
     private static String TAG = HomeActivity.class.getName();
 
@@ -341,7 +340,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
                     showProgressBar(getResources().getString(R.string.message_general_progressDialog));
                     //update server and cache with new Event end time
                     mSnooze = (Duration) data.getParcelableExtra("com.redtop.engaze.com.redtop.engaze.entity.Snooze");
-                    EventManager.extendEventEndTime(mSnooze.getTimeInterval(), mContext, notificationselectedEvent, new OnActionCompleteListner() {
+                    EventManager.extendEventEndTime(mSnooze.getTimeInterval(), mContext, notificationSelectedEvent, new OnActionCompleteListner() {
                         @Override
                         public void actionComplete(Action action) {
                             refreshShareMyLocationList();

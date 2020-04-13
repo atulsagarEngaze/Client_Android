@@ -25,6 +25,9 @@ import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.redtop.engaze.Interface.OnSelectLocationCompleteListner;
 import com.redtop.engaze.adapter.SuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
@@ -55,77 +58,16 @@ public class AppLocationService {
         mContext = context;
     }
 
-
-    public void findPlaceById(String id, GoogleApiClient mGoogleApiClient, final OnSelectLocationCompleteListner listner) {
-        if (TextUtils.isEmpty(id) || mGoogleApiClient == null || !mGoogleApiClient.isConnected())
-            return;
-
-        Places.GeoDataApi.getPlaceById(mGoogleApiClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
-            @Override
-            public void onResult(PlaceBuffer places) {
-                if (places.getStatus().isSuccess()) {
-                    Place place = places.get(0);
-                    if (mAdapter != null) {
-                        mAdapter.clear();
-                    }
-                    listner.OnSelectLocationComplete(place);
-                }
-
-                //Release the PlaceBuffer to prevent a memory leak
-                places.release();
-
-
-            }
-        });
-    }
-
-    public void getCurrentPlace(GoogleApiClient mGoogleApiClient, final OnSelectLocationCompleteListner listner) {
-        try {
-            PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, null);
-            result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-                @Override
-                public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                    PlaceLikelihood currentPlaceLikelihood = null;
-                    if (null != likelyPlaces) {
-                        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                            if (currentPlaceLikelihood == null) {
-                                currentPlaceLikelihood = placeLikelihood;
-                            } else {
-                                if (placeLikelihood.getLikelihood() > currentPlaceLikelihood.getLikelihood()) {
-                                    currentPlaceLikelihood = placeLikelihood;
-                                }
-                            }
-                        }
-
-                        if (currentPlaceLikelihood != null && currentPlaceLikelihood.getPlace() != null) {
-                            listner.OnSelectLocationComplete(currentPlaceLikelihood.getPlace());
-                        } else {
-                            listner.OnSelectLocationComplete(null);
-                        }
-
-                        likelyPlaces.release();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Log.d(TAG, "GooglePlayServicesNotAvailableException thrown" + e.toString());
-        }
-    }
-
     public void displayPlace(EventPlace place, TextView mEventLocation) {
         mEventLocation.setText(place.getName());
     }
 
-    public LatLngBounds getLatLongBounds(Location location) {
+    public RectangularBounds getLatLongBounds(Location location) {
         double radiusDegrees = .25;
         LatLng center = new LatLng(location.getLatitude(), location.getLongitude());
         LatLng northEast = new LatLng(center.latitude + radiusDegrees, center.longitude + radiusDegrees);
         LatLng southWest = new LatLng(center.latitude - radiusDegrees, center.longitude - radiusDegrees);
-        LatLngBounds bounds = LatLngBounds.builder()
-                .include(northEast)
-                .include(southWest)
-                .build();
-
+        RectangularBounds bounds = RectangularBounds.newInstance( northEast, southWest);
         return bounds;
     }
 
