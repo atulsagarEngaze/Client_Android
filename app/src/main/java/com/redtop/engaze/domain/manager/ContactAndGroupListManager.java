@@ -191,29 +191,32 @@ public class ContactAndGroupListManager {
         if (jUsers.length() == 0) {
             return registeredContacts;
         }
+
+        for(ContactOrGroup cg : contactsAndgroups.values()){
+            if (cg.getThumbnailUri() == null||cg.getThumbnailUri()=="") {
+                cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
+                String startingchar = cg.getName().substring(0, 1);
+                if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
+                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
+                } else {
+                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
+                }
+            } else {
+                Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
+                cg.setImageBitmap(pofilePicBitmap);
+                cg.setIconImageBitmap(pofilePicBitmap);
+            }
+        }
+
         String userId = "";
         ContactOrGroup cg = null;
         for (int i = 0, size = jUsers.length(); i < size; i++) {
             JSONObject jsonObj = jUsers.getJSONObject(i);
+
             cg = contactsAndgroups.get(jsonObj.getString("MobileNumberStoredInRequestorPhone"));
             if (cg != null) {
                 userId = jsonObj.get("UserId").toString();
                 cg.setUserId(userId);
-                if (cg.getThumbnailUri() == null) {
-                    cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-                    String startingchar = cg.getName().substring(0, 1);
-                    if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
-                    } else {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
-                    }
-                } else {
-                    Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
-                    cg.setImageBitmap(pofilePicBitmap);
-                    cg.setIconImageBitmap(pofilePicBitmap);
-
-                }
-
                 registeredContacts.put(userId, cg);
                 contactsAndgroups.put(jsonObj.getString("MobileNumberStoredInRequestorPhone"), cg);
             }

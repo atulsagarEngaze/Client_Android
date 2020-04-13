@@ -1,4 +1,4 @@
-package com.redtop.engaze.manager;
+package com.redtop.engaze.domain.manager;
 
 import android.location.Location;
 import android.util.Log;
@@ -8,7 +8,6 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.webservice.ILocationWS;
-import com.redtop.engaze.webservice.LocationWS;
 import com.redtop.engaze.webservice.proxy.LocationWSProxy;
 
 import org.json.JSONException;

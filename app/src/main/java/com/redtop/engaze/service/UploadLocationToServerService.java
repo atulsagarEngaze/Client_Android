@@ -23,7 +23,7 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.DurationConstants;
 import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.manager.LocationManager;
+import com.redtop.engaze.domain.manager.LocationManager;
 
 //this service upload the current address to server to be available to other users in the event
 public class UploadLocationToServerService extends Service implements GoogleApiClient.ConnectionCallbacks,

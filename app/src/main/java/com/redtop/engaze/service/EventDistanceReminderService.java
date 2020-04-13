@@ -20,8 +20,7 @@ import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.manager.EventNotificationManager;
-import com.redtop.engaze.manager.LocationManager;
-import com.redtop.engaze.webservice.LocationWS;
+import com.redtop.engaze.domain.manager.LocationManager;
 
 import android.app.IntentService;
 import android.content.Context;

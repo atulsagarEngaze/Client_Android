@@ -123,12 +123,11 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);		
 	}
 
-
 	public Drawable getImageDrawable(Context context)
 	{
 		try
 		{
-			return new BitmapDrawable(context.getResources(),getImageBitmap(context));			
+			return new BitmapDrawable(context.getResources(),getImageBitmap(context));
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -151,8 +150,6 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 		byte [] encodeByte=Base64.decode(this.bitmap,Base64.DEFAULT);
 		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);		
 	}
-
-
 
 	public String getUserId(){
 		return userId;

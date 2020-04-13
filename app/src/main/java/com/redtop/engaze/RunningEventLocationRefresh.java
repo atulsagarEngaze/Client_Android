@@ -31,7 +31,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.manager.LocationManager;
+import com.redtop.engaze.domain.manager.LocationManager;
 
 import androidx.cardview.widget.CardView;
 
