@@ -3,6 +3,7 @@ package com.redtop.engaze.common.utility;
 import java.util.Random;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +48,17 @@ public class AppUtility {
 		= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	//this method can be accessed from background service while app is not running, so AppContext.context will be null
+	public static boolean isBackgroundServiceRunning(Class serviceClass, Context context){
+		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (serviceClass.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public int pxToDp(int px, Context context) {

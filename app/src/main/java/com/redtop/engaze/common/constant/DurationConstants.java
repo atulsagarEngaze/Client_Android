@@ -15,4 +15,6 @@ public class DurationConstants {
     public static final int LOCATION_REFRESH_INTERVAL_NORMAL= 20000;//milliseconds
     public static final int LOCATION_REFRESH_SLOWER_NORMAL= 60000;//milliseconds
 
+    public static final int  MIN_DISTANCE_IN_METER_LOCATION_UPDATE = 20;
+
 }

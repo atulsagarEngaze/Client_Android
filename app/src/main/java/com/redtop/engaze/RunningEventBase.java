@@ -38,7 +38,7 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.localbroadcastmanager.RunningEventBroadcastManager;
+import com.redtop.engaze.receiver.RunningEventBroadcastReceiver;
 import com.redtop.engaze.viewmanager.RunningEventViewManager;
 
 import androidx.appcompat.app.AlertDialog;
@@ -47,7 +47,7 @@ import androidx.appcompat.app.AlertDialog;
 public class RunningEventBase  extends BaseLocationActivity  {
 	protected boolean mIsInfoWindowOpen = false;
 	public Boolean canRefreshUserLocation=true;
-	protected RunningEventBroadcastManager mRunningEventBroadcastManager = null;
+	protected RunningEventBroadcastReceiver mRunningEventBroadcastManager = null;
 	public RunningEventViewManager viewManager = null;
 	static LatLng currentLocation = new LatLng(0, 0);
 	protected static final String TAG = RunningEventBase.class.getName();
@@ -118,7 +118,7 @@ public class RunningEventBase  extends BaseLocationActivity  {
 		mComparer = new Comparer();
 		fbHelper = new FBShareHelper(this);
 		fbHelper.initializeFacebookInstance();
-		mRunningEventBroadcastManager = new RunningEventBroadcastManager(mContext);
+		mRunningEventBroadcastManager = new RunningEventBroadcastReceiver(mContext);
 		mEventId = this.getIntent().getStringExtra("EventId");
 		mEventTypeId = this.getIntent().getIntExtra("EventTypeId", 0);
 		mEvent = InternalCaching.getEventFromCache(mEventId);

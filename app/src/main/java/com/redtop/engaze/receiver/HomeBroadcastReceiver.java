@@ -1,4 +1,4 @@
-package com.redtop.engaze.localbroadcastmanager;
+package com.redtop.engaze.receiver;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +7,11 @@ import android.content.IntentFilter;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.common.constant.Veranstaltung;
 
-public class HomeBroadcastManager  extends LocalBroadcastManager{
+public class HomeBroadcastReceiver extends LocalBroadcastReceiver {
 
 	public HomeActivity activity;
 
-	public HomeBroadcastManager(Context context) {
+	public HomeBroadcastReceiver(Context context) {
 		super(context);
 		activity = (HomeActivity)mContext;		
 		initializeFilter();
@@ -86,10 +86,4 @@ public class HomeBroadcastManager  extends LocalBroadcastManager{
 			break;
 		}		
 	}
-	public IntentFilter getFilter(){
-		return mFilter;
-	}
-
-
-
 }

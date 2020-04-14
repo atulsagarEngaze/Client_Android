@@ -1,4 +1,4 @@
-package com.redtop.engaze.localbroadcastmanager;
+package com.redtop.engaze.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,11 +15,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class LocalBroadcastManager extends BroadcastReceiver{
+public class LocalBroadcastReceiver extends BroadcastReceiver{
 	protected Context mContext;
 	public IntentFilter mFilter;
 	
-	public LocalBroadcastManager(Context context){
+	public LocalBroadcastReceiver(Context context){
 		super();
 		mContext = context;		
 	}
@@ -28,5 +28,9 @@ public class LocalBroadcastManager extends BroadcastReceiver{
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
-	}	
+	}
+
+	public IntentFilter getFilter(){
+		return mFilter;
+	}
 }

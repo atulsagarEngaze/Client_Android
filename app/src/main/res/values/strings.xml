@@ -156,15 +156,7 @@
 
     <string name="duration">" is the duration</string>
     <string name="minuteslater">Minutes</string>
-    <string name="event_reminder_default_interval">30</string>
-    <string name="event_reminder_default_period">minute</string>
-    <string name="event_reminder_default_notification">notification</string>
-    <string name="event_tracking_default_enabled">true</string>
-    <string name="event_tracking_default_interval">30</string>
-    <string name="event_tracking_default_period">minute</string>
-    <string name="event_default_duration">1</string>
-    <string name="event_default_period">hour</string>
-    <string name="min_distance_in_meter_location_update">20</string>
+
     <string name="event_title_hint"><i>Event title</i></string>
     <string name="event_note_hint"><i>Write a note</i></string>
     <string-array name="time_options">

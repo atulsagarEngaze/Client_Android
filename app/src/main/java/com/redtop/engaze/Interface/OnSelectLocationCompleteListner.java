@@ -1,6 +1,6 @@
 package com.redtop.engaze.Interface;
 
-import com.google.android.gms.location.places.Place;
+import com.google.android.libraries.places.api.model.Place;
 
 public interface OnSelectLocationCompleteListner {
 	void OnSelectLocationComplete(Place place);

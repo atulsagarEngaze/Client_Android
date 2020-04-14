@@ -10,7 +10,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -81,12 +80,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
     private void createGoogleAPIClientAndLocationRequest() {
         Log.v(TAG, "Creating Google Api Client");
         mGoogleApiClient =
-                new GoogleApiClient.Builder(mContext)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .addApi(Places.GEO_DATA_API)
-                        .addApi(Places.PLACE_DETECTION_API).build();
+                new GoogleApiClient.Builder(mContext).build();
         mGoogleApiClient.connect();
 
         Log.v(TAG, "Creating Location Request");

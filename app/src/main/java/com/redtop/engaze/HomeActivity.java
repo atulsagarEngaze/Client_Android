@@ -39,7 +39,7 @@ import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
-import com.redtop.engaze.localbroadcastmanager.HomeBroadcastManager;
+import com.redtop.engaze.receiver.HomeBroadcastReceiver;
 import com.redtop.engaze.viewmanager.HomeViewManager;
 import com.redtop.engaze.viewmanager.LocationViewManager;
 
@@ -58,7 +58,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
     private Boolean isGPSEnableThreadRun = false;
     private HomeViewManager homeViewManager = null;
     private Duration mSnooze;
-    protected HomeBroadcastManager mBroadcastManager = null;
+    protected HomeBroadcastReceiver mBroadcastManager = null;
     public Event notificationSelectedEvent;
 
     private static String TAG = HomeActivity.class.getName();
@@ -88,7 +88,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
         setContentView(R.layout.activity_home);
         homeViewManager = new HomeViewManager(this);
         locationViewManager = (LocationViewManager) homeViewManager;
-        mBroadcastManager = new HomeBroadcastManager(mContext);
+        mBroadcastManager = new HomeBroadcastReceiver(mContext);
         Log.i(TAG, "density: " + AppUtility.deviceDensity);
         //mRunningEventAdapter = new HomeEventListAdapter(null, mContext);
         mRunningEventAdapter = new HomeRunningEventListAdapter(mContext, R.layout.item_home_running_event_list, mRunningEventList);

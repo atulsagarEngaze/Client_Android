@@ -1,4 +1,4 @@
-package com.redtop.engaze.localbroadcastmanager;
+package com.redtop.engaze.receiver;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +8,12 @@ import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.constant.Veranstaltung;
 
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
-public class RunningEventBroadcastManager  extends LocalBroadcastManager{
+public class RunningEventBroadcastReceiver extends LocalBroadcastReceiver {
 
 	public RunningEventActivity activity;
 	public IntentFilter mFilterEventNotExist;
 
-	public RunningEventBroadcastManager(Context context) {
+	public RunningEventBroadcastReceiver(Context context) {
 		super(context);
 		activity = (RunningEventActivity)mContext;		
 		initializeFilter();
@@ -83,8 +83,5 @@ public class RunningEventBroadcastManager  extends LocalBroadcastManager{
 			break;
 		}				
 
-	}
-	public IntentFilter getFilter(){
-		return mFilter;
 	}
 }

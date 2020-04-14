@@ -14,12 +14,6 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.redtop.engaze.R;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.domain.AutoCompletePlace;
@@ -102,16 +96,17 @@ public class SuggestedLocationAdapter extends ArrayAdapter<AutoCompletePlace> {
 
     }
 
-    private void displayPredictiveResults(String query) {
+    private void displayPredictiveResults(String query) {}
         //Southwest corner to Northeast corner.
-        LatLngBounds bounds = appLocationService.getLatLongBounds
-                (appLocationService.getMyLocation2(mGoogleApiClient));
+       /* LatLngBounds bounds = appLocationService.getLatLongBounds
+                (appLocationService.getMyLocation2(mGoogleApiClient));*/
 
         //Filter: https://developers.google.com/places/supported_types#table3
         List<Integer> filterTypes = new ArrayList<Integer>();
         //filterTypes.add( Place.TYPE_ESTABLISHMENT );
         ///**/filterTypes.add( Place. );
 
+/*
 
         Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, query, bounds,
                 new AutocompleteFilter.Builder()
@@ -126,8 +121,9 @@ public class SuggestedLocationAdapter extends ArrayAdapter<AutoCompletePlace> {
                             }
                         }, 60, TimeUnit.SECONDS);
     }
+*/
 
-    private void OnAutocomleteSuccess(AutocompletePredictionBuffer buffer) {
+    /*private void OnAutocomleteSuccess(AutocompletePredictionBuffer buffer) {
         if (buffer == null)
             return;
         clear();
@@ -141,7 +137,7 @@ public class SuggestedLocationAdapter extends ArrayAdapter<AutoCompletePlace> {
 
         //Prevent memory leak by releasing buffer
         buffer.release();
-    }
+    }*/
 
 
 }

@@ -16,7 +16,13 @@
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:theme="@style/ETMaterialTheme"></activity>
+            android:theme="@style/ETMaterialTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".SplashActivity"
@@ -25,11 +31,7 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".HomeActivity"
@@ -165,6 +167,11 @@
                 <category android:name="com.redtop.engaze" />
             </intent-filter>
         </receiver>
+
+
+        <receiver
+            android:name=".receiver.CurrentLocationUploadService"
+            android:enabled="true"></receiver>
         <receiver
             android:name=".service.EventTrackerAlarmReceiverService"
             android:enabled="true"></receiver>
@@ -179,6 +186,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+
+        <service
+            android:name=".service.BackgroundServiceManager"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".service.EventTrackerGcmListenerService"
@@ -199,7 +216,7 @@
 
         <service android:name=".service.RegistrationIntentService" />
         <service
-            android:name=".service.MyCurrentLocationToServerUploader"
+            android:name=".service.MyCurrentLocationListener"
             android:enabled="true" />
     </application>
 

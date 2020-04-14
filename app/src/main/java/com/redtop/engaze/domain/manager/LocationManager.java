@@ -1,11 +1,14 @@
 package com.redtop.engaze.domain.manager;
 
+import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.webservice.ILocationWS;
 import com.redtop.engaze.webservice.proxy.LocationWSProxy;
@@ -18,23 +21,23 @@ public class LocationManager {
     private final static String TAG = LocationManager.class.getName();
     private final static ILocationWS locationWS = new LocationWSProxy();
 
-    public static void updateLocationToServer(final Location location, final OnAPICallCompleteListner listnerOnSuccess,
+    public static void updateLocationToServer(final Context context, final Location location, final String loginId, final OnAPICallCompleteListner listnerOnSuccess,
                                               final OnActionFailedListner listnerOnFailure ) {
-
-        if(!AppContext.context.isInternetEnabled){
+        //this will be called from background service, app may not be running at that time
+        if(!AppUtility.isNetworkAvailable(context)){
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }
 
         LocationWSProxy.location = location;
         UsersLocationDetail usersLocationDetail = new UsersLocationDetail(
-                AppContext.context.loginId,
+                loginId,
                 location.getLatitude(),
                 location.getLongitude(), "1.0","0");
 
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject(AppContext.jsonParser.Serialize(usersLocationDetail));
+            jsonObject = new JSONObject(new JsonParser().Serialize(usersLocationDetail));
         } catch (JSONException e) {
             e.printStackTrace();
         }

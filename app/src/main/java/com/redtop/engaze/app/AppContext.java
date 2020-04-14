@@ -10,6 +10,7 @@ import com.redtop.engaze.common.utility.ActionHandler;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
+import com.redtop.engaze.service.BackgroundServiceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,6 +51,9 @@ public class AppContext extends Application {
             defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
             defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
             defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
+
+            //starting the BackgroundServiceManager
+            BackgroundServiceManager.startService(context);
 
         }
     }

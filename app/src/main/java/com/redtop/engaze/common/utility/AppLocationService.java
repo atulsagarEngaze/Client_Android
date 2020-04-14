@@ -9,29 +9,15 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.redtop.engaze.Interface.OnSelectLocationCompleteListner;
 import com.redtop.engaze.adapter.SuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventPlace;
 
 public class AppLocationService {
@@ -124,92 +110,8 @@ public class AppLocationService {
 
         final String address = adr;
 
-        Place place = new Place() {
 
-            @Override
-            public boolean isDataValid() {
-                // TODO Auto-generated method stub
-                return true;
-            }
-
-            @Override
-            public Place freeze() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Uri getWebsiteUri() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public CharSequence getName() {
-                // TODO Auto-generated method stub
-                return name;
-            }
-
-            @Override
-            public LatLng getLatLng() {
-                // TODO Auto-generated method stub
-                return ltlang;
-            }
-
-            @Override
-            public String getId() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public CharSequence getAddress() {
-                // TODO Auto-generated method stub
-                return address;
-            }
-
-            @Override
-            public Locale getLocale() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public CharSequence getPhoneNumber() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public List<Integer> getPlaceTypes() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public int getPriceLevel() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public float getRating() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public LatLngBounds getViewport() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public CharSequence getAttributions() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        };
-        return place;
+        return null;
     }
 
 
