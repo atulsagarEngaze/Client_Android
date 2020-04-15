@@ -29,7 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
-public class HomeViewManager  extends LocationViewManager {	
+public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 
 	public RelativeLayout mHomeTrackBuddyListView;	
 	private RelativeLayout mTrackBuddyImageButtonLayout;

@@ -1,8 +1,10 @@
 package com.redtop.engaze.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
 import android.os.Looper;
@@ -16,13 +18,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.webservice.proxy.LocationWSProxy;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -34,6 +39,9 @@ public class MyCurrentLocationListener extends Service {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
+    private BroadcastReceiver mBroadcastReceiver;
+    private IntentFilter mFilter;
+    private Location mLocation = null;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = MyCurrentLocationListener.class.getName();
@@ -48,6 +56,7 @@ public class MyCurrentLocationListener extends Service {
         Log.v(TAG, "\n LocationUpdatorService created ");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
+        createLocalLocationRequestReceiver();
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -67,7 +76,32 @@ public class MyCurrentLocationListener extends Service {
                 locationCallback,
                 Looper.getMainLooper());
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                mFilter);
+
         return START_STICKY;
+    }
+
+    public void createLocalLocationRequestReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(final Context context, Intent intent) {
+                // TODO Auto-generated method stub
+                {
+                    if (mLocation == null) {
+                        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                            mLocation = location;
+                            broadcastCurrentLocation(mLocation);
+                        });
+                    } else {
+                        broadcastCurrentLocation(mLocation);
+                    }
+                }
+            }
+        };
+
+        mFilter = new IntentFilter();
+        mFilter.addAction(Veranstaltung.NEED_LOCATION_INSTANT);
     }
 
     protected void createLocationRequest() {
@@ -104,9 +138,12 @@ public class MyCurrentLocationListener extends Service {
         Log.v(TAG, "Destroy Location Updator Service");
         fusedLocationClient.removeLocationUpdates(locationCallback);
         Log.v(TAG, "Destroy Running event check callback");
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     public void onLocationChanged(Location location) {
+        mLocation = location;
         broadcastCurrentLocation(location);
     }
 

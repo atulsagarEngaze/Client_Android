@@ -1,4 +1,5 @@
 package com.redtop.engaze;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +12,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.viewmanager.PickLocationViewManager;
 
 @SuppressLint("ResourceAsColor")
-public class PickLocationActivity extends LocationActivity implements OnMapReadyCallback {		
+public class PickLocationActivity extends MapLocationSelectionActivity implements OnMapReadyCallback {
 	static LatLng currentLocation = new LatLng(12.9667, 77.5667);
 	private static final String TAG = PickLocationActivity.class.getName();		
 	private PickLocationViewManager pickLocationViewManager = null;	
@@ -29,8 +30,8 @@ public class PickLocationActivity extends LocationActivity implements OnMapReady
 		mContext = this;		
 		setContentView(R.layout.activity_pick_location);
 		mEventPlace  =  (EventPlace)this.getIntent().getParcelableExtra("DestinatonLocation");
-		locationViewManager = new PickLocationViewManager(this);
-		pickLocationViewManager = (PickLocationViewManager)locationViewManager;	
+		mapCameraMovementHandleViewManager = new PickLocationViewManager(this);
+		pickLocationViewManager = (PickLocationViewManager) mapCameraMovementHandleViewManager;
 		mSuggestedLocationAdapter = new NewSuggestedLocationAdapter(this, R.layout.item_suggested_location_list, mAutoCompletePlaces);
 		pickLocationViewManager.setLocationViewAdapter(mSuggestedLocationAdapter);
 		SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.pick_location_map);
@@ -65,30 +66,30 @@ public class PickLocationActivity extends LocationActivity implements OnMapReady
 		findLatLangOnCameraChange = false;
 		if(mEventPlace != null)
 		{			
-			locationViewManager.setLocationText(mEventPlace.getAddress());
-			mLatlong = mEventPlace.getLatLang();
+			mapCameraMovementHandleViewManager.setLocationText(mEventPlace.getAddress());
+			mMapCameraFocusLatlong = mEventPlace.getLatLang();
 			pickLocationViewManager.showLocationBar(mEventPlace.getName(), mEventPlace.getAddress());			
-			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
+			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
 			hideProgressBar();
 		}
 		else
 		{
 			if(mMyCoordinates==null){
-				mLatlong = new LatLng( Double.longBitsToDouble(PreffManager.getPrefLong("lat")),
+				mMapCameraFocusLatlong = new LatLng( Double.longBitsToDouble(PreffManager.getPrefLong("lat")),
 						Double.longBitsToDouble(PreffManager.getPrefLong("long")));
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
 				if(AppContext.context.isInternetEnabled){
 					runGPSEnableThread();			
 				}			
 			}
 			else{			
-				mLatlong = mMyCoordinates;
+				mMapCameraFocusLatlong = mMyCoordinates;
 				isCameraMovedToMyLocation = true;
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMyCoordinates, Constants.ZOOM_VALUE));
 			}
 		}
 
-		locationViewManager.showPin();
+		mapCameraMovementHandleViewManager.showPin();
 	}
 
 	@Override

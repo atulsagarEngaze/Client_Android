@@ -26,4 +26,5 @@ public class Veranstaltung {
     public static final String EVENT_EXTENDED_BY_INITIATOR= "eventExtendedByInitiator";
     public static final String PARTICIPANT_LEFT_EVENT = "participantLeftEvent";
     public static final String CURRENT_LOCATION_FOUND="currentLocationFound";
+    public static final String NEED_LOCATION_INSTANT="needlocationinstantly";
 }

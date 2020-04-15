@@ -81,12 +81,12 @@ public class BackgroundServiceManager extends Service {
             } else {
                 stopLocationListenerService();
             }
-            runningEventCheckHandler.postDelayed(runningEventCheckRunnable, 10000);
+            runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
 
         };
 
         runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
-        runningEventCheckHandler.postDelayed(runningEventCheckRunnable, 10000);
+        runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
     }
 
 

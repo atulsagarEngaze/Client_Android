@@ -12,6 +12,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -44,7 +45,7 @@ import com.redtop.engaze.viewmanager.RunningEventViewManager;
 import androidx.appcompat.app.AlertDialog;
 
 @SuppressLint({ "ResourceAsColor", "SimpleDateFormat" })
-public class RunningEventBase  extends BaseLocationActivity  {
+public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 	protected boolean mIsInfoWindowOpen = false;
 	public Boolean canRefreshUserLocation=true;
 	protected RunningEventBroadcastReceiver mRunningEventBroadcastManager = null;
@@ -112,6 +113,11 @@ public class RunningEventBase  extends BaseLocationActivity  {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);		
+	}
+
+	@Override
+	protected void onMyLocationFound(Location location) {
+
 	}
 
 	protected void initialize(Bundle savedInstanceState){			

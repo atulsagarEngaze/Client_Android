@@ -41,11 +41,11 @@ import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
 import com.redtop.engaze.receiver.HomeBroadcastReceiver;
 import com.redtop.engaze.viewmanager.HomeViewManager;
-import com.redtop.engaze.viewmanager.LocationViewManager;
+import com.redtop.engaze.viewmanager.MapCameraMovementHandleViewManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class HomeActivity extends LocationActivity implements RunningEventAdapterCallback, NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner, IActionHandler {
+public class HomeActivity extends MapLocationSelectionActivity implements RunningEventAdapterCallback, NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner, IActionHandler {
 
     private List<TrackLocationMember> mShareMyLocationList;
     private List<TrackLocationMember> mTrackBuddyList;
@@ -87,7 +87,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
         mContext = this;
         setContentView(R.layout.activity_home);
         homeViewManager = new HomeViewManager(this);
-        locationViewManager = (LocationViewManager) homeViewManager;
+        mapCameraMovementHandleViewManager = (MapCameraMovementHandleViewManager) homeViewManager;
         mBroadcastManager = new HomeBroadcastReceiver(mContext);
         Log.i(TAG, "density: " + AppUtility.deviceDensity);
         //mRunningEventAdapter = new HomeEventListAdapter(null, mContext);
@@ -97,7 +97,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
         //homeViewManager.setRunningEventRecycleViewAdapter(mRunningEventAdapter);
         homeViewManager.setLocationViewAdapter(mSuggestedLocationAdapter);
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.home_map);
-        mLatlong = new LatLng(Double.longBitsToDouble(PreffManager.getPrefLong("lat")),
+        mMapCameraFocusLatlong = new LatLng(Double.longBitsToDouble(PreffManager.getPrefLong("lat")),
                 Double.longBitsToDouble(PreffManager.getPrefLong("long")));
         fragment.getMapAsync(this);
         gpsOnListner = null;
@@ -121,7 +121,7 @@ public class HomeActivity extends LocationActivity implements RunningEventAdapte
         if (AppContext.context.isInternetEnabled) {
             runGPSEnableThread();
         } else {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
         }
 
         findLatLangOnCameraChange = false;

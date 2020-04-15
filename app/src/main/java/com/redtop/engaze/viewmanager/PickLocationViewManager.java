@@ -9,10 +9,11 @@ import android.widget.TextView;
 
 import com.redtop.engaze.PickLocationActivity;
 import com.redtop.engaze.R;
+import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.common.utility.AppUtility;
 
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
-public class PickLocationViewManager  extends LocationViewManager {
+public class PickLocationViewManager  extends MapCameraMovementHandleViewManager {
 
 	private PickLocationActivity activity;
 	private ImageButton mBtnImgeAddLocation;
@@ -42,7 +43,7 @@ public class PickLocationViewManager  extends LocationViewManager {
 		
 		mBtnImgeAddLocation =  (ImageButton)activity.findViewById(R.id.img_add_location);
 		mBtnImgeAddLocation.setVisibility(View.GONE);
-		//mAdapter = new NewSuggestedLocationAdapter(this, R.layout.item_suggested_location_list, mAutoCompletePlaces);	
+		activity.mSuggestedLocationAdapter = new NewSuggestedLocationAdapter(activity, R.layout.item_suggested_location_list, activity.mAutoCompletePlaces);
 		mPin= (ImageView)activity.findViewById(R.id.img_center_pin);
 		mPin.setVisibility(View.GONE);
 //		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

@@ -21,19 +21,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
@@ -45,20 +46,23 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.redtop.engaze.adapter.CachedLocationAdapter;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.AutoCompletePlace;
 import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.viewmanager.LocationViewManager;
+import com.redtop.engaze.viewmanager.MapCameraMovementHandleViewManager;
+
+import androidx.annotation.NonNull;
 
 
-public abstract class LocationActivity extends BaseLocationActivity implements LocationListener {
-    protected LocationViewManager locationViewManager = null;
+public abstract class MapLocationSelectionActivity extends MyCurrentLocationHandlerActivity implements LocationListener {
+    protected MapCameraMovementHandleViewManager mapCameraMovementHandleViewManager = null;
     public NewSuggestedLocationAdapter mSuggestedLocationAdapter;
     public CachedLocationAdapter mCachedLocationAdapter;
     public ArrayList<Marker> mMarkers = new ArrayList<Marker>();
-    public LatLng mLatlong = null;
+    public LatLng mMapCameraFocusLatlong = null;
     public EventPlace mEventPlace;
     public ArrayList<AutoCompletePlace> mAutoCompletePlaces = new ArrayList<AutoCompletePlace>();
     public String mOriginalQuery = "";
@@ -72,11 +76,12 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     public Boolean isImageSetToGray = false;
     public LocationManager mLocationManager;
     protected PlacesClient placesClient = null;
+    AutocompleteSessionToken token;
 
-    private final static String TAG = LocationActivity.class.getName();
+    private final static String TAG = MapLocationSelectionActivity.class.getName();
 
     protected void createEventPlace() {
-        Place place = mLh.getPlaceFromLatLang(mLatlong);
+        Place place = mLh.getPlaceFromLatLang(mMapCameraFocusLatlong);
         mEventPlace = null;
         if (place != null) {
             mEventPlace = new EventPlace(place.getName().toString(),
@@ -86,6 +91,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_map_access_key));
         // Create a new Places client instance.
         placesClient = Places.createClient(this);
+        token = AutocompleteSessionToken.newInstance();
 
     }
 
@@ -97,7 +103,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             @Override
             public void run() {
                 mCachedLocationAdapter = new CachedLocationAdapter(mContext, R.layout.item_cached_location_list, DestinationCacher.getDestinationsFromCache(mContext));
-                locationViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
+                mapCameraMovementHandleViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
             }
         });
     }
@@ -121,30 +127,31 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         }
         if (mCachedLocationAdapter != null) {
             mCachedLocationAdapter.mItems = DestinationCacher.getDestinationsFromCache(mContext);
-            locationViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
+            mapCameraMovementHandleViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
         }
 
     }
 
     protected void bringPinToMyLocation() {
         try {
-            //myImageButton.setVisibility(View.GONE);
-            Location location = mLh.getMyLocation2(mGoogleApiClient);
-            if (location != null) {
-                mLatlong = new LatLng(location.getLatitude(), location.getLongitude());
-                mMyCoordinates = mLatlong;
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
-                findLatLangOnCameraChange = false;
-            } else {
-                mLatlong = null;
-                isCameraMovedToMyLocation = false;
-            }
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+
+                if (location != null) {
+                    mMyCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMapCameraFocusLatlong = mMyCoordinates;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
+                    findLatLangOnCameraChange = false;
+                } else {
+                    mMapCameraFocusLatlong = null;
+                    isCameraMovedToMyLocation = false;
+                }
+
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    protected void myLocationButtonClicked() {
     }
 
     protected void postCameraMoved() {
@@ -157,17 +164,17 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             public void onCameraChange(CameraPosition arg0) {
 
                 if (findLatLangOnCameraChange) {
-                    mLatlong = mMap.getCameraPosition().target;
+                    mMapCameraFocusLatlong = mMap.getCameraPosition().target;
                 } else {
                     findLatLangOnCameraChange = true;
                 }
                 if (isGPSOn) {
-                    if (mMyCoordinates == mLatlong && mMyCoordinates != null && mLatlong != null) {
-                        locationViewManager.setGpsOnPinOnMyLocationDrawable();
-                        PreffManager.setPrefLong("lat", Double.doubleToLongBits(mLatlong.latitude));
-                        PreffManager.setPrefLong("long", Double.doubleToLongBits(mLatlong.longitude));
+                    if (mMyCoordinates == mMapCameraFocusLatlong && mMyCoordinates != null && mMapCameraFocusLatlong != null) {
+                        mapCameraMovementHandleViewManager.setGpsOnPinOnMyLocationDrawable();
+                        PreffManager.setPrefLong("lat", Double.doubleToLongBits(mMapCameraFocusLatlong.latitude));
+                        PreffManager.setPrefLong("long", Double.doubleToLongBits(mMapCameraFocusLatlong.longitude));
                     } else {
-                        locationViewManager.setGpsOnDrawable();
+                        mapCameraMovementHandleViewManager.setGpsOnDrawable();
                     }
                 }
 
@@ -189,22 +196,25 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         if (!AppContext.context.isInternetEnabled) {
             return;
         }
+
         String newQuery = query.toString();
+
+
         Location location = new Location("");
-        location.setLatitude(mLatlong.latitude);
-        location.setLongitude(mLatlong.longitude);
+        location.setLatitude(mMapCameraFocusLatlong.latitude);
+        location.setLongitude(mMapCameraFocusLatlong.longitude);
 
 
         // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
 // and once again when the user makes a selection (for example when calling fetchPlace()).
-        AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+
 // Create a RectangularBounds object.
         RectangularBounds bounds = mLh.getLatLongBounds(location);
 // Use the builder to create a FindAutocompletePredictionsRequest.
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
 // Call either setLocationBias() OR setLocationRestriction().
-                .setLocationBias(bounds)
-                //.setLocationRestriction(bounds)
+                //.setLocationBias(bounds)
+                .setLocationRestriction(bounds)
                 .setSessionToken(token)
                 .setQuery(query.toString())
                 .build();
@@ -212,10 +222,12 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
         placesClient.findAutocompletePredictions(request).addOnSuccessListener(
                 (response) -> {
+                    AppUtility.showAlert(mContext,"\"Place found", "Place found");
                     OnAutoCompleteSuccess(response.getAutocompletePredictions());
                 }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;
+                AppUtility.showAlert(mContext,"\"Place not found", Integer.toString(apiException.getStatusCode()));
                 Log.e(TAG, "Place not found: " + apiException.getStatusCode());
             }
         });
@@ -223,17 +235,17 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     }
 
     private void OnAutoCompleteSuccess(List<AutocompletePrediction> predictions) {
-        if (predictions == null || predictions.size() == 0)
-            return;
+
         mAutoCompletePlaces.clear();
+        if (!(predictions == null || predictions.size() == 0)) {
 
-
-        for (AutocompletePrediction prediction : predictions) {
-            //Add as a new item to avoid IllegalArgumentsException when buffer is released
-            mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getFullText(null).toString()));
+            for (AutocompletePrediction prediction : predictions) {
+                //Add as a new item to avoid IllegalArgumentsException when buffer is released
+                mAutoCompletePlaces.add(new AutoCompletePlace(prediction.getPlaceId(), prediction.getFullText(null).toString()));
+            }
         }
 
-        mSuggestedLocationAdapter.mItems = mAutoCompletePlaces;
+        //mSuggestedLocationAdapter.mItems = mAutoCompletePlaces;
         mSuggestedLocationAdapter.notifyDataSetChanged();
     }
 
@@ -267,8 +279,8 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
             }
             turnOnOfLocationAvailabilityMessage(true);
             //new CameraChangeGetPlace().execute();
-            locationViewManager.setLocationText(mEventPlace.getName());
-            locationViewManager.setLocationNameAndAddress(mEventPlace.getName(), mEventPlace.getAddress());
+            mapCameraMovementHandleViewManager.setLocationText(mEventPlace.getName());
+            mapCameraMovementHandleViewManager.setLocationNameAndAddress(mEventPlace.getName(), mEventPlace.getAddress());
             postCameraMoved();
         }
 
@@ -296,11 +308,11 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
 
         mMyCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
         if ((this.getClass().getSimpleName().equals(HomeActivity.class.getSimpleName()))
-                || (this.getClass().getSimpleName() == PickLocationActivity.class.getName() && mLatlong == null)) {
-            mLatlong = mMyCoordinates;
+                || (this.getClass().getSimpleName() == PickLocationActivity.class.getName() && mMapCameraFocusLatlong == null)) {
+            mMapCameraFocusLatlong = mMyCoordinates;
             if (!isCameraMovedToMyLocation) {
                 isCameraMovedToMyLocation = true;
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
                 findLatLangOnCameraChange = false;
             }
         }
@@ -310,10 +322,10 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     public void onProviderEnabled(String s) {
         if (LocationManager.GPS_PROVIDER.equals(s)) {
             needLocation = true;
-            if (mLatlong == mMyCoordinates) {
-                locationViewManager.setGpsOnPinOnMyLocationDrawable();
+            if (mMapCameraFocusLatlong == mMyCoordinates) {
+                mapCameraMovementHandleViewManager.setGpsOnPinOnMyLocationDrawable();
             } else {
-                locationViewManager.setGpsOnDrawable();
+                mapCameraMovementHandleViewManager.setGpsOnDrawable();
 
             }
             isGPSOn = true;
@@ -324,7 +336,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     public void onProviderDisabled(String s) {
         if (LocationManager.GPS_PROVIDER.equals(s)) {
             isGPSOn = false;
-            locationViewManager.setGpsOffDrawable();
+            mapCameraMovementHandleViewManager.setGpsOffDrawable();
         }
     }
 
@@ -341,12 +353,12 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
                     case Activity.RESULT_OK:
                         //with below three setting onLocationFound method will be called and will move marker to my location
                         isCameraMovedToMyLocation = false;
-                        mLatlong = null;
+                        mMapCameraFocusLatlong = null;
                         needLocation = true;
                         break;
                     case Activity.RESULT_CANCELED:
                         // this mLatlang is taken from preferences ..last place latlang
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
                         break;
                     default:
                         break;
@@ -384,7 +396,7 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             bringPinToMyLocation();
         } else {
-            ((LocationActivity) mContext).needLocation = true;
+            ((MapLocationSelectionActivity) mContext).needLocation = true;
             checkAndEnableGPS();
         }
     }
@@ -397,31 +409,40 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locReqHighPriority).setAlwaysShow(true);
 
-
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+        Task<LocationSettingsResponse> task =
+                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+        task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
             @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        //not doing anything because onMyLocationFound will be called and move marker to my location;
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                    // All location settings are satisfied. The client can initialize location
+                    // no work needed here
 
-                        try {
-                            status.startResolutionForResult(
-                                    (BaseActivity) mContext,
-                                    CHECK_SETTINGS_REQUEST_CODE);
-                        } catch (SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        (BaseActivity) mContext,
+                                        CHECK_SETTINGS_REQUEST_CODE);
+                            } catch (SendIntentException e) {
+                                //Ignore the error.
+                            }
 
-                        break;
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+
+                            break;
+                    }
                 }
             }
         });
@@ -440,11 +461,11 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
                 .build();
 
         // Add a listener to handle the response.
-                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
-                    mEventPlace = new EventPlace(place.getName(),
-                            place.getAddress(), place.getLatLng());
-                    moveToSelectedLocation(mEventPlace);
+            mEventPlace = new EventPlace(place.getName(),
+                    place.getAddress(), place.getLatLng());
+            moveToSelectedLocation(mEventPlace);
             Log.i(TAG, "Place found: " + place.getName());
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
@@ -462,22 +483,29 @@ public abstract class LocationActivity extends BaseLocationActivity implements L
     }
 
     private void moveToSelectedLocation(EventPlace ep) {
-        mLatlong = ep.getLatLang();
+        mMapCameraFocusLatlong = ep.getLatLang();
         findAddressOnCameraChange = false;
         findLatLangOnCameraChange = false;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatlong, Constants.ZOOM_VALUE));
-        locationViewManager.setLocationText(mEventPlace.getName());
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mMapCameraFocusLatlong, Constants.ZOOM_VALUE));
+        mapCameraMovementHandleViewManager.setLocationText(mEventPlace.getName());
         OnLocationSelectionComplete(mEventPlace);
     }
 
     @Override
     public void onBackPressed() {
-        if (locationViewManager.mMapView.getVisibility() == View.VISIBLE) {
+        if (mapCameraMovementHandleViewManager.mMapView.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
         } else {
-            locationViewManager.hideSearchView();
+            mapCameraMovementHandleViewManager.hideSearchView();
         }
         //Include the code here
         return;
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mMapCameraFocusLatlong = new LatLng(location.getLatitude(), location.getLongitude());
+
+    }
+
 }

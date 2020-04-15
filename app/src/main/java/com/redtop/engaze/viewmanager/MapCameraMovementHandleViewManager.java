@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.redtop.engaze.BaseActivity;
-import com.redtop.engaze.LocationActivity;
+import com.redtop.engaze.MapLocationSelectionActivity;
 import com.redtop.engaze.R;
 import com.redtop.engaze.adapter.CachedLocationAdapter;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
@@ -28,10 +28,10 @@ import com.redtop.engaze.common.utility.MarkerHelper;
 import com.redtop.engaze.domain.AutoCompletePlace;
 import com.redtop.engaze.domain.EventPlace;
 
-public class LocationViewManager implements  OnItemClickListener, OnClickListener, TextWatcher, View.OnFocusChangeListener, View.OnTouchListener
+public class MapCameraMovementHandleViewManager implements  OnItemClickListener, OnClickListener, TextWatcher, View.OnFocusChangeListener, View.OnTouchListener
 {
 	protected int mSearchLocationTextLength;
-	private LocationActivity activity;
+	private MapLocationSelectionActivity activity;
 	public TextView mEventLocation;
 	public EditText mTxtSearchLocation;
 	public ListView mLocationListView;
@@ -45,8 +45,8 @@ public class LocationViewManager implements  OnItemClickListener, OnClickListene
 	public ImageView mIconSearchClear ;
 	public ImageView mTxtSelectLocationBack;
 	public int mFontSize;
-	public LocationViewManager(Context context){
-		activity = (LocationActivity)context;		
+	public MapCameraMovementHandleViewManager(Context context){
+		activity = (MapLocationSelectionActivity)context;
 	}	
 
 	protected void initializeElements(){
