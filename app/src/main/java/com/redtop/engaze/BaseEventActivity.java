@@ -392,9 +392,8 @@ public abstract class BaseEventActivity extends BaseActivity {
             createOrUpdateEvent.Participants.add(participant);
         }
 
-        /*createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());
-        createOrUpdateEvent.Destination = mDestinationPlace;
-*/
+        //createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());
+
     }
 
 }

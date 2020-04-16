@@ -3,17 +3,22 @@ package com.redtop.engaze.domain;
 import java.io.Serializable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.annotations.Expose;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
 public class EventPlace  implements Parcelable, Serializable{
-	
+	@Expose
 	private String name;
+	@Expose
 	private String address;
-	private transient  LatLng latLang;	
+	@Expose
+	private transient  LatLng latLang;
+	@Expose
 	private double latitude;
+	@Expose
 	private double longitude;
 	
 	public EventPlace( String name, String address, LatLng latLang) {
