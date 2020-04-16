@@ -4,6 +4,7 @@
         <!--Set application-wide security config using base-config tag.-->
         <base-config cleartextTrafficPermitted="true"/>
         <domain includeSubdomains="true">redtopdev.com(to be adjusted)</domain>
+        <domain includeSubdomains="true">maps.googleapis.com</domain>
         <base-config cleartextTrafficPermitted="true"/>
     </domain-config>
 </network-security-config>
