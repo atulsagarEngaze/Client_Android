@@ -448,6 +448,7 @@ public abstract class MapLocationSelectionActivity extends MyCurrentLocationHand
 
 // Construct a request object, passing the place ID and fields array.
         FetchPlaceRequest request = FetchPlaceRequest.builder(item.getPlaceId(), placeFields)
+                .setSessionToken(token)
                 .build();
 
         // Add a listener to handle the response.

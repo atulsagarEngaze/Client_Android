@@ -42,7 +42,7 @@
             android:layout_marginLeft="0dip"
             android:paddingLeft="@dimen/paddinghalf"
             android:paddingTop="0dip"
-            android:textColor="#006400"
+            android:textColor="@color/primary"
             android:textSize="@dimen/small_text_size" />
 
         <LinearLayout
@@ -66,7 +66,8 @@
                 android:text="@string/button_home_notification_view"
                 android:textColor="@color/primary"
                 android:textSize="@dimen/extra_small_text_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginRight="@dimen/padding"/>
 
             <TextView
                 android:id="@+id/event_leave"

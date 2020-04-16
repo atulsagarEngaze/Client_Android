@@ -346,6 +346,7 @@ public abstract class BaseEventActivity extends BaseActivity {
         createOrUpdateEvent = new Event();
         createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
         createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
+        createOrUpdateEvent.InitiatorName = AppContext.context.loginName;
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
         Duration defaultDuration = AppContext.context.defaultDurationSettings;
         createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
