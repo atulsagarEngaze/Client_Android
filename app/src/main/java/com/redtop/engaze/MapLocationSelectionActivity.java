@@ -210,7 +210,6 @@ public abstract class MapLocationSelectionActivity extends MyCurrentLocationHand
 
         placesClient.findAutocompletePredictions(request).addOnSuccessListener(
                 (response) -> {
-                    AppUtility.showAlert(mContext, "\"Place found", "Place found");
                     OnAutoCompleteSuccess(response.getAutocompletePredictions());
                 }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
