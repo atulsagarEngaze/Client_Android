@@ -244,6 +244,4 @@
     <uses-permission android:name="com.redtop.engaze.locationapi.maps.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.redtop.engaze.permission.MAPS_RECEIVE" />
 
-    <uses-permission android:name="com.redtop.engaze.gcm.permission.C2D_MESSAGE" />
-
 </manifest>

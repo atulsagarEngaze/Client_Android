@@ -30,6 +30,7 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.ShowLocationActivity;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -184,7 +185,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext, ShowLocationActivity.class);
-                intent.putExtra("DestinatonLocation", ed.Destination.getName());
+                intent.putExtra(IntentConstants.DESTINATION_LOCATION, ed.Destination.getName());
                 intent.putExtra("DestinatonAddress", ed.Destination.getAddress());
                 intent.putExtra("DestinatonLatitude", ed.Destination.getLatitude());
                 intent.putExtra("DestinatonLongitude", ed.Destination.getLongitude());

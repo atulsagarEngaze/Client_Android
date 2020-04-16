@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.EventPlace;
@@ -29,7 +30,7 @@ public class PickLocationActivity extends MapLocationSelectionActivity implement
 		super.onCreate(savedInstanceState);
 		mContext = this;		
 		setContentView(R.layout.activity_pick_location);
-		mEventPlace  =  (EventPlace)this.getIntent().getParcelableExtra("DestinatonLocation");
+		mEventPlace  =  (EventPlace)this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
 		mapCameraMovementHandleViewManager = new PickLocationViewManager(this);
 		pickLocationViewManager = (PickLocationViewManager) mapCameraMovementHandleViewManager;
 		mSuggestedLocationAdapter = new NewSuggestedLocationAdapter(this, R.layout.item_suggested_location_list, mAutoCompletePlaces);

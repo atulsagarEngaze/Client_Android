@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -149,7 +150,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEditEventActivity.this, PickLocationActivity.class);
                 if (createOrUpdateEvent.Destination != null) {
-                    intent.putExtra("DestinatonLocation", (Parcelable) createOrUpdateEvent.Destination);
+                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.Destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
             }
@@ -455,9 +456,9 @@ public class CreateEditEventActivity extends BaseEventActivity {
             initializeEventWithDefaultValues();
             mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
 
-            if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
+            if (this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION) != null) {
                 mFromEventsActivity = false;
-                createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
+                createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
                 mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
             }
         }

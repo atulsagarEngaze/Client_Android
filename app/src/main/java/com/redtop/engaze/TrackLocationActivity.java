@@ -25,6 +25,7 @@ import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventType;
@@ -77,8 +78,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         initializeBasedOnEventType();
         mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", mEventTypeId);
         SetDurationText();
-        if (this.getIntent().getParcelableExtra("DestinatonLocation") != null) {
-            createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra("DestinatonLocation");
+        if (this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION) != null) {
+            createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
         if (!accessingContactsFirstTime()) {
@@ -222,7 +223,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
                 intent = new Intent(TrackLocationActivity.this, PickLocationActivity.class);
                 if (createOrUpdateEvent.Destination != null) {
-                    intent.putExtra("DestinatonLocation", (Parcelable) createOrUpdateEvent.Destination);
+                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.Destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
                 break;

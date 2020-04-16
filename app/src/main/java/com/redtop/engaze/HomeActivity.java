@@ -27,6 +27,7 @@ import com.redtop.engaze.adapter.HomeTrackLocationListAdapter;
 import com.redtop.engaze.adapter.HomeTrackLocationListAdapter.TrackLocationAdapterCallback;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -279,7 +280,7 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
     public void onMeetNowClicked() {
         if (AppContext.context.isInternetEnabled) {
             Intent intent = new Intent(mContext, TrackLocationActivity.class);
-            intent.putExtra("DestinatonLocation", (Parcelable) ((HomeActivity) mContext).mEventPlace);
+            intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) ((HomeActivity) mContext).mEventPlace);
             intent.putExtra("caller", HomeActivity.class.toString());
             intent.putExtra("EventTypeId", EventType.QUIK.GetEventTypeId());
             startActivity(intent);
@@ -289,7 +290,7 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
     public void onMeetLaterClicked() {
         if (AppContext.context.isInternetEnabled) {
             Intent intent = new Intent(mContext, CreateEditEventActivity.class);
-            intent.putExtra("DestinatonLocation", (Parcelable) ((HomeActivity) mContext).mEventPlace);
+            intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) ((HomeActivity) mContext).mEventPlace);
             startActivity(intent);
         }
     }

@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -256,7 +257,7 @@ public class RunningEventActions extends RunningEventActivityResults {
         }
         intent = new Intent(RunningEventActions.this, PickLocationActivity.class);
         if (mDestinationPlace != null) {
-            intent.putExtra("DestinatonLocation", (Parcelable) mDestinationPlace);
+            intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) mDestinationPlace);
         }
         startActivityForResult(intent, UPDATE_LOCATION_REQUEST_CODE);
     }

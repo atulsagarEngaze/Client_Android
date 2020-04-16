@@ -11,6 +11,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.utility.MarkerHelper;
 
 import androidx.appcompat.widget.Toolbar;
@@ -28,7 +29,7 @@ public class ShowLocationActivity extends BaseActivity implements OnMapReadyCall
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_location);
 		mContext = this;
-		mLocation  =  this.getIntent().getStringExtra("DestinatonLocation");
+		mLocation  =  this.getIntent().getStringExtra(IntentConstants.DESTINATION_LOCATION);
 		mDestinatonAddress = this.getIntent().getStringExtra("DestinatonAddress");
 		TextView selectedLocationNameText =  (TextView)findViewById(R.id.txt_selected_location_name);
 		TextView selectedLocationAddressText= (TextView)findViewById(R.id.txt_selected_location_address);		
