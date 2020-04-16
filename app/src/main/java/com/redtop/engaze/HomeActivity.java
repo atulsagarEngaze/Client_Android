@@ -81,6 +81,11 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
     }
 
     @Override
+    protected void postCameraMoved() {
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
