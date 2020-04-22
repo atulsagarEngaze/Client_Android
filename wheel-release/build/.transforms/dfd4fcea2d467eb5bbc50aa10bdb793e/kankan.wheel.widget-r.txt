@@ -1,4 +1,0 @@
-kankan.wheel.widget
-drawable wheel_bg
-drawable wheel_val
-string app_name

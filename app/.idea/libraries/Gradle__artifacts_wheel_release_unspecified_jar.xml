@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: artifacts:wheel-release:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../wheel-release/build/.transforms/7a49e8c0197cab1056b36776e32fcf50/jetified-wheel-release/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../wheel-release/build/.transforms/7a49e8c0197cab1056b36776e32fcf50/jetified-wheel-release/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Client_Android.iml" filepath="$PROJECT_DIR$/../Client_Android.iml" group="Client_Android" />
+      <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="Client_Android/app" />
+      <module fileurl="file://$PROJECT_DIR$/../wheel-release/wheel-release.iml" filepath="$PROJECT_DIR$/../wheel-release/wheel-release.iml" group="Client_Android/wheel-release" />
+    </modules>
+  </component>
+</project>
