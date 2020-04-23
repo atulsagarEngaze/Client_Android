@@ -1,6 +1,6 @@
-package com.redtop.engaze.common.constant;
+package com.redtop.engaze.app;
 
-public class DurationConstants {
+public class Config {
 
     public static final int DEFAULT_SHORT_TIME_TIMEOUT = 20000;//millisecond
     public static final int DEFAULT_MEDIUM_TIME_TIMEOUT = 40000;//millisecond
@@ -14,7 +14,8 @@ public class DurationConstants {
     public static final int LOCATION_REFRESH_INTERVAL_FAST= 15000;//milliseconds
     public static final int LOCATION_REFRESH_INTERVAL_NORMAL= 20000;//milliseconds
     public static final int LOCATION_REFRESH_SLOWER_NORMAL= 60000;//milliseconds
-
     public static final int  MIN_DISTANCE_IN_METER_LOCATION_UPDATE = 20;
 
+    //APIs
+    public static final String RegisterBaseURL ="http://34.69.91.187/";
 }

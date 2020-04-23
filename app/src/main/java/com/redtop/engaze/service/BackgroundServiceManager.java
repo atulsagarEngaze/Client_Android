@@ -7,8 +7,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.receiver.CurrentLocationUploadService;
@@ -81,12 +80,12 @@ public class BackgroundServiceManager extends Service {
             } else {
                 stopLocationListenerService();
             }
-            runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
+            runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);
 
         };
 
         runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
-        runningEventCheckHandler.postDelayed(runningEventCheckRunnable, DurationConstants.RUNNING_EVENT_CHECK_INTERVAL);
+        runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);
     }
 
 

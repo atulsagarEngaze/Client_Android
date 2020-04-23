@@ -23,7 +23,7 @@ public class SmsWS extends BaseWebService {
 
     public static void callSMSGateway(final Context context, JSONObject smsGatewayObj){
         try{
-            String JsonPostURL =  MAP_API_URL + Routes.SMS_GATEWAY;
+            String JsonPostURL =  MAP_API_URL + ApiUrl.SMS_GATEWAY;
 
             Log.d(TAG, "Calling URL:" + JsonPostURL);
 

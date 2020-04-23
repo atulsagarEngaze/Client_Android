@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.enums.ReminderFrom;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Event;
@@ -86,8 +86,8 @@ public class EventDistanceReminderService extends IntentService implements Googl
         Log.v(TAG, "Creating Location Request");
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST)        // 10 seconds, in milliseconds
-                .setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST);
+                .setInterval(Config.LOCATION_REFRESH_INTERVAL_FAST)        // 10 seconds, in milliseconds
+                .setFastestInterval(Config.LOCATION_REFRESH_INTERVAL_FAST);
     }
 
     @Override

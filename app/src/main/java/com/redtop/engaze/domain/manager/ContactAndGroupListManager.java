@@ -31,15 +31,14 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.webservice.ContactsWS;
-import com.redtop.engaze.webservice.IContactsWS;
-import com.redtop.engaze.webservice.proxy.ContactsWSProxy;
+import com.redtop.engaze.webservice.IUserWS;
+import com.redtop.engaze.webservice.UserWS;
 
 public class ContactAndGroupListManager {
 
     private final static String TAG = ContactAndGroupListManager.class.getName();
 
-    private final static IContactsWS contactsWS = new ContactsWSProxy();
+    private final static IUserWS userWS = new UserWS();
 
     public static void cacheContactAndGroupList(final OnRefreshMemberListCompleteListner listnerOnSuccess, final OnRefreshMemberListCompleteListner listnerOnFailure) {
 
@@ -150,7 +149,7 @@ public class ContactAndGroupListManager {
             return;
         }
 
-        contactsWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListner() {
+        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListner() {
             @Override
             public void apiCallComplete(JSONObject response) {
                 try {

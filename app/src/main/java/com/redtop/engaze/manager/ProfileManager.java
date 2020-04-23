@@ -12,11 +12,14 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.webservice.ProfileWS;
+import com.redtop.engaze.webservice.IUserWS;
+import com.redtop.engaze.webservice.UserWS;
 
 
 public class ProfileManager {
     private final static String TAG = ProfileManager.class.getName();
+
+    private final static IUserWS userWS = new UserWS();
 
     public static void saveProfile(final Context context, final JSONObject jRequestobj,
                                    final OnAPICallCompleteListner listnerOnSuccess,
@@ -30,7 +33,7 @@ public class ProfileManager {
 
         }
 
-        ProfileWS.saveProfile(context, jRequestobj, new OnAPICallCompleteListner() {
+        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListner() {
 
             @Override
             public void apiCallComplete(JSONObject response) {
@@ -71,7 +74,4 @@ public class ProfileManager {
             }
         });
     }
-
 }
-
-

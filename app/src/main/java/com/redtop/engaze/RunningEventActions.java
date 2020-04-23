@@ -27,7 +27,7 @@ import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -196,7 +196,7 @@ public class RunningEventActions extends RunningEventActivityResults {
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                locationhandler.postDelayed(locationRunnable, DurationConstants.LOCATION_RETRIVAL_INTERVAL);
+                locationhandler.postDelayed(locationRunnable, Config.LOCATION_RETRIVAL_INTERVAL);
             }
         });
         adb.show();

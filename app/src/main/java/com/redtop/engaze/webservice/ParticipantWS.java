@@ -1,6 +1,5 @@
 package com.redtop.engaze.webservice;
 
-import android.content.Context;
 import android.util.Log;
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 
@@ -15,7 +14,7 @@ public class ParticipantWS extends BaseWebService implements IParticipantWS {
                                         final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String JsonPostURL = MAP_API_URL + Routes.POKEALL_CONTACTS;
+            String JsonPostURL = MAP_API_URL + ApiUrl.POKEALL_CONTACTS;
 
             postData(pokeAllContactsJSON, JsonPostURL, listnerOnSuccess, listnerOnFailure);
 
@@ -30,7 +29,7 @@ public class ParticipantWS extends BaseWebService implements IParticipantWS {
     public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + Routes.UPDATE_PARTICIPANTS;
+            String url = MAP_API_URL + ApiUrl.UPDATE_PARTICIPANTS;
 
             postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 

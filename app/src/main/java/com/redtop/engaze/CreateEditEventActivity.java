@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.json.JSONException;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.DatePickerDialog;
@@ -45,7 +43,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
-import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
@@ -54,14 +51,11 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
-import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.webservice.Routes;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;

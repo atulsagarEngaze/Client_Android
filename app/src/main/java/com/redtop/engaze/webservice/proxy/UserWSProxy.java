@@ -1,9 +1,11 @@
 package com.redtop.engaze.webservice.proxy;
 
 
+import android.util.Log;
+
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.webservice.IContactsWS;
+import com.redtop.engaze.webservice.IUserWS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,9 +13,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ContactsWSProxy implements IContactsWS {
+public class UserWSProxy implements IUserWS {
 
-    private final static String TAG = ContactsWSProxy.class.getName();
+    private final static String TAG = UserWSProxy.class.getName();
 
     public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
                            final OnAPICallCompleteListner listnerOnFailure) {
@@ -49,8 +51,6 @@ public class ContactsWSProxy implements IContactsWS {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
@@ -87,6 +87,18 @@ public class ContactsWSProxy implements IContactsWS {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
+
+    public void saveProfile(JSONObject jRequestobj,
+                            final OnAPICallCompleteListner listnerOnSuccess,
+                            final OnAPICallCompleteListner listnerOnFailure) {
+        try {
+           listnerOnSuccess.apiCallComplete(null);
+        } catch (Exception ex) {
+            Log.d(TAG, ex.toString());
+            ex.printStackTrace();
+            listnerOnFailure.apiCallComplete(null);
+        }
+    }
+
 }

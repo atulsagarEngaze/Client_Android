@@ -27,7 +27,7 @@ import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.utility.Comparer;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.FBShareHelper;
@@ -67,7 +67,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 	protected EventDetailsOnMapAdapter mEventDetailAdapter;
 	protected NameImageAdapter mUserLocationItemMenuAdapter;
 	protected Boolean mEnableAutoCameraAdjust = true;	
-	protected int mLocationRefreshTime = DurationConstants.LOCATION_REFRESH_INTERVAL_FAST;
+	protected int mLocationRefreshTime = Config.LOCATION_REFRESH_INTERVAL_FAST;
 
 	protected HashMap<Marker, UsersLocationDetail> markerUserLocation = new HashMap<Marker, UsersLocationDetail>();
 

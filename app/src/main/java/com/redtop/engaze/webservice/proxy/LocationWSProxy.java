@@ -9,7 +9,6 @@ import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.webservice.BaseWebService;
 import com.redtop.engaze.webservice.ILocationWS;
-import com.redtop.engaze.webservice.Routes;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

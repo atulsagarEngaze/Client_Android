@@ -8,7 +8,7 @@ import android.location.Location;
 
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -49,7 +49,7 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
         }
 
         if (lastLocation != null) {
-            if (lastLocation.distanceTo(currentLocation) > DurationConstants.MIN_DISTANCE_IN_METER_LOCATION_UPDATE) {
+            if (lastLocation.distanceTo(currentLocation) > Config.MIN_DISTANCE_IN_METER_LOCATION_UPDATE) {
                 updateCurrentLocationToServer(currentLocation, context);
             }
         } else {

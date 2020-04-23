@@ -15,7 +15,7 @@ public class FeedbackWS extends BaseWebService {
                                                     OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + Routes.SAVE_FEEDBACK;
+            String url = MAP_API_URL + ApiUrl.SAVE_FEEDBACK;
 
             postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
 

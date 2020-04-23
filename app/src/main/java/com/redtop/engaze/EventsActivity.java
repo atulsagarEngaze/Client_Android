@@ -30,7 +30,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.constant.DurationConstants;
+import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.customeviews.SlidingTabLayout;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
@@ -79,7 +79,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 	private Runnable EventsRefreshRunnable = new Runnable() {
 		public void run() {	
 			refreshEventFragments();
-			EventsRefreshHandler.postDelayed(this, DurationConstants.EVENTS_REFRESH_INTERVAL); // 60 seconds here you can give
+			EventsRefreshHandler.postDelayed(this, Config.EVENTS_REFRESH_INTERVAL); // 60 seconds here you can give
 		}	
 	};
 

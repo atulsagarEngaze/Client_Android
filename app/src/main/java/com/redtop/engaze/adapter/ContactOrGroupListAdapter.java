@@ -23,9 +23,8 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.webservice.ContactsWS;
-import com.redtop.engaze.webservice.IContactsWS;
-import com.redtop.engaze.webservice.proxy.ContactsWSProxy;
+import com.redtop.engaze.webservice.IUserWS;
+import com.redtop.engaze.webservice.proxy.UserWSProxy;
 
 public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
 
@@ -33,7 +32,7 @@ public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
     List<ContactOrGroup> rowItems;
     List<ContactOrGroup> list;
     private JSONObject mInviteJasonObj;
-    private final static IContactsWS contactsWS = new ContactsWSProxy();
+    private final static IUserWS contactsWS = new UserWSProxy();
     public ContactOrGroupListAdapter(Context context, int resource,
                                      List<ContactOrGroup> data) {
         super(context, resource, data);

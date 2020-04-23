@@ -18,16 +18,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.common.constant.DurationConstants;
-import com.redtop.engaze.webservice.proxy.LocationWSProxy;
+import com.redtop.engaze.app.Config;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -106,8 +103,8 @@ public class MyCurrentLocationListener extends Service {
 
     protected void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_NORMAL);
-        locationRequest.setFastestInterval(DurationConstants.LOCATION_REFRESH_INTERVAL_FAST);
+        locationRequest.setInterval(Config.LOCATION_REFRESH_INTERVAL_NORMAL);
+        locationRequest.setFastestInterval(Config.LOCATION_REFRESH_INTERVAL_FAST);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()

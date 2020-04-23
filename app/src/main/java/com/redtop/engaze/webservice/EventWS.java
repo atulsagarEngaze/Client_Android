@@ -1,6 +1,5 @@
 package com.redtop.engaze.webservice;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
@@ -18,9 +17,9 @@ public class EventWS extends BaseWebService implements IEventWS {
         try {
             String url = "";
             if (jsonObject.has("EventId")) {
-                url = MAP_API_URL + Routes.UPDATE_EVENT;
+                url = MAP_API_URL + ApiUrl.UPDATE_EVENT;
             } else {
-                url = MAP_API_URL + Routes.CREATE_EVENT;
+                url = MAP_API_URL + ApiUrl.CREATE_EVENT;
             }
 
             postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
@@ -34,7 +33,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
-            String url = MAP_API_URL + Routes.RESPOND_INVITE;
+            String url = MAP_API_URL + ApiUrl.RESPOND_INVITE;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
@@ -55,7 +54,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void endEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + Routes.END_EVENT;
+            String url = MAP_API_URL + ApiUrl.END_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("RequestorId", AppContext.context.loginId);
@@ -73,7 +72,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void leaveEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + Routes.LEAVE_EVENT;
+            String url = MAP_API_URL + ApiUrl.LEAVE_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("RequestorId", AppContext.context.loginId);
@@ -92,7 +91,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + Routes.EVENT_DETAIL;
+            String url = MAP_API_URL + ApiUrl.EVENT_DETAIL;
 
             JSONObject jsonObject = new JSONObject();
 
@@ -109,7 +108,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
-            String url = MAP_API_URL + Routes.EXTEND_EVENT;
+            String url = MAP_API_URL + ApiUrl.EXTEND_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
@@ -127,7 +126,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
-            String url = MAP_API_URL + Routes.UPDATE_DESTINATION;
+            String url = MAP_API_URL + ApiUrl.UPDATE_DESTINATION;
 
             JSONObject jsonObject = new JSONObject();
 
@@ -160,7 +159,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
         try {
 
-            String url = MAP_API_URL + Routes.EVENT_DETAIL;
+            String url = MAP_API_URL + ApiUrl.EVENT_DETAIL;
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("EventId", eventid);

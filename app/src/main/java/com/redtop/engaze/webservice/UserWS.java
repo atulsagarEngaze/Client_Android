@@ -1,6 +1,8 @@
 package com.redtop.engaze.webservice;
 
+import android.content.Context;
 import android.util.Log;
+
 import com.redtop.engaze.Interface.OnAPICallCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.ContactOrGroup;
@@ -11,12 +13,24 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ContactsWS extends BaseWebService implements IContactsWS {
+public class UserWS extends BaseWebService implements IUserWS {
 
-    private final static String TAG = ContactsWS.class.getName();
+    private final static String TAG = SmsWS.class.getName();
+
+    public void saveProfile(JSONObject jRequestobj,
+                            final OnAPICallCompleteListner listnerOnSuccess,
+                            final OnAPICallCompleteListner listnerOnFailure) {
+        try {
+            postData(jRequestobj, ApiUrl.ACCOUNT_REGISTER, listnerOnSuccess, listnerOnFailure);
+        } catch (Exception ex) {
+            Log.d(TAG, ex.toString());
+            ex.printStackTrace();
+            listnerOnFailure.apiCallComplete(null);
+        }
+    }
 
     public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
-                                  final OnAPICallCompleteListner listnerOnFailure){
+                           final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
             String url = MAP_API_URL + "Routes.Contacts/InviteContact";
@@ -31,13 +45,12 @@ public class ContactsWS extends BaseWebService implements IContactsWS {
     }
 
     public void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
-                                                    final OnAPICallCompleteListner listnerOnSuccess,
-                                                    final OnAPICallCompleteListner listnerOnFailure) {
+                                             final OnAPICallCompleteListner listnerOnSuccess,
+                                             final OnAPICallCompleteListner listnerOnFailure) {
         try {
             JSONObject jsonObject = createContactsJSON(contactsAndgroups);
-            String url = MAP_API_URL + Routes.GET_REGISTERED_CONTACTS;
 
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, ApiUrl.REGISTERED_CONTACTS, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -60,4 +73,5 @@ public class ContactsWS extends BaseWebService implements IContactsWS {
 
         return jobj;
     }
+
 }
