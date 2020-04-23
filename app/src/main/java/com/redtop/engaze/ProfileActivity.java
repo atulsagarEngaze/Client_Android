@@ -176,17 +176,18 @@ public class ProfileActivity extends BaseActivity {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			if (requestCode == SELECT_PICTURE) {					        
+			if (requestCode == SELECT_PICTURE) {
 				selectedImageUri = data.getData();
 				//selectedImagePath = getRealPathFromURI(selectedImageUri);
-				img.setBackgroundResource(0);				
+				img.setBackgroundResource(0);
 				Bitmap bm = getBitMapFromURI(selectedImageUri);
-				RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),bm);
-				dr.setCornerRadius(Math.min(dr.getMinimumWidth(), dr.getMinimumHeight()) / 2.0F);				
+				RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(), bm);
+				dr.setCornerRadius(Math.min(dr.getMinimumWidth(), dr.getMinimumHeight()) / 2.0F);
 				dr.setAntiAlias(true);
-				img.setImageDrawable(dr);								
-			}			
+				img.setImageDrawable(dr);
+			}
 		}
 	}
 
