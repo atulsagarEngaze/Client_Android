@@ -153,18 +153,11 @@ public class ContactAndGroupListManager {
             @Override
             public void apiCallComplete(JSONObject response) {
                 try {
-                    String Status = (String) response.getString("Status");
-                    if (Status == "true") {
                         Hashtable<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
                         InternalCaching.saveRegisteredContactListToCache(registeredContacts);
                         InternalCaching.saveContactListToCache(contactsAndgroups);
                         PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
                         listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
-                    } else {
-                        String error = (String) response.getString("ErrorMessage");
-                        Log.d(TAG, error);
-                        listnerOnFailure.RefreshMemberListComplete(null);
-                    }
 
                 } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
@@ -186,7 +179,7 @@ public class ContactAndGroupListManager {
     private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONObject response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
 
         Hashtable<String, ContactOrGroup> registeredContacts = new Hashtable<String, ContactOrGroup>();
-        JSONArray jUsers = response.getJSONArray("ListOfRegisteredContacts");
+        JSONArray jUsers = response.getJSONArray("listOfRegisteredContact");
         if (jUsers.length() == 0) {
             return registeredContacts;
         }
@@ -212,12 +205,12 @@ public class ContactAndGroupListManager {
         for (int i = 0, size = jUsers.length(); i < size; i++) {
             JSONObject jsonObj = jUsers.getJSONObject(i);
 
-            cg = contactsAndgroups.get(jsonObj.getString("MobileNumberStoredInRequestorPhone"));
+            cg = contactsAndgroups.get(jsonObj.getString("mobileNumberStoredInRequestorPhone"));
             if (cg != null) {
-                userId = jsonObj.get("UserId").toString();
+                userId = jsonObj.get("userId").toString();
                 cg.setUserId(userId);
                 registeredContacts.put(userId, cg);
-                contactsAndgroups.put(jsonObj.getString("MobileNumberStoredInRequestorPhone"), cg);
+                contactsAndgroups.put(jsonObj.getString("mobileNumberStoredInRequestorPhone"), cg);
             }
         }
         return registeredContacts;

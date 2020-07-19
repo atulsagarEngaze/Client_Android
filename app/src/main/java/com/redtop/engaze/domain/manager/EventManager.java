@@ -45,6 +45,7 @@ import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
 import com.redtop.engaze.service.MyCurrentLocationListener;
+import com.redtop.engaze.webservice.EventWS;
 import com.redtop.engaze.webservice.IEventWS;
 import com.redtop.engaze.webservice.proxy.EventWSProxy;
 
@@ -55,7 +56,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 public class EventManager {
     private final static String TAG = EventManager.class.getName();
 
-    private final static IEventWS eventWS = new EventWSProxy();
+    private final static IEventWS eventWS = new EventWS();
 
     public static List<Event> getRunningEventList() {
         List<Event> list = InternalCaching.getEventListFromCache();
@@ -786,7 +787,7 @@ public class EventManager {
     public static void refreshEventList(final OnRefreshEventListCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";
-        if (AppContext.context.isInternetEnabled) {
+        if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
             Log.d(TAG, message);
             if (listnerOnFailure != null) {

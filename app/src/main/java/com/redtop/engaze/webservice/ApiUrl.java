@@ -6,11 +6,11 @@ public class ApiUrl {
 
     public static final String SMS_GATEWAY = "Contacts/SendSMSOTP";
     public static final String EMAIL_EXCEPTION_URL = "http://redtopdev.com/server.php/";
-    public static final String REGISTERED_CONTACTS = Config.RegisterBaseURL + "user/registeredcontacts";
-    public static final String ACCOUNT_REGISTER = Config.RegisterBaseURL + "user/register";
+    public static final String REGISTERED_CONTACTS = Config.RegisterBaseURL + "users/registered";
+    public static final String ACCOUNT_REGISTER = Config.RegisterBaseURL + "users/register";
 
     public static final String COUNTRY_CODES = "CountryCodes";
-    public static final String EVENT_DETAIL = "Event/Get";
+    public static final String EVENT_DETAIL = "events/user/{userId}";
     public static final String USER_LOCATION = "Location/Get";
     public static final String USER_LOCATION_UPLOAD = "Location/Upload";
 

@@ -91,13 +91,8 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
         try {
 
-            String url = MAP_API_URL + ApiUrl.EVENT_DETAIL;
-
-            JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("RequestorId", AppContext.context.loginId);
-
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            String url = MAP_API_URL + (ApiUrl.EVENT_DETAIL).replace("{userId}",AppContext.context.loginId);
+            getData(null, url, listnerOnSuccess, listnerOnFailure);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

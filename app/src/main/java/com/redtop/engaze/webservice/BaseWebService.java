@@ -23,7 +23,7 @@ public abstract class BaseWebService {
             .getSimpleName();
 
     private static RequestQueue mRequestQueue;
-    public static final String MAP_API_URL = "http://redtopdev.com/CoordifyAPI/api/";
+    public static final String MAP_API_URL = "http://13.127.180.59/";
 
     public static final int DEFAULT_SHORT_TIME_TIMEOUT = 20000;//millisecond
     public static final int DEFAULT_MEDIUM_TIME_TIMEOUT = 40000;//millisecond

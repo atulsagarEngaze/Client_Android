@@ -17,5 +17,5 @@ public class Config {
     public static final int  MIN_DISTANCE_IN_METER_LOCATION_UPDATE = 20;
 
     //APIs
-    public static final String RegisterBaseURL ="http://34.69.91.187/";
+    public static final String RegisterBaseURL ="http://13.127.180.59/";
 }

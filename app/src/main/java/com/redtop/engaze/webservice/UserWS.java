@@ -64,7 +64,6 @@ public class UserWS extends BaseWebService implements IUserWS {
         JSONObject jobj = new JSONObject();
         JSONArray jsonarr = new JSONArray();
         for (String mobileNumber : contactsAndgroups.keySet()) {
-
             jsonarr.put(mobileNumber.replaceAll("\\s", ""));
         }
         // Construct the selected Users json object

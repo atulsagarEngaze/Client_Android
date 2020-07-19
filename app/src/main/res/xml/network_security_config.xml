@@ -3,7 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <!--Set application-wide security config using base-config tag.-->
         <base-config cleartextTrafficPermitted="true"/>
-        <domain includeSubdomains="true">redtopdev.com(to be adjusted)</domain>
+        <domain includeSubdomains="true">13.232.177.122(to be adjusted)</domain>
         <domain includeSubdomains="true">maps.googleapis.com</domain>
         <base-config cleartextTrafficPermitted="true"/>
     </domain-config>
