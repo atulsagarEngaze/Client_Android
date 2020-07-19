@@ -148,12 +148,12 @@ public class EventManager {
             event.EndTime = DateUtil.convertToUtcDateTime(event.EndTimeInDateFormat, null);//parseFormat.format(endDate);
 
             JSONObject jObject = new JSONObject(AppContext.jsonParser.Serialize(event));
-            jObject.remove("Participants");
+            /*jObject.remove("Participants");
             List<String> participants = new ArrayList<>();
             for(EventParticipant participant : event.Participants){
                 participants.add(participant.getUserId());
             }
-            jObject.put("Participants", AppContext.jsonParser.Serialize(participants));
+            jObject.put("Participants", AppContext.jsonParser.Serialize(participants));*/
 
 
             eventWS.CreateEvent(jObject, new OnAPICallCompleteListner() {

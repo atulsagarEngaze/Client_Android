@@ -16,7 +16,7 @@ public class ApiUrl {
 
     public static final String RESPOND_INVITE = "Event/RespondToInvite";
     public static final String POKEALL_CONTACTS = "Contacts/RemindContact";
-    public static final String CREATE_EVENT = "Event/CreateEvent";
+    public static final String CREATE_EVENT = "evento";
     public static final String UPDATE_EVENT = "Event/Update";
     public static final String EXTEND_EVENT = "Event/ExtendEvent";
     public static final String END_EVENT = "Event/EndEvent";

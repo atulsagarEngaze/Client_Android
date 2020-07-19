@@ -13,7 +13,7 @@ public class JsonParser {
 
         gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
-                .create();;;
+                .create();
     }
 
     public <TObject> TObject deserialize(String jsonStr, Class<TObject> classT) {
