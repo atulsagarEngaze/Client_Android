@@ -40,18 +40,12 @@ public class ProfileManager {
                 Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
-                    String Status = (String) response.getString("Status");
+                    String loginID = (String) response.getString("id");
+                    // save the loginid to preferences
+                    PreffManager.setPref(Constants.LOGIN_ID, loginID);
+                    PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
+                    listnerOnSuccess.apiCallSuccess(response);
 
-                    if (Status == "true") {
-                        String loginID = (String) response.getString("Id");
-                        // save the loginid to preferences
-                        PreffManager.setPref(Constants.LOGIN_ID, loginID);
-                        PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
-                        listnerOnSuccess.apiCallSuccess(response);
-                    } else {
-
-                        listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
-                    }
 
                 } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
