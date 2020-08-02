@@ -134,13 +134,13 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 				eventTitle =  mContext.getResources().getString(R.string.title_running_event_track_buddies);
 			}
 			else{
-				eventTitle = mEvent.Name;
+				eventTitle = mEvent.name;
 			}
 			viewManager = new RunningEventViewManager(mContext, savedInstanceState, eventTitle);
 			mUserId = AppContext.context.loginId;
 			mGd = new GoogleDirection(mContext);		
 			initializeEventStartTimeForUI();
-			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.Participants);
+			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
 		}
 	}
 
@@ -149,7 +149,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 
 		Calendar calendar = Calendar.getInstance();
 		try {						
-			Date startParsedDate =  sdf.parse(mEvent.StartTime);
+			Date startParsedDate =  sdf.parse(mEvent.startTime);
 			calendar.setTime(startParsedDate);
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
@@ -169,7 +169,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 		}
 		switch (getTimeLeft()){
 		case "5 MINS" :
-			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.InitiatorId)){
+			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.initiatorId)){
 				snoozeFlag  = 1;
 				Intent intent = new Intent(mContext, SnoozeOffset.class);			
 				startActivityForResult(intent, SNOOZING_REQUEST_CODE);					
@@ -181,7 +181,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 	public String getTimeLeft(){		
 		Calendar eventEnd = Calendar.getInstance();
 		try {
-			eventEnd.setTime(sdf.parse(mEvent.EndTime));
+			eventEnd.setTime(sdf.parse(mEvent.endTime));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

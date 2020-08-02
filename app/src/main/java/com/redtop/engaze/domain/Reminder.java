@@ -14,11 +14,11 @@ public class Reminder implements Parcelable, DataModel {
     public static final long serialVersionUID = 1002715454105775832L;
 
     @Expose
-    private int timeInterval;
+    public int timeInterval;
     @Expose
-    private String period;
+    public String period;
     @Expose
-    private String notificationType;
+    public String notificationType;
     @Expose
     public long ReminderOffsetInMinute;
 

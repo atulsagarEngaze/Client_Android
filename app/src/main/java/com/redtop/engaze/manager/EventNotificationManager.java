@@ -73,7 +73,7 @@ public class EventNotificationManager {
         DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         long minutes = 0;
         try {
-            Date startDate = writeFormat.parse(event.StartTime);
+            Date startDate = writeFormat.parse(event.startTime);
             Calendar cal = Calendar.getInstance();
             Date currentDate = cal.getTime();
             minutes = (startDate.getTime() - currentDate.getTime()) / (60 * 1000);
@@ -97,7 +97,7 @@ public class EventNotificationManager {
             // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(RunningEventActivity.class);
             Intent activityIntent = new Intent(AppContext.context, RunningEventActivity.class);
-            activityIntent.putExtra("EventId", event.EventId);
+            activityIntent.putExtra("EventId", event.eventId);
             stackBuilder.addNextIntent(activityIntent);
         }
 
@@ -105,7 +105,7 @@ public class EventNotificationManager {
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent snoozeResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
-        snoozeResponseIntent.putExtra("eventid", event.EventId);
+        snoozeResponseIntent.putExtra("eventid", event.eventId);
         snoozeResponseIntent.putExtra("responseCode", "snooze");
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), snoozeResponseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -113,7 +113,7 @@ public class EventNotificationManager {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(AppContext.context)
                         .setSmallIcon(R.drawable.logo_notification)
-                        .setContentTitle(event.Name)
+                        .setContentTitle(event.name)
                         .setContentText(durationMessage)
                         .setAutoCancel(true)
                         //.setSound(notificationSound)
@@ -125,16 +125,16 @@ public class EventNotificationManager {
         }
 
         //if(!event.getCurrentMember().getUserId().equalsIgnoreCase(event.getInitiatorId()))
-        if (!ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
+        if (!ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
             Intent declineResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
-            declineResponseIntent.putExtra("eventid", event.EventId);
+            declineResponseIntent.putExtra("eventid", event.eventId);
             declineResponseIntent.putExtra("responseCode", "leave");
             PendingIntent declinePendingIntent =
                     PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), declineResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             mBuilder.addAction(R.drawable.ic_clear_black_18dp, "Leave", declinePendingIntent);
         } else {
             Intent endResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
-            endResponseIntent.putExtra("eventid", event.EventId);
+            endResponseIntent.putExtra("eventid", event.eventId);
             endResponseIntent.putExtra("responseCode", "end");
             PendingIntent endPendingIntent =
                     PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), endResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -150,7 +150,7 @@ public class EventNotificationManager {
         event.SnoozeNotificationId = notificationId;
         InternalCaching.saveEventToCache(event);
         mNotificationManager.notify(notificationId, mBuilder.build());
-        currentNotificationEventId = event.EventId;
+        currentNotificationEventId = event.eventId;
         isNotificActive = true;
 
     }
@@ -170,7 +170,7 @@ public class EventNotificationManager {
         try {
 
 
-            String parsedDate = newFormat.format(originalformat.parse(event.StartTime));
+            String parsedDate = newFormat.format(originalformat.parse(event.startTime));
 
             /* Add Big View Specific Configuration */
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -180,17 +180,17 @@ public class EventNotificationManager {
             String[] events = new String[2];
             if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
                 title = "Tracking request";
-                events[0] = new String(event.InitiatorName + " wants to share his/her location");
+                events[0] = new String(event.initiatorName + " wants to share his/her location");
                 events[1] = new String(parsedDate);
 
             } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
                 title = "Tracking request";
-                events[0] = new String(event.InitiatorName + " wants to track your location");
+                events[0] = new String(event.initiatorName + " wants to track your location");
                 events[1] = new String(parsedDate);
             } else {
-                title = event.Name;
+                title = event.name;
                 events[0] = new String(parsedDate);
-                events[1] = new String("From " + event.InitiatorName);
+                events[1] = new String("From " + event.initiatorName);
             }
 
 
@@ -206,13 +206,13 @@ public class EventNotificationManager {
 
             mBuilder.setStyle(inboxStyle);
             Intent acceptResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
-            acceptResponseIntent.putExtra("eventid", event.EventId);
+            acceptResponseIntent.putExtra("eventid", event.eventId);
             acceptResponseIntent.putExtra("responseCode", "accept");
             PendingIntent acceptIntent = PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), acceptResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
             Intent rejectResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
-            rejectResponseIntent.putExtra("eventid", event.EventId);
+            rejectResponseIntent.putExtra("eventid", event.eventId);
             rejectResponseIntent.putExtra("responseCode", "reject");
             PendingIntent rejectIntent = PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), rejectResponseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             //remoteViews.setOnClickPendingIntent(R.id.btn_reject, rejectIntent);
@@ -252,7 +252,7 @@ public class EventNotificationManager {
 
             // Post the notification
             notificationManager.notify(notificationId, mBuilder.build());
-            currentNotificationEventId = event.EventId;
+            currentNotificationEventId = event.eventId;
 
             // Used so that we can't stop a notification that has already been stopped
             isNotificActive = true;
@@ -268,13 +268,13 @@ public class EventNotificationManager {
         String title = "";
         if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
             title = "Tracking extended";
-            notificationMessage = event.InitiatorName + " has extended sharing his/her location";
+            notificationMessage = event.initiatorName + " has extended sharing his/her location";
 
         } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
             title = "Tracking extended";
-            notificationMessage = event.InitiatorName + " has extended tracking your location";
+            notificationMessage = event.initiatorName + " has extended tracking your location";
         } else {
-            notificationMessage = event.InitiatorName + " has extended the event " + event.Name;
+            notificationMessage = event.initiatorName + " has extended the event " + event.name;
         }
         showGenericNotification(event, notificationMessage, title);
     }
@@ -285,9 +285,9 @@ public class EventNotificationManager {
         if (EventService.isEventTrackBuddyEventForCurrentUser(event)
                 || EventService.isEventShareMyLocationEventForCurrentUser(event)) {
             notificationTitle = "Tracking destination changed";
-            notificationMessage = event.InitiatorName + " has changed the destination ";
+            notificationMessage = event.initiatorName + " has changed the destination ";
         } else {
-            notificationMessage = event.InitiatorName + " has changed the meeting place of the event " + event.Name;
+            notificationMessage = event.initiatorName + " has changed the meeting place of the event " + event.name;
         }
 
         showGenericNotification(event, notificationMessage, notificationTitle);
@@ -299,9 +299,9 @@ public class EventNotificationManager {
         if (EventService.isEventTrackBuddyEventForCurrentUser(event)
                 || EventService.isEventShareMyLocationEventForCurrentUser(event)) {
             notificationTitle = "Tracking participants updated";
-            notificationMessage = event.InitiatorName + " has added/removed participant(s) ";
+            notificationMessage = event.initiatorName + " has added/removed participant(s) ";
         } else {
-            notificationMessage = event.InitiatorName + " has added/removed participant(s) of the event " + event.Name;
+            notificationMessage = event.initiatorName + " has added/removed participant(s) of the event " + event.name;
         }
         showGenericNotification(event, notificationMessage, notificationTitle);
     }
@@ -311,19 +311,19 @@ public class EventNotificationManager {
         String notificationTitle = "";
         if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
             notificationTitle = "Removed from Tracking";
-            notificationMessage = event.InitiatorName + " has stopped sharing location with you";
+            notificationMessage = event.initiatorName + " has stopped sharing location with you";
         } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
             notificationTitle = "Removed from Tracking";
-            notificationMessage = event.InitiatorName + " has stopped tracking your location";
+            notificationMessage = event.initiatorName + " has stopped tracking your location";
         } else {
-            notificationMessage = event.InitiatorName + " has removed you from the event " + event.Name;
+            notificationMessage = event.initiatorName + " has removed you from the event " + event.name;
         }
         showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
     public static void showEventDeleteNotification(Event event) {
 
-        String notificationMessage = event.InitiatorName + " has cancelled " + event.Name;
+        String notificationMessage = event.initiatorName + " has cancelled " + event.name;
         showGenericNotification(event, notificationMessage, "");
     }
 
@@ -333,12 +333,12 @@ public class EventNotificationManager {
         String notificationTitle = "";
         if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
             notificationTitle = "Tracking ended";
-            notificationMessage = event.InitiatorName + " has stopped sharing location";
+            notificationMessage = event.initiatorName + " has stopped sharing location";
         } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
             notificationTitle = "Tracking ended";
-            notificationMessage = event.InitiatorName + " has stopped tracking your location";
+            notificationMessage = event.initiatorName + " has stopped tracking your location";
         } else {
-            notificationMessage = event.InitiatorName + " has ended " + event.Name;
+            notificationMessage = event.initiatorName + " has ended " + event.name;
         }
 
         showGenericNotification(event, notificationMessage, notificationTitle);
@@ -347,7 +347,7 @@ public class EventNotificationManager {
     public static void pokeNotification(Context context, String mEventId) {
 
         Event event = InternalCaching.getEventFromCache(mEventId);
-        String notificationMessage = event.InitiatorName + " has poked you. Did you miss to respond to an invitation ?";
+        String notificationMessage = event.initiatorName + " has poked you. Did you miss to respond to an invitation ?";
         String title = "You have been poked!";
         isPokeNotification = true;
         notificationType = "POKE";
@@ -396,7 +396,7 @@ public class EventNotificationManager {
             notificationMessage = userName + " has stopped viewing your location";
         } else {
             notificationTitle = "";
-            notificationMessage = userName + " has left " + event.Name;
+            notificationMessage = userName + " has left " + event.name;
         }
 
         showGenericNotification(event, notificationMessage, notificationTitle);
@@ -592,7 +592,7 @@ public class EventNotificationManager {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
         String notificationMessage = msg;
         if (title == "") {
-            title = event.Name;
+            title = event.name;
         }
         // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(HomeActivity.class);
@@ -627,7 +627,7 @@ public class EventNotificationManager {
                 break;
             case "APPROACHING":
                 Intent approachingAlarmDismissIntent = new Intent(AppContext.context, notificationActionsListener.class);
-                approachingAlarmDismissIntent.putExtra("eventid", event.EventId);
+                approachingAlarmDismissIntent.putExtra("eventid", event.eventId);
                 approachingAlarmDismissIntent.putExtra("responseCode", "approachingAlarmDismiss");
                 PendingIntent approachingAlarmPendingIntent =
                         PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);

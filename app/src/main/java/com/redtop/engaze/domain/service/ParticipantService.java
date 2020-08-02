@@ -6,7 +6,6 @@ import android.location.Location;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
@@ -107,8 +106,8 @@ public class ParticipantService {
             jobj.put("RequestorId", AppContext.context.loginId);
             jobj.put("RequestorName", AppContext.context.loginId);
             jobj.put("UserIdsForRemind", mJSONArray);
-            jobj.put("EventName", ed.Name);
-            jobj.put("EventId", ed.EventId);
+            jobj.put("EventName", ed.name);
+            jobj.put("EventId", ed.eventId);
 
             ParticipantManager.pokeParticipants(jobj, new OnActionCompleteListner() {
 
@@ -189,7 +188,7 @@ public class ParticipantService {
     }
 
     public static boolean setCurrentParticipant(Event event) {
-        for (EventParticipant participant : event.Participants) {
+        for (EventParticipant participant : event.participants) {
             if (participant.getUserId() == AppContext.context.loginId) {
                 event.setCurrentParticipant(participant);
                 return true;
@@ -199,7 +198,7 @@ public class ParticipantService {
     }
 
     public static void attacheContactGroupToParticipants(Event event) {
-        for (EventParticipant participant : event.Participants) {
+        for (EventParticipant participant : event.participants) {
             ContactOrGroup cg = ContactAndGroupListManager.getContact(participant.getUserId());
             if (cg != null) {
                 participant.setProfileName(cg.getName());
@@ -213,7 +212,7 @@ public class ParticipantService {
     public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus) {
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
-        ArrayList<EventParticipant> participants = event.Participants;
+        ArrayList<EventParticipant> participants = event.participants;
         if (participants != null && participants.size() > 0) {
             for (EventParticipant mem : participants) {
                 if (isValidForLocationSharing(event, mem)) {
@@ -229,17 +228,17 @@ public class ParticipantService {
     public static Boolean isValidForLocationSharing(Event event, EventParticipant mem) {
         Boolean isValid = true;
 
-        Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.InitiatorId);
-        if (event.EventType == EventType.TRACKBUDDY &&
+        Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.initiatorId);
+        if (event.eventType == EventType.TRACKBUDDY &&
                 isCurrentUserInitiator &&
                 isParticipantCurrentUser(mem.getUserId())
         ) {
             isValid = false;
         }
 
-        if (event.EventType == EventType.SHAREMYLOACTION &&
+        if (event.eventType == EventType.SHAREMYLOACTION &&
                 !isCurrentUserInitiator &&
-                !mem.getUserId().equalsIgnoreCase(event.InitiatorId)) {
+                !mem.getUserId().equalsIgnoreCase(event.initiatorId)) {
             isValid = false;
         }
         return isValid;

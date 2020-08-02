@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Marker;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.app.AppContext;
@@ -87,10 +87,10 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             return;
         }
 
-        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListner() {
+        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 if (isActivityRunning) {
                     try {
                         onSuccessLocationResponse(response.getJSONArray("ListOfUserLocation"));
@@ -99,10 +99,9 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
                     }
                 }
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 if (isActivityRunning) {
                     locationhandler.postDelayed(locationRunnable, mLocationRefreshTime); // 60 seconds here you can give
                 }
@@ -284,7 +283,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         ArrayList<UsersLocationDetail> temUldList = new ArrayList<UsersLocationDetail>();
         UsersLocationDetail tUl = null;
         temUldList.addAll(mUsersLocationDetailList);
-        for (EventParticipant em : mEvent.Participants) {
+        for (EventParticipant em : mEvent.participants) {
             Boolean isExist = false;
             tUl = null;
             for (UsersLocationDetail uld : temUldList) {
@@ -325,7 +324,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         Intent intent = new Intent(mContext, RunningEventMenuOptionsActivity.class);
         intent.putExtra("UserName", uld.userName);
         intent.putExtra("UserId", uld.userId);
-        intent.putExtra("EventId", mEvent.EventId);
+        intent.putExtra("EventId", mEvent.eventId);
         intent.putExtra("AcceptanceStatus", uld.acceptanceStatus.getStatus());
         mContext.startActivity(intent);
         canRefreshUserLocation = false;

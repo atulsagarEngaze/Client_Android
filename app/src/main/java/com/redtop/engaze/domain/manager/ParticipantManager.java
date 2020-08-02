@@ -2,22 +2,16 @@ package com.redtop.engaze.domain.manager;
 
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.webservice.IParticipantWS;
-import com.redtop.engaze.webservice.ParticipantWS;
 import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
@@ -35,10 +29,10 @@ public class ParticipantManager {
             return;
         }
 
-        participantWS.pokeParticipants(pokeParticipantsJSON, new OnAPICallCompleteListner() {
+        participantWS.pokeParticipants(pokeParticipantsJSON, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "PokeAllResponse:" + response.toString());
 
                 try {
@@ -52,13 +46,9 @@ public class ParticipantManager {
                 }
 
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                if (response != null) {
-                    Log.d(TAG, "EventResponse:" + response.toString());
-                }
+            public void apiCallFailure() {
                 onActionFailedListner.actionFailed(null, Action.POKEALL);
             }
         });
@@ -73,10 +63,10 @@ public class ParticipantManager {
             return;
         }
 
-        participantWS.addRemoveParticipants(addRemoveContactsJSON, new OnAPICallCompleteListner() {
+        participantWS.addRemoveParticipants(addRemoveContactsJSON, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
                 try {
 
@@ -93,15 +83,13 @@ public class ParticipantManager {
                 }
 
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 listenerOnFailure.actionFailed(null, Action.ADDREMOVEPARTICIPANTS);
+
             }
         });
 
     }
-
-
 }

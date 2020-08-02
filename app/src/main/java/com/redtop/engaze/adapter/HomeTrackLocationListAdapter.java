@@ -104,11 +104,11 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         holder.txtPoke.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), event.EventId, AppContext.actionHandler);
+                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), event.eventId, AppContext.actionHandler);
             }
         });
 
-        if (ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
+        if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
             holder.txtExtend.setVisibility(View.VISIBLE);
         }
 
@@ -128,7 +128,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             public void onClick(View v) {
 
                 ProgressBar.showProgressBar("Please wait");
-                if (ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
+                if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
                     //Current user is initiator...so he can either end the event or remove the member.
                     if (event.getParticipantCount() <= 2) {
                         //End the event since it is a 1 to 1 event
@@ -155,7 +155,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                         ProgressBar.showProgressBar("Please wait");
                         event.ContactOrGroups.remove(event.getCurrentParticipant().getContact());
 
-                        JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.EventId);
+                        JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.eventId);
                         ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {
                             @Override
                             public void actionComplete(Action action) {
@@ -210,8 +210,8 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             public void onClick(View v) {
                 ProgressBar.showProgressBar("Please wait");
                 Intent intent = new Intent(mContext, RunningEventActivity.class);
-                intent.putExtra("EventId", event.EventId);
-                intent.putExtra("EventTypeId", event.EventType);
+                intent.putExtra("EventId", event.eventId);
+                intent.putExtra("EventTypeId", event.eventType);
                 mContext.startActivity(intent);
                 ProgressBar.hideProgressBar();
             }
@@ -230,13 +230,13 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             try {
-                calendar.setTime(sdf.parse(event.EndTime));
+                calendar.setTime(sdf.parse(event.endTime));
                 long diffMinutes = (calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
                 String timeLeft = DateUtil.getDurationText(diffMinutes);
 
                 calendar = Calendar.getInstance();
 
-                calendar.setTime(sdf.parse(event.StartTime));
+                calendar.setTime(sdf.parse(event.startTime));
                 String startTime = DateUtil.getTime(calendar);
 
                 timeInfoTxt = String.format(mContext.getResources().getString(R.string.track_location_timeinfo_text),
@@ -247,7 +247,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             }
 
         } else {
-            if (event.EventType == EventType.SHAREMYLOACTION) { // Share my Location
+            if (event.eventType == EventType.SHAREMYLOACTION) { // Share my Location
                 timeInfoTxt = "Awaiting response to your Share My Location Request";
             } else {
                 timeInfoTxt = "Awaiting response to your Track Buddy Request";

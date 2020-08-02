@@ -13,11 +13,11 @@ public class Duration implements Parcelable, DataModel {
 
     public static final long serialVersionUID = 1001715454105775832L;
     @Expose
-    private int timeInterval;
+    public int timeInterval;
     @Expose
-    private String period;
+    public String period;
     @Expose
-    private Boolean enabled;
+    public Boolean enabled;
 
 
     public Duration(int timeInterval, String period, Boolean enabled) {

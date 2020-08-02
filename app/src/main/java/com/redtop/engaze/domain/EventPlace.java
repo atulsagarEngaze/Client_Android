@@ -11,15 +11,15 @@ import android.os.Parcelable;
 // this can be a person from contact list or can be a group which will be resolved to actual contact at server
 public class EventPlace  implements Parcelable, Serializable{
 	@Expose
-	private String name;
+	public String name;
 	@Expose
-	private String address;
+	public String address;
 	@Expose
-	private transient  LatLng latLang;
+	public transient  LatLng latLang;
 	@Expose
-	private double latitude;
+	public double latitude;
 	@Expose
-	private double longitude;
+	public double longitude;
 	
 	public EventPlace( String name, String address, LatLng latLang) {
 		

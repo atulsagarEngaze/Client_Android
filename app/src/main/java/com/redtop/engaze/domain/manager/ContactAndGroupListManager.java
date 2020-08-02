@@ -19,7 +19,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
@@ -149,31 +149,29 @@ public class ContactAndGroupListManager {
             return;
         }
 
-        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListner() {
+        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONObject>() {
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 try {
-                        Hashtable<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
-                        InternalCaching.saveRegisteredContactListToCache(registeredContacts);
-                        InternalCaching.saveContactListToCache(contactsAndgroups);
-                        PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-                        listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
+                    Hashtable<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
+                    InternalCaching.saveRegisteredContactListToCache(registeredContacts);
+                    InternalCaching.saveContactListToCache(contactsAndgroups);
+                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
+                    listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
 
                 } catch (Exception ex) {
                     Log.d(TAG, ex.toString());
                     ex.printStackTrace();
                     listnerOnFailure.RefreshMemberListComplete(null);
                 }
-
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 listnerOnFailure.RefreshMemberListComplete(null);
-
             }
         });
+
     }
 
     private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONObject response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
@@ -184,8 +182,8 @@ public class ContactAndGroupListManager {
             return registeredContacts;
         }
 
-        for(ContactOrGroup cg : contactsAndgroups.values()){
-            if (cg.getThumbnailUri() == null||cg.getThumbnailUri()=="") {
+        for (ContactOrGroup cg : contactsAndgroups.values()) {
+            if (cg.getThumbnailUri() == null || cg.getThumbnailUri() == "") {
                 cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
                 String startingchar = cg.getName().substring(0, 1);
                 if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {

@@ -18,56 +18,56 @@ public class Event implements DataModel {
      */
     public static final long serialVersionUID = 1602715454105775832L;
     @Expose
-    public String EventId;
+    public String eventId;
 
     @Expose
-    public String Name;
+    public String name;
 
     @Expose
-    public EventType EventType;
+    public EventType eventType;
 
     @Expose
-    public String Description;
+    public String description;
 
     @Expose
-    public String StartTime;
+    public String startTime;
 
     @Expose
-    public String EndTime;
+    public String endTime;
 
     @Expose
-    public Duration Duration;
+    public Duration duration;
 
     @Expose
-    public Duration Tracking;
+    public Duration tracking;
 
     @Expose
-    public EventState TrackingState;
+    public EventState trackingState;
 
     @Expose
-    public String InitiatorId;
+    public String initiatorId;
 
     @Expose
-    public String InitiatorName;
+    public String initiatorName;
 
     @Expose
-    public EventState State;
+    public EventState state;
 
     @Expose
-    public EventPlace Destination;
+    public EventPlace destination;
 
     @Expose
-    public Reminder Reminder;
+    public Reminder reminder;
 
     @Expose
-    public ArrayList<EventParticipant> Participants = new ArrayList<>();
+    public ArrayList<EventParticipant> participants = new ArrayList<>();
 
     @Expose
-    private EventParticipant CurrentParticipant;
+    private EventParticipant currentParticipant;
 
-    public Date StartTimeInDateFormat;
-    public Date EndTimeInDateFormat;
-    public Boolean IsTrackingRequired;
+    public Date startTimeInDateFormat;
+    public Date endTimeInDateFormat;
+    public Boolean isTrackingRequired;
 
 
     public ArrayList<EventParticipant> ReminderEnabledMembers;
@@ -97,18 +97,18 @@ public class Event implements DataModel {
                  Integer reminderOffset, String reminderType, Integer trackingStartOffset, ArrayList<ContactOrGroup> contactOrGroups,
                  Boolean isQuickEvent) {
         super();
-        this.EventId = eventId;
-        this.Name = name;
-        this.EventType = eventType;
-        this.Description = description;
-        this.StartTime = startTime;
-        this.EndTime = endTime;
-        this.Duration = duration;
-        this.InitiatorId = initiatorId;
-        this.InitiatorName = initiatorName;
-        this.State = state;
+        this.eventId = eventId;
+        this.name = name;
+        this.eventType = eventType;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
+        this.initiatorId = initiatorId;
+        this.initiatorName = initiatorName;
+        this.state = state;
 
-        this.IsTrackingRequired = isTrackingRequired;
+        this.isTrackingRequired = isTrackingRequired;
         this.ContactOrGroups = contactOrGroups;
         this.NotificationIds = new ArrayList<Integer>();
     }
@@ -121,19 +121,19 @@ public class Event implements DataModel {
                  Integer reminderOffset, String reminderType, Integer trackingStartOffset,
                  Boolean isQuickEvent) {
         super();
-        this.EventId = eventId;
-        this.Name = name;
-        this.EventType = eventType;
-        this.Description = description;
-        this.Destination = destination;
-        this.StartTime = startTime;
-        this.EndTime = endTime;
-        this.Duration = duration;
-        this.InitiatorId = initiatorId;
-        this.InitiatorName = initiatorName;
-        this.State = state;
-        this.IsTrackingRequired = isTrackingRequired;
-        this.Participants = members;
+        this.eventId = eventId;
+        this.name = name;
+        this.eventType = eventType;
+        this.description = description;
+        this.destination = destination;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
+        this.initiatorId = initiatorId;
+        this.initiatorName = initiatorName;
+        this.state = state;
+        this.isTrackingRequired = isTrackingRequired;
+        this.participants = members;
         this.NotificationIds = new ArrayList<Integer>();
     }
 
@@ -144,24 +144,24 @@ public class Event implements DataModel {
     }
 
     public void setCurrentParticipant(EventParticipant participant){
-        this.CurrentParticipant = participant;
+        this.currentParticipant = participant;
     }
     public  EventParticipant getCurrentParticipant() {
-        if (CurrentParticipant == null) {
-            for (EventParticipant participant : this.Participants) {
+        if (currentParticipant == null) {
+            for (EventParticipant participant : this.participants) {
                 if (participant.getUserId() == AppContext.context.loginId) {
-                    this.CurrentParticipant = participant;
+                    this.currentParticipant = participant;
                 }
             }
         }
-        return this.CurrentParticipant;
+        return this.currentParticipant;
     }
 
     public EventParticipant getParticipant(String userId) {
 
         EventParticipant member = null;
-        if (this.Participants != null && this.Participants.size() > 0) {
-            for (EventParticipant mem : this.Participants) {
+        if (this.participants != null && this.participants.size() > 0) {
+            for (EventParticipant mem : this.participants) {
                 if (mem.getUserId().equalsIgnoreCase(userId.toLowerCase())) {
                     member = mem;
                     break;
@@ -176,8 +176,8 @@ public class Event implements DataModel {
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
 
-        if (this.Participants != null && this.Participants.size() > 0) {
-            for (EventParticipant mem : this.Participants) {
+        if (this.participants != null && this.participants.size() > 0) {
+            for (EventParticipant mem : this.participants) {
                 if (mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString())) {
                     memStatus.add(mem);
                 }
@@ -190,8 +190,8 @@ public class Event implements DataModel {
 
 
     public int getParticipantCount() {
-        if (this.Participants != null) {
-            return this.Participants.size();
+        if (this.participants != null) {
+            return this.participants.size();
         } else {
             return 0;
         }

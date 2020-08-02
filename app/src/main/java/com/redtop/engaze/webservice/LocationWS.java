@@ -2,32 +2,30 @@ package com.redtop.engaze.webservice;
 
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 
 import org.json.JSONObject;
 
 public class LocationWS extends BaseWebService implements ILocationWS {
 
     public void updateLocation(JSONObject jsonObject,
-                                      final OnAPICallCompleteListner listnerOnSuccess,
-                                      final OnAPICallCompleteListner listnerOnFailure) {
+                                      final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             String url = MAP_API_URL + ApiUrl.USER_LOCATION_UPLOAD;
 
             Log.d(TAG, "Calling URL:" + url);
 
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 
     public void getLocationsFromServer(String userId, String eventId,
-                                              final OnAPICallCompleteListner listnerOnSuccess,
-                                              final OnAPICallCompleteListner listnerOnFailure) {
+                                              final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
             JSONObject jsonObject = new JSONObject();
@@ -38,12 +36,12 @@ public class LocationWS extends BaseWebService implements ILocationWS {
             String url = MAP_API_URL + ApiUrl.USER_LOCATION;
             Log.d(TAG, "Calling URL:" + url);
 
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 }

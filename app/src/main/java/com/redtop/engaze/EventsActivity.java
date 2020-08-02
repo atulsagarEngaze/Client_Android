@@ -258,7 +258,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		ArrayList<Event> pl =  new ArrayList<Event>();
 		ArrayList<Event> dl =  new ArrayList<Event>();
 		for(Event ed : eventList){
-			if(ed.EventType!= EventType.TRACKBUDDY){
+			if(ed.eventType != EventType.TRACKBUDDY){
 			switch (ed.getCurrentParticipant().getAcceptanceStatus()) {
 			case ACCEPTED:
 				al.add(ed);
@@ -363,14 +363,14 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 			case R.id.context_action_accept:
 
-				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.EventId,
+				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.eventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.EventId,
+				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.eventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
@@ -386,7 +386,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 				return true;
 			case R.id.context_action_delete:
 
-				if(ParticipantService.isCurrentUserInitiator(event.InitiatorId)){
+				if(ParticipantService.isCurrentUserInitiator(event.initiatorId)){
 
 					AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
 					// adb.setView(alertDialogView);

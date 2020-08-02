@@ -69,27 +69,27 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         }
         final Event ed = mEventList.get(i);
         viewHolder.event = ed;
-        ContactOrGroup cg = ContactAndGroupListManager.getContact(ed.InitiatorId);
+        ContactOrGroup cg = ContactAndGroupListManager.getContact(ed.initiatorId);
         if (cg != null) {
             viewHolder.profileImage.setBackground(cg.getIconImageDrawable(mContext));
         } else {
             viewHolder.profileImage.setBackground(ContactOrGroup.getAppUserIconDrawable());
         }
-        if (ParticipantService.isCurrentUserInitiator(ed.InitiatorId)) {
+        if (ParticipantService.isCurrentUserInitiator(ed.initiatorId)) {
             viewHolder.txtInitiator.setText("You");
         } else {
-            viewHolder.txtInitiator.setText(ed.InitiatorName);
+            viewHolder.txtInitiator.setText(ed.initiatorName);
         }
 
         //viewHolder.txtEventID.setText(ed.EventId);
-        if (ed.Destination == null) {
+        if (ed.destination == null) {
             viewHolder.rlLocationSection.setVisibility(View.GONE);
         } else {
             viewHolder.rlLocationSection.setVisibility(View.VISIBLE);
 
-            viewHolder.txtLocation.setText(AppUtility.createTextForDisplay(ed.Destination.getName(), Constants.EVENTS_ACTIVITY_LOCATION_TEXT_LENGTH));
+            viewHolder.txtLocation.setText(AppUtility.createTextForDisplay(ed.destination.getName(), Constants.EVENTS_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
-        String title = ed.Name;
+        String title = ed.name;
         title = title.substring(0, 1).toUpperCase() + title.substring(1);
         viewHolder.txtEventTile.setText(title);
 
@@ -101,8 +101,8 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
-            Date startDate = originalformat.parse(ed.StartTime);
-            Date endDate = originalformat.parse(ed.EndTime);
+            Date startDate = originalformat.parse(ed.startTime);
+            Date endDate = originalformat.parse(ed.endTime);
             Date currentDate = Calendar.getInstance().getTime();
 
             if (endDate.getTime() >= currentDate.getTime() && currentDate.getTime() > startDate.getTime()) {
@@ -128,7 +128,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             viewHolder.txtEventTimeToStart.setText(setTimeToStartText(cal));
 
-            cal.add(Calendar.MINUTE, ed.Tracking.getOffSetInMinutes() * -1);
+            cal.add(Calendar.MINUTE, ed.tracking.getOffSetInMinutes() * -1);
 
 
             if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
@@ -185,10 +185,10 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext, ShowLocationActivity.class);
-                intent.putExtra(IntentConstants.DESTINATION_LOCATION, ed.Destination.getName());
-                intent.putExtra("DestinatonAddress", ed.Destination.getAddress());
-                intent.putExtra("DestinatonLatitude", ed.Destination.getLatitude());
-                intent.putExtra("DestinatonLongitude", ed.Destination.getLongitude());
+                intent.putExtra(IntentConstants.DESTINATION_LOCATION, ed.destination.getName());
+                intent.putExtra("DestinatonAddress", ed.destination.getAddress());
+                intent.putExtra("DestinatonLatitude", ed.destination.getLatitude());
+                intent.putExtra("DestinatonLongitude", ed.destination.getLongitude());
                 mContext.startActivity(intent);
 
                 if (((EventsActivity) mContext).mActionMode != null) {
@@ -200,11 +200,11 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         viewHolder.llParticipants.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ed.Participants != null) {
+                if (ed.participants != null) {
                     Intent intent = new Intent(mContext, EventParticipantsInfo.class);
-                    intent.putExtra("EventMembers", ed.Participants);
-                    intent.putExtra("InitiatorID", ed.InitiatorId);
-                    intent.putExtra("EventId", ed.EventId);
+                    intent.putExtra("EventMembers", ed.participants);
+                    intent.putExtra("InitiatorID", ed.initiatorId);
+                    intent.putExtra("EventId", ed.eventId);
                     mContext.startActivity(intent);
 
                     if (((EventsActivity) mContext).mActionMode != null) {
@@ -241,11 +241,11 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
     }
 
     private void setDescriptionLayout(Event ed, EventViewHolder viewHolder) {
-        if (ed.Description.isEmpty()) {
+        if (ed.description.isEmpty()) {
             viewHolder.llEventDescription.setVisibility(View.GONE);
         } else {
             viewHolder.llEventDescription.setVisibility(View.VISIBLE);
-            final String description = ed.Description;
+            final String description = ed.description;
             viewHolder.txtEventDesc.setText(description);
         }
     }
@@ -312,7 +312,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
                                     trackingStatus) {
                         Intent intent = new Intent(mContext, RunningEventActivity.class);
-                        intent.putExtra("EventId", event.EventId);
+                        intent.putExtra("EventId", event.eventId);
                         mContext.startActivity(intent);
                         if (((EventsActivity) mContext).mActionMode != null) {
                             ((EventsActivity) mContext).mActionMode.finish();
@@ -373,7 +373,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
             itemMuteUnmute.setIcon(dr);
 
-            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.InitiatorId)) {
+            if (this.event.getCurrentParticipant().getUserId().equalsIgnoreCase(this.event.initiatorId)) {
                 itemAccept.setVisible(false);
                 itemDeclined.setVisible(false);
                 if (this.runningStatus || this.trackingStatus) {

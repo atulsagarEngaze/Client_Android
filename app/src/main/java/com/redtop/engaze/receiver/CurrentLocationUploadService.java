@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.app.Config;
@@ -28,7 +29,7 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
         super(context);
     }
 
-    public static void register(Context context){
+    public static void register(Context context) {
 
         CurrentLocationUploadService locationReceiver = new CurrentLocationUploadService(context);
         locationReceiver.mFilter = new IntentFilter();
@@ -59,10 +60,20 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
 
     private void updateCurrentLocationToServer(final Location currentLocation, final Context context) {
 
-        LocationManager.updateLocationToServer(context, currentLocation, PreffManager.getPref(Constants.LOGIN_ID), response -> {
-            isUpdateInProgress = false;
-            lastLocation = currentLocation;
-        }, (msg, action) -> isUpdateInProgress = false);
+        LocationManager.updateLocationToServer(context,
+                currentLocation,
+                PreffManager.getPref(Constants.LOGIN_ID), new OnAPICallCompleteListener() {
+                    @Override
+                    public void apiCallSuccess(Object response) {
+                        isUpdateInProgress = false;
+                        lastLocation = currentLocation;
+                    }
+
+                    @Override
+                    public void apiCallFailure() {
+                        isUpdateInProgress = false;
+                    }
+                });
     }
 
 }

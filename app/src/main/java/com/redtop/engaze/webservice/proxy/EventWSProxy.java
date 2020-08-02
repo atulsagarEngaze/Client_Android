@@ -1,8 +1,8 @@
-package com.redtop.engaze.webservice.proxy;
+/*package com.redtop.engaze.webservice.proxy;
 
 
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventPlace;
@@ -24,92 +24,93 @@ public class EventWSProxy implements IEventWS {
         }
     }
 
-    public void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
 
             jsonObject.put("EventId", AppUtility.getRandamNumber());
 
-            listnerOnSuccess.apiCallComplete(jsonObject);
+            listnerOnSuccess.apiCallSuccess(jsonObject);
 
         } catch (Exception ex) {
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
         }
     }
 
-    public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
         }
     }
 
-    public void endEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void endEvent(final String eventID, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
 
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
-
-        }
-    }
-
-    public void leaveEvent(final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
-        try {
-
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
-
-        } catch (Exception ex) {
-
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
 
         }
     }
 
-    public void RefreshEventListFromServer(final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void leaveEvent(final String eventID, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
 
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
+
         }
     }
 
-    public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void RefreshEventListFromServer(final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
+
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
         }
     }
 
-    public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
-
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
         }
     }
 
-    public void getEventDetail(String eventid, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
-
+    public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
         try {
-
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
 
-            listnerOnFailure.apiCallComplete(null);
+            listnerOnFailure.apiCallSuccess(null);
+        }
+    }
+
+    public void getEventDetail(String eventid, final OnAPICallCompleteListener listnerOnSuccess, final OnAPICallCompleteListener listnerOnFailure) {
+
+        try {
+
+            listnerOnSuccess.apiCallSuccess(fakeJsonResponse);
+
+        } catch (Exception ex) {
+
+            listnerOnFailure.apiCallSuccess(null);
         }
     }
 
 }
+*/

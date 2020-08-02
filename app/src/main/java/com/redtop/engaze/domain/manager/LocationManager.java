@@ -3,9 +3,9 @@ package com.redtop.engaze.domain.manager;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.JsonParser;
@@ -21,10 +21,9 @@ public class LocationManager {
     private final static String TAG = LocationManager.class.getName();
     private final static ILocationWS locationWS = new LocationWSProxy();
 
-    public static void updateLocationToServer(final Context context, final Location location, final String loginId, final OnAPICallCompleteListner listnerOnSuccess,
-                                              final OnActionFailedListner listnerOnFailure ) {
+    public static void updateLocationToServer(final Context context, final Location location, final String loginId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         //this will be called from background service, app may not be running at that time
-        if(!AppUtility.isNetworkAvailable(context)){
+        if (!AppUtility.isNetworkAvailable(context)) {
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }
@@ -33,7 +32,7 @@ public class LocationManager {
         UsersLocationDetail usersLocationDetail = new UsersLocationDetail(
                 loginId,
                 location.getLatitude(),
-                location.getLongitude(), "1.0","0");
+                location.getLongitude(), "1.0", "0");
 
         JSONObject jsonObject = null;
         try {
@@ -42,34 +41,32 @@ public class LocationManager {
             e.printStackTrace();
         }
 
-        locationWS.updateLocation( jsonObject, new OnAPICallCompleteListner() {
+        locationWS.updateLocation(jsonObject, new OnAPICallCompleteListener<JSONObject>() {
             @Override
-            public void apiCallComplete(JSONObject response) {
-                listnerOnSuccess.apiCallComplete(response);
+            public void apiCallSuccess(JSONObject response) {
+                onAPICallCompleteListener.apiCallSuccess(response);
             }
-        }, new OnAPICallCompleteListner() {
+
             @Override
-            public void apiCallComplete(JSONObject response) {
-                listnerOnFailure.actionFailed(null, Action.SAVEEVENTSHAREMYLOCATION);
+            public void apiCallFailure() {
+                onAPICallCompleteListener.apiCallFailure();
             }
         });
     }
 
     public static void getLocationsFromServer(String userId, String eventId,
-                                              final OnAPICallCompleteListner listnerOnSuccess,
-                                              final OnAPICallCompleteListner listnerOnFailure){
+                                              final OnAPICallCompleteListener onAPICallCompleteListener) {
 
 
-
-        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListner() {
+        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListener<JSONObject>() {
             @Override
-            public void apiCallComplete(JSONObject response) {
-                listnerOnSuccess.apiCallComplete(response);
+            public void apiCallSuccess(JSONObject response) {
+                onAPICallCompleteListener.apiCallSuccess(response);
             }
-        }, new OnAPICallCompleteListner() {
+
             @Override
-            public void apiCallComplete(JSONObject response) {
-                listnerOnFailure.apiCallComplete(response);
+            public void apiCallFailure() {
+                onAPICallCompleteListener.apiCallFailure();
             }
         });
 

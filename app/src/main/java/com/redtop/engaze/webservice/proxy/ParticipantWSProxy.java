@@ -2,7 +2,7 @@ package com.redtop.engaze.webservice.proxy;
 
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.webservice.BaseWebService;
 import com.redtop.engaze.webservice.IParticipantWS;
 
@@ -24,29 +24,28 @@ public class ParticipantWSProxy extends BaseWebService implements IParticipantWS
     }
 
     public void pokeParticipants(JSONObject pokeAllContactsJSON,
-                                 final OnAPICallCompleteListner listnerOnSuccess,
-                                 final OnAPICallCompleteListner listnerOnFailure) {
+                                 final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            onAPICallCompleteListener.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
 
     }
 
-    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            listnerOnSuccess.apiCallComplete(fakeJsonResponse);
+            onAPICallCompleteListener.apiCallSuccess(fakeJsonResponse);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 }

@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -257,10 +257,10 @@ public class ProfileActivity extends BaseActivity {
 		try {
 			// get GCMID/DeviceID/MobileNumber from Preferences
 			mJRequestobj.put("GCMClientId", PreffManager.getPref(Constants.GCM_REGISTRATION_TOKEN));
-			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListner() {
+			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListener<JSONObject>() {
 
 				@Override
-				public void apiCallComplete(JSONObject response) {
+				public void apiCallSuccess(JSONObject response) {
 					if(mProgress.isShowing()){
 						mProgress.hide();
 					}
@@ -268,6 +268,16 @@ public class ProfileActivity extends BaseActivity {
 					Intent intent = new Intent(mContext, SplashActivity.class);
 					startActivity(intent);
 
+				}
+
+				@Override
+				public void apiCallFailure() {
+					if(mProgress.isShowing()){
+						mProgress.hide();
+					}
+					Toast.makeText(getApplicationContext(),
+							getResources().getString(R.string.message_userReg_errorSaving),
+							Toast.LENGTH_LONG).show();
 				}
 			}, AppContext.actionHandler);
 

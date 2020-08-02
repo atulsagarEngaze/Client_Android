@@ -140,14 +140,14 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static void saveEventToCache(Event event) {
         Hashtable<String, Event> cachedEntries;
-        EventType eventType = event.EventType;
+        EventType eventType = event.eventType;
         if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
             cachedEntries = getCachedTrackEventHashMap();
-            cachedEntries.put(event.EventId, event);
+            cachedEntries.put(event.eventId, event);
             writeObject(CACHE_TRACK_EVENTS, cachedEntries);
         } else {
             cachedEntries = getCachedEventHashMap();
-            cachedEntries.put(event.EventId, event);
+            cachedEntries.put(event.eventId, event);
             writeObject(CACHE_EVENTS, cachedEntries);
         }
     }
@@ -193,7 +193,7 @@ public final class InternalCaching {
             List<String> tobeRemoved = new ArrayList<String>();
             for (Event event : eventList) {
                 if (EventService.isEventPast(event)) {
-                    tobeRemoved.add(event.EventId);
+                    tobeRemoved.add(event.eventId);
                 }
             }
             if (tobeRemoved.size() < 0) {
@@ -213,8 +213,8 @@ public final class InternalCaching {
             Hashtable<String, Event> cachedEntriesForTE = new Hashtable<String, Event>();
             EventType eventType;
             for (Event event : events) {
-                eventId = event.EventId;
-                eventType = event.EventType;
+                eventId = event.eventId;
+                eventType = event.eventType;
                 if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
                     ed = oldcachedEntriesForTE.get(eventId);
                 } else {

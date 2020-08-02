@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +18,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.IActionHandler;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
@@ -44,10 +45,8 @@ import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
-import com.redtop.engaze.service.MyCurrentLocationListener;
 import com.redtop.engaze.webservice.EventWS;
 import com.redtop.engaze.webservice.IEventWS;
-import com.redtop.engaze.webservice.proxy.EventWSProxy;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -65,7 +64,7 @@ public class EventManager {
         if (list != null) {
             for (Event event : list) {
                 if (event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
-                        && event.State == EventState.TRACKING_ON) {
+                        && event.state == EventState.TRACKING_ON) {
                     runningList.add(event);
                 }
             }
@@ -103,7 +102,7 @@ public class EventManager {
             return;
         }
 
-        event.State = EventState.TRACKING_ON;
+        event.state = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
 
     }
@@ -117,7 +116,7 @@ public class EventManager {
             return;
         }
 
-        event.State = EventState.TRACKING_ON;
+        event.state = EventState.TRACKING_ON;
         InternalCaching.saveEventToCache(event);
     }
 
@@ -129,7 +128,7 @@ public class EventManager {
             Log.d(TAG, message);
             return;
         }
-        event.State = EventState.EVENT_END;
+        event.state = EventState.EVENT_END;
         EventNotificationManager.cancelAllNotifications(event);
         InternalCaching.removeEventFromCache(eventid);
         checkForReccurrence(event);
@@ -144,8 +143,8 @@ public class EventManager {
                 return;
             }
 
-            event.StartTime = DateUtil.convertToUtcDateTime(event.StartTimeInDateFormat, null);
-            event.EndTime = DateUtil.convertToUtcDateTime(event.EndTimeInDateFormat, null);//parseFormat.format(endDate);
+            event.startTime = DateUtil.convertToUtcDateTime(event.startTimeInDateFormat, null);
+            event.endTime = DateUtil.convertToUtcDateTime(event.endTimeInDateFormat, null);//parseFormat.format(endDate);
 
             JSONObject jObject = new JSONObject(AppContext.jsonParser.Serialize(event));
             /*jObject.remove("Participants");
@@ -156,10 +155,10 @@ public class EventManager {
             jObject.put("Participants", AppContext.jsonParser.Serialize(participants));*/
 
 
-            eventWS.CreateEvent(jObject, new OnAPICallCompleteListner() {
+            eventWS.CreateEvent(jObject, new OnAPICallCompleteListener<JSONObject>() {
 
                 @Override
-                public void apiCallComplete(JSONObject response) {
+                public void apiCallSuccess(JSONObject response) {
 
 
                     try {
@@ -167,23 +166,23 @@ public class EventManager {
 
                         if (response != null) {
                             Event eventData = new JsonParser().deserialize(response.toString(), Event.class);
-                            eventData.StartTime = DateUtil.convertUtcToLocalDateTime(event.StartTime, null);
-                            eventData.EndTime = DateUtil.convertUtcToLocalDateTime(event.EndTime, null);
+                            eventData.startTime = DateUtil.convertUtcToLocalDateTime(event.startTime, null);
+                            eventData.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
 
                             ParticipantService.attacheContactGroupToParticipants(eventData);
-                            eventData.Participants.add(eventData.getCurrentParticipant());
+                            eventData.participants.add(eventData.getCurrentParticipant());
 
                             EventService.setEndEventAlarm(eventData);
-                            if (eventData.EventType == EventType.QUIK) {
-                                eventData.State = EventState.TRACKING_ON;
-                            } else if (eventData.EventType == EventType.GENERAL) {
+                            if (eventData.eventType == EventType.QUIK) {
+                                eventData.state = EventState.TRACKING_ON;
+                            } else if (eventData.eventType == EventType.GENERAL) {
                                 EventService.setTracking(eventData);
                                 EventService.setEventStarAlarm(eventData);
                                 if (reminder != null) {
                                     EventService.setEventReminder(eventData);
 
                                 }
-                                eventData.State = EventState.EVENT_OPEN;
+                                eventData.state = EventState.EVENT_OPEN;
                             }
 
                             EventNotificationManager.cancelNotification(eventData);
@@ -200,10 +199,9 @@ public class EventManager {
                     }
 
                 }
-            }, new OnAPICallCompleteListner() {
 
                 @Override
-                public void apiCallComplete(JSONObject response) {
+                public void apiCallFailure() {
                     listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                 }
             });
@@ -212,7 +210,7 @@ public class EventManager {
         }
     }
 
-    public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner listnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner actionlistnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
@@ -231,10 +229,10 @@ public class EventManager {
         }
 
 
-        eventWS.saveUserResponse(userAcceptanceResponse, eventid, new OnAPICallCompleteListner() {
+        eventWS.saveUserResponse(userAcceptanceResponse, eventid, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
@@ -244,10 +242,10 @@ public class EventManager {
                                 setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
                         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-                        Date startDate = originalformat.parse(event.StartTime);
+                        Date startDate = originalformat.parse(event.startTime);
                         Date currentDate = Calendar.getInstance().getTime();
                         if (currentDate.getTime() >= startDate.getTime()) { //quick event
-                            event.State = EventState.TRACKING_ON;
+                            event.state = EventState.TRACKING_ON;
                         } else {
                             EventService.setEventStarAlarm(event);
                             EventService.setEventReminder(event);
@@ -259,7 +257,7 @@ public class EventManager {
                     }
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
-                    listnerOnSuccess.actionComplete(Action.SAVEUSERRESPONSE);
+                    actionlistnerOnSuccess.actionComplete(Action.SAVEUSERRESPONSE);
 
 
                 } catch (Exception ex) {
@@ -269,13 +267,9 @@ public class EventManager {
                 }
 
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                if (response != null) {
-                    Log.d(TAG, "EventResponse:" + response.toString());
-                }
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.SAVEUSERRESPONSE);
             }
         });
@@ -289,10 +283,10 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.GETEVENTDATAFROMSERVER);
             return;
         }
-        eventWS.getEventDetail(eventid, new OnAPICallCompleteListner() {
+        eventWS.getEventDetail(eventid, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
                 try {
 
@@ -300,7 +294,7 @@ public class EventManager {
                     List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                     Event event = eventList.get(0);
                     if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
-                        event.State = EventState.TRACKING_ON;
+                        event.state = EventState.TRACKING_ON;
                     }
                     InternalCaching.saveEventToCache(event);
                     EventService.setEndEventAlarm(event);
@@ -312,17 +306,11 @@ public class EventManager {
                     ex.printStackTrace();
                     listnerOnFailure.actionFailed(null, Action.GETEVENTDATAFROMSERVER);
                 }
-
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                if (response != null) {
-                    Log.d(TAG, "EventResponse:" + response.toString());
-                }
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.GETEVENTDATAFROMSERVER);
-
             }
         });
     }
@@ -345,17 +333,15 @@ public class EventManager {
             return;
         }
 
-        final String eventid = event.EventId;
+        final String eventid = event.eventId;
 
-        eventWS.leaveEvent(eventid, new OnAPICallCompleteListner() {
+        eventWS.leaveEvent(eventid, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
-
-
                     event.getCurrentParticipant().
                             setAcceptanceStatus(AcceptanceStatus.DECLINED);
 
@@ -370,13 +356,9 @@ public class EventManager {
                 }
 
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                if (response != null) {
-                    Log.d(TAG, "EventResponse:" + response.toString());
-                }
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.LEAVEEVENT);
             }
         });
@@ -398,12 +380,12 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.ENDEVENT);
             return;
         }
-        final String eventid = event.EventId;
+        final String eventid = event.eventId;
 
-        eventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
+        eventWS.endEvent(event.eventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
                 try {
 
@@ -414,7 +396,7 @@ public class EventManager {
 
                     // Remove the event related items from preferences
                     PreffManager.removePref(eventid);
-                    for (EventParticipant i : event.Participants) {
+                    for (EventParticipant i : event.participants) {
                         PreffManager.removePref(i.getUserId());
                     }
 
@@ -426,17 +408,13 @@ public class EventManager {
                     ex.printStackTrace();
                     listnerOnFailure.actionFailed(null, Action.ENDEVENT);
                 }
-
-
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.ENDEVENT);
             }
         });
-
     }
 
     public static void deleteEvent(final Event event, final IActionHandler actionHandler) {
@@ -453,19 +431,19 @@ public class EventManager {
             actionHandler.actionFailed(message, Action.DELETEEVENT);
             return;
         }
-        final String eventid = event.EventId;
+        final String eventid = event.eventId;
 
-        eventWS.endEvent(event.EventId, new OnAPICallCompleteListner() {
+        eventWS.endEvent(event.eventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
                 try {
                     EventService.RemoveEndEventAlarm(eventid);
                     InternalCaching.removeEventFromCache(eventid);
                     //LocalBroadCast
                     Intent intent = new Intent(IntentConstants.EVENT_DELETE_BY_INITIATOR);
-                    intent.putExtra("eventId", event.EventId);
+                    intent.putExtra("eventId", event.eventId);
                     LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
                     actionHandler.actionComplete(Action.DELETEEVENT);
 
@@ -477,15 +455,12 @@ public class EventManager {
                 }
 
             }
-        }, new
 
-                OnAPICallCompleteListner() {
-
-                    @Override
-                    public void apiCallComplete(JSONObject response) {
-                        actionHandler.actionFailed(null, Action.DELETEEVENT);
-                    }
-                });
+            @Override
+            public void apiCallFailure() {
+                actionHandler.actionFailed(null, Action.DELETEEVENT);
+            }
+        });
     }
 
 
@@ -504,14 +479,14 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.CHANGEDESTINATION);
             return;
         }
-        final String eventId = event.EventId;
+        final String eventId = event.eventId;
 
-        eventWS.changeDestination(destinationPlace, eventId, new OnAPICallCompleteListner() {
+        eventWS.changeDestination(destinationPlace, eventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 try {
-                    event.Destination = destinationPlace;
+                    event.destination = destinationPlace;
                     InternalCaching.saveEventToCache(event);
                     listenerOnSuccess.actionComplete(Action.CHANGEDESTINATION);
                 } catch (Exception ex) {
@@ -520,14 +495,12 @@ public class EventManager {
                     listnerOnFailure.actionFailed(null, Action.CHANGEDESTINATION);
                 }
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.CHANGEDESTINATION);
             }
         });
-
     }
 
     public static void extendEventEndTime(final int i, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
@@ -545,25 +518,25 @@ public class EventManager {
             listnerOnFailure.actionFailed(message, Action.EXTENDEVENTENDTIME);
             return;
         }
-        final String eventid = event.EventId;
+        final String eventid = event.eventId;
 
-        eventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListner() {
+        eventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 try {
 
 
                     DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-                    Date endTime = writeFormat.parse(event.EndTime);
+                    Date endTime = writeFormat.parse(event.endTime);
                     Calendar cal = Calendar.getInstance();
 
                     cal.setTime(endTime);
                     cal.add(Calendar.MINUTE, i);
 
                     String newEndTime = writeFormat.format(cal.getTime());
-                    event.EndTime = newEndTime;
+                    event.endTime = newEndTime;
 
                     EventService.RemoveEndEventAlarm(eventid);
                     EventService.setEndEventAlarm(event);
@@ -576,14 +549,12 @@ public class EventManager {
                     listnerOnFailure.actionFailed(null, Action.EXTENDEVENTENDTIME);
                 }
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 listnerOnFailure.actionFailed(null, Action.EXTENDEVENTENDTIME);
             }
         });
-
     }
 
     public static void updateEventWithParticipantResponse(String eventid, String userId, String userName, int eventAcceptanceStateId, OnActionCompleteListner listnerOnSuccess, OnActionFailedListner listnerOnFailure) {
@@ -596,13 +567,13 @@ public class EventManager {
             return;
         }
         try {
-            for (EventParticipant em : event.Participants) {
+            for (EventParticipant em : event.participants) {
                 if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
                     em.setAcceptanceStatus(AcceptanceStatus.getStatus(eventAcceptanceStateId));
                 }
             }
             InternalCaching.saveEventToCache(event);
-            if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.InitiatorId)) {
+            if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
                 EventNotificationManager.showEventResponseNotification(AppContext.context, event, userName, eventAcceptanceStateId);
             }
             listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
@@ -624,7 +595,7 @@ public class EventManager {
             return;
         }
         try {
-            for (EventParticipant em : event.Participants) {
+            for (EventParticipant em : event.participants) {
                 if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
                     em.setAcceptanceStatus(AcceptanceStatus.DECLINED);
                 }
@@ -652,7 +623,7 @@ public class EventManager {
             return;
         }
         try {
-            event.State = EventState.EVENT_END;
+            event.state = EventState.EVENT_END;
             // Remove Event End Alarm and the entire event from cache
             EventService.RemoveEndEventAlarm(eventid);
             EventNotificationManager.cancelAllNotifications(event);
@@ -796,14 +767,14 @@ public class EventManager {
             return;
         }
 
-        eventWS.RefreshEventListFromServer(new OnAPICallCompleteListner() {
+        eventWS.RefreshEventListFromServer(new OnAPICallCompleteListener<String>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(String response) {
 
                 try {
 
-                    List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
+                    List<Event> eventList = EventParser.parseEventDetailList(new JSONArray(response));
                     EventService.RemovePastEvents(eventList);
                     EventService.upDateEventStatus(eventList);
                     InternalCaching.saveEventListToCache(eventList);
@@ -821,13 +792,9 @@ public class EventManager {
                 }
 
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                if (response != null) {
-                    Log.d(TAG, "EventResponse:" + response.toString());
-                }
+            public void apiCallFailure() {
                 if (listnerOnFailure != null) {
                     listnerOnFailure.actionFailed(null, Action.REFRESHEVENTLIST);
                 }
@@ -848,14 +815,10 @@ public class EventManager {
     private static void checkForReccurrence(Event event) {
         Boolean strIsReccurrence = event.IsRecurrence;
         if (strIsReccurrence != null && strIsReccurrence == true) {
-            refreshEventList(new OnRefreshEventListCompleteListner() {
+            refreshEventList(eventList -> {
+                Intent eventRefreshed = new Intent(Veranstaltung.EVENTS_REFRESHED);
+                LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(eventRefreshed);
 
-                @Override
-                public void RefreshEventListComplete(List<Event> eventList) {
-                    Intent eventRefreshed = new Intent(Veranstaltung.EVENTS_REFRESHED);
-                    LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(eventRefreshed);
-
-                }
             }, new OnActionFailedListner() {
 
                 @Override
@@ -885,34 +848,34 @@ public class EventManager {
         switch (inorOut) {
             case "LocationsOut":
                 for (Event e : list) {
-                    members = e.Participants;
+                    members = e.participants;
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
-                    eventType = e.EventType;
+                    eventType = e.eventType;
                     //Out going locations - 100 - Share my location - current user is initiator - add all members except me
-                    if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
+                    if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.initiatorId)) {
                         members.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }
                     }
                     //Out going locations 200 - Track Buddy - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getParticipant(e.InitiatorId), AcceptanceStatus.ACCEPTED));
+                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getParticipant(e.initiatorId), AcceptanceStatus.ACCEPTED));
                     }
                 }
                 break;
             case "locationsIn":
                 for (Event e : list) {
-                    members = e.Participants;
+                    members = e.participants;
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
-                    eventType = e.EventType;
+                    eventType = e.eventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.InitiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
-                        slist.add(new TrackLocationMember(e, e.getParticipant(e.InitiatorId), AcceptanceStatus.ACCEPTED));
+                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                        slist.add(new TrackLocationMember(e, e.getParticipant(e.initiatorId), AcceptanceStatus.ACCEPTED));
                     }
                     //In coming locations - 200 - track buddy - Current user is initiator - add all members except me
-                    else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.InitiatorId)) {
-                        e.Participants.remove(e.getCurrentParticipant());
+                    else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.initiatorId)) {
+                        e.participants.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
                             slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
                         }

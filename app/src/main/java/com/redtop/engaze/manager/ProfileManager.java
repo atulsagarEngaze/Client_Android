@@ -10,7 +10,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.webservice.IUserWS;
 import com.redtop.engaze.webservice.UserWS;
@@ -22,7 +22,7 @@ public class ProfileManager {
     private final static IUserWS userWS = new UserWS();
 
     public static void saveProfile(final Context context, final JSONObject jRequestobj,
-                                   final OnAPICallCompleteListner listnerOnSuccess,
+                                   final OnAPICallCompleteListener listnerOnSuccess,
                                    final OnActionFailedListner listnerOnFailure) {
 
         if (!AppContext.context.isInternetEnabled) {
@@ -33,10 +33,10 @@ public class ProfileManager {
 
         }
 
-        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListner() {
+        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
@@ -47,7 +47,7 @@ public class ProfileManager {
                         // save the loginid to preferences
                         PreffManager.setPref(Constants.LOGIN_ID, loginID);
                         PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
-                        listnerOnSuccess.apiCallComplete(response);
+                        listnerOnSuccess.apiCallSuccess(response);
                     } else {
 
                         listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
@@ -58,19 +58,11 @@ public class ProfileManager {
                     ex.printStackTrace();
                     listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
                 }
-
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
-                //for testing
-                //listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
-                PreffManager.setPref(Constants.LOGIN_ID, "94973d2a-614e-4b2c-8654-7e6b13cdc44e");
-                PreffManager.setPref(Constants.LOGIN_NAME, "Atul");
-                AppContext.context.loginId = "94973d2a-614e-4b2c-8654-7e6b13cdc44e";
-                AppContext.context.loginName = "Atul";
-                listnerOnSuccess.apiCallComplete(response);
+            public void apiCallFailure() {
+                listnerOnFailure.actionFailed(null, Action.SAVEPROFILE);
             }
         });
     }

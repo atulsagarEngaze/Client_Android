@@ -1,9 +1,8 @@
 package com.redtop.engaze.webservice;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.ContactOrGroup;
 
@@ -18,44 +17,41 @@ public class UserWS extends BaseWebService implements IUserWS {
     private final static String TAG = SmsWS.class.getName();
 
     public void saveProfile(JSONObject jRequestobj,
-                            final OnAPICallCompleteListner listnerOnSuccess,
-                            final OnAPICallCompleteListner listnerOnFailure) {
+                            final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            postData(jRequestobj, ApiUrl.ACCOUNT_REGISTER, listnerOnSuccess, listnerOnFailure);
+            postData(jRequestobj, ApiUrl.ACCOUNT_REGISTER, onAPICallCompleteListener);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 
-    public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
-                           final OnAPICallCompleteListner listnerOnFailure) {
+    public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
             String url = MAP_API_URL + "Routes.Contacts/InviteContact";
 
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 
     public void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
-                                             final OnAPICallCompleteListner listnerOnSuccess,
-                                             final OnAPICallCompleteListner listnerOnFailure) {
+                                             final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             JSONObject jsonObject = createContactsJSON(contactsAndgroups);
 
-            postData(jsonObject, ApiUrl.REGISTERED_CONTACTS, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, ApiUrl.REGISTERED_CONTACTS, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 

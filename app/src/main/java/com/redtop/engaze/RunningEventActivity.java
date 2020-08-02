@@ -62,7 +62,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
     private boolean isEventPast() {
         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
-            Date endDate = originalformat.parse(mEvent.EndTime);
+            Date endDate = originalformat.parse(mEvent.endTime);
             if (endDate.getTime() - Calendar.getInstance().getTimeInMillis() < 0) {
                 return true;
             }
@@ -232,7 +232,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu
         if (mEvent != null) {
-            if (ParticipantService.isCurrentUserInitiator(mEvent.InitiatorId)) {
+            if (ParticipantService.isCurrentUserInitiator(mEvent.initiatorId)) {
                 getMenuInflater().inflate(R.menu.menu_running_event_initiator, menu);
                 if ((mEvent.getParticipantsbyStatus(AcceptanceStatus.getStatus(1))).size() > 1) {
                     menu.removeItem(R.id.action_poke_all);

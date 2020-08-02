@@ -1,13 +1,9 @@
 package com.redtop.engaze;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -28,7 +24,6 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.enums.EventType;
-import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.utility.DateUtil;
@@ -36,7 +31,6 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.EventManager;
@@ -105,23 +99,23 @@ public abstract class BaseEventActivity extends BaseActivity {
                     break;
 
                 case REMINDER_REQUEST_CODE:
-                    createOrUpdateEvent.Reminder = data.getParcelableExtra("com.redtop.engaze.entity.Reminder");
+                    createOrUpdateEvent.reminder = data.getParcelableExtra("com.redtop.engaze.entity.Reminder");
                     SetReminderOffset();
                     SetReminderText();
                     break;
                 case TRACKING_REQUEST_CODE:
-                    createOrUpdateEvent.Tracking = data.getParcelableExtra("com.redtop.engaze.entity.Tracking");
+                    createOrUpdateEvent.tracking = data.getParcelableExtra("com.redtop.engaze.entity.Tracking");
                     SetTrackingText();
                     break;
 
                 case DURATION_REQUEST_CODE:
-                    createOrUpdateEvent.Duration = data.getParcelableExtra("com.redtop.engaze.entity.Duration");
+                    createOrUpdateEvent.duration = data.getParcelableExtra("com.redtop.engaze.entity.Duration");
                     SetDurationText();
                     break;
 
                 case LOCATION_REQUEST_CODE:
-                    createOrUpdateEvent.Destination = data.getParcelableExtra("DestinatonPlace");
-                    appLocationService.displayPlace(createOrUpdateEvent.Destination, mEventLocationTextView);
+                    createOrUpdateEvent.destination = data.getParcelableExtra("DestinatonPlace");
+                    appLocationService.displayPlace(createOrUpdateEvent.destination, mEventLocationTextView);
 
                     break;
 
@@ -130,11 +124,11 @@ public abstract class BaseEventActivity extends BaseActivity {
     }
 
     protected void SetDurationText() {
-        if (createOrUpdateEvent.Duration != null) {
-            mDurationTime = createOrUpdateEvent.Duration.getTimeInterval();
+        if (createOrUpdateEvent.duration != null) {
+            mDurationTime = createOrUpdateEvent.duration.getTimeInterval();
             String holder = "";
 
-            holder = DateUtil.getDurationText(createOrUpdateEvent.Duration.getOffSetInMinutes()).toLowerCase();
+            holder = DateUtil.getDurationText(createOrUpdateEvent.duration.getOffSetInMinutes()).toLowerCase();
             if (holder.equals("0")) {
                 holder = "0 minute";
 
@@ -152,23 +146,23 @@ public abstract class BaseEventActivity extends BaseActivity {
 
     protected void SetReminderOffset() {
 
-        if (createOrUpdateEvent.Reminder != null) {
-            switch (createOrUpdateEvent.Reminder.getPeriod()) {
+        if (createOrUpdateEvent.reminder != null) {
+            switch (createOrUpdateEvent.reminder.getPeriod()) {
                 case "minute":
-                    createOrUpdateEvent.Reminder.ReminderOffsetInMinute
-                            = createOrUpdateEvent.Reminder.getTimeInterval();
+                    createOrUpdateEvent.reminder.ReminderOffsetInMinute
+                            = createOrUpdateEvent.reminder.getTimeInterval();
                     break;
                 case "hour":
-                    createOrUpdateEvent.Reminder.ReminderOffsetInMinute
-                            = createOrUpdateEvent.Reminder.getTimeInterval() * 60;
+                    createOrUpdateEvent.reminder.ReminderOffsetInMinute
+                            = createOrUpdateEvent.reminder.getTimeInterval() * 60;
                     break;
                 case "day":
-                    createOrUpdateEvent.Reminder.ReminderOffsetInMinute
-                            = createOrUpdateEvent.Reminder.getTimeInterval() * 60 * 24;
+                    createOrUpdateEvent.reminder.ReminderOffsetInMinute
+                            = createOrUpdateEvent.reminder.getTimeInterval() * 60 * 24;
                     break;
                 case "week":
-                    createOrUpdateEvent.Reminder.ReminderOffsetInMinute
-                            = createOrUpdateEvent.Reminder.getTimeInterval() * 60 * 24 * 7;
+                    createOrUpdateEvent.reminder.ReminderOffsetInMinute
+                            = createOrUpdateEvent.reminder.getTimeInterval() * 60 * 24 * 7;
                     break;
             }
         }
@@ -177,10 +171,10 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected void SetReminderText() {
         TextView reminderOffsetText = (TextView) findViewById(R.id.ReminderOffeset);
 
-        if (createOrUpdateEvent.Reminder != null) {
+        if (createOrUpdateEvent.reminder != null) {
             String reminderText = "";
 
-            reminderText = DateUtil.getDurationText(createOrUpdateEvent.Reminder.ReminderOffsetInMinute)
+            reminderText = DateUtil.getDurationText(createOrUpdateEvent.reminder.ReminderOffsetInMinute)
                     .toLowerCase();
             if (reminderText.equals("0")) {
                 reminderText = "0 minute";
@@ -189,7 +183,7 @@ public abstract class BaseEventActivity extends BaseActivity {
                 reminderText = reminderText.replace("min", "minute");
                 reminderText = reminderText.replace("mins", "minutes");
             }
-            reminderText += " before through " + createOrUpdateEvent.Reminder.getNotificationType();
+            reminderText += " before through " + createOrUpdateEvent.reminder.getNotificationType();
 
             reminderOffsetText.setText(reminderText);
 
@@ -199,11 +193,11 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected void SetTrackingText() {
         TextView trackingOffsettext = (TextView) findViewById(R.id.TrackingStartOffeset);
 
-        if (createOrUpdateEvent.Tracking != null) {
+        if (createOrUpdateEvent.tracking != null) {
             String trackingText = "";
 
 
-            trackingText = DateUtil.getDurationText(createOrUpdateEvent.Tracking.getOffSetInMinutes()).toLowerCase();
+            trackingText = DateUtil.getDurationText(createOrUpdateEvent.tracking.getOffSetInMinutes()).toLowerCase();
             if (trackingText.equals("0")) {
                 trackingText = "0 minute";
 
@@ -243,28 +237,28 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         long trackingOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
+        startCal.setTime(createOrUpdateEvent.startTimeInDateFormat);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
 
         if (trackingOffset > diffMinutes) {
             trackingOffset = diffMinutes;
         }
 
-        createOrUpdateEvent.Tracking.setTimeInterval((int) trackingOffset);
+        createOrUpdateEvent.tracking.setTimeInterval((int) trackingOffset);
     }
 
     private void setReminderOffset() {
 
         long reminderOffset = 0;
         Calendar startCal = Calendar.getInstance();
-        startCal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
+        startCal.setTime(createOrUpdateEvent.startTimeInDateFormat);
         long diffMinutes = (startCal.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 60000;
         if (reminderOffset > diffMinutes) {
             reminderOffset = diffMinutes;
         }
 
-        createOrUpdateEvent.Reminder.setTimeInterval((int)reminderOffset);
-        createOrUpdateEvent.Reminder.ReminderOffsetInMinute = reminderOffset;
+        createOrUpdateEvent.reminder.setTimeInterval((int)reminderOffset);
+        createOrUpdateEvent.reminder.ReminderOffsetInMinute = reminderOffset;
 
     }
 
@@ -272,7 +266,7 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
 
-        EventManager.saveEvent(createOrUpdateEvent, isMeetNow, createOrUpdateEvent.Reminder, new OnEventSaveCompleteListner() {
+        EventManager.saveEvent(createOrUpdateEvent, isMeetNow, createOrUpdateEvent.reminder, new OnEventSaveCompleteListner() {
 
             @Override
             public void eventSaveComplete(Event event) {
@@ -282,17 +276,17 @@ public abstract class BaseEventActivity extends BaseActivity {
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
-                        if (createOrUpdateEvent.Destination != null) {//when event is created without destination
-                            DestinationCacher.cacheDestination(createOrUpdateEvent.Destination, mContext);
+                        if (createOrUpdateEvent.destination != null) {//when event is created without destination
+                            DestinationCacher.cacheDestination(createOrUpdateEvent.destination, mContext);
                         }
                     }
                 });
 
-                if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION) {
+                if (createOrUpdateEvent.eventType == EventType.SHAREMYLOACTION) {
                     gotoHomePage();
-                } else if (createOrUpdateEvent.EventType == EventType.TRACKBUDDY ||
-                        createOrUpdateEvent.EventType == EventType.QUIK) {
-                    gotoTrackingPage(event.EventId);
+                } else if (createOrUpdateEvent.eventType == EventType.TRACKBUDDY ||
+                        createOrUpdateEvent.eventType == EventType.QUIK) {
+                    gotoTrackingPage(event.eventId);
                 } else {
                     gotoEventsPage();
                 }
@@ -344,28 +338,28 @@ public abstract class BaseEventActivity extends BaseActivity {
 
     protected void initializeEventWithDefaultValues() {
         createOrUpdateEvent = new Event();
-        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeId);
-        createOrUpdateEvent.InitiatorId = AppContext.context.loginId;
-        createOrUpdateEvent.InitiatorName = AppContext.context.loginName;
+        createOrUpdateEvent.eventType = EventType.getEventType(mEventTypeId);
+        createOrUpdateEvent.initiatorId = AppContext.context.loginId;
+        createOrUpdateEvent.initiatorName = AppContext.context.loginName;
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
         Duration defaultDuration = AppContext.context.defaultDurationSettings;
-        createOrUpdateEvent.Duration = new Duration(defaultDuration.getTimeInterval(),
+        createOrUpdateEvent.duration = new Duration(defaultDuration.getTimeInterval(),
                 defaultDuration.getPeriod(),
                 true);
 
         Reminder defaultReminder = AppContext.context.defaultReminderSettings;
-        createOrUpdateEvent.Reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
-        createOrUpdateEvent.Reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
+        createOrUpdateEvent.reminder = new Reminder(defaultReminder.getTimeInterval(), defaultReminder.getPeriod(), defaultReminder.getNotificationType());
+        createOrUpdateEvent.reminder.ReminderOffsetInMinute = defaultReminder.ReminderOffsetInMinute;
 
         Duration defaultTracking = AppContext.context.defaultTrackingSettings;
-        createOrUpdateEvent.Tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
+        createOrUpdateEvent.tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
 
         EventParticipant currentParticipant = new EventParticipant();
         currentParticipant.setUserId(AppContext.context.loginId);
         currentParticipant.setProfileName(AppContext.context.loginName);
         currentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
-        if (createOrUpdateEvent.EventType == EventType.SHAREMYLOACTION
-                || createOrUpdateEvent.EventType == EventType.QUIK) {
+        if (createOrUpdateEvent.eventType == EventType.SHAREMYLOACTION
+                || createOrUpdateEvent.eventType == EventType.QUIK) {
             currentParticipant.isUserLocationShared = true;
         }
         createOrUpdateEvent.setCurrentParticipant(currentParticipant);
@@ -375,14 +369,14 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected void populateEventData() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(createOrUpdateEvent.StartTimeInDateFormat);
-        calendar.add(Calendar.MINUTE, createOrUpdateEvent.Duration.getOffSetInMinutes());
-        createOrUpdateEvent.EndTimeInDateFormat = calendar.getTime();
-        createOrUpdateEvent.State = EventState.TRACKING_ON;
-        createOrUpdateEvent.TrackingState = EventState.TRACKING_ON;
-        createOrUpdateEvent.IsTrackingRequired = true;
+        calendar.setTime(createOrUpdateEvent.startTimeInDateFormat);
+        calendar.add(Calendar.MINUTE, createOrUpdateEvent.duration.getOffSetInMinutes());
+        createOrUpdateEvent.endTimeInDateFormat = calendar.getTime();
+        createOrUpdateEvent.state = EventState.TRACKING_ON;
+        createOrUpdateEvent.trackingState = EventState.TRACKING_ON;
+        createOrUpdateEvent.isTrackingRequired = true;
 
-        createOrUpdateEvent.EventType = EventType.getEventType(mEventTypeItem.getImageIndex());
+        createOrUpdateEvent.eventType = EventType.getEventType(mEventTypeItem.getImageIndex());
         EventParticipant participant = null;
         setReminderOffset();
         setTrackingOffset();
@@ -390,7 +384,7 @@ public abstract class BaseEventActivity extends BaseActivity {
             participant = new EventParticipant();
             participant.setUserId(cg.getUserId());
             participant.setMobileNumber(cg.getMobileNumber());
-            createOrUpdateEvent.Participants.add(participant);
+            createOrUpdateEvent.participants.add(participant);
         }
 
         //createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());

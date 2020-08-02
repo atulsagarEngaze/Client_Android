@@ -1,7 +1,7 @@
 package com.redtop.engaze.webservice;
 
 import android.util.Log;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 
 import org.json.JSONObject;
 
@@ -10,33 +10,32 @@ public class ParticipantWS extends BaseWebService implements IParticipantWS {
     private final static String TAG = ParticipantWS.class.getName();
 
     public void pokeParticipants(JSONObject pokeAllContactsJSON,
-                                        final OnAPICallCompleteListner listnerOnSuccess,
-                                        final OnAPICallCompleteListner listnerOnFailure) {
+                                        final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
             String JsonPostURL = MAP_API_URL + ApiUrl.POKEALL_CONTACTS;
 
-            postData(pokeAllContactsJSON, JsonPostURL, listnerOnSuccess, listnerOnFailure);
+            postData(pokeAllContactsJSON, JsonPostURL, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
 
     }
 
-    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess, final OnAPICallCompleteListner listnerOnFailure) {
+    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
             String url = MAP_API_URL + ApiUrl.UPDATE_PARTICIPANTS;
 
-            postData(jsonObject, url, listnerOnSuccess, listnerOnFailure);
+            postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 }

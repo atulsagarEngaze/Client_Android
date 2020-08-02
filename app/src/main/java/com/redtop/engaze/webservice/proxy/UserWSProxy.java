@@ -3,7 +3,7 @@ package com.redtop.engaze.webservice.proxy;
 
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.webservice.IUserWS;
 
@@ -17,8 +17,7 @@ public class UserWSProxy implements IUserWS {
 
     private final static String TAG = UserWSProxy.class.getName();
 
-    public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListner listnerOnSuccess,
-                           final OnAPICallCompleteListner listnerOnFailure) {
+    public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
 
 
         try {
@@ -47,15 +46,15 @@ public class UserWSProxy implements IUserWS {
             JSONObject response = new JSONObject();
             response.put("ListOfRegisteredContacts", jUsers);
 
-            listnerOnSuccess.apiCallComplete(response);
+            onAPICallCompleteListener.apiCallSuccess(response);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public void AssignUserIdToRegisteredUser(final HashMap<String, ContactOrGroup> contactsAndgroups,
-                                             final OnAPICallCompleteListner listnerOnSuccess,
-                                             final OnAPICallCompleteListner listnerOnFailure) {
+                                             final OnAPICallCompleteListener onAPICallCompleteListener
+    ) {
         try {
             JSONArray jUsers = new JSONArray();
 
@@ -81,23 +80,22 @@ public class UserWSProxy implements IUserWS {
 
             JSONObject response = new JSONObject();
             response.put("ListOfRegisteredContacts", jUsers);
-            response.put("Status","true");
+            response.put("Status", "true");
 
-            listnerOnSuccess.apiCallComplete(response);
+            onAPICallCompleteListener.apiCallSuccess(response);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public void saveProfile(JSONObject jRequestobj,
-                            final OnAPICallCompleteListner listnerOnSuccess,
-                            final OnAPICallCompleteListner listnerOnFailure) {
+                            final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-           listnerOnSuccess.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallSuccess(null);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 

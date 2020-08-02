@@ -67,11 +67,11 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 
 		} else 
 			holder = (ViewHolder) convertView.getTag();
-		final String eventId = rowItem.EventId;
+		final String eventId = rowItem.eventId;
 		SimpleDateFormat  originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		Date startDate = null;
 		try {
-			startDate = originalformat.parse(rowItem.StartTime);
+			startDate = originalformat.parse(rowItem.startTime);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 				DateUtil.getShortMonth(cal), DateUtil.getYear(cal),
 				DateUtil.getTime(cal));
 		
-		holder.txtEventName.setText(rowItem.Name);
+		holder.txtEventName.setText(rowItem.name);
 		holder.txtEventStartTime.setText(startTime);
-		holder.txtInitiator.setText("from "+ rowItem.InitiatorName);
+		holder.txtInitiator.setText("from "+ rowItem.initiatorName);
 		holder.txtAccept.setOnClickListener(new OnClickListener() {
 			
 			@Override

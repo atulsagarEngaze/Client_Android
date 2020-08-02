@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyLog;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.LogReader;
 import com.redtop.engaze.webservice.FeedbackWS;
@@ -132,15 +132,14 @@ public class FeedbackActivity extends BaseActivity {
 
 		JSONObject jsonObject =  createFeedbackJson();
 		if(jsonObject!=null){
-			FeedbackWS.saveFeedback(jsonObject, new OnAPICallCompleteListner() {
+			FeedbackWS.saveFeedback(jsonObject, new OnAPICallCompleteListener<JSONObject>() {
 				@Override
-				public void apiCallComplete(JSONObject response) {
+				public void apiCallSuccess(JSONObject response) {
 					onSaveResponse(response);
 				}
-			}, new OnAPICallCompleteListner() {
+
 				@Override
-				public void apiCallComplete(JSONObject error) {
-					VolleyLog.d(TAG, "Error: " + error.toString());
+				public void apiCallFailure() {
 					Toast.makeText(AppContext.context,
 							getResources().getString(R.string.message_feedback_saveFailure), Toast.LENGTH_SHORT).show();
 					hideProgressBar();

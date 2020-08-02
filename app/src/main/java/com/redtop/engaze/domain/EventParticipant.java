@@ -25,38 +25,38 @@ public class EventParticipant implements DataModel {
      */
     private static final long serialVersionUID = -8550528718275826735L;
     @Expose
-    private String eventId;
+    public String eventId;
     @Expose
-    private String userId;
+    public String userId;
     @Expose
-    private String profileName;
+    public String profileName;
     @Expose
-    private String contactName;
+    public String contactName;
     @Expose
-    private String mobileNumber;
+    public String mobileNumber;
     @Expose
-    private String gCMClientId;
+    public String gCMClientId;
 
     @Expose
-    private Boolean isTrackingAccepted;
+    public Boolean isTrackingAccepted;
     @Expose
-    private String trackingStartTime;
+    public String trackingStartTime;
     @Expose
-    private String trackingEndTime;
+    public String trackingEndTime;
     @Expose
-    private String trackingEndReason;
+    public String trackingEndReason;
     @Expose
-    private String isTrackingActive;
+    public String isTrackingActive;
     @Expose
-    private String userEventEndTime;
+    public String userEventEndTime;
     @Expose
-    private AcceptanceStatus acceptanceStatus;
+    public AcceptanceStatus acceptanceStatus;
     @Expose
-    private int distanceReminderDistance;
+    public int distanceReminderDistance;
     @Expose
-    private String distanceReminderId;
+    public String distanceReminderId;
     @Expose
-    private ReminderFrom reminderFrom;
+    public ReminderFrom reminderFrom;
     @Expose
     public Boolean isUserLocationShared;
     public ContactOrGroup contactOrGroup;

@@ -65,9 +65,9 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
 
         } else
             holder = (ViewHolder) convertView.getTag();
-        final String eventId = rowItem.EventId;
+        final String eventId = rowItem.eventId;
 
-        if (ParticipantService.isCurrentUserInitiator(rowItem.InitiatorId)) {
+        if (ParticipantService.isCurrentUserInitiator(rowItem.initiatorId)) {
             holder.txtLeave.setVisibility(View.GONE);
             holder.txtEnd.setVisibility(View.VISIBLE);
         } else {
@@ -75,8 +75,8 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
             holder.txtLeave.setVisibility(View.VISIBLE);
         }
 
-        holder.txtEventName.setText(rowItem.Name);
-        holder.txtInitiator.setText("from " + rowItem.InitiatorName);
+        holder.txtEventName.setText(rowItem.name);
+        holder.txtInitiator.setText("from " + rowItem.initiatorName);
 
         holder.txtLeave.setOnClickListener(new OnClickListener() {
 
@@ -120,7 +120,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
             public void onClick(View v) {
                 ProgressBar.showProgressBar("Please wait");
                 Intent intent = new Intent(mContext, RunningEventActivity.class);
-                intent.putExtra("EventId", rowItem.EventId);
+                intent.putExtra("EventId", rowItem.eventId);
                 mContext.startActivity(intent);
                 ProgressBar.hideProgressBar();
             }

@@ -11,7 +11,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.enums.ReminderFrom;
@@ -131,10 +131,10 @@ public class EventDistanceReminderService extends IntentService implements Googl
     }
 
     private void getParticipantLocationsFromServer() {
-        LocationManager.getLocationsFromServer(mMember.getUserId(), mEvent.EventId, new OnAPICallCompleteListner() {
+        LocationManager.getLocationsFromServer(mMember.getUserId(), mEvent.eventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, response.toString());
                 String Status = "";
                 try {
@@ -147,7 +147,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
                             createGoogleAPIClientAndLocationRequest();
                         } else {
                             if (mMember.getReminderFrom() == ReminderFrom.DESTINATION) {
-                                reminderEndLatLng = new LatLng(mEvent.Destination.getLatitude(), mEvent.Destination.getLongitude());
+                                reminderEndLatLng = new LatLng(mEvent.destination.getLatitude(), mEvent.destination.getLongitude());
                                 getDistanceForReminderDistanceCalculation();
                             } else {
                                 Log.v(TAG, "This option is yet not implemented");
@@ -161,13 +161,11 @@ public class EventDistanceReminderService extends IntentService implements Googl
                     e.printStackTrace();
                 }
             }
-        }, new OnAPICallCompleteListner() {
 
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 Log.v(TAG, "Unable to get the location of participant from server.");
                 Log.v(TAG, "Service will retry after 15 seconds");
-
             }
         });
     }
@@ -213,7 +211,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
 
     private Boolean checkValidityOfReminder() {
 
-        mEvent = InternalCaching.getEventFromCache(mEvent.EventId);
+        mEvent = InternalCaching.getEventFromCache(mEvent.eventId);
         if (mEvent == null) {
             return false;
         }
@@ -231,7 +229,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
         if (!mReminderId.equalsIgnoreCase(mMember.getDistanceReminderId())) {
             return false;
         }
-        String destLat = Double.toString(mEvent.Destination.getLatitude());
+        String destLat = Double.toString(mEvent.destination.getLatitude());
         if (mMember.getReminderFrom() == ReminderFrom.DESTINATION &&
                 (destLat == null || destLat == "")) {
             return false;

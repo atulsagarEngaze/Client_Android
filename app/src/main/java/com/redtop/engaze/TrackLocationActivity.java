@@ -26,17 +26,12 @@ import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.IntentConstants;
-import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
-import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
@@ -68,7 +63,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             @Override
             public void onClick(View v) {
                 mEventLocationTextView.setText("");
-                createOrUpdateEvent.Destination = null;
+                createOrUpdateEvent.destination = null;
             }
         });
     }
@@ -79,8 +74,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", mEventTypeId);
         SetDurationText();
         if (this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION) != null) {
-            createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
-            mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
+            createOrUpdateEvent.destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
+            mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
         if (!accessingContactsFirstTime()) {
             //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
@@ -129,23 +124,23 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     private void initializeBasedOnEventType() {
-        switch (createOrUpdateEvent.EventType) {
+        switch (createOrUpdateEvent.eventType) {
             case SHAREMYLOACTION:
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.sharemylocation_event_create_successful);
-                createOrUpdateEvent.Name = "S_" + AppContext.context.loginName + "_";
-                createOrUpdateEvent.Description = "ShareMyLocationEvent";
+                createOrUpdateEvent.name = "S_" + AppContext.context.loginName + "_";
+                createOrUpdateEvent.description = "ShareMyLocationEvent";
                 break;
             case TRACKBUDDY:
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.track_my_buddy_event_create_successful);
-                createOrUpdateEvent.Name = "T_L_" + AppContext.context.loginName + "_B";
-                createOrUpdateEvent.Description = "TrackBuddy";
+                createOrUpdateEvent.name = "T_L_" + AppContext.context.loginName + "_B";
+                createOrUpdateEvent.description = "TrackBuddy";
                 break;
             default:
                 Calendar calendar_start = Calendar.getInstance();
                 mCreateUpdateSuccessfulMessage = getResources().getString(R.string.meet_now_event_create_successful);
-                createOrUpdateEvent.Name = "Meet " + AppContext.context.loginName + " @" + DateUtil.getTime(calendar_start);
-                mQuickEventNameView.setText(createOrUpdateEvent.Name);
-                createOrUpdateEvent.Description = "QuickEvent";
+                createOrUpdateEvent.name = "Meet " + AppContext.context.loginName + " @" + DateUtil.getTime(calendar_start);
+                mQuickEventNameView.setText(createOrUpdateEvent.name);
+                createOrUpdateEvent.description = "QuickEvent";
                 break;
         }
     }
@@ -186,10 +181,10 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     @Override
     protected void populateEventData() {
         Calendar calendar_start = Calendar.getInstance();
-        if (createOrUpdateEvent.EventType == EventType.QUIK) {
-            createOrUpdateEvent.Name = mQuickEventNameView.getText().toString();
+        if (createOrUpdateEvent.eventType == EventType.QUIK) {
+            createOrUpdateEvent.name = mQuickEventNameView.getText().toString();
         }
-        createOrUpdateEvent.StartTimeInDateFormat = calendar_start.getTime();
+        createOrUpdateEvent.startTimeInDateFormat = calendar_start.getTime();
         super.populateEventData();
     }
 
@@ -222,15 +217,15 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             case R.id.tracklocation_location:
 
                 intent = new Intent(TrackLocationActivity.this, PickLocationActivity.class);
-                if (createOrUpdateEvent.Destination != null) {
-                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.Destination);
+                if (createOrUpdateEvent.destination != null) {
+                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
                 break;
 
             case R.id.tracklocation_Duration_holder:
                 intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.Duration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
                 break;
             case R.id.btn_tracking_start:

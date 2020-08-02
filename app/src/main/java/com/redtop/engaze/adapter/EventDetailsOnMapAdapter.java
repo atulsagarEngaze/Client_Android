@@ -135,8 +135,8 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
 							Intent intent = new Intent(mContext, EventParticipantsInfo.class);
 							intent.putExtra("source", RunningEventActivity.class.getName());
 							intent.putExtra("EventMembers", mems);
-							intent.putExtra("InitiatorID", mEvent.InitiatorId);
-							intent.putExtra("EventId", mEvent.EventId);
+							intent.putExtra("InitiatorID", mEvent.initiatorId);
+							intent.putExtra("EventId", mEvent.eventId);
 							mContext.startActivity(intent);
 						}
 						break;				

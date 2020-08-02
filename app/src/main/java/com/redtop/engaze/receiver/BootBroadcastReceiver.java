@@ -9,7 +9,6 @@ import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.service.BackgroundServiceManager;
 import com.redtop.engaze.service.EventDistanceReminderService;
-import com.redtop.engaze.service.MyCurrentLocationListener;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,7 +29,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 			if(alertMems!=null && alertMems.size()>0){
 				for(EventParticipant mem : alertMems){
 					Intent eventDistanceReminderServiceIntent = new Intent(context, EventDistanceReminderService.class);
-					eventDistanceReminderServiceIntent.putExtra("EventId", ed.EventId);
+					eventDistanceReminderServiceIntent.putExtra("EventId", ed.eventId);
 					eventDistanceReminderServiceIntent.putExtra("MemberId", mem.getUserId());
 					context.startService(eventDistanceReminderServiceIntent);
 				}

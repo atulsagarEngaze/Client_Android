@@ -112,7 +112,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         initializeClickEvents();
         populateControls();
 
-        if (createOrUpdateEvent.Tracking.getTrackingState() == false) {
+        if (createOrUpdateEvent.tracking.getTrackingState() == false) {
             mTrackingStartOffsetView.setVisibility(View.GONE);
         } else {
             mTrackingStartOffsetView.setVisibility(View.VISIBLE);
@@ -143,8 +143,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEditEventActivity.this, PickLocationActivity.class);
-                if (createOrUpdateEvent.Destination != null) {
-                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.Destination);
+                if (createOrUpdateEvent.destination != null) {
+                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.destination);
                 }
                 startActivityForResult(intent, LOCATION_REQUEST_CODE);
             }
@@ -163,7 +163,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             @Override
             public void onClick(View v) {
                 mEventLocationTextView.setText("");
-                createOrUpdateEvent.Destination = null;
+                createOrUpdateEvent.destination = null;
             }
         });
 
@@ -174,7 +174,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CreateEditEventActivity.this, CustomReminder.class);
-                intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) createOrUpdateEvent.Reminder);
+                intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) createOrUpdateEvent.reminder);
 
                 startActivityForResult(intent, REMINDER_REQUEST_CODE);
             }
@@ -186,7 +186,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CreateEditEventActivity.this, TrackingOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.Tracking);
+                intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.tracking);
 
                 startActivityForResult(intent, TRACKING_REQUEST_CODE);
             }
@@ -198,7 +198,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.Duration);
+                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
 
                 startActivityForResult(intent, DURATION_REQUEST_CODE);
             }
@@ -413,16 +413,16 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
             SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
             try {
-                createOrUpdateEvent.StartTimeInDateFormat = parseFormat.parse(createOrUpdateEvent.StartTime);
+                createOrUpdateEvent.startTimeInDateFormat = parseFormat.parse(createOrUpdateEvent.startTime);
             } catch (ParseException ex) {
                 ex.printStackTrace();
             }
-            cal.setTime(createOrUpdateEvent.StartTimeInDateFormat);
-            mEventTitleView.setText(createOrUpdateEvent.Name);
-            mNoteView.setText(createOrUpdateEvent.Description);
+            cal.setTime(createOrUpdateEvent.startTimeInDateFormat);
+            mEventTitleView.setText(createOrUpdateEvent.name);
+            mNoteView.setText(createOrUpdateEvent.description);
             ArrayList<ContactOrGroup> contactList = new ArrayList<ContactOrGroup>();
             String currentMemUserId = createOrUpdateEvent.getCurrentParticipant().getUserId();
-            ArrayList<EventParticipant> members = createOrUpdateEvent.Participants;
+            ArrayList<EventParticipant> members = createOrUpdateEvent.participants;
             for (EventParticipant mem : members) {
                 if (!mem.getUserId().equals(currentMemUserId)) {
                     ContactOrGroup cg = ContactAndGroupListManager.getContact(mem.getUserId());
@@ -435,8 +435,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
                 clearAutoCompleteInviteeTextView();
             }
 
-            if (createOrUpdateEvent.Destination != null) {
-                appLocationService.displayPlace(createOrUpdateEvent.Destination, mEventLocationTextView);
+            if (createOrUpdateEvent.destination != null) {
+                appLocationService.displayPlace(createOrUpdateEvent.destination, mEventLocationTextView);
             }
 
             if (createOrUpdateEvent.IsRecurrence) {
@@ -452,8 +452,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
             if (this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION) != null) {
                 mFromEventsActivity = false;
-                createOrUpdateEvent.Destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
-                mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.Destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
+                createOrUpdateEvent.destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
+                mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
             }
         }
         Drawable originalDrawable = getResources().getDrawable(mEventTypeItem.getImageId());
@@ -604,13 +604,13 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     private Boolean validateInputData() {
 
-        if (createOrUpdateEvent.Name == null || createOrUpdateEvent.Name.isEmpty()) {
+        if (createOrUpdateEvent.name == null || createOrUpdateEvent.name.isEmpty()) {
             setAlertDialog("Oops event title is blank !", "Kindly give a title to your event");
             mAlertDialog.show();
             return false;
         }
 
-        if (createOrUpdateEvent.Participants.size() == 0) {
+        if (createOrUpdateEvent.participants.size() == 0) {
             setAlertDialog("Oops no invitee has been selected !", "Kindly select atleast one invitee");
             mAlertDialog.show();
             return false;
@@ -632,14 +632,14 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
         DateFormat writeFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a");
         try {
-            createOrUpdateEvent.StartTimeInDateFormat = writeFormat.parse(mStartDateDisplayView.getText() + " " + mStartTimeDisplayView.getText());
+            createOrUpdateEvent.startTimeInDateFormat = writeFormat.parse(mStartDateDisplayView.getText() + " " + mStartTimeDisplayView.getText());
         } catch (ParseException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 
-        createOrUpdateEvent.Name = mEventTitleView.getText().toString();
-        createOrUpdateEvent.Description = mNoteView.getText().toString();
+        createOrUpdateEvent.name = mEventTitleView.getText().toString();
+        createOrUpdateEvent.description = mNoteView.getText().toString();
         //For Recurrence
         if (mChkrecurrence.isChecked()) {
             createOrUpdateEvent.IsRecurrence = true;

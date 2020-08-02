@@ -99,7 +99,7 @@ public class EtaDistanceAlertHelper {
         from = (WheelView) reminderDialog.findViewById(R.id.eta_from);
         ArrayWheelAdapter<String> fromAdapter;
 
-        if (mEvent.Destination != null) {
+        if (mEvent.destination != null) {
             fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[]{"Me", "Dest"});
         } else {
             fromAdapter = new ArrayWheelAdapter<String>(AppContext.context, new String[]{"Me"});
@@ -155,7 +155,7 @@ public class EtaDistanceAlertHelper {
                 reminderDialog.cancel();
                 AppContext.actionHandler.actionComplete(Action.SETTIMEBASEDALERT);
                 Intent eventDistanceReminderServiceIntent = new Intent(AppContext.context, EventDistanceReminderService.class);
-                eventDistanceReminderServiceIntent.putExtra("EventId", mEvent.EventId);
+                eventDistanceReminderServiceIntent.putExtra("EventId", mEvent.eventId);
                 eventDistanceReminderServiceIntent.putExtra("MemberId", mUserId);
                 AppContext.context.startService(eventDistanceReminderServiceIntent);
             }

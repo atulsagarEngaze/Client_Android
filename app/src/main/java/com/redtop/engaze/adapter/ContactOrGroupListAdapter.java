@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.customeviews.CircularImageView;
@@ -111,18 +111,19 @@ public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
     private void SendInvite() {
 
         //showProgressBar();
-        contactsWS.sendInvite(mInviteJasonObj, new OnAPICallCompleteListner() {
+        contactsWS.sendInvite(mInviteJasonObj, new OnAPICallCompleteListener<JSONObject>() {
+
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallSuccess(JSONObject response) {
                 ProgressBar.hideProgressBar();
 
                 Toast.makeText(mContext,
                         "Invitation Sent",
                         Toast.LENGTH_SHORT).show();
             }
-        }, new OnAPICallCompleteListner() {
+
             @Override
-            public void apiCallComplete(JSONObject response) {
+            public void apiCallFailure() {
                 ProgressBar.hideProgressBar();
                 Toast.makeText(mContext,
                         "Failed to send invite. Please try agan later.", Toast.LENGTH_SHORT).show();

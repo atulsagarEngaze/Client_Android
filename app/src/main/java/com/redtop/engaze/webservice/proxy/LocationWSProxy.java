@@ -3,7 +3,7 @@ package com.redtop.engaze.webservice.proxy;
 import android.location.Location;
 import android.util.Log;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListner;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
@@ -22,8 +22,7 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
 
 
     public void updateLocation(JSONObject jsonObject,
-                               final OnAPICallCompleteListner listnerOnSuccess,
-                               final OnAPICallCompleteListner listnerOnFailure) {
+                               final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             JSONArray jLocation = new JSONArray();
             UsersLocationDetail ud1 = new UsersLocationDetail("3105beb6-3347-4bdf-8905-29b622b51dbd",
@@ -44,18 +43,17 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
             JSONObject response = new JSONObject();
             response.put("ListOfUserLocation", jLocation);
 
-            listnerOnSuccess.apiCallComplete(response);
+            onAPICallCompleteListener.apiCallSuccess(response);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 
     public void getLocationsFromServer(String userId, String eventId,
-                                       final OnAPICallCompleteListner listnerOnSuccess,
-                                       final OnAPICallCompleteListner listnerOnFailure) {
+                                       final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             JSONArray jLocation = new JSONArray();
             UsersLocationDetail ud1 = new UsersLocationDetail("3105beb6-3347-4bdf-8905-29b622b51dbd",
@@ -80,12 +78,12 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
             JSONObject response = new JSONObject();
             response.put("ListOfUserLocation", jLocation);
 
-            listnerOnSuccess.apiCallComplete(response);
+            onAPICallCompleteListener.apiCallSuccess(response);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
-            listnerOnFailure.apiCallComplete(null);
+            onAPICallCompleteListener.apiCallFailure();
         }
     }
 }
