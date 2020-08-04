@@ -775,6 +775,11 @@ public class EventManager {
                 try {
 
                     List<Event> eventList = EventParser.parseEventDetailList(new JSONArray(response));
+                    for(Event eventData:eventList){
+                        eventData.startTime = DateUtil.convertUtcToLocalDateTime(eventData.startTime, null);
+                        eventData.endTime = DateUtil.convertUtcToLocalDateTime(eventData.endTime, null);
+                    }
+
                     EventService.RemovePastEvents(eventList);
                     EventService.upDateEventStatus(eventList);
                     InternalCaching.saveEventListToCache(eventList);

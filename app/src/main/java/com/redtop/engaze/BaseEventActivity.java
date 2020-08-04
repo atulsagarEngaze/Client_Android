@@ -386,6 +386,7 @@ public abstract class BaseEventActivity extends BaseActivity {
             participant.setMobileNumber(cg.getMobileNumber());
             createOrUpdateEvent.participants.add(participant);
         }
+        createOrUpdateEvent.participants.add(createOrUpdateEvent.getCurrentParticipant());
 
         //createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());
 

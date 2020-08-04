@@ -91,7 +91,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void RefreshEventListFromServer(final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String url = MAP_API_URL + (ApiUrl.EVENT_DETAIL).replace("{userId}", "94973d2a-614e-4b2c-8654-7e6b13cdc44e");//AppContext.context.loginId);
+            String url = MAP_API_URL + (ApiUrl.EVENT_DETAIL).replace("{userId}", AppContext.context.loginId);
             getData(url, onAPICallCompleteListener);
 
         } catch (Exception ex) {

@@ -189,7 +189,7 @@ public class ParticipantService {
 
     public static boolean setCurrentParticipant(Event event) {
         for (EventParticipant participant : event.participants) {
-            if (participant.getUserId() == AppContext.context.loginId) {
+            if (participant.userId.equals(AppContext.context.loginId)) {
                 event.setCurrentParticipant(participant);
                 return true;
             }

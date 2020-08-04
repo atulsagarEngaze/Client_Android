@@ -228,9 +228,7 @@ public class EventService {
             Calendar cal = Calendar.getInstance();
             Date currentDate = cal.getTime();
             DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            //using this logic as end date is not coming properly
-            cal.setTime(writeFormat.parse(event.startTime));
-            cal.add(Calendar.MINUTE, event.duration.getTimeInterval());
+            cal.setTime(writeFormat.parse(event.endTime));
             Date endDate = cal.getTime();
             if (currentDate.getTime() > endDate.getTime()) {
                 return true;

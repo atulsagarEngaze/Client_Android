@@ -41,7 +41,7 @@ public class ProfileManager {
 
                 try {
                     String loginID = (String) response.getString("id");
-                    // save the loginid to preferences
+                    AppContext.context.loginId = loginID;
                     PreffManager.setPref(Constants.LOGIN_ID, loginID);
                     PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
                     listnerOnSuccess.apiCallSuccess(response);
