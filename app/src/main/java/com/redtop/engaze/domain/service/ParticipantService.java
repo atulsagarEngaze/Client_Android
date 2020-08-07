@@ -135,7 +135,7 @@ public class ParticipantService {
     }
 
     public static Boolean isNotifyUser(Event event) {
-        if (event != null && event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
+        if (event != null && event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.DECLINED) {
             return false;
         }
         return true;
@@ -156,10 +156,10 @@ public class ParticipantService {
                 );
                 ContactOrGroup cg = ContactAndGroupListManager.getContact(c.getString("UserId"));
                 if (cg != null) {
-                    mem.setProfileName(cg.getName());
-                    mem.setContact(cg);
+                    mem.profileName = cg.getName();
+                    mem.contactOrGroup = cg;
                 } else {
-                    mem.setProfileName("~" + mem.getProfileName());
+                    mem.profileName = "~" + mem.profileName;
                 }
                 mem.isUserLocationShared = c.getBoolean("IsUserLocationShared");
                 list.add(mem);
@@ -197,18 +197,6 @@ public class ParticipantService {
         return false;
     }
 
-    public static void attacheContactGroupToParticipants(Event event) {
-        for (EventParticipant participant : event.participants) {
-            ContactOrGroup cg = ContactAndGroupListManager.getContact(participant.getUserId());
-            if (cg != null) {
-                participant.setProfileName(cg.getName());
-                participant.setContact(cg);
-            } else {
-                participant.setProfileName("~" + participant.getProfileName());
-            }
-        }
-    }
-
     public static ArrayList<EventParticipant> getMembersbyStatusForLocationSharing(Event event, AcceptanceStatus acceptanceStatus) {
 
         ArrayList<EventParticipant> memStatus = new ArrayList<EventParticipant>();
@@ -216,7 +204,7 @@ public class ParticipantService {
         if (participants != null && participants.size() > 0) {
             for (EventParticipant mem : participants) {
                 if (isValidForLocationSharing(event, mem)) {
-                    if (mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString())) {
+                    if (mem.acceptanceStatus.name().equals(acceptanceStatus.toString())) {
                         memStatus.add(mem);
                     }
                 }
@@ -231,14 +219,14 @@ public class ParticipantService {
         Boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(event.initiatorId);
         if (event.eventType == EventType.TRACKBUDDY &&
                 isCurrentUserInitiator &&
-                isParticipantCurrentUser(mem.getUserId())
+                isParticipantCurrentUser(mem.userId)
         ) {
             isValid = false;
         }
 
         if (event.eventType == EventType.SHAREMYLOACTION &&
                 !isCurrentUserInitiator &&
-                !mem.getUserId().equalsIgnoreCase(event.initiatorId)) {
+                !mem.userId.equalsIgnoreCase(event.initiatorId)) {
             isValid = false;
         }
         return isValid;

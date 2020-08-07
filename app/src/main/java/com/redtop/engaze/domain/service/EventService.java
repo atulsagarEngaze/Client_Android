@@ -339,7 +339,7 @@ public class EventService {
             if (ed.state == state) {
                 if (checkOnlyWhenEventAccepted) {
 
-                    if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+                    if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED
                     ) {
                         return true;
                     }
@@ -359,7 +359,7 @@ public class EventService {
             return false;
         }
         for (Event ed : events) {
-            if (ed.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+            if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED
                     && ed.state == EventState.TRACKING_ON
             ) {
                 return true;

@@ -53,6 +53,9 @@ public class ContactAndGroupListManager {
 
     public static ContactOrGroup getContact(String userId) {
         ContactOrGroup cg = null;
+        if(userId==null){
+            return cg;
+        }
         Hashtable<String, ContactOrGroup> table = InternalCaching.getRegisteredContactListFromCache();
         if (table != null) {
             cg = table.get(userId);
@@ -69,19 +72,19 @@ public class ContactAndGroupListManager {
         Hashtable<String, ContactOrGroup> registeredList = InternalCaching.getRegisteredContactListFromCache();
         ContactOrGroup cg;
         for (EventParticipant mem : eventMembers) {
-            cg = mem.getContact();
+            cg = mem.contactOrGroup;
             if (cg == null) {
                 cg = registeredList.get(mem);
                 if (cg == null) {
                     cg = new ContactOrGroup();
                     cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-                    if (ParticipantService.isParticipantCurrentUser(mem.getUserId()) || mem.getProfileName().startsWith("~")) {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.getProfileName()), 40, mem.getProfileName().substring(1, 2).toUpperCase()));
+                    if (ParticipantService.isParticipantCurrentUser(mem.userId) || mem.profileName.startsWith("~")) {
+                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.profileName), 40, mem.profileName.substring(1, 2).toUpperCase()));
                     } else {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.getProfileName()), 40, mem.getProfileName().substring(0, 1).toUpperCase()));
+                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.profileName), 40, mem.profileName.substring(0, 1).toUpperCase()));
                     }
                 }
-                mem.setContact(cg);
+                mem.contactOrGroup = cg;
             }
         }
     }

@@ -72,7 +72,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         ViewHolder holder = null;
         final TrackLocationMember rowItem = getItem(position);
         final Event event = rowItem.getEvent();
-        final ContactOrGroup cg = rowItem.getMember().getContact();
+        final ContactOrGroup cg = rowItem.getMember().contactOrGroup;
         LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_home_track_location_list, null);
@@ -98,13 +98,13 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         holder.txtName.setText(cg.getName());
         holder.imageView.setBackground(cg.getImageDrawable(mContext));
         holder.txtTimeInfo.setText(getStartTimeAndTimeLeftText(event, rowItem.getAcceptance()));
-        if (rowItem.getMember().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+        if (rowItem.getMember().acceptanceStatus == AcceptanceStatus.ACCEPTED) {
             holder.txtPoke.setVisibility(View.GONE);
         }
         holder.txtPoke.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParticipantService.pokeParticipant(rowItem.getMember().getUserId(), cg.getName(), event.eventId, AppContext.actionHandler);
+                ParticipantService.pokeParticipant(rowItem.getMember().userId, cg.getName(), event.eventId, AppContext.actionHandler);
             }
         });
 
@@ -153,7 +153,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     } else {
                         //remove the row item member alone since there are still other members in the event.
                         ProgressBar.showProgressBar("Please wait");
-                        event.ContactOrGroups.remove(event.getCurrentParticipant().getContact());
+                        event.ContactOrGroups.remove(event.getCurrentParticipant().contactOrGroup);
 
                         JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.eventId);
                         ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {
@@ -184,7 +184,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                         @Override
                         public void actionComplete(Action action) {
-                            rowItem.getMember().setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.DECLINED;
                             if (callback != null) {
                                 callback.refreshTrackingEvents();
                             }

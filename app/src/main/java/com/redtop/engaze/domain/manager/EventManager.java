@@ -35,6 +35,7 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
+import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
@@ -63,7 +64,7 @@ public class EventManager {
         List<Event> runningList = new ArrayList<Event>();
         if (list != null) {
             for (Event event : list) {
-                if (event.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED
+                if (event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED
                         && event.state == EventState.TRACKING_ON) {
                     runningList.add(event);
                 }
@@ -81,8 +82,8 @@ public class EventManager {
             //list = removePastEvents(context, list);
             if (list != null) {
                 for (Event e : list) {
-                    if (e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.ACCEPTED &&
-                            e.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED) {
+                    if (e.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.ACCEPTED &&
+                            e.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.DECLINED) {
                         pendingList.add(e);
                     }
                 }
@@ -165,29 +166,33 @@ public class EventManager {
                         Log.d(TAG, "EventResponse:" + response.toString());
 
                         if (response != null) {
-                            Event eventData = new JsonParser().deserialize(response.toString(), Event.class);
-                            eventData.startTime = DateUtil.convertUtcToLocalDateTime(event.startTime, null);
-                            eventData.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
+                            event.eventId = response.getString("id");
+                            event.startTime = DateUtil.convertUtcToLocalDateTime(event.startTime, null);
+                            event.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
 
-                            ParticipantService.attacheContactGroupToParticipants(eventData);
-                            eventData.participants.add(eventData.getCurrentParticipant());
-
-                            EventService.setEndEventAlarm(eventData);
-                            if (eventData.eventType == EventType.QUIK) {
-                                eventData.state = EventState.TRACKING_ON;
-                            } else if (eventData.eventType == EventType.GENERAL) {
-                                EventService.setTracking(eventData);
-                                EventService.setEventStarAlarm(eventData);
-                                if (reminder != null) {
-                                    EventService.setEventReminder(eventData);
-
+                            for (EventParticipant participant : event.participants) {
+                                if (AppContext.context.loginId.equals(participant.userId)) {
+                                    continue;
                                 }
-                                eventData.state = EventState.EVENT_OPEN;
+                                participant.profileName = participant.contactOrGroup.getName();
                             }
 
-                            EventNotificationManager.cancelNotification(eventData);
-                            InternalCaching.saveEventToCache(eventData);
-                            listnerOnSuccess.eventSaveComplete(eventData);
+                            EventService.setEndEventAlarm(event);
+                            if (event.eventType == EventType.QUIK) {
+                                event.state = EventState.TRACKING_ON;
+                            } else if (event.eventType == EventType.GENERAL) {
+                                EventService.setTracking(event);
+                                EventService.setEventStarAlarm(event);
+                                if (reminder != null) {
+                                    EventService.setEventReminder(event);
+
+                                }
+                                event.state = EventState.EVENT_OPEN;
+                            }
+
+                            EventNotificationManager.cancelNotification(event);
+                            InternalCaching.saveEventToCache(event);
+                            listnerOnSuccess.eventSaveComplete(event);
                         } else {
                             listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                         }
@@ -209,7 +214,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
         }
     }
-
+    
     public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner actionlistnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";
@@ -239,7 +244,7 @@ public class EventManager {
 
                     if (userAcceptanceResponse == AcceptanceStatus.ACCEPTED) {
                         event.getCurrentParticipant().
-                                setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
+                                acceptanceStatus = AcceptanceStatus.ACCEPTED;
                         SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
                         Date startDate = originalformat.parse(event.startTime);
@@ -253,7 +258,7 @@ public class EventManager {
                         }
                     } else {
                         event.getCurrentParticipant().
-                                setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                                acceptanceStatus = AcceptanceStatus.DECLINED;
                     }
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
@@ -343,7 +348,7 @@ public class EventManager {
 
                 try {
                     event.getCurrentParticipant().
-                            setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                            acceptanceStatus = AcceptanceStatus.DECLINED;
 
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
@@ -397,7 +402,7 @@ public class EventManager {
                     // Remove the event related items from preferences
                     PreffManager.removePref(eventid);
                     for (EventParticipant i : event.participants) {
-                        PreffManager.removePref(i.getUserId());
+                        PreffManager.removePref(i.userId);
                     }
 
                     checkForReccurrence(event);
@@ -568,8 +573,8 @@ public class EventManager {
         }
         try {
             for (EventParticipant em : event.participants) {
-                if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
-                    em.setAcceptanceStatus(AcceptanceStatus.getStatus(eventAcceptanceStateId));
+                if (em.userId.toLowerCase().equals(userId.toLowerCase())) {
+                    em.acceptanceStatus = AcceptanceStatus.getStatus(eventAcceptanceStateId);
                 }
             }
             InternalCaching.saveEventToCache(event);
@@ -596,8 +601,8 @@ public class EventManager {
         }
         try {
             for (EventParticipant em : event.participants) {
-                if (em.getUserId().toLowerCase().equals(userId.toLowerCase())) {
-                    em.setAcceptanceStatus(AcceptanceStatus.DECLINED);
+                if (em.userId.toLowerCase().equals(userId.toLowerCase())) {
+                    em.acceptanceStatus = AcceptanceStatus.DECLINED;
                 }
             }
             InternalCaching.saveEventToCache(event);
@@ -775,7 +780,7 @@ public class EventManager {
                 try {
 
                     List<Event> eventList = EventParser.parseEventDetailList(new JSONArray(response));
-                    for(Event eventData:eventList){
+                    for (Event eventData : eventList) {
                         eventData.startTime = DateUtil.convertUtcToLocalDateTime(eventData.startTime, null);
                         eventData.endTime = DateUtil.convertUtcToLocalDateTime(eventData.endTime, null);
                     }
@@ -809,7 +814,7 @@ public class EventManager {
 
     public static void saveUsersLocationDetailList(Context context, Event event,
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
-        if (event != null && event.getCurrentParticipant().getAcceptanceStatus() != AcceptanceStatus.DECLINED
+        if (event != null && event.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.DECLINED
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
             event.UsersLocationDetailList = usersLocationDetailList;
             InternalCaching.saveEventToCache(event);
@@ -860,11 +865,11 @@ public class EventManager {
                     if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.initiatorId)) {
                         members.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
-                            slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
+                            slist.add(new TrackLocationMember(e, mem, mem.acceptanceStatus));
                         }
                     }
                     //Out going locations 200 - Track Buddy - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                    else if (eventType == EventType.TRACKBUDDY && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED) {
                         slist.add(new TrackLocationMember(e, e.getParticipant(e.initiatorId), AcceptanceStatus.ACCEPTED));
                     }
                 }
@@ -875,14 +880,14 @@ public class EventManager {
                     ContactAndGroupListManager.assignContactsToEventMembers(members);
                     eventType = e.eventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
-                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+                    if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED) {
                         slist.add(new TrackLocationMember(e, e.getParticipant(e.initiatorId), AcceptanceStatus.ACCEPTED));
                     }
                     //In coming locations - 200 - track buddy - Current user is initiator - add all members except me
                     else if (eventType == EventType.TRACKBUDDY && ParticipantService.isCurrentUserInitiator(e.initiatorId)) {
                         e.participants.remove(e.getCurrentParticipant());
                         for (EventParticipant mem : members) {
-                            slist.add(new TrackLocationMember(e, mem, mem.getAcceptanceStatus()));
+                            slist.add(new TrackLocationMember(e, mem, mem.acceptanceStatus));
                         }
                     }
                 }

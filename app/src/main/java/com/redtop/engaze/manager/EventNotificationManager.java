@@ -526,7 +526,7 @@ public class EventNotificationManager {
         try {
             NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            switch (eventData.getCurrentParticipant().getAcceptanceStatus()) {
+            switch (eventData.getCurrentParticipant().acceptanceStatus) {
                 case ACCEPTED:
                     notificationManager.cancel(eventData.AcceptNotificationId);
                     break;

@@ -106,9 +106,9 @@ public class UsersLocationDetail implements Serializable {
 
     public static UsersLocationDetail createUserLocationListFromEventMember(Event event, EventParticipant mem) {
 
-        UsersLocationDetail uld = new UsersLocationDetail(mem.getUserId(), null, null, "false", "", "location unavailable", "", mem.getProfileName());
+        UsersLocationDetail uld = new UsersLocationDetail(mem.userId, null, null, "false", "", "location unavailable", "", mem.profileName);
         ContactOrGroup cg = ContactAndGroupListManager.getContact(uld.userId);
-        Boolean isParticipantCurrentUser = ParticipantService.isParticipantCurrentUser(mem.getUserId());
+        Boolean isParticipantCurrentUser = ParticipantService.isParticipantCurrentUser(mem.userId);
         if (cg == null) {
             cg = new ContactOrGroup();
             cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
@@ -121,7 +121,7 @@ public class UsersLocationDetail implements Serializable {
             uld.userName = cg.getName();
         }
         uld.contactOrGroup = cg;
-        uld.acceptanceStatus = mem.getAcceptanceStatus();
+        uld.acceptanceStatus = mem.acceptanceStatus;
         if (isParticipantCurrentUser) {
             uld.userName = "You";
         }

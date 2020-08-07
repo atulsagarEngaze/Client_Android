@@ -63,9 +63,9 @@ public class EtaDistanceAlertHelper {
         ArrayList<EventParticipant> reminderMembers = mEvent.ReminderEnabledMembers;
         if (reminderMembers != null) {
             for (EventParticipant em : reminderMembers) {
-                if (em.getUserId().equals(mUserId)) {
+                if (em.userId.equals(mUserId)) {
                     etaExisting.setVisibility(View.VISIBLE);
-                    etaExisting.setText("Reminder set to : " + em.getDistanceReminderDistance() + " Mtrs.");
+                    etaExisting.setText("Reminder set to : " + em.distanceReminderDistance + " Mtrs.");
                     cancelRemove.setText("Remove");
                     cancelRemove.setTag(em);
                 }
@@ -135,9 +135,9 @@ public class EtaDistanceAlertHelper {
                 int finalMeters = readvalues(R.id.eta_unit, R.id.eta_values, mUserName, from.getCurrentItem());
 
                 EventParticipant mem = mEvent.getParticipant(mUserId);
-                mem.setDistanceReminderId(UUID.randomUUID().toString());
-                mem.setDistanceReminderDistance(finalMeters);
-                mem.setReminderFrom(ReminderFrom.getDistanceReminderFrom(from.getCurrentItem()));
+                mem.distanceReminderId = UUID.randomUUID().toString();
+                mem.distanceReminderDistance = finalMeters;
+                mem.reminderFrom = ReminderFrom.getDistanceReminderFrom(from.getCurrentItem());
                 mEvent.IsDistanceReminderSet = true;
 
                 ArrayList<EventParticipant> emList = mEvent.ReminderEnabledMembers;

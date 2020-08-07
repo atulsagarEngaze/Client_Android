@@ -73,7 +73,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 		View rowView;
 
 		final EventParticipant member = eventMembers.get(position);
-		final String mobileno = member.getMobileNumber();
+		final String mobileno = member.mobileNumber;
 
 
 		rowView = inflater.inflate(R.layout.item_event_participant_list, null);
@@ -87,16 +87,16 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 		holder.img_poke = (ImageView) rowView.findViewById(R.id.img_poke);
 
 		if (source != null && source.equals(RunningEventActivity.class.getName())) {
-			holder.img_profile.setBackground(member.getContact().getImageDrawable(context));
+			holder.img_profile.setBackground(member.contactOrGroup.getImageDrawable(context));
 			holder.img_status.setVisibility(View.GONE);
 		} else {
 			holder.img_profile.setVisibility(View.GONE);
 
 			holder.img_status.setVisibility(View.VISIBLE);
-			if (member.getAcceptanceStatus() == AcceptanceStatus.ACCEPTED) {
+			if (member.acceptanceStatus == AcceptanceStatus.ACCEPTED) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_lightgreen);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_check_green_48));
-			} else if (member.getAcceptanceStatus() == AcceptanceStatus.DECLINED) {
+			} else if (member.acceptanceStatus == AcceptanceStatus.DECLINED) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_red);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_decline_red_48));
 			} else {
@@ -105,22 +105,22 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_exclam));
 			}
 		}
-		if (ParticipantService.isParticipantCurrentUser(member.getUserId())) {
+		if (ParticipantService.isParticipantCurrentUser(member.userId)) {
 			holder.img_call.setVisibility(View.GONE);
 			//holder.img_sms.setVisibility(holder.img_sms.GONE);
 			holder.tv.setText("You");
 			holder.img_poke.setVisibility(View.GONE);
 		} else {
-			final String participanName = member.getProfileName();
+			final String participanName = member.profileName;
 
 			holder.tv.setText(participanName);
 
-			if (member.getAcceptanceStatus() != AcceptanceStatus.ACCEPTED) {
+			if (member.acceptanceStatus != AcceptanceStatus.ACCEPTED) {
 				holder.img_poke.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						ParticipantService.pokeParticipant(member.getUserId(), member.getProfileName(), eventId, AppContext.actionHandler);
+						ParticipantService.pokeParticipant(member.userId, member.profileName, eventId, AppContext.actionHandler);
 					}
 				});
 			} else {

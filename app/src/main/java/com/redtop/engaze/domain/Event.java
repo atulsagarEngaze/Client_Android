@@ -149,7 +149,7 @@ public class Event implements DataModel {
     public  EventParticipant getCurrentParticipant() {
         if (currentParticipant == null) {
             for (EventParticipant participant : this.participants) {
-                if (participant.getUserId() == AppContext.context.loginId) {
+                if (participant.userId == AppContext.context.loginId) {
                     this.currentParticipant = participant;
                 }
             }
@@ -162,7 +162,7 @@ public class Event implements DataModel {
         EventParticipant member = null;
         if (this.participants != null && this.participants.size() > 0) {
             for (EventParticipant mem : this.participants) {
-                if (mem.getUserId().equalsIgnoreCase(userId.toLowerCase())) {
+                if (mem.userId.equalsIgnoreCase(userId.toLowerCase())) {
                     member = mem;
                     break;
                 }
@@ -178,7 +178,7 @@ public class Event implements DataModel {
 
         if (this.participants != null && this.participants.size() > 0) {
             for (EventParticipant mem : this.participants) {
-                if (mem.getAcceptanceStatus().name().equals(acceptanceStatus.toString())) {
+                if (mem.acceptanceStatus.name().equals(acceptanceStatus.toString())) {
                     memStatus.add(mem);
                 }
             }

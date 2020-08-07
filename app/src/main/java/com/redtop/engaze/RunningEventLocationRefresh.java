@@ -284,12 +284,15 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         UsersLocationDetail tUl = null;
         temUldList.addAll(mUsersLocationDetailList);
         for (EventParticipant em : mEvent.participants) {
+            if (em.userId == null) {
+                continue;
+            }
             Boolean isExist = false;
             tUl = null;
             for (UsersLocationDetail uld : temUldList) {
 
-                if (uld != null && em.getUserId().equalsIgnoreCase(uld.userId)) {
-                    uld.acceptanceStatus = em.getAcceptanceStatus();
+                if (uld.userId != null && em.userId.equalsIgnoreCase(uld.userId)) {
+                    uld.acceptanceStatus = em.acceptanceStatus;
                     tUl = uld;
                     isExist = true;
                     break;

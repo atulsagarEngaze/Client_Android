@@ -30,7 +30,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 				for(EventParticipant mem : alertMems){
 					Intent eventDistanceReminderServiceIntent = new Intent(context, EventDistanceReminderService.class);
 					eventDistanceReminderServiceIntent.putExtra("EventId", ed.eventId);
-					eventDistanceReminderServiceIntent.putExtra("MemberId", mem.getUserId());
+					eventDistanceReminderServiceIntent.putExtra("MemberId", mem.userId);
 					context.startService(eventDistanceReminderServiceIntent);
 				}
 			}

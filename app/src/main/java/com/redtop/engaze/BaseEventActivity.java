@@ -257,7 +257,7 @@ public abstract class BaseEventActivity extends BaseActivity {
             reminderOffset = diffMinutes;
         }
 
-        createOrUpdateEvent.reminder.setTimeInterval((int)reminderOffset);
+        createOrUpdateEvent.reminder.setTimeInterval((int) reminderOffset);
         createOrUpdateEvent.reminder.ReminderOffsetInMinute = reminderOffset;
 
     }
@@ -355,9 +355,9 @@ public abstract class BaseEventActivity extends BaseActivity {
         createOrUpdateEvent.tracking = new Duration(defaultTracking.getTimeInterval(), defaultTracking.getPeriod(), defaultTracking.getTrackingState());
 
         EventParticipant currentParticipant = new EventParticipant();
-        currentParticipant.setUserId(AppContext.context.loginId);
-        currentParticipant.setProfileName(AppContext.context.loginName);
-        currentParticipant.setAcceptanceStatus(AcceptanceStatus.ACCEPTED);
+        currentParticipant.userId = AppContext.context.loginId;
+        currentParticipant.profileName = AppContext.context.loginName;
+        currentParticipant.acceptanceStatus = AcceptanceStatus.ACCEPTED;
         if (createOrUpdateEvent.eventType == EventType.SHAREMYLOACTION
                 || createOrUpdateEvent.eventType == EventType.QUIK) {
             currentParticipant.isUserLocationShared = true;
@@ -382,9 +382,11 @@ public abstract class BaseEventActivity extends BaseActivity {
         setTrackingOffset();
         for (ContactOrGroup cg : createOrUpdateEvent.ContactOrGroups) {
             participant = new EventParticipant();
-            participant.setUserId(cg.getUserId());
-            participant.setMobileNumber(cg.getMobileNumber());
+            participant.userId = cg.getUserId();
+            participant.mobileNumber = cg.getMobileNumber();
+            participant.contactOrGroup = cg;
             createOrUpdateEvent.participants.add(participant);
+
         }
         createOrUpdateEvent.participants.add(createOrUpdateEvent.getCurrentParticipant());
 

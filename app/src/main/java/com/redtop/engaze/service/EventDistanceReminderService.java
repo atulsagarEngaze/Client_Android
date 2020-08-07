@@ -69,7 +69,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
             mContext = this;
             mEvent = InternalCaching.getEventFromCache(intent.getStringExtra("EventId"));
             mMember = mEvent.getParticipant(intent.getStringExtra("MemberId"));
-            mReminderId = mMember.getDistanceReminderId();
+            mReminderId = mMember.distanceReminderId;
             mDistancetCheckHandler.post(mDistancetCheckRunnable);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -131,7 +131,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
     }
 
     private void getParticipantLocationsFromServer() {
-        LocationManager.getLocationsFromServer(mMember.getUserId(), mEvent.eventId, new OnAPICallCompleteListener<JSONObject>() {
+        LocationManager.getLocationsFromServer(mMember.userId, mEvent.eventId, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
             public void apiCallSuccess(JSONObject response) {
@@ -143,10 +143,10 @@ public class EventDistanceReminderService extends IntentService implements Googl
                     if (Status == "true") {
                         JSONObject c = response.getJSONArray("ListOfUserLocation").getJSONObject(0);
                         reminderStartLatLng = new LatLng(Double.parseDouble(c.getString("Latitude")), Double.parseDouble(c.getString("Longitude")));
-                        if (mMember.getReminderFrom() == ReminderFrom.SELF) {
+                        if (mMember.reminderFrom == ReminderFrom.SELF) {
                             createGoogleAPIClientAndLocationRequest();
                         } else {
-                            if (mMember.getReminderFrom() == ReminderFrom.DESTINATION) {
+                            if (mMember.reminderFrom == ReminderFrom.DESTINATION) {
                                 reminderEndLatLng = new LatLng(mEvent.destination.getLatitude(), mEvent.destination.getLongitude());
                                 getDistanceForReminderDistanceCalculation();
                             } else {
@@ -186,13 +186,13 @@ public class EventDistanceReminderService extends IntentService implements Googl
     }
 
     private void checkReminder(GoogleDirection gd, Document doc) {
-        if (gd.getTotalDistanceValue(doc) <= mMember.getDistanceReminderDistance()) {
+        if (gd.getTotalDistanceValue(doc) <= mMember.distanceReminderDistance) {
             int actual = gd.getTotalDistanceValue(doc) / 1000;
             String notificationMessage = "";
             if (actual > 1) {
-                notificationMessage = mMember.getProfileName() + " is just " + actual + " Kms away!";
+                notificationMessage = mMember.profileName + " is just " + actual + " Kms away!";
             } else {
-                notificationMessage = mMember.getProfileName() + " is just " + gd.getTotalDistanceValue(doc) + " mtrs away!";
+                notificationMessage = mMember.profileName + " is just " + gd.getTotalDistanceValue(doc) + " mtrs away!";
             }
             EventNotificationManager.approachingAlertNotification(mContext, mEvent, notificationMessage);
 
@@ -215,7 +215,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
         if (mEvent == null) {
             return false;
         }
-        mMember = mEvent.getParticipant(mMember.getUserId());
+        mMember = mEvent.getParticipant(mMember.userId);
         if (mMember == null) {
             return false;
         }
@@ -226,11 +226,11 @@ public class EventDistanceReminderService extends IntentService implements Googl
             return false;
         }
 
-        if (!mReminderId.equalsIgnoreCase(mMember.getDistanceReminderId())) {
+        if (!mReminderId.equalsIgnoreCase(mMember.distanceReminderId)) {
             return false;
         }
         String destLat = Double.toString(mEvent.destination.getLatitude());
-        if (mMember.getReminderFrom() == ReminderFrom.DESTINATION &&
+        if (mMember.reminderFrom == ReminderFrom.DESTINATION &&
                 (destLat == null || destLat == "")) {
             return false;
         }
