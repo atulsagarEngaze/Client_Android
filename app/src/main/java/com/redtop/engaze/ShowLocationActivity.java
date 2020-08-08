@@ -30,14 +30,12 @@ public class ShowLocationActivity extends BaseActivity implements OnMapReadyCall
 		setContentView(R.layout.activity_show_location);
 		mContext = this;
 		mLocation  =  this.getIntent().getStringExtra(IntentConstants.DESTINATION_LOCATION);
-		mDestinatonAddress = this.getIntent().getStringExtra("DestinatonAddress");
+		mDestinatonAddress = this.getIntent().getStringExtra(IntentConstants.DESTINATION_ADDRESS);
+		mLatlong = this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LATLANG);
 		TextView selectedLocationNameText =  (TextView)findViewById(R.id.txt_selected_location_name);
 		TextView selectedLocationAddressText= (TextView)findViewById(R.id.txt_selected_location_address);		
 		selectedLocationNameText.setText(mLocation);
 		selectedLocationAddressText.setText(mDestinatonAddress);
-		mLatlong = new LatLng(Double.parseDouble(this.getIntent().getStringExtra("DestinatonLatitude")), 
-				Double.parseDouble(this.getIntent().getStringExtra("DestinatonLongitude")));		
-
 		SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_show_location);
 
 		fragment.getMapAsync(this);

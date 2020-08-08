@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.EventParticipantsInfo;
 import com.redtop.engaze.EventRecurrenceInfo;
 import com.redtop.engaze.EventsActivity;
@@ -186,9 +187,9 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 
                 Intent intent = new Intent(mContext, ShowLocationActivity.class);
                 intent.putExtra(IntentConstants.DESTINATION_LOCATION, ed.destination.getName());
-                intent.putExtra("DestinatonAddress", ed.destination.getAddress());
-                intent.putExtra("DestinatonLatitude", ed.destination.getLatitude());
-                intent.putExtra("DestinatonLongitude", ed.destination.getLongitude());
+                intent.putExtra(IntentConstants.DESTINATION_ADDRESS, ed.destination.getAddress());
+                intent.putExtra(IntentConstants.DESTINATION_LATLANG, new LatLng(ed.destination.getLatitude(), ed.destination.getLongitude()));
+
                 mContext.startActivity(intent);
 
                 if (((EventsActivity) mContext).mActionMode != null) {

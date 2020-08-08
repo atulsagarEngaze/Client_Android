@@ -214,7 +214,7 @@ public class EventManager {
             listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
         }
     }
-    
+
     public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner actionlistnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
         String message = "";

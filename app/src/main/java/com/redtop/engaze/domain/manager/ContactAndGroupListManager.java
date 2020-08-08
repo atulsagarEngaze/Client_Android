@@ -242,12 +242,25 @@ public class ContactAndGroupListManager {
                     if (!has_phone.endsWith("0")) {
                         ArrayList<String> phoneNumbers = getPhoneNumbers(cursor.getString(ColumeIndex_ID));
                         for (String phoneNumber : phoneNumbers) {
-
                             cg = new ContactOrGroup();
                             cg.setMobileNumber(phoneNumber);
                             cg.setName(cursor.getString(ColumeIndex_DISPLAY_NAME));
 
                             cg.setThumbnailUri(thumbnail_uri);
+
+                            if (thumbnail_uri == null || thumbnail_uri == "") {
+                                cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
+                                String startingchar = cg.getName().substring(0, 1);
+                                if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
+                                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
+                                } else {
+                                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
+                                }
+                            } else {
+                                Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
+                                cg.setImageBitmap(pofilePicBitmap);
+                                cg.setIconImageBitmap(pofilePicBitmap);
+                            }
                             contacts.put(phoneNumber, cg);
                         }
                     }

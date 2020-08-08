@@ -18,11 +18,11 @@ public class ApiUrl {
     public static final String POKEALL_CONTACTS = "Contacts/RemindContact";
     public static final String CREATE_EVENT = "evento";
     public static final String UPDATE_EVENT = "Event/Update";
-    public static final String EXTEND_EVENT = "Event/ExtendEvent";
-    public static final String END_EVENT = "Event/EndEvent";
-    public static final String LEAVE_EVENT = "Event/LeaveEvent";
-    public static final String DELETE_EVENT = "Event/DeleteEvent";
-    public static final String UPDATE_PARTICIPANTS = "Event/UpdateParticipants";
+    public static final String EXTEND_EVENT = "evento/{eventId}/extend/{endTime}";
+    public static final String END_EVENT = "evento/{eventId}/end";
+    public static final String LEAVE_EVENT = "evento/{eventId}/participant/{participantId}/leave";
+    public static final String DELETE_EVENT = "evento/{eventId}";
+    public static final String UPDATE_PARTICIPANTS = "evento/{eventId}/participants";
     public static final String UPDATE_DESTINATION = "Event/UpdateEventLocation";
     public static final String SAVE_FEEDBACK = "Account/SaveFeedback";
 }

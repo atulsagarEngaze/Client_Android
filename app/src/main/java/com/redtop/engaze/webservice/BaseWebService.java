@@ -58,6 +58,27 @@ public abstract class BaseWebService {
         addToRequestQueue(stringRequest, AppContext.context);
     }
 
+    protected static void putData(JSONObject jRequestobj, String url,
+                                   final OnAPICallCompleteListener callCompleteListener) {
+        Log.d(TAG, "Calling URL:" + url);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
+                url, jRequestobj, (Response.Listener<JSONObject>) response -> {
+            Log.d(TAG, response.toString());
+            callCompleteListener.apiCallSuccess(response);
+        }, (Response.ErrorListener) error -> {
+            Log.d(TAG, "Volley Error: " + error.getMessage());
+            callCompleteListener.apiCallFailure();
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+        jsonObjReq.setRetryPolicy(GetDefaultReTryPolicy());
+        // Adding request to request queue
+        addToRequestQueue(jsonObjReq, AppContext.context);
+    }
+
     protected static void postData(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListener callCompleteListener) {
         Log.d(TAG, "Calling URL:" + url);
