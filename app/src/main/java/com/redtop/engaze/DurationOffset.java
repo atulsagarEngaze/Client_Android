@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.Duration;
 
@@ -46,7 +48,7 @@ public class DurationOffset extends BaseActivity {
                         if (Duration.validateDurationInput(duration)) {
                             hideKeyboard(v);
                             Intent intent = new Intent();
-                            intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable)duration);
+                            intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) duration);
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {
@@ -112,7 +114,7 @@ public class DurationOffset extends BaseActivity {
                     }
                     // TODO Auto-generated method stub
                     TextView dur = ((TextView) v);
-                    Drawable draw = getResources().getDrawable(R.drawable.primary_color_check);
+                    Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_black_24dp);
                     dur.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
                     dur.setTextColor(getResources().getColorStateList(R.color.primary));
                     //dur.setText(dur.getText().toString().concat(getResources().getString(R.string.duration)));
@@ -127,7 +129,7 @@ public class DurationOffset extends BaseActivity {
         if (period.getTag().equals(duration.getPeriod())) {
             //period.setText(period.getText().toString().concat(getResources().getString(R.string.duration)));
             period.setTextColor(getResources().getColorStateList(R.color.primary));
-            Drawable draw = getResources().getDrawable(R.drawable.primary_color_check);
+            Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_black_24dp);
             period.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
         }
     }

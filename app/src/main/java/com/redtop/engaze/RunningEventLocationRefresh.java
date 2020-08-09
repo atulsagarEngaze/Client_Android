@@ -1,9 +1,11 @@
 package com.redtop.engaze;
 
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 
 import org.json.JSONArray;
@@ -33,6 +35,7 @@ import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.domain.manager.LocationManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 
 @SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
@@ -175,12 +178,14 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             return "";
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected void onPostExecute(String result) {
             if (mEvent == null) {
                 return; //event is ended
             }
             ArrayList<Marker> deletedMarkers = new ArrayList<Marker>();
+
             for (Marker marker : mMarkers) {
                 if (!(marker == mDestinationMarker || marker == mCurrentMarker)) {
                     marker.remove();
@@ -188,9 +193,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
                     markerUserLocation.remove(marker);
                 }
             }
-            for (Marker marker : deletedMarkers) {
-                mMarkers.remove(marker);
-            }
+            mMarkers.removeAll(deletedMarkers);
             deletedMarkers.clear();
             removeEtaMarkers();
             arrangeListinAvailabilityOrder();
@@ -239,22 +242,19 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         return mRunningEventDetailList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     protected void createUserLocationList() {
         // TODO Auto-generated method stub
         mUsersLocationDetailList = new ArrayList<UsersLocationDetail>();
         mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent, mContext));
+        currentUld = mUsersLocationDetailList.stream().filter(usersLocationDetail->   ParticipantService.isParticipantCurrentUser(usersLocationDetail.userId)).findFirst().get();
 
-        for (UsersLocationDetail ud : mUsersLocationDetailList) {
-            if (ParticipantService.isParticipantCurrentUser(ud.userId)) {
-                currentUld = ud;
-                break;
-            }
-        }
         arrangeListinAvailabilityOrder();
     }
 
     protected void BindLocationListToAdapter() {
         try {
+
             mUserLocationDetailAdapter = new EventUserLocationAdapter(mUsersLocationDetailList, mContext, mEventId);
             viewManager.bindUserLocationDetailRecyclerView(mUserLocationDetailAdapter);
         } catch (Exception e) {

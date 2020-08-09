@@ -193,11 +193,9 @@ public class RunningEventActions extends RunningEventActivityResults {
             }
         });
 
-        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                locationhandler.postDelayed(locationRunnable, Config.LOCATION_RETRIVAL_INTERVAL);
-            }
+        adb.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            locationhandler.postDelayed(locationRunnable, Config.LOCATION_RETRIVAL_INTERVAL);
         });
         adb.show();
     }

@@ -71,13 +71,13 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 	}
 
 	private void setToolBar(){
-		Toolbar toolbar = (Toolbar)activity.findViewById(R.id.home_toolbar);
+		Toolbar toolbar = activity.findViewById(R.id.home_toolbar);
 		if (toolbar != null) {
 			activity.setSupportActionBar(toolbar);			
 			activity.getSupportActionBar().setDisplayShowHomeEnabled(true);			
 			NavDrawerFragment drawerFragment = (NavDrawerFragment)
 					activity.getFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-			drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) activity.findViewById(R.id.drawer_layout), toolbar);
+			drawerFragment.setUp(R.id.fragment_navigation_drawer, activity.findViewById(R.id.drawer_layout), toolbar);
 			drawerFragment.setDrawerListener(activity);
 
 			toolbar.setOnTouchListener(new OnTouchListener() {
@@ -133,37 +133,37 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 
 	@Override
 	protected void initializeElements(){
-		mTrackBuddyImageButtonLayout = (RelativeLayout)activity.findViewById(R.id.rl_hn_track_buddy_events);
-		mCurrentTrackBuddyListButton = (ImageButton)activity.findViewById(R.id.img_hn_buddy_tracking);
-		mTxtTrackBuddyEventListItemCount = (TextView)activity.findViewById(R.id.txt_track_buddy_events );
-		mHomeTrackBuddyListView  = (RelativeLayout)activity.findViewById(R.id.rl_home_trackbuddy_list );
-		mHomeTrackBuddyList = (ListView)activity.findViewById(R.id.home_trackbuddy_list);
+		mTrackBuddyImageButtonLayout = activity.findViewById(R.id.rl_hn_track_buddy_events);
+		mCurrentTrackBuddyListButton = activity.findViewById(R.id.img_hn_buddy_tracking);
+		mTxtTrackBuddyEventListItemCount = activity.findViewById(R.id.txt_track_buddy_events );
+		mHomeTrackBuddyListView  = activity.findViewById(R.id.rl_home_trackbuddy_list );
+		mHomeTrackBuddyList = activity.findViewById(R.id.home_trackbuddy_list);
 
-		mShareMyLocationImageButtonLayout = (RelativeLayout)activity.findViewById(R.id.rl_hn_share_location_events);
-		mCurrentShareMyLocationListButton = (ImageButton)activity.findViewById(R.id.img_hn_location_sharing);
-		mTxtShareMyLocationEventListItemCount = (TextView)activity.findViewById(R.id.txt_sharing_location_events );
-		mHomeShareMyLocationtListView  = (RelativeLayout)activity.findViewById(R.id.rl_home_sharemylocation_list );
-		mHomeShareMyLocationList = (ListView)activity.findViewById(R.id.home_sharemylocation_list);
+		mShareMyLocationImageButtonLayout = activity.findViewById(R.id.rl_hn_share_location_events);
+		mCurrentShareMyLocationListButton = activity.findViewById(R.id.img_hn_location_sharing);
+		mTxtShareMyLocationEventListItemCount = activity.findViewById(R.id.txt_sharing_location_events );
+		mHomeShareMyLocationtListView  = activity.findViewById(R.id.rl_home_sharemylocation_list );
+		mHomeShareMyLocationList = activity.findViewById(R.id.home_sharemylocation_list);
 
-		mPendingImageButtonLayout = (RelativeLayout)activity.findViewById(R.id.rl_hn_pending_events);
-		mCurrentPendingEventListButton = (ImageButton)activity.findViewById(R.id.img_hn_pending_events);
-		mTxtPendingEventListItemCount = (TextView)activity.findViewById(R.id.txt_unread_events );
-		mHomePendingEventListView  = (RelativeLayout)activity.findViewById(R.id.rl_home_pending_event_list );
-		mHomePendingEventList = (ListView)activity.findViewById(R.id.home_pending_event_list);
+		mPendingImageButtonLayout = activity.findViewById(R.id.rl_hn_pending_events);
+		mCurrentPendingEventListButton = activity.findViewById(R.id.img_hn_pending_events);
+		mTxtPendingEventListItemCount = activity.findViewById(R.id.txt_unread_events );
+		mHomePendingEventListView  = activity.findViewById(R.id.rl_home_pending_event_list );
+		mHomePendingEventList = activity.findViewById(R.id.home_pending_event_list);
 
-		mRunningImageButtonLayout = (RelativeLayout)activity.findViewById(R.id.rl_hn_running_events);
-		mCurrentRunningEventListButton = (ImageButton)activity.findViewById(R.id.img_hn_running_events);
-		mTxtRunningEventListItemCount = (TextView)activity.findViewById(R.id.txt_running_events );
-		mHomeRunningEventListView  = (RelativeLayout)activity.findViewById(R.id.rl_home_running_event_list );
-		mHomeRunningEventList = (ListView)activity.findViewById(R.id.home_running_event_list);
-		mImgBtnMeetNow = (ImageButton)activity.findViewById(R.id.img_meet_now);
-		mImgBtnMeetLater =  (ImageButton)activity.findViewById(R.id.img_meet_later);
-		mImgBtnMeetTrackBuddy = (ImageButton)activity.findViewById(R.id.img_track_buddy);
-		mImgBtnMeetShareMyLoc = (ImageButton)activity.findViewById(R.id.img_share_mylocation);
+		mRunningImageButtonLayout = activity.findViewById(R.id.rl_hn_running_events);
+		mCurrentRunningEventListButton = activity.findViewById(R.id.img_hn_running_events);
+		mTxtRunningEventListItemCount = activity.findViewById(R.id.txt_running_events );
+		mHomeRunningEventListView  = activity.findViewById(R.id.rl_home_running_event_list );
+		mHomeRunningEventList = activity.findViewById(R.id.home_running_event_list);
+		mImgBtnMeetNow = activity.findViewById(R.id.img_meet_now);
+		mImgBtnMeetLater = activity.findViewById(R.id.img_meet_later);
+		mImgBtnMeetTrackBuddy = activity.findViewById(R.id.img_track_buddy);
+		mImgBtnMeetShareMyLoc = activity.findViewById(R.id.img_share_mylocation);
 
 		mSearchLocationTextLength = Constants.HOME_ACTIVITY_LOCATION_TEXT_LENGTH;
 
-		mPin= (ImageView)activity.findViewById(R.id.img_center_pin);
+		mPin= activity.findViewById(R.id.img_center_pin);
 		mPin.setVisibility(View.GONE);
 		//		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 		//			final Drawable originalDrawable = mIconSearchClear.getBackground();
@@ -184,13 +184,13 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 			LinearLayout.LayoutParams paramsh = (LinearLayout.LayoutParams)mImgBtnMeetShareMyLoc.getLayoutParams();
 			paramsh.setMargins(10, 0, 10, 2); //substitute parameters for left, top, right, bottom
 			mImgBtnMeetShareMyLoc.setLayoutParams(paramsh);
-			TextView txtTB = (TextView)activity.findViewById(R.id.txt_track_buddy);
+			TextView txtTB = activity.findViewById(R.id.txt_track_buddy);
 			txtTB.setTextSize(11);
-			txtTB = (TextView)activity.findViewById(R.id.txt_share_my_location);
+			txtTB = activity.findViewById(R.id.txt_share_my_location);
 			txtTB.setTextSize(11);
-			txtTB = (TextView)activity.findViewById(R.id.txt_meet_later);
+			txtTB = activity.findViewById(R.id.txt_meet_later);
 			txtTB.setTextSize(11);
-			txtTB = (TextView)activity.findViewById(R.id.txt_meet_now);
+			txtTB = activity.findViewById(R.id.txt_meet_now);
 			txtTB.setTextSize(11);
 		}		
 		super.initializeElements();

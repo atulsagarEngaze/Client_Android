@@ -54,7 +54,7 @@ public class RunningEventViewManager implements OnClickListener {
 	}
 
 	private void setToolBar(String toolbarTitle){
-		Toolbar toolbar = (Toolbar)activity.findViewById(R.id.running_event_toolbar);
+		Toolbar toolbar = activity.findViewById(R.id.running_event_toolbar);
 		if (toolbar != null) {
 			activity.setSupportActionBar(toolbar);
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -69,11 +69,11 @@ public class RunningEventViewManager implements OnClickListener {
 	}
 
 	protected void initializeElements(Bundle savedInstanceState){
-		mUserLocationListItemMenulistView = (ListView)activity.findViewById(R.id.user_menu_options);
-		mEventDetailRecyclerView = (RecyclerView)activity.findViewById(R.id.map_user_event_details);		
+		mUserLocationListItemMenulistView = activity.findViewById(R.id.user_menu_options);
+		mEventDetailRecyclerView = activity.findViewById(R.id.map_user_event_details);
 		mEventDetailLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 		mEventDetailRecyclerView.setLayoutManager(mEventDetailLayoutManager);
-		mUserLocationDetailRecyclerView = (RecyclerView)activity.findViewById(R.id.map_user_location_list);	
+		mUserLocationDetailRecyclerView = activity.findViewById(R.id.map_user_location_list);
 		mUserLocationDetailLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 
 		mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
@@ -86,14 +86,14 @@ public class RunningEventViewManager implements OnClickListener {
 			}
 		}		
 
-		mNavigationButton = (ImageButton) activity.findViewById(R.id.img_navigation);
+		mNavigationButton = activity.findViewById(R.id.img_navigation);
 		mNavigationButton.setVisibility(View.GONE);	
-		mReCenterButton = (Button) activity.findViewById(R.id.reCenter);		
+		mReCenterButton = activity.findViewById(R.id.reCenter);
 		mReCenterButton.setVisibility(View.GONE);
-		mETAButton = (ImageButton)activity.findViewById(R.id.img_etaDistance);
-		mTrafficButton = (ImageButton)activity.findViewById(R.id.img_traffic);
+		mETAButton = activity.findViewById(R.id.img_etaDistance);
+		mTrafficButton = activity.findViewById(R.id.img_traffic);
 		setRecyclerViewLayoutManager(mCurrentLayoutManagerType);		
-		mProgressBar = (ProgressBar) activity.findViewById(R.id.progress_bar);
+		mProgressBar = activity.findViewById(R.id.progress_bar);
 	}
 
 	protected void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
@@ -124,10 +124,10 @@ public class RunningEventViewManager implements OnClickListener {
 
 
 	protected void setClickListener(){
-		((ImageButton)activity.findViewById(R.id.img_traffic)).setOnClickListener(this);
-		((ImageButton)activity.findViewById(R.id.img_etaDistance)).setOnClickListener(this);	
-		((Button)activity.findViewById(R.id.reCenter)).setOnClickListener(this);
-		((ImageButton)activity.findViewById(R.id.img_navigation)).setOnClickListener(this);		
+		activity.findViewById(R.id.img_traffic).setOnClickListener(this);
+		activity.findViewById(R.id.img_etaDistance).setOnClickListener(this);
+		activity.findViewById(R.id.reCenter).setOnClickListener(this);
+		activity.findViewById(R.id.img_navigation).setOnClickListener(this);
 	}	
 
 	@Override

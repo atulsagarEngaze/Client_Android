@@ -118,7 +118,7 @@ public class TrackingOffset extends Activity {
 		{		   
 			period.setText(period.getText().toString().concat(getResources().getString(R.string.before)));
 			period.setTextColor(getResources().getColorStateList(R.color.primary));
-			Drawable draw = getResources().getDrawable(R.drawable.primary_color_check);
+			Drawable draw = getResources().getDrawable(R.drawable.ic_check_black_24dp);
 			period.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
 		}	
 	}

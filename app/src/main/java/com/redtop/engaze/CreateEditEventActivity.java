@@ -99,12 +99,10 @@ public class CreateEditEventActivity extends BaseEventActivity {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             //getSupportActionBar().setTitle(mActivityTitle);
             getSupportActionBar().setTitle(R.string.title_meet_later);
-            toolbar.setNavigationOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                    finish();
-                }
+            toolbar.setNavigationOnClickListener(v -> {
+                onBackPressed();
+                hideKeyboard(v);
+                finish();
             });
             PreffManager.setPrefArrayList("Invitees", null);
         }
@@ -121,155 +119,97 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     private void initializeClickEvents() {
         ///
-        mStartTimeDisplayView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showDialog(START_TIME_DIALOG_ID);
-            }
-        });
+        mStartTimeDisplayView.setOnClickListener(v -> showDialog(START_TIME_DIALOG_ID));
         ///
-        mEventTypeView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+        mEventTypeView.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
 
-                Intent i = new Intent(CreateEditEventActivity.this, EventTypeList.class);
-                startActivityForResult(i, EVENT_TYPE_REQUEST_CODE);
-            }
+            Intent i = new Intent(CreateEditEventActivity.this, EventTypeList.class);
+            startActivityForResult(i, EVENT_TYPE_REQUEST_CODE);
         });
 
-        mEventLocationTextView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateEditEventActivity.this, PickLocationActivity.class);
-                if (createOrUpdateEvent.destination != null) {
-                    intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.destination);
-                }
-                startActivityForResult(intent, LOCATION_REQUEST_CODE);
+        mEventLocationTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateEditEventActivity.this, PickLocationActivity.class);
+            if (createOrUpdateEvent.destination != null) {
+                intent.putExtra(IntentConstants.DESTINATION_LOCATION, (Parcelable) createOrUpdateEvent.destination);
             }
+            startActivityForResult(intent, LOCATION_REQUEST_CODE);
         });
         //////
-        mStartDateDisplayView.setOnClickListener(new OnClickListener() {
+        mStartDateDisplayView.setOnClickListener(v -> showDialog(START_DATE_DIALOG_ID));
 
-            @Override
-            public void onClick(View v) {
-                showDialog(START_DATE_DIALOG_ID);
-            }
-        });
-
-        imgView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mEventLocationTextView.setText("");
-                createOrUpdateEvent.destination = null;
-            }
+        imgView.setOnClickListener(v -> {
+            mEventLocationTextView.setText("");
+            createOrUpdateEvent.destination = null;
         });
 
         ///
-        mReminderOffsetView.setOnClickListener(new OnClickListener() {
+        mReminderOffsetView.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(CreateEditEventActivity.this, CustomReminder.class);
+            intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) createOrUpdateEvent.reminder);
 
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(CreateEditEventActivity.this, CustomReminder.class);
-                intent.putExtra("com.redtop.engaze.entity.Reminder", (Parcelable) createOrUpdateEvent.reminder);
-
-                startActivityForResult(intent, REMINDER_REQUEST_CODE);
-            }
+            startActivityForResult(intent, REMINDER_REQUEST_CODE);
         });
         ///
-        mTrackingStartOffsetView.setOnClickListener(new OnClickListener() {
+        mTrackingStartOffsetView.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(CreateEditEventActivity.this, TrackingOffset.class);
+            intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.tracking);
 
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(CreateEditEventActivity.this, TrackingOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.tracking);
-
-                startActivityForResult(intent, TRACKING_REQUEST_CODE);
-            }
+            startActivityForResult(intent, TRACKING_REQUEST_CODE);
         });
         ///
-        mDurationTextView.setOnClickListener(new OnClickListener() {
+        mDurationTextView.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
+            Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
+            intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
 
-                Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
-
-                startActivityForResult(intent, DURATION_REQUEST_CODE);
-            }
+            startActivityForResult(intent, DURATION_REQUEST_CODE);
         });
 
-        mRdDailyView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDailyLayoutVisible();
-            }
-        });
+        mRdDailyView.setOnClickListener(v -> setDailyLayoutVisible());
 
-        mRdWeeklyView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setWeeklyLayoutVisible();
-            }
-        });
+        mRdWeeklyView.setOnClickListener(v -> setWeeklyLayoutVisible());
 
         mDayOfMonthView = (TextView) findViewById(R.id.txt_day_of_month);
 
-        mRdMonthlyView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMonthlyLayoutVisible();
-            }
-        });
+        mRdMonthlyView.setOnClickListener(v -> setMonthlyLayoutVisible());
 
-        mAutoCompleteInviteeTextView.setOnKeyListener(new OnKeyListener() {
-
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (getAutoCompleteInviteeTextView().getText().toString().length() <= 0) {
-                        if (mAddedMembers.size() > 0) {
-                            int index = mAddedMembers.size() - 1;
-                            View view = getContactView(index);
-                            String key = (String) ((LinearLayout) view).getChildAt(0).getTag();
-                            mAddedMembers.remove(key);
-                            removeContactView(view, index);
-                        }
+        mAutoCompleteInviteeTextView.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (getAutoCompleteInviteeTextView().getText().toString().length() <= 0) {
+                    if (mAddedMembers.size() > 0) {
+                        int index = mAddedMembers.size() - 1;
+                        View view = getContactView(index);
+                        String key = (String) ((LinearLayout) view).getChildAt(0).getTag();
+                        mAddedMembers.remove(key);
+                        removeContactView(view, index);
                     }
                 }
-                return false;
             }
+            return false;
         });
 
-        mAutoCompleteInviteeTextView.setOnItemClickListener(new OnItemClickListener() {
+        mAutoCompleteInviteeTextView.setOnItemClickListener((adapter, arg1, position, arg3) -> {
+            ContactOrGroup contact = (ContactOrGroup) adapter.getItemAtPosition(position);
+            //v.setSelected(true);
 
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View arg1, int position,
-                                    long arg3) {
-                ContactOrGroup contact = (ContactOrGroup) adapter.getItemAtPosition(position);
-                //v.setSelected(true);
+            if (mAddedMembers.size() < 10) {
 
-                if (mAddedMembers.size() < 10) {
-
-                    if (mAddedMembers.containsKey(contact.getName())) {
-                        Toast.makeText(mContext,
-                                "User is already added", Toast.LENGTH_SHORT).show();
-                    } else {
-                        mAddedMembers.put(contact.getName(), contact);
-                        createContactLayoutItem(contact);
-                        clearAutoCompleteInviteeTextView();
-                    }
-                } else {
+                if (mAddedMembers.containsKey(contact.getName())) {
                     Toast.makeText(mContext,
-                            "You have reached maximum limit of participants!", Toast.LENGTH_SHORT).show();
+                            "User is already added", Toast.LENGTH_SHORT).show();
+                } else {
+                    mAddedMembers.put(contact.getName(), contact);
+                    createContactLayoutItem(contact);
+                    clearAutoCompleteInviteeTextView();
                 }
-
+            } else {
+                Toast.makeText(mContext,
+                        "You have reached maximum limit of participants!", Toast.LENGTH_SHORT).show();
             }
+
         });
         mChkrecurrence.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -307,15 +247,11 @@ public class CreateEditEventActivity extends BaseEventActivity {
         });
 
         for (final AppCompatCheckBox chkBox : mWeekDaysChecboxList.values()) {
-            chkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (!isChecked && mSelectedDateCheck == chkBox) {
-                        Toast.makeText(mContext, "this day is day of selected date, to unselect, please change the date",
-                                Toast.LENGTH_LONG).show();
-                        chkBox.setChecked(true);
-                    }
+            chkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (!isChecked && mSelectedDateCheck == chkBox) {
+                    Toast.makeText(mContext, "this day is day of selected date, to unselect, please change the date",
+                            Toast.LENGTH_LONG).show();
+                    chkBox.setChecked(true);
                 }
             });
         }

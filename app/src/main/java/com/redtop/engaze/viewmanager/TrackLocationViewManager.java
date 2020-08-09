@@ -43,18 +43,16 @@ public class TrackLocationViewManager  {
 	}
 
 	private void setToolBar(){
-		Toolbar toolbar = (Toolbar) activity.findViewById(R.id.track_location_event_toolbar);
+		Toolbar toolbar = activity.findViewById(R.id.track_location_event_toolbar);
 		if (toolbar != null) {
 			activity.setSupportActionBar(toolbar);
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			activity.getSupportActionBar().setTitle(R.string.title_share_my_location);
 			//toolbar.setSubtitle(R.string.title_event);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activity.onBackPressed();
-				}
-			});			
+			toolbar.setNavigationOnClickListener(v -> {
+				activity.hideKeyboard(v);
+				activity.onBackPressed();
+			});
 		}
 	}
 
@@ -62,13 +60,13 @@ public class TrackLocationViewManager  {
 		return mAutoCompleteInviteeTextView;
 	}
 	private void initializeElements(){
-		mQuickEventName = (TextView)activity.findViewById(R.id.QuickEventName);
-		mDurationLabel = (TextView)activity.findViewById(R.id.Duration);
-		mFlowContainer = (ViewGroup) activity.findViewById(R.id.participant_layout);
-		mEventLocationTextView = (TextView)activity.findViewById(R.id.tracklocation_location);		
-		mDurationtext = (TextView)activity.findViewById(R.id.tracklocation_Duration_holder);
-		mBtnStartTracking = (Button)activity.findViewById(R.id.btn_tracking_start);
-		mAutoCompleteInviteeTextView = (CustomAutoCompleteTextView)activity.findViewById(R.id.searchAutoComplete);	
+		mQuickEventName = activity.findViewById(R.id.QuickEventName);
+		mDurationLabel = activity.findViewById(R.id.Duration);
+		mFlowContainer = activity.findViewById(R.id.participant_layout);
+		mEventLocationTextView = activity.findViewById(R.id.tracklocation_location);
+		mDurationtext = activity.findViewById(R.id.tracklocation_Duration_holder);
+		mBtnStartTracking = activity.findViewById(R.id.btn_tracking_start);
+		mAutoCompleteInviteeTextView = activity.findViewById(R.id.searchAutoComplete);
 	}
 
 	private void setClickListener(){
@@ -100,13 +98,10 @@ public class TrackLocationViewManager  {
 		lblname.setText(cg.getName());
 		lblname.setTag(cg.getName());
 
-		contactLayout.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {			
-				mFlowContainer.removeView(v);
-				activity.onContactViewClicked(v);				
-			}
-		});	
+		contactLayout.setOnClickListener(v -> {
+			mFlowContainer.removeView(v);
+			activity.onContactViewClicked(v);
+		});
 		mFlowContainer.addView(contactLayout, childrenCount-1,new LayoutParams(LayoutParams.WRAP_CONTENT , LayoutParams.WRAP_CONTENT ));
 	}
 

@@ -248,15 +248,11 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
     }
 
     private void displayNotifications() {
-        new Handler().post(new Runnable() {
-
-            @Override
-            public void run() {
-                refreshPendingEventList();
-                refreshRunningEventList();
-                refreshShareMyLocationList();
-                refreshTrackBuddyList();
-            }
+        new Handler().post(() -> {
+            refreshPendingEventList();
+            refreshRunningEventList();
+            refreshShareMyLocationList();
+            refreshTrackBuddyList();
         });
     }
 

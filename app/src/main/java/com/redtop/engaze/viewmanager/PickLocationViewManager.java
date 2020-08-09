@@ -34,17 +34,17 @@ public class PickLocationViewManager  extends MapCameraMovementHandleViewManager
 	@Override
 	protected void initializeElements(){
 
-		mBackButton = (ImageView)activity.findViewById(R.id.img_pick_location_back);
-		mSelectedLocationAddressText = (TextView)activity.findViewById(R.id.txt_selected_location_address);
-		mSelectedLocationNameText=  (TextView)activity.findViewById(R.id.txt_selected_location_name);
-		mselectedLocationLayout = (RelativeLayout)activity.findViewById(R.id.rl_selected_location);
+		mBackButton = activity.findViewById(R.id.img_pick_location_back);
+		mSelectedLocationAddressText = activity.findViewById(R.id.txt_selected_location_address);
+		mSelectedLocationNameText= activity.findViewById(R.id.txt_selected_location_name);
+		mselectedLocationLayout = activity.findViewById(R.id.rl_selected_location);
 		mselectedLocationLayout.setVisibility(View.GONE);
 		mSearchLocationTextLength = PICK_LOCATION_ACTIVITY_LOCATION_TEXT_LENGTH;
 		
-		mBtnImgeAddLocation =  (ImageButton)activity.findViewById(R.id.img_add_location);
+		mBtnImgeAddLocation = activity.findViewById(R.id.img_add_location);
 		mBtnImgeAddLocation.setVisibility(View.GONE);
 		activity.mSuggestedLocationAdapter = new NewSuggestedLocationAdapter(activity, R.layout.item_suggested_location_list, activity.mAutoCompletePlaces);
-		mPin= (ImageView)activity.findViewById(R.id.img_center_pin);
+		mPin= activity.findViewById(R.id.img_center_pin);
 		mPin.setVisibility(View.GONE);
 //		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 //			final Drawable originalDrawable = mIconSearchClear.getBackground();
@@ -69,7 +69,7 @@ public class PickLocationViewManager  extends MapCameraMovementHandleViewManager
 		switch(v.getId()){
 		case R.id.icon_search_clear:			
 			mBtnImgeAddLocation.setVisibility(View.GONE);
-			mselectedLocationLayout.setVisibility(View.GONE);;
+			mselectedLocationLayout.setVisibility(View.GONE);
 			mSelectedLocationNameText.setText("");
 			mSelectedLocationAddressText.setText("");
 			mEventLocation.setText("");
