@@ -3,6 +3,7 @@ package com.redtop.engaze;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -158,7 +159,6 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     public void SaveEvent() {
-
         populateEventData();
 
         if (!validateInputData()) {
@@ -230,6 +230,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 break;
             case R.id.btn_tracking_start:
                 createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
+                hideKeyboard(v);
                 SaveEvent();
                 break;
         }

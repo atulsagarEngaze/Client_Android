@@ -23,7 +23,7 @@ public abstract class BaseWebService {
             .getSimpleName();
 
     private static RequestQueue mRequestQueue;
-    public static final String MAP_API_URL = "http://127.0.0.1:8080/";
+    public static final String MAP_API_URL = "http://127.0.0.1:6000/";
 
     public static final int DEFAULT_SHORT_TIME_TIMEOUT = 20000;//millisecond
     public static final int DEFAULT_MEDIUM_TIME_TIMEOUT = 40000;//millisecond

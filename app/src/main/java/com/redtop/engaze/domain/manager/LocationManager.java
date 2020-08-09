@@ -11,15 +11,17 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.webservice.ILocationWS;
+import com.redtop.engaze.webservice.LocationWS;
 import com.redtop.engaze.webservice.proxy.LocationWSProxy;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LocationManager {
 
     private final static String TAG = LocationManager.class.getName();
-    private final static ILocationWS locationWS = new LocationWSProxy();
+    private final static ILocationWS locationWS = new LocationWS();
 
     public static void updateLocationToServer(final Context context, final Location location, final String loginId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         //this will be called from background service, app may not be running at that time
@@ -28,7 +30,6 @@ public class LocationManager {
             return;
         }
 
-        LocationWSProxy.location = location;
         UsersLocationDetail usersLocationDetail = new UsersLocationDetail(
                 loginId,
                 location.getLatitude(),
@@ -58,10 +59,17 @@ public class LocationManager {
                                               final OnAPICallCompleteListener onAPICallCompleteListener) {
 
 
-        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListener<JSONObject>() {
+        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListener<String>() {
             @Override
-            public void apiCallSuccess(JSONObject response) {
-                onAPICallCompleteListener.apiCallSuccess(response);
+            public void apiCallSuccess(String response) {
+
+                JSONArray jsonArrayResult = null;
+                try {
+                    jsonArrayResult = new JSONArray(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                onAPICallCompleteListener.apiCallSuccess( jsonArrayResult);
             }
 
             @Override

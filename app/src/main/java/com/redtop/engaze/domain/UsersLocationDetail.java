@@ -36,14 +36,14 @@ public class UsersLocationDetail implements Serializable {
     @Expose
     public String createdOn;
     @Expose
-    public String currentAddress;
+    public String address;
 
     public ContactOrGroup contactOrGroup;
     public String distance = "";
     public String userName;
     public String currentKnownPlace;
 
-    public String currentDisplayAddress;
+    public String name;
     public AcceptanceStatus acceptanceStatus;
     public Boolean showLocationOnMap = true;
     public int imageID;

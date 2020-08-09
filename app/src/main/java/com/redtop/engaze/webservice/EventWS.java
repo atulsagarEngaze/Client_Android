@@ -17,9 +17,9 @@ public class EventWS extends BaseWebService implements IEventWS {
         try {
             String url = "";
             if (jsonObject.has("EventId")) {
-                url = MAP_API_URL + ApiUrl.UPDATE_EVENT;
+                url = ApiUrl.UPDATE_EVENT;
             } else {
-                url = MAP_API_URL + ApiUrl.CREATE_EVENT;
+                url = ApiUrl.CREATE_EVENT;
             }
 
             postData(jsonObject, url, onAPICallCompleteListener);
@@ -33,7 +33,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = MAP_API_URL + ApiUrl.RESPOND_INVITE;
+            String url = ApiUrl.RESPOND_INVITE;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
@@ -42,7 +42,7 @@ public class EventWS extends BaseWebService implements IEventWS {
             jsonObject.put("EventAcceptanceStateId", acceptanceStatus.getStatus());
             jsonObject.put("TrackingAccepted", "true");
 
-            postData( jsonObject, url, onAPICallCompleteListener);
+            postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
@@ -55,7 +55,7 @@ public class EventWS extends BaseWebService implements IEventWS {
         try {
 
 
-            String url = MAP_API_URL + (ApiUrl.END_EVENT).replace("{eventId}", eventID);
+            String url = ApiUrl.END_EVENT.replace("{eventId}", eventID);
             // making json object request
             JSONObject jsonObject = new JSONObject();
             putData(jsonObject, url, onAPICallCompleteListener);
@@ -71,7 +71,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void leaveEvent(final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String url = MAP_API_URL + ApiUrl.LEAVE_EVENT;
+            String url = ApiUrl.LEAVE_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("RequestorId", AppContext.context.loginId);
@@ -90,7 +90,7 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void RefreshEventListFromServer(final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String url = MAP_API_URL + (ApiUrl.EVENT_DETAIL).replace("{userId}", AppContext.context.loginId);
+            String url = ApiUrl.EVENT_DETAIL.replace("{userId}", AppContext.context.loginId);
             getData(url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
@@ -102,7 +102,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = MAP_API_URL + ApiUrl.EXTEND_EVENT;
+            String url = ApiUrl.EXTEND_EVENT;
             // making json object request
             JSONObject jsonObject = new JSONObject();
 
@@ -120,7 +120,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = MAP_API_URL + ApiUrl.UPDATE_DESTINATION;
+            String url = ApiUrl.UPDATE_DESTINATION;
 
             JSONObject jsonObject = new JSONObject();
 
@@ -153,9 +153,9 @@ public class EventWS extends BaseWebService implements IEventWS {
 
         try {
 
-            String url = MAP_API_URL + (ApiUrl.EVENT_DETAIL).replace("{userId}", "6172ab1a-2e58-4dab-9431-9a06dd88905c")
-                    .replace("{eventId}", eventid);//AppContext.context.loginId);
-            getData( url, onAPICallCompleteListener);
+            String url = ApiUrl.EVENT_DETAIL.replace("{userId}", AppContext.context.loginId)
+                    .replace("{eventId}", eventid);
+            getData(url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

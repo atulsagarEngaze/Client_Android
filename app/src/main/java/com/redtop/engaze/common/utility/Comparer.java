@@ -11,8 +11,8 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 	public int compare(UsersLocationDetail lhs, UsersLocationDetail rhs) {
 		if(lhs.acceptanceStatus==rhs.acceptanceStatus){
 			if (lhs.acceptanceStatus== AcceptanceStatus.ACCEPTED ){
-				if(lhs.currentAddress!=null && lhs.currentAddress!=""){
-					if(rhs.currentAddress!=null && rhs.currentAddress!=""){
+				if(lhs.address !=null && lhs.address !=""){
+					if(rhs.address !=null && rhs.address !=""){
 						return  lhs.userName.compareToIgnoreCase(rhs.userName);
 					}
 					else {
@@ -21,7 +21,7 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 
 				}
 				else {
-					if(rhs.currentAddress!=null && rhs.currentAddress!=""){
+					if(rhs.address !=null && rhs.address !=""){
 						return 1;
 					}
 					else

@@ -162,7 +162,7 @@ public class Event implements DataModel {
         EventParticipant member = null;
         if (this.participants != null && this.participants.size() > 0) {
             for (EventParticipant mem : this.participants) {
-                if (mem.userId.equalsIgnoreCase(userId.toLowerCase())) {
+                if (mem.userId!=null && mem.userId.equalsIgnoreCase(userId)) {
                     member = mem;
                     break;
                 }

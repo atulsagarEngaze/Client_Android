@@ -57,7 +57,7 @@ public class InfoWindowHelper {
                 String address = "";
                 String userName = "";
                 if (ud != null) {//destination address
-                    address = ud.currentAddress;
+                    address = ud.address;
                     userName = ud.userName;
                 } else {
                     address = ed.destination.getAddress();

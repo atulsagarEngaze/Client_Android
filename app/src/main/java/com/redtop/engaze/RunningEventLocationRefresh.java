@@ -1,15 +1,12 @@
 package com.redtop.engaze;
 
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -90,16 +87,12 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             return;
         }
 
-        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListener<JSONObject>() {
+        LocationManager.getLocationsFromServer(mUserId, mEventId, new OnAPICallCompleteListener<JSONArray>() {
 
             @Override
-            public void apiCallSuccess(JSONObject response) {
+            public void apiCallSuccess(JSONArray response) {
                 if (isActivityRunning) {
-                    try {
-                        onSuccessLocationResponse(response.getJSONArray("ListOfUserLocation"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    onSuccessLocationResponse(response);
                 }
             }
 
@@ -160,14 +153,19 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 
     private class populateLocationListWithAddress extends AsyncTask<JSONArray, Void, String> {
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected String doInBackground(JSONArray... jsonObjects) {
             try {
+                JSONObject locFromServerObj;
+                UsersLocationDetail udFromServer;
                 JSONArray userLocationsJsonArray = jsonObjects[0];
                 ArrayList<UsersLocationDetail> userLocationsFromServer = new ArrayList<>();
                 for (int i = 0; i < userLocationsJsonArray.length(); i++) {
-
-                    userLocationsFromServer.add(AppContext.jsonParser.deserialize(userLocationsJsonArray.getJSONObject(i).toString(), UsersLocationDetail.class));
+                    locFromServerObj = userLocationsJsonArray.getJSONObject(i);
+                    udFromServer = AppContext.jsonParser.deserialize(locFromServerObj.get("location").toString(), UsersLocationDetail.class);
+                    udFromServer.userId = locFromServerObj.get("userId").toString();
+                    userLocationsFromServer.add(udFromServer);
                 }
 
                 ParticipantService.updateUserListWithLocation(userLocationsFromServer, mUsersLocationDetailList, mDestinationlatlang);
@@ -205,8 +203,8 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         protected void onPreExecute() {
             for (UsersLocationDetail ud : mUsersLocationDetailList) {
                 if (ud != null) {
-                    if (ud.currentAddress == null || ud.currentAddress == "") {
-                        ud.currentAddress = "fetching location..";
+                    if (ud.address == null || ud.address == "") {
+                        ud.address = "fetching location..";
                     }
                 }
             }
@@ -247,7 +245,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         // TODO Auto-generated method stub
         mUsersLocationDetailList = new ArrayList<UsersLocationDetail>();
         mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent, mContext));
-        currentUld = mUsersLocationDetailList.stream().filter(usersLocationDetail->   ParticipantService.isParticipantCurrentUser(usersLocationDetail.userId)).findFirst().get();
+        currentUld = mUsersLocationDetailList.stream().filter(usersLocationDetail -> ParticipantService.isParticipantCurrentUser(usersLocationDetail.userId)).findFirst().get();
 
         arrangeListinAvailabilityOrder();
     }
@@ -288,7 +286,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             Boolean isExist = false;
             tUl = null;
             for (UsersLocationDetail uld : temUldList) {
-               if (uld.userId!=null && uld.userId.equalsIgnoreCase(em.userId)) {
+                if (uld.userId != null && uld.userId.equalsIgnoreCase(em.userId)) {
                     uld.acceptanceStatus = em.acceptanceStatus;
                     tUl = uld;
                     isExist = true;

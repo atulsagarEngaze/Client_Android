@@ -275,22 +275,22 @@ public class ParticipantService {
             for (UsersLocationDetail userLocation : userLocationsFromServer)
 
                 for (UsersLocationDetail ud : userLocationList) {
-                    if (ud.userId.equalsIgnoreCase(userLocation.userId)) {
+                    if (ud.userId!=null && ud.userId.equalsIgnoreCase(userLocation.userId)) {
                         ud.latitude = userLocation.latitude;
                         ud.longitude = userLocation.longitude;
                         ud.createdOn = DateUtil.convertUtcToLocalDateTime(userLocation.createdOn, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
                         ud.eta = userLocation.eta;
                         ud.arrivalStatus = userLocation.arrivalStatus;
-                        if (userLocation.currentAddress != null && userLocation.currentAddress != "") {
-                            ud.currentAddress = userLocation.currentAddress;
-                            ud.currentDisplayAddress = buildCurrentDisplayAddress(userLocation.currentAddress);
+                        if (userLocation.address != null && userLocation.address != "") {
+                            ud.address = userLocation.address;
+                            ud.name = buildCurrentDisplayAddress(userLocation.address);
                             if (destLoc != null) {
                                 Location loc = new Location("");//provider name is unecessary
                                 loc.setLatitude(userLocation.latitude);//your coords of course
                                 loc.setLongitude(userLocation.longitude);
                                 if (loc.distanceTo(destLoc) <= Constants.DESTINATION_RADIUS) {
-                                    ud.currentAddress = "at destination";
-                                    ud.currentDisplayAddress = "at destination";
+                                    ud.address = "at destination";
+                                    ud.name = "at destination";
                                 }
                             }
                         }

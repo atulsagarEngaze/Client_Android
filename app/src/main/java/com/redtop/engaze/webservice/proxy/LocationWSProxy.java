@@ -27,14 +27,14 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
             JSONArray jLocation = new JSONArray();
             UsersLocationDetail ud1 = new UsersLocationDetail("3105beb6-3347-4bdf-8905-29b622b51dbd",
                     12.9823286, 77.6931817,"","");
-            ud1.currentAddress = "83, Laxmi Sagar Layout, 2, Goshala Rd, Garudachar Palya, Mahadevapura, Bengaluru, Karnataka 560048";
+            ud1.address = "83, Laxmi Sagar Layout, 2, Goshala Rd, Garudachar Palya, Mahadevapura, Bengaluru, Karnataka 560048";
             ud1.eta = "";
 
             jLocation.put(new JSONObject( AppContext.jsonParser.Serialize(ud1)));
 
             UsersLocationDetail ud2 = new UsersLocationDetail("94973d2a-614e-4b2c-8654-7e6b13cdc44e",
                     location.getLatitude(), location.getLongitude(),"","");
-            ud2.currentAddress = "#1127, 8th B Main, BTM 1st Stage, Bangalore 560029";
+            ud2.address = "#1127, 8th B Main, BTM 1st Stage, Bangalore 560029";
             ud2.eta = "";
 
             jLocation.put(new JSONObject( AppContext.jsonParser.Serialize(ud2)));
@@ -58,7 +58,7 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
             JSONArray jLocation = new JSONArray();
             UsersLocationDetail ud1 = new UsersLocationDetail("3105beb6-3347-4bdf-8905-29b622b51dbd",
                     12.9823286, 77.6931817,"","");
-            ud1.currentAddress = "83, Laxmi Sagar Layout, 2, Goshala Rd, Garudachar Palya, Mahadevapura, Bengaluru, Karnataka 560048";
+            ud1.address = "83, Laxmi Sagar Layout, 2, Goshala Rd, Garudachar Palya, Mahadevapura, Bengaluru, Karnataka 560048";
             ud1.eta = "";
             Date currentTime = Calendar.getInstance().getTime();
             ud1.createdOn = DateUtil.ConvertDateToString(currentTime);
@@ -67,7 +67,7 @@ public class LocationWSProxy extends BaseWebService implements ILocationWS {
 
             UsersLocationDetail ud2 = new UsersLocationDetail("94973d2a-614e-4b2c-8654-7e6b13cdc44e",
                     location.getLatitude(), location.getLongitude(),"","");
-            ud2.currentAddress = "#1127, 8th B Main, BTM 1st Stage, Bangalore 560029";
+            ud2.address = "#1127, 8th B Main, BTM 1st Stage, Bangalore 560029";
             ud2.eta = "";
 
             ud2.createdOn = DateUtil.ConvertDateToString(currentTime);

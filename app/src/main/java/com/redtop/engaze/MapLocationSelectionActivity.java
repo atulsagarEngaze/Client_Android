@@ -444,7 +444,7 @@ public abstract class MapLocationSelectionActivity extends MyCurrentLocationHand
     public void onListItemClicked(AutoCompletePlace item) {
 
 // Specify the fields to return.
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
 
 // Construct a request object, passing the place ID and fields array.
         FetchPlaceRequest request = FetchPlaceRequest.builder(item.getPlaceId(), placeFields)

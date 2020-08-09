@@ -87,7 +87,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                         viewHolder.rlDeclinedUser.setVisibility(View.GONE);
                         viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
 
-                        String displayText = ud.currentDisplayAddress;
+                        String displayText = ud.name;
 
                         if (displayText == null || displayText.equals("")) {
                             displayText = mContext.getString(R.string.label_runningEvent_acceptedLocationNotFound);
