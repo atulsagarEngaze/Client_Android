@@ -5,17 +5,23 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public abstract class BaseWebService {
 
@@ -63,7 +69,6 @@ public abstract class BaseWebService {
         Log.d(TAG, "Calling URL:" + url);
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
-            Log.d(TAG, response.toString());
             callCompleteListener.apiCallSuccess(response);
         }, (Response.ErrorListener) error -> {
             Log.d(TAG, "Volley Error: " + error.getMessage());
@@ -72,6 +77,28 @@ public abstract class BaseWebService {
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONObject result = null;
+
+                    if (jsonString != null && jsonString.length() > 0) {
+                        Log.d(TAG, jsonString);
+                        result = new JSONObject(jsonString);
+                    }
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch ( JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
             }
         };
         jsonObjReq.setRetryPolicy(GetDefaultReTryPolicy());
@@ -84,7 +111,6 @@ public abstract class BaseWebService {
         Log.d(TAG, "Calling URL:" + url);
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
-            Log.d(TAG, response.toString());
             callCompleteListener.apiCallSuccess(response);
         }, (Response.ErrorListener) error -> {
             Log.d(TAG, "Volley Error: " + error.getMessage());
@@ -93,6 +119,28 @@ public abstract class BaseWebService {
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONObject result = null;
+
+                    if (jsonString != null && jsonString.length() > 0) {
+                        Log.d(TAG, jsonString);
+                        result = new JSONObject(jsonString);
+                    }
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch ( JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
             }
         };
         jsonObjReq.setRetryPolicy(GetDefaultReTryPolicy());

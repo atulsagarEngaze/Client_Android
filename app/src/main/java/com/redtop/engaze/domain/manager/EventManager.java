@@ -391,10 +391,7 @@ public class EventManager {
 
             @Override
             public void apiCallSuccess(JSONObject response) {
-                Log.d(TAG, "EventResponse:" + response.toString());
                 try {
-
-
                     EventNotificationManager.cancelAllNotifications(event);
                     EventService.RemoveEndEventAlarm(eventid);
                     InternalCaching.removeEventFromCache(eventid);

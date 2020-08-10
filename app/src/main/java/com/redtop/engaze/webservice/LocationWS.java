@@ -13,7 +13,6 @@ public class LocationWS extends BaseWebService implements ILocationWS {
                                final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             String url = ApiUrl.UPLOAD_USER_LOCATION.replace("{userId}", AppContext.context.loginId);
-            Log.d(TAG, "Calling URL:" + url);
             postData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
@@ -27,8 +26,6 @@ public class LocationWS extends BaseWebService implements ILocationWS {
                                        final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
             String url = ApiUrl.FETCH_USER_LOCATION.replace("{eventId}", eventId).replace("{requesterId}", userId);
-            Log.d(TAG, "Calling URL:" + url);
-
             getData(url, onAPICallCompleteListener);
 
         } catch (Exception ex) {

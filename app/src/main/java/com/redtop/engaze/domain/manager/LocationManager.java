@@ -23,21 +23,16 @@ public class LocationManager {
     private final static String TAG = LocationManager.class.getName();
     private final static ILocationWS locationWS = new LocationWS();
 
-    public static void updateLocationToServer(final Context context, final Location location, final String loginId, final OnAPICallCompleteListener onAPICallCompleteListener) {
+    public static void updateLocationToServer(final Context context, final UsersLocationDetail location, final OnAPICallCompleteListener onAPICallCompleteListener) {
         //this will be called from background service, app may not be running at that time
         if (!AppUtility.isNetworkAvailable(context)) {
             Log.d(TAG, "No internet connection. Aborting location update to server.");
             return;
         }
 
-        UsersLocationDetail usersLocationDetail = new UsersLocationDetail(
-                loginId,
-                location.getLatitude(),
-                location.getLongitude(), "1.0", "0");
-
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject(new JsonParser().Serialize(usersLocationDetail));
+            jsonObject = new JSONObject(new JsonParser().Serialize(location));
         } catch (JSONException e) {
             e.printStackTrace();
         }

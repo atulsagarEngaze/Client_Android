@@ -245,8 +245,6 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         // TODO Auto-generated method stub
         mUsersLocationDetailList = new ArrayList<UsersLocationDetail>();
         mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent, mContext));
-        currentUld = mUsersLocationDetailList.stream().filter(usersLocationDetail -> ParticipantService.isParticipantCurrentUser(usersLocationDetail.userId)).findFirst().get();
-
         arrangeListinAvailabilityOrder();
     }
 
