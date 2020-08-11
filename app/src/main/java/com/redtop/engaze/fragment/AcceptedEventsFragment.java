@@ -21,7 +21,7 @@ public class AcceptedEventsFragment extends EventsFragmentBase implements OnItem
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);				
 		mContext = getActivity();
-		mEventList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.ACCEPTED);
+		mEventList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.Accepted);
 	}
 
 	@Override

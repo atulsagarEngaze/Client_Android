@@ -90,14 +90,14 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 			
 			@Override
 			public void onClick(View v) {
-				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.ACCEPTED);
+				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.Accepted);
 			}
 		});
 		holder.txtReject.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.DECLINED);
+				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.Declined);
 			}
 		});
 		if(EventService.isEventShareMyLocationEventForCurrentUser(rowItem)){

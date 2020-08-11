@@ -323,7 +323,7 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 		for(UsersLocationDetail userLocationDetail : mUsersLocationDetailList )
 		{
 			marker = null;
-			if(userLocationDetail.acceptanceStatus== AcceptanceStatus.ACCEPTED)
+			if(userLocationDetail.acceptanceStatus== AcceptanceStatus.Accepted)
 			{
 				if (!isMarkerExistForTheUser(userLocationDetail.userId)){
 

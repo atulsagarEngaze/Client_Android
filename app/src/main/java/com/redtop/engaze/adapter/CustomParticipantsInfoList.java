@@ -93,10 +93,10 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 			holder.img_profile.setVisibility(View.GONE);
 
 			holder.img_status.setVisibility(View.VISIBLE);
-			if (member.acceptanceStatus == AcceptanceStatus.ACCEPTED) {
+			if (member.acceptanceStatus == AcceptanceStatus.Accepted) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_lightgreen);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_check_green_48));
-			} else if (member.acceptanceStatus == AcceptanceStatus.DECLINED) {
+			} else if (member.acceptanceStatus == AcceptanceStatus.Declined) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_red);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_decline_red_48));
 			} else {
@@ -115,7 +115,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 
 			holder.tv.setText(participanName);
 
-			if (member.acceptanceStatus != AcceptanceStatus.ACCEPTED) {
+			if (member.acceptanceStatus != AcceptanceStatus.Accepted) {
 				holder.img_poke.setOnClickListener(new OnClickListener() {
 
 					@Override

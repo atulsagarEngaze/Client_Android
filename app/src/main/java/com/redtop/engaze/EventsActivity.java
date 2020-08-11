@@ -235,13 +235,13 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 	public void refreshEventFragments() {		
 		if(aef!=null){
-			aef.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.ACCEPTED));
+			aef.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Accepted));
 		}
 		if(pef!=null){
-			pef.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.PENDING));
+			pef.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Pending));
 		}
 		if(def!=null){
-			def.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.DECLINED));
+			def.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Declined));
 		}	
 	}
 
@@ -260,13 +260,13 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		for(Event ed : eventList){
 			if(ed.eventType != EventType.TRACKBUDDY){
 			switch (ed.getCurrentParticipant().acceptanceStatus) {
-			case ACCEPTED:
+			case Accepted:
 				al.add(ed);
 				break;
-			case PENDING:
+			case Pending:
 				pl.add(ed);
 				break;
-			case DECLINED:
+				case Declined:
 				dl.add(ed);
 				break;
 
@@ -275,9 +275,9 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 			}
 			}
 		}		
-		mEventDetailHashmap.put(AcceptanceStatus.ACCEPTED, al);
-		mEventDetailHashmap.put(AcceptanceStatus.PENDING, pl);
-		mEventDetailHashmap.put(AcceptanceStatus.DECLINED, dl);
+		mEventDetailHashmap.put(AcceptanceStatus.Accepted, al);
+		mEventDetailHashmap.put(AcceptanceStatus.Pending, pl);
+		mEventDetailHashmap.put(AcceptanceStatus.Declined, dl);
 
 	}
 
@@ -363,14 +363,14 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 
 			case R.id.context_action_accept:
 
-				EventManager.saveUserResponse(AcceptanceStatus.ACCEPTED, event.eventId,
+				EventManager.saveUserResponse(AcceptanceStatus.Accepted, event.eventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.DECLINED,  event.eventId,
+				EventManager.saveUserResponse(AcceptanceStatus.Declined,  event.eventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();

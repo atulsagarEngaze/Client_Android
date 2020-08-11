@@ -132,7 +132,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             cal.add(Calendar.MINUTE, ed.tracking.getOffSetInMinutes() * -1);
 
 
-            if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED && cal.getTime().getTime() - currentDate.getTime() < 0) {
+            if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted && cal.getTime().getTime() - currentDate.getTime() < 0) {
                 viewHolder.trackingStatus = true;
                 viewHolder.imgEventTrackingOn.setVisibility(View.VISIBLE);
             } else {
@@ -309,7 +309,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
                 public void onClick(View v) {
 
                     if (
-                            event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED &&
+                            event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted &&
 
                                     trackingStatus) {
                         Intent intent = new Intent(mContext, RunningEventActivity.class);
@@ -395,10 +395,10 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
 //				{
 //					itemDelete.setVisible(true);
 //				}
-                if (this.event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.ACCEPTED) {
+                if (this.event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted) {
                     itemAccept.setVisible(false);
                     itemDeclined.setVisible(true);
-                } else if (this.event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.PENDING) {
+                } else if (this.event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Pending) {
                     itemAccept.setVisible(true);
                     itemDeclined.setVisible(true);
                 } else {

@@ -36,11 +36,11 @@ public class EventParticipantsInfo extends BaseActivity {
         CustomParticipantsInfoList adapter = new CustomParticipantsInfoList(EventParticipantsInfo.this, eventMembers, initiatorID, eventId, source);
         if (source != null && source.equals(RunningEventActivity.class.getName())) {
             if (eventMembers.size() > 0) {
-                if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.ACCEPTED) {
+                if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Accepted) {
                     tvHeader.setText(getResources().getString(R.string.accepted_members_header));
-                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.PENDING) {
+                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Pending) {
                     tvHeader.setText(getResources().getString(R.string.pending_members_header));
-                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.DECLINED) {
+                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Declined) {
                     tvHeader.setText(getResources().getString(R.string.declined_members_header));
                 }
             }

@@ -4,11 +4,11 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PermissionRequester;
@@ -16,7 +16,6 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ALL_NECCESSARY;
-import static com.redtop.engaze.common.constant.RequestCode.Permission.SEND_SMS;
 
 public class SplashActivity extends BaseActivity {
 
@@ -31,9 +30,15 @@ public class SplashActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AcceptanceStatus status = AcceptanceStatus.Accepted;
+
+        String strAccpet  =  "Accepted";
+
+        AcceptanceStatus status2 = AppContext.jsonParser.deserialize(strAccpet, AcceptanceStatus.class);
+
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
-        //firs time load ask for all the permissions needed
+        //first time load ask for all the permissions needed
         if (AppContext.context.loginId == null) {
             checkRequiredPermissions();
         } else {

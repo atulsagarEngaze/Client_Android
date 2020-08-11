@@ -1,7 +1,10 @@
 package com.redtop.engaze.common.enums;
 
+import com.google.gson.annotations.Expose;
+
 public enum AcceptanceStatus {
-    ACCEPTED(1), DECLINED(0),PENDING(-1);
+    @Expose
+    Accepted(1), Declined(0), Pending(-1);
 
     private final int status;
 
@@ -19,16 +22,16 @@ public enum AcceptanceStatus {
         {
 
             case 0 :
-                return AcceptanceStatus.DECLINED;
+                return AcceptanceStatus.Declined;
 
             case -1:
-                return AcceptanceStatus.PENDING;
+                return AcceptanceStatus.Pending;
 
             case 1:
-                return AcceptanceStatus.ACCEPTED;
+                return AcceptanceStatus.Accepted;
 
             default :
-                return AcceptanceStatus.PENDING;
+                return AcceptanceStatus.Pending;
 
         }
     }

@@ -146,7 +146,7 @@ public class RunningEventActions extends RunningEventActivityResults {
             String alertmsg = "";
 
             if (eventAcceptanceStateId != -1) {
-                if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.ACCEPTED) {
+                if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.Accepted) {
                     if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
                         alertmsg = eventResponderName + " has accepted your tracking request";
                     } else {
@@ -238,7 +238,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
             @Override
             public void actionComplete(Action action) {
-                mEvent.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.DECLINED;
+                mEvent.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.Declined;
                 AppContext.actionHandler.actionComplete(action);
                 gotoPreviousPage();
 

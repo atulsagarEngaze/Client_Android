@@ -135,7 +135,7 @@ public class ParticipantService {
     }
 
     public static Boolean isNotifyUser(Event event) {
-        if (event != null && event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.DECLINED) {
+        if (event != null && event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Declined) {
             return false;
         }
         return true;

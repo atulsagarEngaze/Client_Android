@@ -10,7 +10,7 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 	@Override
 	public int compare(UsersLocationDetail lhs, UsersLocationDetail rhs) {
 		if(lhs.acceptanceStatus==rhs.acceptanceStatus){
-			if (lhs.acceptanceStatus== AcceptanceStatus.ACCEPTED ){
+			if (lhs.acceptanceStatus== AcceptanceStatus.Accepted){
 				if(lhs.address !=null && lhs.address !=""){
 					if(rhs.address !=null && rhs.address !=""){
 						return  lhs.userName.compareToIgnoreCase(rhs.userName);
@@ -34,7 +34,7 @@ public class Comparer implements Comparator<UsersLocationDetail> {
 			return  lhs.userName.compareToIgnoreCase(rhs.userName);
 		}
 		else {
-			if (lhs.acceptanceStatus==AcceptanceStatus.ACCEPTED ){
+			if (lhs.acceptanceStatus==AcceptanceStatus.Accepted){
 				return -1;
 			}
 			else

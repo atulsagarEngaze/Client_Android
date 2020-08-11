@@ -69,7 +69,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
 
             viewHolder.profileImage.setBackground(ud.contactOrGroup.getImageDrawable(mContext));
 
-            if (ud.acceptanceStatus== AcceptanceStatus.ACCEPTED) {
+            if (ud.acceptanceStatus== AcceptanceStatus.Accepted) {
                 if (ud.latitude==null||ud.latitude.equals("")) {
 
                     viewHolder.rlActiveWithNoLocationUser.setVisibility(View.VISIBLE);
@@ -113,7 +113,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                 viewHolder.rlNotRespondedUser.setVisibility(View.VISIBLE);
                 viewHolder.locationImage.setVisibility(View.GONE);
 
-                if (ud.acceptanceStatus == AcceptanceStatus.DECLINED) {
+                if (ud.acceptanceStatus == AcceptanceStatus.Declined) {
                     viewHolder.rlDeclinedUser.setVisibility(View.VISIBLE);
                     viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
                 }

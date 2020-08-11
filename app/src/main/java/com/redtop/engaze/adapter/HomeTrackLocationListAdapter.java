@@ -98,7 +98,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         holder.txtName.setText(cg.getName());
         holder.imageView.setBackground(cg.getImageDrawable(mContext));
         holder.txtTimeInfo.setText(getStartTimeAndTimeLeftText(event, rowItem.getAcceptance()));
-        if (rowItem.getMember().acceptanceStatus == AcceptanceStatus.ACCEPTED) {
+        if (rowItem.getMember().acceptanceStatus == AcceptanceStatus.Accepted) {
             holder.txtPoke.setVisibility(View.GONE);
         }
         holder.txtPoke.setOnClickListener(new OnClickListener() {
@@ -184,7 +184,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                         @Override
                         public void actionComplete(Action action) {
-                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.DECLINED;
+                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.Declined;
                             if (callback != null) {
                                 callback.refreshTrackingEvents();
                             }
@@ -226,7 +226,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
     @SuppressWarnings("static-access")
     private String getStartTimeAndTimeLeftText(Event event, AcceptanceStatus acceptanceStatus) {
         String timeInfoTxt = "";
-        if (acceptanceStatus == acceptanceStatus.ACCEPTED) {
+        if (acceptanceStatus == acceptanceStatus.Accepted) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             try {

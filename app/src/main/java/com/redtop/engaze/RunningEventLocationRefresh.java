@@ -224,15 +224,15 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         int size;
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_timer_gray, mEventStartTimeForUI, null));
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_hourglass_gray, getTimeLeft(), null));
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.ACCEPTED)).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Accepted)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_accepted, String.valueOf(size), AcceptanceStatus.getStatus(1))); // 1 is ACCEPTED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.PENDING)).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Pending)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_pending, String.valueOf(size), AcceptanceStatus.getStatus(-1))); // -1 is DECLINED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.DECLINED)).size();
+        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Declined)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_declined, String.valueOf(size), AcceptanceStatus.getStatus(0))); // 0 is PENDING
         }

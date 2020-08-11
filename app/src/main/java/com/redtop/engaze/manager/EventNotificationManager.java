@@ -372,7 +372,7 @@ public class EventNotificationManager {
             notificationTitle = "";
         }
 
-        if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.ACCEPTED) {
+        if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.Accepted) {
             if (notificationTitle != "") {
                 notificationTitle = notificationTitle + " accepted";
             }
@@ -472,15 +472,15 @@ public class EventNotificationManager {
 
             switch (responseCode) {
                 case "accept":
-                    saveResponse(AcceptanceStatus.ACCEPTED, eventid);
+                    saveResponse(AcceptanceStatus.Accepted, eventid);
                     break;
 
                 case "reject":
-                    saveResponse(AcceptanceStatus.DECLINED, eventid);
+                    saveResponse(AcceptanceStatus.Declined, eventid);
                     break;
 
                 case "leave":
-                    saveResponse(AcceptanceStatus.DECLINED, eventid);
+                    saveResponse(AcceptanceStatus.Declined, eventid);
                     break;
 
                 case "snooze":
@@ -527,11 +527,11 @@ public class EventNotificationManager {
             NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             switch (eventData.getCurrentParticipant().acceptanceStatus) {
-                case ACCEPTED:
+                case Accepted:
                     notificationManager.cancel(eventData.AcceptNotificationId);
                     break;
 
-                case DECLINED:
+                case Declined:
                     notificationManager.cancel(eventData.AcceptNotificationId);
                     notificationManager.cancel(eventData.SnoozeNotificationId);
                     for (int notficationId : eventData.NotificationIds) {

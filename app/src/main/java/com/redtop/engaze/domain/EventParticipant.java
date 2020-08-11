@@ -3,16 +3,10 @@
  */
 package com.redtop.engaze.domain;
 
-import android.content.Context;
-
 import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
-import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.ReminderFrom;
-import com.redtop.engaze.domain.service.ParticipantService;
-
-import java.util.ArrayList;
 
 /**
  * @author Vijay.kumar
@@ -79,7 +73,7 @@ public class EventParticipant implements DataModel {
     public EventParticipant(){
         this.isUserLocationShared = false;
         this.isTrackingAccepted = false;
-        this.acceptanceStatus = AcceptanceStatus.PENDING;
+        this.acceptanceStatus = AcceptanceStatus.Pending;
     }
 
     @Override

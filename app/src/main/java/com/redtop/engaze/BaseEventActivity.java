@@ -357,7 +357,7 @@ public abstract class BaseEventActivity extends BaseActivity {
         EventParticipant currentParticipant = new EventParticipant();
         currentParticipant.userId = AppContext.context.loginId;
         currentParticipant.profileName = AppContext.context.loginName;
-        currentParticipant.acceptanceStatus = AcceptanceStatus.ACCEPTED;
+        currentParticipant.acceptanceStatus = AcceptanceStatus.Accepted;
         if (createOrUpdateEvent.eventType == EventType.SHAREMYLOACTION
                 || createOrUpdateEvent.eventType == EventType.QUIK) {
             currentParticipant.isUserLocationShared = true;
