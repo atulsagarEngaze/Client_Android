@@ -380,6 +380,7 @@ public abstract class BaseEventActivity extends BaseActivity {
         EventParticipant participant = null;
         setReminderOffset();
         setTrackingOffset();
+        createOrUpdateEvent.participants =  new ArrayList<>();
         for (ContactOrGroup cg : createOrUpdateEvent.ContactOrGroups) {
             participant = new EventParticipant();
             participant.userId = cg.getUserId();

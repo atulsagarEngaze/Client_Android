@@ -24,7 +24,7 @@ public interface IEventWS {
     public void RefreshEventListFromServer(final OnAPICallCompleteListener onAPICallCompleteListener);
 
 
-    public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener);
+    public void extendEventEndTime(final String newEndTime, final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener);
 
     public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener);
 

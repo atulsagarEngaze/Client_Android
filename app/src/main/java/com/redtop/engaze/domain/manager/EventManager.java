@@ -1,6 +1,7 @@
 package com.redtop.engaze.domain.manager;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -503,7 +504,7 @@ public class EventManager {
         });
     }
 
-    public static void extendEventEndTime(final int i, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
+    public static void extendEventEndTime(final int duration, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
             message = context.getResources().getString(R.string.message_general_no_internet_responseFail);
@@ -520,34 +521,30 @@ public class EventManager {
         }
         final String eventid = event.eventId;
 
-        eventWS.extendEventEndTime(i, eventid, new OnAPICallCompleteListener<JSONObject>() {
+        DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(writeFormat.parse(event.endTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            listnerOnFailure.actionFailed(null, Action.EXTENDEVENTENDTIME);
+            return;
+        }
+        cal.add(Calendar.MINUTE, duration);
+        final Date newEndTime = cal.getTime();
+        final String newUTCEndTime =  DateUtil.convertToUtcDateTime(newEndTime, null);
+
+        eventWS.extendEventEndTime(newUTCEndTime, eventid, new OnAPICallCompleteListener<JSONObject>() {
 
             @Override
             public void apiCallSuccess(JSONObject response) {
-                try {
+                event.endTime = DateUtil.convertUtcToLocalDateTime(newUTCEndTime, null);
+                EventService.RemoveEndEventAlarm(eventid);
+                EventService.setEndEventAlarm(event);
+                InternalCaching.saveEventToCache(event);
+                listenerOnSuccess.actionComplete(Action.EXTENDEVENTENDTIME);
 
 
-                    DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
-                    Date endTime = writeFormat.parse(event.endTime);
-                    Calendar cal = Calendar.getInstance();
-
-                    cal.setTime(endTime);
-                    cal.add(Calendar.MINUTE, i);
-
-                    String newEndTime = writeFormat.format(cal.getTime());
-                    event.endTime = newEndTime;
-
-                    EventService.RemoveEndEventAlarm(eventid);
-                    EventService.setEndEventAlarm(event);
-                    InternalCaching.saveEventToCache(event);
-                    listenerOnSuccess.actionComplete(Action.EXTENDEVENTENDTIME);
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    listnerOnFailure.actionFailed(null, Action.EXTENDEVENTENDTIME);
-                }
             }
 
             @Override

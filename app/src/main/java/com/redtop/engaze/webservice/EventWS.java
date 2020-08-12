@@ -100,17 +100,12 @@ public class EventWS extends BaseWebService implements IEventWS {
         }
     }
 
-    public void extendEventEndTime(final int duration, final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener) {
+    public void extendEventEndTime(final String  newEndTime, final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = ApiUrl.EXTEND_EVENT;
+            String url = ApiUrl.EXTEND_EVENT.replace("{eventId}", eventID).replace("{endTime}", newEndTime);
             // making json object request
             JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("RequestorId", AppContext.context.loginId);
-            jsonObject.put("EventId", eventID);
-            jsonObject.put("ExtendEventDuration", duration);
-
-            postData(jsonObject, url, onAPICallCompleteListener);
+            putData(jsonObject, url, onAPICallCompleteListener);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();

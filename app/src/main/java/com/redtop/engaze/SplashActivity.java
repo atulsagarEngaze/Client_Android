@@ -30,12 +30,6 @@ public class SplashActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AcceptanceStatus status = AcceptanceStatus.Accepted;
-
-        String strAccpet  =  "Accepted";
-
-        AcceptanceStatus status2 = AppContext.jsonParser.deserialize(strAccpet, AcceptanceStatus.class);
-
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
         //first time load ask for all the permissions needed
