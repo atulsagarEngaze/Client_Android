@@ -168,7 +168,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 
 					Boolean alreadyAdded = false;
 					for (ContactOrGroup cg  : mAddedMembers ){
-						if(cg.getUserId().equals(value.getUserId())){
+						if(cg.userId!=null && cg.userId.equals(value.userId)){
 							alreadyAdded = true;
 							break;
 						}

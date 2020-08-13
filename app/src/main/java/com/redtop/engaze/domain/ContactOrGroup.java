@@ -26,7 +26,7 @@ import com.redtop.engaze.app.AppContext;
 public class ContactOrGroup  implements Parcelable, Serializable{
 
 	private String name;
-	private String userId;
+	public String userId;
 	private ArrayList<String> numbers;	
 	private String number;
 	private int groupId;

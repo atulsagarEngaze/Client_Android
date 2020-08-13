@@ -26,6 +26,6 @@ public class ApiUrl {
     public static final String LEAVE_EVENT = Config.EventBaseURL + "evento/{eventId}/participant/{participantId}/leave";
     public static final String DELETE_EVENT = Config.EventBaseURL + "evento/{eventId}";
     public static final String UPDATE_PARTICIPANTS = Config.EventBaseURL + "evento/{eventId}/participants";
-    public static final String UPDATE_DESTINATION = Config.EventBaseURL + "Event/UpdateEventLocation";
+    public static final String UPDATE_DESTINATION = Config.EventBaseURL + "evento/{eventId}/update-destination";
     public static final String SAVE_FEEDBACK = Config.EventBaseURL + "Account/SaveFeedback";
 }

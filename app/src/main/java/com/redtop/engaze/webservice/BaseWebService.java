@@ -67,6 +67,9 @@ public abstract class BaseWebService {
     protected static void putData(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListener callCompleteListener) {
         Log.d(TAG, "Calling URL:" + url);
+        if(jRequestobj!=null){
+            Log.d(TAG, "Request Body:" + jRequestobj.toString());
+        }
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
             callCompleteListener.apiCallSuccess(response);
@@ -109,6 +112,9 @@ public abstract class BaseWebService {
     protected static void postData(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListener callCompleteListener) {
         Log.d(TAG, "Calling URL:" + url);
+        if(jRequestobj!=null){
+            Log.d(TAG, "Request Body:" + jRequestobj.toString());
+        }
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
             callCompleteListener.apiCallSuccess(response);

@@ -115,27 +115,22 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     public void changeDestination(final EventPlace destinationPlace, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = ApiUrl.UPDATE_DESTINATION;
+            String url = ApiUrl.UPDATE_DESTINATION.replace("{eventId}", eventId);
 
             JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("RequestorId", AppContext.context.loginId);
-
             if (destinationPlace != null) {
-                jsonObject.put("DestinationLatitude", destinationPlace.getLatLang().latitude);
-                jsonObject.put("DestinationLongitude", destinationPlace.getLatLang().longitude);
-                jsonObject.put("DestinationAddress", destinationPlace.getAddress());
-                jsonObject.put("DestinationName", destinationPlace.getName());
+                jsonObject.put("Latitude", destinationPlace.getLatLang().latitude);
+                jsonObject.put("Longitude", destinationPlace.getLatLang().longitude);
+                jsonObject.put("Address", destinationPlace.getAddress());
+                jsonObject.put("Name", destinationPlace.getName());
                 //jobj.put( "DestinationName", mEventLocationTextView.getText());
             } else {
-                jsonObject.put("DestinationLatitude", "");
-                jsonObject.put("DestinationLongitude", "");
-                jsonObject.put("DestinationAddress", "");
-                jsonObject.put("DestinationName", "");
+                jsonObject.put("Latitude", "");
+                jsonObject.put("Longitude", "");
+                jsonObject.put("Address", "");
+                jsonObject.put("Name", "");
             }
-
-            jsonObject.put("EventId", eventId);
-            postData(jsonObject, url, onAPICallCompleteListener);
+            putData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

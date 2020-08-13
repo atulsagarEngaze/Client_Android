@@ -266,8 +266,8 @@ public class RunningEventActions extends RunningEventActivityResults {
         String currentMemUserId = mEvent.getCurrentParticipant().userId;
         ArrayList<EventParticipant> members = mEvent.participants;
         for (EventParticipant mem : members) {
-            if (!mem.userId.equals(currentMemUserId))
-                contactList.add(ContactAndGroupListManager.getContact(mem.userId));
+            if (!currentMemUserId.equals(mem.userId))
+                contactList.add(mem.contactOrGroup);
         }
 
         PreffManager.setPrefArrayList("Invitees", contactList);
