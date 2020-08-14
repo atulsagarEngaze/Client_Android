@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
+import com.redtop.engaze.common.utility.UserMessageHandler;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
@@ -87,6 +89,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mNetworkUpdateBroadcastReceiver,
                 new IntentFilter(Constants.NETWORK_STATUS_UPDATE));
         turnOnOfInternetAvailabilityMessage();
+    }
+
+    public void actionFailed(String msg, Action action) {
+        if (msg == null) {
+            msg = UserMessageHandler.getFailureMessage(action);
+        }
+
+        ProgressBar.hideProgressBar();
+        Toast.makeText(AppContext.context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void actionCompleted(Action action) {
+        String msg = UserMessageHandler.getSuccessMessage(action);
+        ProgressBar.hideProgressBar();
+        Toast.makeText(AppContext.context, msg, Toast.LENGTH_SHORT).show();
     }
 
     protected void showProgressBar(String message) {

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public interface IEventWS {
 
-    public void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener);
+    public void SaveEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener);
 
 
     public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener);

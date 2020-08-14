@@ -376,7 +376,7 @@ public abstract class BaseEventActivity extends BaseActivity {
         createOrUpdateEvent.trackingState = EventState.TRACKING_ON;
         createOrUpdateEvent.isTrackingRequired = true;
 
-        createOrUpdateEvent.eventType = EventType.getEventType(mEventTypeItem.getImageIndex());
+        //createOrUpdateEvent.eventType = EventType.getEventType(mEventTypeItem.getImageIndex());
         EventParticipant participant = null;
         setReminderOffset();
         setTrackingOffset();

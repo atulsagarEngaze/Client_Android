@@ -360,8 +360,8 @@ public class CreateEditEventActivity extends BaseEventActivity {
             String currentMemUserId = createOrUpdateEvent.getCurrentParticipant().userId;
             ArrayList<EventParticipant> members = createOrUpdateEvent.participants;
             for (EventParticipant mem : members) {
-                if (!mem.userId.equals(currentMemUserId)) {
-                    ContactOrGroup cg = ContactAndGroupListManager.getContact(mem.userId);
+                if (!currentMemUserId.equals(mem.userId)) {
+                    ContactOrGroup cg = mem.contactOrGroup;
                     contactList.add(cg);
                     mAddedMembers.put(cg.getName(), cg);
                     createContactLayoutItem(cg);
@@ -384,7 +384,6 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
             mEventTypeId = EventType.GENERAL.GetEventTypeId();
             initializeEventWithDefaultValues();
-            mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
 
             if (this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION) != null) {
                 mFromEventsActivity = false;
@@ -392,6 +391,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
                 mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
             }
         }
+        /*mEventTypeItem = new NameImageItem(R.drawable.ic_event_black_24dp, "General", 6);
         Drawable originalDrawable = getResources().getDrawable(mEventTypeItem.getImageId());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
@@ -399,7 +399,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
             mEventTypeView.setBackground(wrappedDrawable);
         } else {
             mEventTypeView.setBackground(originalDrawable);
-        }
+        }*/
 
         SetReminderText();
         SetTrackingText();

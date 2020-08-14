@@ -170,14 +170,11 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                             createDestinationMarker();
                             mEnableAutoCameraAdjust = true;
                             showAllMarkers();
-                            AppContext.actionHandler.actionComplete(action);
+                            actionCompleted(action);
                             locationhandler.post(locationRunnable);
                         }
-                    }, new OnActionFailedListner() {
-                        @Override
-                        public void actionFailed(String msg, Action action) {
-                            onActionFailed(msg,action);
-                        }
+                    }, (msg, action) -> {
+                        onActionFailed(msg, action);
                     });
                     break;
             }
@@ -192,6 +189,6 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh {
                 || action == Action.CHANGEDESTINATION) {
             locationhandler.post(locationRunnable);
         }
-        AppContext.actionHandler.actionFailed(msg, action);
+        actionFailed(msg, action);
     }
 }

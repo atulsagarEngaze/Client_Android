@@ -147,72 +147,67 @@ public class EventManager {
             event.endTime = DateUtil.convertToUtcDateTime(event.endTimeInDateFormat, null);//parseFormat.format(endDate);
 
             JSONObject jObject = new JSONObject(AppContext.jsonParser.Serialize(event));
-            /*jObject.remove("Participants");
-            List<String> participants = new ArrayList<>();
-            for(EventParticipant participant : event.Participants){
-                participants.add(participant.getUserId());
-            }
-            jObject.put("Participants", AppContext.jsonParser.Serialize(participants));*/
 
-
-            eventWS.CreateEvent(jObject, new OnAPICallCompleteListener<JSONObject>() {
+            eventWS.SaveEvent(jObject, new OnAPICallCompleteListener<JSONObject>() {
 
                 @Override
                 public void apiCallSuccess(JSONObject response) {
 
 
-                    try {
+                    if (response != null) {
                         Log.d(TAG, "EventResponse:" + response.toString());
 
-                        if (response != null) {
+                        try {
+
                             event.eventId = response.getString("id");
-                            event.startTime = DateUtil.convertUtcToLocalDateTime(event.startTime, null);
-                            event.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
-
-                            for (EventParticipant participant : event.participants) {
-                                if (AppContext.context.loginId.equals(participant.userId)) {
-                                    continue;
-                                }
-                                participant.profileName = participant.contactOrGroup.getName();
-                            }
-
-                            EventService.setEndEventAlarm(event);
-                            if (event.eventType == EventType.QUIK) {
-                                event.state = EventState.TRACKING_ON;
-                            } else if (event.eventType == EventType.GENERAL) {
-                                EventService.setTracking(event);
-                                EventService.setEventStarAlarm(event);
-                                if (reminder != null) {
-                                    EventService.setEventReminder(event);
-
-                                }
-                                event.state = EventState.EVENT_OPEN;
-                            }
-
-                            EventNotificationManager.cancelNotification(event);
-                            InternalCaching.saveEventToCache(event);
-                            listnerOnSuccess.eventSaveComplete(event);
-                        } else {
+                        } catch (Exception ex) {
+                            Log.d(TAG, ex.toString());
+                            ex.printStackTrace();
                             listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                         }
-
-                    } catch (Exception ex) {
-                        Log.d(TAG, ex.toString());
-                        ex.printStackTrace();
-                        listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
                     }
 
-                }
+                    event.startTime = DateUtil.convertUtcToLocalDateTime(event.startTime, null);
+                    event.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
 
-                @Override
-                public void apiCallFailure() {
-                    listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
-                }
-            });
-        } catch (JSONException e) {
-            listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
-        }
+                    for (EventParticipant participant : event.participants) {
+                        if (AppContext.context.loginId.equals(participant.userId)) {
+                            continue;
+                        }
+                        participant.profileName = participant.contactOrGroup.getName();
+                    }
+
+                    EventService.setEndEventAlarm(event);
+                    if (event.eventType == EventType.QUIK) {
+                        event.state = EventState.TRACKING_ON;
+                    } else if (event.eventType == EventType.GENERAL) {
+                        EventService.setTracking(event);
+                        EventService.setEventStarAlarm(event);
+                        if (reminder != null) {
+                            EventService.setEventReminder(event);
+
+                        }
+                        event.state = EventState.EVENT_OPEN;
+                    }
+
+                    EventNotificationManager.cancelNotification(event);
+                    InternalCaching.saveEventToCache(event);
+                    listnerOnSuccess.eventSaveComplete(event);
+            }
+
+            @Override
+            public void apiCallFailure () {
+                listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
+            }
+        });
+    } catch(
+    JSONException e)
+
+    {
+        listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
     }
+
+}
 
     public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner actionlistnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
@@ -532,7 +527,7 @@ public class EventManager {
         }
         cal.add(Calendar.MINUTE, duration);
         final Date newEndTime = cal.getTime();
-        final String newUTCEndTime =  DateUtil.convertToUtcDateTime(newEndTime, null);
+        final String newUTCEndTime = DateUtil.convertToUtcDateTime(newEndTime, null);
 
         eventWS.extendEventEndTime(newUTCEndTime, eventid, new OnAPICallCompleteListener<JSONObject>() {
 

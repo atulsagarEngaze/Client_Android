@@ -26,7 +26,6 @@ public class HomeBroadcastReceiver extends LocalBroadcastReceiver {
 		mFilter.addAction(Veranstaltung.REMOVED_FROM_EVENT_BY_INITIATOR);
 		mFilter.addAction(Veranstaltung.EVENT_LEFT);
 		mFilter.addAction(Veranstaltung.EVENT_RECEIVED);
-		mFilter.addAction(Veranstaltung.REMOVED_FROM_EVENT_BY_INITIATOR);
 		mFilter.addAction(Veranstaltung.EVENT_USER_RESPONSE);
 		mFilter.addAction(Veranstaltung.EVENTS_REFRESHED);
 	}

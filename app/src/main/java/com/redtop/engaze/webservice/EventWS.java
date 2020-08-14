@@ -13,21 +13,18 @@ public class EventWS extends BaseWebService implements IEventWS {
 
     private final static String TAG = EventWS.class.getName();
 
-    public void CreateEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
+    public void SaveEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = "";
             if (jsonObject.has("EventId")) {
-                url = ApiUrl.UPDATE_EVENT;
+                putData(jsonObject, ApiUrl.SAVE_EVENT, onAPICallCompleteListener);
             } else {
-                url = ApiUrl.CREATE_EVENT;
+               postData(jsonObject, ApiUrl.SAVE_EVENT, onAPICallCompleteListener);
             }
 
-            postData(jsonObject, url, onAPICallCompleteListener);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
             onAPICallCompleteListener.apiCallFailure();
-
         }
     }
 

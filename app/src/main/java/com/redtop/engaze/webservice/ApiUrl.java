@@ -19,8 +19,7 @@ public class ApiUrl {
 
     public static final String RESPOND_INVITE = Config.EventBaseURL + "Event/RespondToInvite";
     public static final String POKEALL_CONTACTS = Config.EventBaseURL + "Contacts/RemindContact";
-    public static final String CREATE_EVENT = Config.EventBaseURL + "evento";
-    public static final String UPDATE_EVENT = Config.EventBaseURL + "Event/Update";
+    public static final String SAVE_EVENT = Config.EventBaseURL + "evento";
     public static final String EXTEND_EVENT = Config.EventBaseURL + "evento/{eventId}/extend/{endTime}";
     public static final String END_EVENT = Config.EventBaseURL + "evento/{eventId}/end";
     public static final String LEAVE_EVENT = Config.EventBaseURL + "evento/{eventId}/participant/{participantId}/leave";
