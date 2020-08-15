@@ -143,15 +143,15 @@
     <string name="before">" before</string>
 
     <string-array name="event_type_image">
-         <item>@drawable/ic_directions_car_black_24dp</item>
-         <item>@drawable/ic_local_dining_black_24dp</item>
-         <item>@drawable/ic_directions_run_black_24dp</item>
-         <item>@drawable/ic_group_add_black_24dp</item>
-         <item>@drawable/ic_live_tv_black_24dp</item>
-         <item>@drawable/ic_wc_black_24dp</item>
-         <item>@drawable/ic_event_black_24dp</item>
-         <item>@drawable/ic_cake_black_24dp</item>
-     </string-array>
+        <item>@drawable/ic_directions_car_black_24dp</item>
+        <item>@drawable/ic_local_dining_black_24dp</item>
+        <item>@drawable/ic_directions_run_black_24dp</item>
+        <item>@drawable/ic_group_add_black_24dp</item>
+        <item>@drawable/ic_live_tv_black_24dp</item>
+        <item>@drawable/ic_wc_black_24dp</item>
+        <item>@drawable/ic_event_black_24dp</item>
+        <item>@drawable/ic_cake_black_24dp</item>
+    </string-array>
 
 
     <string name="duration">" is the duration</string>
@@ -416,5 +416,7 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

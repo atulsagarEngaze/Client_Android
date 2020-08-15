@@ -60,6 +60,7 @@ import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.FragmentManager;
 
 @SuppressWarnings("deprecation")
 public class CreateEditEventActivity extends BaseEventActivity {
@@ -162,10 +163,14 @@ public class CreateEditEventActivity extends BaseEventActivity {
         ///
         mDurationTextView.setOnClickListener(v -> {
 
-            Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
+            FragmentManager fm = getSupportFragmentManager();
+            DurationOffsetFragment editNameDialogFragment = DurationOffsetFragment.newInstance(createOrUpdateEvent.duration);
+            editNameDialogFragment.show(fm, "Duration");
+
+           /* Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
             intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
 
-            startActivityForResult(intent, DURATION_REQUEST_CODE);
+            startActivityForResult(intent, DURATION_REQUEST_CODE);*/
         });
 
         mRdDailyView.setOnClickListener(v -> setDailyLayoutVisible());

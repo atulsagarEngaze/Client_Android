@@ -32,7 +32,7 @@ public class DurationOffset extends BaseActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.activity_setduration);
-        duration = (Duration) this.getIntent().getParcelableExtra("com.redtop.engaze.entity.Duration");
+        duration = (Duration) this.getIntent().getParcelableExtra("Duration");
 
         Button save = (Button) findViewById(R.id.save_event_duration);
         save.setOnClickListener(new OnClickListener() {

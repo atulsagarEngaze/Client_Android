@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
@@ -37,7 +38,7 @@ import com.redtop.engaze.domain.manager.EventManager;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
-public abstract class BaseEventActivity extends BaseActivity {
+public abstract class BaseEventActivity extends BaseActivity implements FragmentToActivity<Duration> {
     protected int mDurationTime = 0;
 
     protected TextView mQuickEventNameView;
@@ -71,6 +72,12 @@ public abstract class BaseEventActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appLocationService = new AppLocationService(this, this);
+    }
+
+    @Override
+    public void communicate(Duration duration) {
+        createOrUpdateEvent.duration = duration;
+        SetDurationText();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -231,7 +238,6 @@ public abstract class BaseEventActivity extends BaseActivity {
 
         mAlertDialog = alertDialogBuilder.create();
     }
-
 
     private void setTrackingOffset() {
 

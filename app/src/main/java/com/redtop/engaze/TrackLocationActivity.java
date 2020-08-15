@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
+
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
 import com.redtop.engaze.app.AppContext;
@@ -224,9 +226,12 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 break;
 
             case R.id.tracklocation_Duration_holder:
-                intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
+                FragmentManager fm = getSupportFragmentManager();
+                DurationOffsetFragment editNameDialogFragment = DurationOffsetFragment.newInstance(createOrUpdateEvent.duration);
+                editNameDialogFragment.show(fm, "Duration");
+               /* intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
                 intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
-                startActivityForResult(intent, DURATION_REQUEST_CODE);
+                startActivityForResult(intent, DURATION_REQUEST_CODE);*/
                 break;
             case R.id.btn_tracking_start:
                 createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
