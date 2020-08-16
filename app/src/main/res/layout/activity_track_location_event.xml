@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:focusable="true"
+    android:layout_width="match_parent"
     android:focusableInTouchMode="true"
-    style="@style/MatchParent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <androidx.appcompat.widget.Toolbar
@@ -12,7 +13,7 @@
         style="@style/ETMaterialTheme.ActionBar" />
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent" >
 
         <LinearLayout
@@ -186,22 +187,6 @@
                         android:tint="@color/primary" />
                 </RelativeLayout>
             </LinearLayout>
-
-            <View
-                android:id="@+id/divider_location_end"
-                style="@style/Divider"
-                android:layout_marginLeft="72dip"
-                android:paddingLeft="72dip" />
-
-            <Button
-                android:id="@+id/btn_tracking_start"
-                style="@style/FullWidthPrimaryButton"
-                android:layout_margin="16sp"
-                android:background="@drawable/ripple_event_save_buttton"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="@string/share_my_location_text_start_button"
-                android:textColor="@color/darkGray"
-                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

@@ -85,7 +85,7 @@
         <activity
             android:name=".TrackLocationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ETMaterialTheme" />
+            android:theme="@style/DialogActivityTheme" />
         <activity
             android:name=".ShowLocationActivity"
             android:screenOrientation="portrait"
@@ -112,17 +112,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
         <activity
-            android:name=".DurationOffset"
-            android:screenOrientation="portrait"
-            android:theme="@style/ETMaterialTheme"></activity>
-        <activity
             android:name=".EventTypeList"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
-        <activity
-            android:name=".TrackingOffset"
-            android:screenOrientation="portrait"
-            android:theme="@style/ETMaterialTheme"></activity>
+
         <activity
             android:name=".CustomReminder"
             android:screenOrientation="portrait"

@@ -18,19 +18,20 @@
         android:paddingBottom="@dimen/padding">
 
         <TextView
+            style="@style/HeaderTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set Duration"
-            style="@style/HeaderTextStyle"></TextView>
+            android:text="Start Tracking" />
+
 
         <EditText
-            android:id="@+id/DurationValue"
+            android:id="@+id/TrackingValue"
             style="@style/PrimaryTextStyle"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/paddinghalf"
             android:background="@null"
             android:ems="10"
-            android:inputType="number"></EditText>
+            android:inputType="number"
+            android:paddingBottom="@dimen/paddinghalf"></EditText>
 
         <View
             style="@style/Divider"
@@ -40,18 +41,19 @@
             android:paddingRight="@dimen/padding" />
 
         <TextView
-            android:id="@+id/DurationMinutes"
+            android:id="@+id/Minutes"
             style="@style/PrimaryTextStyle"
             android:layout_width="fill_parent"
             android:tag="minute"
             android:text="@string/minutes" />
 
         <TextView
-            android:id="@+id/DurationHours"
+            android:id="@+id/Hours"
             style="@style/PrimaryTextStyle"
             android:layout_width="fill_parent"
             android:tag="hour"
             android:text="@string/hours" />
+
 
         <View
             style="@style/Divider"
@@ -66,13 +68,13 @@
 
             <TextView
 
-                android:id="@+id/save_event_duration"
+                android:id="@+id/save_event_track"
                 style="@style/SecondaryTextStyle"
-                android:textColor="@color/primary"
                 android:layout_width="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:text="Done"
+                android:textColor="@color/primary"
                 android:textStyle="bold" />
 
         </RelativeLayout>

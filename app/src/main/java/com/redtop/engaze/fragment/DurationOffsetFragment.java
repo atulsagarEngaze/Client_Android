@@ -1,26 +1,25 @@
-package com.redtop.engaze;
+package com.redtop.engaze.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.redtop.engaze.BaseActivity;
+import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.Interface.FragmentToActivity;
+import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.domain.Duration;
 
@@ -66,7 +65,7 @@ public class DurationOffsetFragment extends DialogFragment {
                     duration.setTimeInterval(userInput);
                     if (Duration.validateDurationInput(duration)) {
                         ((BaseActivity)mContext).hideKeyboard(v);
-                        callBackToActivity.communicate(duration);
+                        callBackToActivity.communicate(duration, this);
                         dismiss();
                     } else {
                         Toast.makeText(AppContext.context,

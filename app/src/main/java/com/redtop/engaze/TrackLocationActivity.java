@@ -3,12 +3,12 @@ package com.redtop.engaze;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
-import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -37,6 +39,7 @@ import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
+import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 
 public class TrackLocationActivity extends BaseEventActivity implements OnItemClickListener, OnClickListener, OnKeyListener, IActionHandler {
@@ -50,6 +53,9 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_location_event);
+        Window window = getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.BOTTOM);
         TAG = TrackLocationActivity.class.getName();
         mContext = this;
         mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());
@@ -233,11 +239,11 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
                 startActivityForResult(intent, DURATION_REQUEST_CODE);*/
                 break;
-            case R.id.btn_tracking_start:
+            /*case R.id.btn_tracking_start:
                 createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
                 hideKeyboard(v);
                 SaveEvent();
-                break;
+                break;*/
         }
     }
 

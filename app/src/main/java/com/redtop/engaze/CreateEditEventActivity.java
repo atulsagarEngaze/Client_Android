@@ -16,8 +16,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -26,11 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
@@ -54,12 +49,12 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+import com.redtop.engaze.fragment.DurationOffsetFragment;
+import com.redtop.engaze.fragment.TrackingOffsetFragment;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentManager;
 
 @SuppressWarnings("deprecation")
@@ -154,23 +149,17 @@ public class CreateEditEventActivity extends BaseEventActivity {
         });
         ///
         mTrackingStartOffsetView.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            Intent intent = new Intent(CreateEditEventActivity.this, TrackingOffset.class);
-            intent.putExtra("com.redtop.engaze.entity.Tracking", (Parcelable) createOrUpdateEvent.tracking);
-
-            startActivityForResult(intent, TRACKING_REQUEST_CODE);
+            FragmentManager fm = getSupportFragmentManager();
+            TrackingOffsetFragment fragment = TrackingOffsetFragment.newInstance(createOrUpdateEvent.tracking);
+            fragment.show(fm, "Tracking");
         });
         ///
         mDurationTextView.setOnClickListener(v -> {
 
             FragmentManager fm = getSupportFragmentManager();
-            DurationOffsetFragment editNameDialogFragment = DurationOffsetFragment.newInstance(createOrUpdateEvent.duration);
-            editNameDialogFragment.show(fm, "Duration");
+            DurationOffsetFragment fragment = DurationOffsetFragment.newInstance(createOrUpdateEvent.duration);
+            fragment.show(fm, "Duration");
 
-           /* Intent intent = new Intent(CreateEditEventActivity.this, DurationOffset.class);
-            intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
-
-            startActivityForResult(intent, DURATION_REQUEST_CODE);*/
         });
 
         mRdDailyView.setOnClickListener(v -> setDailyLayoutVisible());

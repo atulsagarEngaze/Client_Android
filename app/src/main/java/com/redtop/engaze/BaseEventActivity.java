@@ -35,8 +35,11 @@ import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.fragment.DurationOffsetFragment;
+import com.redtop.engaze.fragment.TrackingOffsetFragment;
 
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.Fragment;
 
 public abstract class BaseEventActivity extends BaseActivity implements FragmentToActivity<Duration> {
     protected int mDurationTime = 0;
@@ -75,9 +78,15 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
     }
 
     @Override
-    public void communicate(Duration duration) {
-        createOrUpdateEvent.duration = duration;
-        SetDurationText();
+    public void communicate(Duration duration, Fragment source) {
+        if(source instanceof DurationOffsetFragment) {
+            createOrUpdateEvent.duration = duration;
+            SetDurationText();
+        }
+        else if (source instanceof TrackingOffsetFragment){
+            createOrUpdateEvent.tracking = duration;
+            SetTrackingText();
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

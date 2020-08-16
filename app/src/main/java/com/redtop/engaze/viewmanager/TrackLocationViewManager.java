@@ -65,12 +65,12 @@ public class TrackLocationViewManager  {
 		mFlowContainer = activity.findViewById(R.id.participant_layout);
 		mEventLocationTextView = activity.findViewById(R.id.tracklocation_location);
 		mDurationtext = activity.findViewById(R.id.tracklocation_Duration_holder);
-		mBtnStartTracking = activity.findViewById(R.id.btn_tracking_start);
+		//mBtnStartTracking = activity.findViewById(R.id.btn_tracking_start);
 		mAutoCompleteInviteeTextView = activity.findViewById(R.id.searchAutoComplete);
 	}
 
 	private void setClickListener(){
-		mBtnStartTracking.setOnClickListener(activity);		
+		//mBtnStartTracking.setOnClickListener(activity);
 		mDurationtext.setOnClickListener(activity);
 		mEventLocationTextView.setOnClickListener(activity);		
 	}	
