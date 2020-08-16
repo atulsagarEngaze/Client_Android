@@ -56,6 +56,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         Window window = getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.BOTTOM);
+        window.setDimAmount(0.05f);
+        this.setFinishOnTouchOutside(false);
         TAG = TrackLocationActivity.class.getName();
         mContext = this;
         mEventTypeId = this.getIntent().getIntExtra("EventTypeId", EventType.TRACKBUDDY.GetEventTypeId());

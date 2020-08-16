@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:focusableInTouchMode="true"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/primaryBackground">
 
     <androidx.appcompat.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,26 +67,30 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
                     android:layout_marginRight="@dimen/padding"
-                    android:background="@drawable/ic_person_outline_black_24dp"></ImageView>
+                    android:background="@drawable/ic_person_outline_primary_24dp"
+                    android:tint="@color/primary"></ImageView>
 
 
                 <com.redtop.engaze.common.customeviews.FlowLayout
                     android:id="@+id/participant_layout"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="32dp"
+                    android:paddingLeft="@dimen/paddinghalf"
+                    android:layout_height="wrap_content"
                     android:paddingTop="3dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/padding">
 
                     <com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView
                         android:id="@+id/searchAutoComplete"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
@@ -117,7 +122,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
                     android:layout_marginRight="@dimen/paddinghalf"
-                    android:background="@drawable/ic_access_time_black_24dp"></ImageView>
+                    android:background="@drawable/ic_access_time_primary_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/Duration"
@@ -157,7 +162,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
                     android:layout_marginRight="@dimen/padding"
-                    android:background="@drawable/ic_location_on_black_24dp"></ImageView>
+                    android:background="@drawable/ic_location_on_primary_24dp"></ImageView>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"

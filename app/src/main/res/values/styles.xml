@@ -2,7 +2,7 @@
 
     <style name="DialogActivityTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/primaryBackground</item>
+        <item name="android:windowBackground">@null</item>
 
     </style>
     <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
