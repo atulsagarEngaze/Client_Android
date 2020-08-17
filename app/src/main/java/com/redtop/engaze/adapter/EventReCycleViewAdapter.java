@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.redtop.engaze.EventParticipantsInfo;
+import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.EventRecurrenceInfo;
 import com.redtop.engaze.EventsActivity;
 import com.redtop.engaze.R;
@@ -44,9 +44,11 @@ import com.redtop.engaze.domain.service.ParticipantService;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.redtop.engaze.fontawesome.TextFont;
+import com.redtop.engaze.fragment.ParticipantInfoFragment;
 
 public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleViewAdapter.EventViewHolder> {
     public List<Event> mEventList;
@@ -202,11 +204,9 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
             @Override
             public void onClick(View v) {
                 if (ed.participants != null) {
-                    Intent intent = new Intent(mContext, EventParticipantsInfo.class);
-                    intent.putExtra("EventMembers", ed.participants);
-                    intent.putExtra("InitiatorID", ed.initiatorId);
-                    intent.putExtra("EventId", ed.eventId);
-                    mContext.startActivity(intent);
+                    FragmentManager fm = ((BaseActivity) mContext).getSupportFragmentManager();
+                    ParticipantInfoFragment fragment = ParticipantInfoFragment.newInstance(RunningEventActivity.class.getName(), ed.initiatorId, ed.eventId, ed.participants);
+                    fragment.show(fm, "ParticipantInfo");
 
                     if (((EventsActivity) mContext).mActionMode != null) {
                         ((EventsActivity) mContext).mActionMode.finish();
