@@ -14,10 +14,8 @@
             style="@style/HeaderTextStyle"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/paddinghalf"
-            android:layout_marginBottom="@dimen/padding"
             android:paddingBottom="0dp"
-            android:text="Event Participants"
-            android:textSize="@dimen/primary_text_size" />
+            android:text="Event Participants" />
 
         <ListView
             android:id="@+id/list_event_participants"

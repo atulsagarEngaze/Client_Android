@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_access_time_black_24dp"></ImageView>
 
                 <TextView
@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_hourglass_empty_black_24dp"></ImageView>
 
                 <TextView
@@ -200,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_autorenew_black_24dp"></ImageView>
 
                 <TextView
@@ -535,7 +535,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_location_on_black_24dp"></ImageView>
 
                 <TextView
@@ -578,7 +578,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_adjust_black_24dp"></ImageView>
 
                 <TextView
@@ -629,7 +629,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_notifications_black_24dp"></ImageView>
 
                 <TextView
@@ -672,7 +672,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="@dimen/paddinghalf"
                     android:background="@drawable/ic_note_black_24dp"></ImageView>
 
                 <EditText
