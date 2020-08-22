@@ -39,8 +39,11 @@ import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.fragment.ExtendEventFragment;
+import com.redtop.engaze.fragment.TrackingOffsetFragment;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
 
 @SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
 public class RunningEventActions extends RunningEventActivityResults {
@@ -277,10 +280,11 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventExtendedClicked() {
-        Intent intent;
         shouldExecuteOnResume = false;
-        intent = new Intent(RunningEventActions.this, SnoozeOffset.class);
-        startActivityForResult(intent, SNOOZING_REQUEST_CODE);
+
+        FragmentManager fm = getSupportFragmentManager();
+        ExtendEventFragment fragment = ExtendEventFragment.newInstance();
+        fragment.show(fm, "Extend");
     }
 
     public void onTrafficButtonClicked() {

@@ -39,10 +39,12 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.fragment.ExtendEventFragment;
 import com.redtop.engaze.receiver.RunningEventBroadcastReceiver;
 import com.redtop.engaze.viewmanager.RunningEventViewManager;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
 
 @SuppressLint({ "ResourceAsColor", "SimpleDateFormat" })
 public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
@@ -171,8 +173,9 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 		case "5 MINS" :
 			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.initiatorId)){
 				snoozeFlag  = 1;
-				Intent intent = new Intent(mContext, SnoozeOffset.class);			
-				startActivityForResult(intent, SNOOZING_REQUEST_CODE);					
+				FragmentManager fm = getSupportFragmentManager();
+				ExtendEventFragment fragment = ExtendEventFragment.newInstance();
+				fragment.show(fm, "Extend");
 			}
 			break;		
 		}		

@@ -15,22 +15,22 @@
         android:paddingLeft="@dimen/paddinghalf"
         android:paddingTop="@dimen/paddinghalf"
         android:paddingRight="@dimen/paddinghalf"
-        android:paddingBottom="@dimen/padding">
+        android:paddingBottom="@dimen/paddinghalf">
 
         <TextView
+            style="@style/HeaderTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set Duration"
-            style="@style/HeaderTextStyle"></TextView>
+            android:text="Set Duration"></TextView>
 
         <EditText
             android:id="@+id/DurationValue"
             style="@style/PrimaryTextStyle"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/paddinghalf"
             android:background="@null"
             android:ems="10"
-            android:inputType="number"></EditText>
+            android:inputType="number"
+            android:paddingBottom="@dimen/paddinghalf"></EditText>
 
         <View
             style="@style/Divider"
@@ -67,13 +67,12 @@
             <TextView
 
                 android:id="@+id/save_event_duration"
-                style="@style/SecondaryTextStyle"
-                android:textColor="@color/primary"
+                style="@style/HeaderTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:text="Done"
-                android:textStyle="bold" />
+                android:textColor="@color/primary" />
 
         </RelativeLayout>
 

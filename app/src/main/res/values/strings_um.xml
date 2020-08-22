@@ -165,8 +165,8 @@
     <string name="sharemylocation_event_create_successful">Sharing of your location started. Notification sent to your buddies to view your location.</string>
     <string name="label_sharemylocation_errorMessage">Unable to share your location! Please try again..</string>
     <string name="track_location_timeinfo_text">"Started at %1$s, finishing after %2$s."</string>
-    <string name="meet_now_text_duration">how long tracking should be on</string>
-    <string name="meet_now_add_friends_hint">Enter contacts you want to meet</string>
+    <string name="meet_now_text_duration">Tracking duration</string>
+    <string name="meet_now_add_friends_hint">Type contacts name you want to meet</string>
     <string name="meet_now_location_hint">choose the place you are meeting</string>
     <string name="meet_now_event_create_successful">Meeting has started. Notification sent to your participants to share their location.</string>
 

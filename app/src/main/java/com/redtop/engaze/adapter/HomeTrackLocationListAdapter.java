@@ -17,13 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+
 import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
-import com.redtop.engaze.SnoozeOffset;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CircularImageView;
@@ -39,6 +40,7 @@ import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.fragment.ExtendEventFragment;
 
 public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMember> {
 
@@ -117,9 +119,10 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
             @Override
             public void onClick(View v) {
                 ((BaseEventActivity) mContext).notificationselectedEvent = event;
-                Intent intent = new Intent(mContext, SnoozeOffset.class);
-                intent.putExtra("FromHomeLayout", true);
-                ((BaseActivity) mContext).startActivityForResult(intent, Constants.SNOOZING_REQUEST_CODE);
+
+                FragmentManager fm =  ((BaseEventActivity) mContext).getSupportFragmentManager();
+                ExtendEventFragment fragment = ExtendEventFragment.newInstance();
+                fragment.show(fm, "Extend");
             }
         });
         holder.txtStop.setOnClickListener(new OnClickListener() {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragment.ExtendEventFragment">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryBackground"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/paddinghalf"
+        android:paddingTop="@dimen/paddinghalf"
+        android:paddingRight="@dimen/paddinghalf"
+        android:paddingBottom="@dimen/padding">
+
+        <TextView
+            android:id="@+id/SnoozeOffset"
+            style="@style/HeaderTextStyle"
+            android:text="Extend by" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/SnoozeValue"
+                style="@style/PrimaryTextStyle"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="number">
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/SnoozeMinutes"
+                style="@style/PrimaryTextStyle"
+                android:layout_width="fill_parent"
+                android:tag="minute"
+                android:text="@string/minuteslater" />
+        </LinearLayout>
+
+        <View
+            style="@style/Divider"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:id="@+id/save_event_Snooze"
+                style="@style/SecondaryTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="Extend"
+                android:textColor="@color/primary"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

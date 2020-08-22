@@ -114,10 +114,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
         <activity
-            android:name=".SnoozeOffset"
-            android:screenOrientation="portrait"
-            android:theme="@style/ETMaterialTheme"></activity>
-        <activity
             android:name=".RunningEventMenuOptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>

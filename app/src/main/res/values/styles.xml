@@ -145,7 +145,7 @@
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">.5dp</item>
         <item name="android:background">@color/divider</item>
         <item name="android:layout_marginBottom">@dimen/paddinghalf</item>
         <item name="android:layout_marginTop">@dimen/paddinghalf</item>
@@ -172,7 +172,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">@dimen/padding</item>
         <item name="android:paddingRight">@dimen/padding</item>
-        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:layout_height">48dip</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
@@ -200,11 +200,11 @@
     </style>
 
     <style name="SecondaryTextStyle">
-        <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">@dimen/padding</item>
         <item name="android:paddingRight">@dimen/padding</item>
-        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:layout_height">36dip</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
@@ -221,10 +221,10 @@
     </style>
 
     <style name="HeaderTextStyle">
-        <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">56dip</item>

@@ -17,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
@@ -44,9 +45,10 @@ import com.redtop.engaze.receiver.HomeBroadcastReceiver;
 import com.redtop.engaze.viewmanager.HomeViewManager;
 import com.redtop.engaze.viewmanager.MapCameraMovementHandleViewManager;
 
+import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class HomeActivity extends MapLocationSelectionActivity implements RunningEventAdapterCallback, NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner, IActionHandler {
+public class HomeActivity extends MapLocationSelectionActivity implements RunningEventAdapterCallback, NavDrawerFragment.FragmentDrawerListener, OnMapReadyCallback, TrackLocationAdapterCallback, OnRefreshEventListCompleteListner, IActionHandler, FragmentToActivity<Duration> {
 
     private List<TrackLocationMember> mShareMyLocationList;
     private List<TrackLocationMember> mTrackBuddyList;
@@ -333,27 +335,19 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
     }
 
     @Override
+    public void communicate(Duration duration, Fragment source) {
+        showProgressBar(getResources().getString(R.string.message_general_progressDialog));
+        mSnooze = duration;
+        EventManager.extendEventEndTime(mSnooze.getTimeInterval(), mContext, notificationSelectedEvent, action -> {
+            refreshShareMyLocationList();
+            refreshTrackBuddyList();
+            hideProgressBar();
+        }, AppContext.actionHandler);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case Constants.SNOOZING_REQUEST_CODE:
-                    showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-                    //update server and cache with new Event end time
-                    mSnooze = (Duration) data.getParcelableExtra("com.redtop.engaze.com.redtop.engaze.entity.Snooze");
-                    EventManager.extendEventEndTime(mSnooze.getTimeInterval(), mContext, notificationSelectedEvent, new OnActionCompleteListner() {
-                        @Override
-                        public void actionComplete(Action action) {
-                            refreshShareMyLocationList();
-                            refreshTrackBuddyList();
-                            hideProgressBar();
-                        }
-                    }, AppContext.actionHandler);
-
-                    break;
-            }
-        }
     }
 
     @Override
