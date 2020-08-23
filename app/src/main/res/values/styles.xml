@@ -3,6 +3,9 @@
     <style name="DialogActivityTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@null</item>
+        <item name="colorControlNormal">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlHighlight">@color/primary</item>
 
     </style>
     <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -40,7 +43,9 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="colorControlNormal">@color/darkGray</item>
+        <item name="colorControlNormal">@color/primaryText</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlHighlight">@color/primary</item>
     </style>
 
     <style name="ETMaterialTheme" parent="ETMaterialTheme.Base">
@@ -166,6 +171,13 @@
          <item name="android:layout_marginBottom">@dimen/paddinghalf</item>
          <item name="android:layout_marginTop">@dimen/paddinghalf</item>
      </style>-->
+
+    <style name="toolbarTextFontFamilyStyle">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="TextStyle">
         <item name="android:textColor">@color/primaryText</item>

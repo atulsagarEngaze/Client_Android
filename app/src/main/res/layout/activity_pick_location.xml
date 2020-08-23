@@ -2,28 +2,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false" >
+    android:clipChildren="false">
 
     <RelativeLayout
         android:id="@+id/rl_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false" >
+        android:clipChildren="false">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <fragment
                 android:id="@+id/pick_location_map"
+                class="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                class="com.google.android.gms.maps.SupportMapFragment" />
+                android:layout_height="match_parent" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" >
+                android:layout_centerInParent="true">
 
                 <ImageView
                     android:id="@+id/img_center_pin"
@@ -37,14 +37,14 @@
             android:id="@+id/ll_pick_location"
             android:layout_width="match_parent"
             android:layout_height="48dip"
-            android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="@dimen/padding"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_marginBottom="@dimen/padding"
             android:background="@color/primaryBackground"
             android:elevation="5dip"
             android:focusable="true"
-            android:focusableInTouchMode="true" >
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/img_pick_location_back"
@@ -66,24 +66,23 @@
                 android:background="@android:color/transparent"
                 android:hint="@string/location_search_bar_hint"
                 android:textAlignment="center"
-                android:textColorHint="@color/hintDisable"
-                android:textSize="@dimen/small_text_size" >
-            </TextView>
+                android:textColorHint="@color/secondaryText"
+                android:textSize="@dimen/small_text_size"></TextView>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/rl_selected_location"
             android:layout_alignWithParentIfMissing="true"
-            android:paddingBottom="@dimen/paddinghalf" >
+            android:layout_above="@+id/rl_selected_location"
+            android:paddingBottom="@dimen/paddinghalf">
 
             <ImageButton
                 android:id="@+id/img_my_location"
                 style="@style/CircularWhiteImageRightCorner"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="32dip"
                 android:layout_marginRight="@dimen/padding"
+                android:layout_marginBottom="32dip"
                 android:padding="@dimen/paddinghalf"
                 android:src="@drawable/ic_gps_fixed_black_24dp" />
         </RelativeLayout>
@@ -96,7 +95,7 @@
             android:layout_marginTop="@dimen/paddinghalf"
             android:background="@color/primaryBackground"
             android:clipChildren="false"
-            android:elevation="15dip" >
+            android:elevation="15dip">
 
             <ImageButton
                 android:id="@+id/img_add_location"
@@ -104,40 +103,37 @@
                 android:layout_width="48dip"
                 android:layout_height="48dip"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="@dimen/padding"
                 android:layout_marginTop="-24dip"
+                android:layout_marginRight="@dimen/padding"
                 android:padding="@dimen/padding"
-                android:src="@drawable/ic_check_black_24dp" />
+                android:src="@drawable/ic_check_white_24" />
 
             <TextView
                 android:id="@+id/txt_selected_location_name"
+                style="@style/SecondaryTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="@dimen/paddinghalf"
-                android:layout_marginLeft="@dimen/padding"
-                android:layout_marginRight="@dimen/padding"
                 android:layout_marginTop="24dip"
-                android:textColor="@color/primaryText"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_marginBottom="@dimen/paddinghalf"
                 android:textSize="@dimen/primary_text_size" />
 
             <TextView
                 android:id="@+id/txt_selected_location_address"
+                style="@style/PrimaryTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_selected_location_name"
-                android:layout_marginBottom="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding"
                 android:layout_marginRight="@dimen/padding"
-                android:textColor="@color/secondaryText"
-                android:textSize="12sp" />
+                android:layout_marginBottom="@dimen/padding"
+                android:textSize="14sp" />
         </RelativeLayout>
     </RelativeLayout>
 
     <include
+        layout="@layout/layout_location_search_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        layout="@layout/layout_location_search_view" >
-    </include>
+        android:layout_height="match_parent"></include>
 
 </RelativeLayout>

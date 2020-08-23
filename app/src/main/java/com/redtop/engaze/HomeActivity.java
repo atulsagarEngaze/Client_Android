@@ -45,6 +45,7 @@ import com.redtop.engaze.receiver.HomeBroadcastReceiver;
 import com.redtop.engaze.viewmanager.HomeViewManager;
 import com.redtop.engaze.viewmanager.MapCameraMovementHandleViewManager;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -94,6 +95,8 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
 
         mContext = this;
         setContentView(R.layout.activity_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.home_toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
         homeViewManager = new HomeViewManager(this);
         mapCameraMovementHandleViewManager = (MapCameraMovementHandleViewManager) homeViewManager;
         mBroadcastManager = new HomeBroadcastReceiver(mContext);

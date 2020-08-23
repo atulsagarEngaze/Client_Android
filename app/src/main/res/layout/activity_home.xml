@@ -83,8 +83,8 @@
                     android:layout_alignParentLeft="true"
                     android:background="@android:color/transparent"
                     android:hint="@string/location_search_bar_hint"
-                    android:textColorHint="@color/hintDisable"
-                    android:textSize="@dimen/small_text_size" >
+                    android:textColorHint="@color/secondaryText"
+                    android:textSize="15sp" >
                 </TextView>
             </RelativeLayout>
 

@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/cached_location_name"
-            style="@style/PrimaryTextStyle"
+            style="@style/SecondaryTextStyle"
             android:paddingBottom="0dip"
             android:paddingTop="@dimen/paddinghalf"
             android:layout_width="fill_parent"             
@@ -44,7 +44,7 @@
         
          <TextView
             android:id="@+id/cached_location_description"
-            style="@style/SecondaryTextStyle"
+            style="@style/PrimaryTextStyle"
             android:textSize="@dimen/small_text_size"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

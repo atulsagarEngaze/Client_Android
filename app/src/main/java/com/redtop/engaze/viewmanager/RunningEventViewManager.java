@@ -149,19 +149,19 @@ public class RunningEventViewManager implements OnClickListener {
 	}	
 
 	public void setTrafficButtonOff(){
-		mTrafficButton.setImageResource(R.drawable.traffic_off);
+		mTrafficButton.setImageResource(R.drawable.ic_traffic_24);
 	}
 
 	public void setTrafficButtonOn(){
-		mTrafficButton.setImageResource(R.drawable.traffic_on);
+		mTrafficButton.setImageResource(R.drawable.ic_traffic_gray_24);
 	}
 
 	public void setEtaButtonOff(){
-		mETAButton.setImageResource(R.drawable.eta_off);
+		mETAButton.setImageResource(R.drawable.ic_car_gray_24);
 	}
 
 	public void setEtaButtonOn(){
-		mETAButton.setImageResource(R.drawable.eta_on);
+		mETAButton.setImageResource(R.drawable.ic_car_24);
 	}
 
 	public void clickRecenterButton() {

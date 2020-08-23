@@ -32,15 +32,6 @@
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/rl_progress_bar" -->
-    <!-- android:layout_width="match_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_below="@+id/ll_map_event_location" > -->
-
-
-    <!-- </RelativeLayout> -->
-
     <RelativeLayout
         android:id="@+id/rl_bottom_lyout"
         android:layout_width="match_parent"
@@ -75,7 +66,7 @@
                 android:layout_marginBottom="12dip"
                 android:layout_marginRight="12dip"
                 android:padding="@dimen/paddinghalf"
-                android:src="@drawable/traffic_on" />
+                android:src="@drawable/ic_traffic_24" />
 
             <ImageButton
                 android:id="@+id/img_etaDistance"
@@ -86,7 +77,7 @@
                 android:layout_marginBottom="12dip"
                 android:layout_marginRight="12dip"
                 android:padding="@dimen/paddinghalf"
-                android:src="@drawable/eta_on" />
+                android:src="@drawable/ic_car_24" />
 
             <ImageButton
                 android:id="@+id/img_navigation"
@@ -111,8 +102,8 @@
                 android:elevation="5dip"
                 android:text="Re-Center"
                 android:textAlignment="gravity"
+                style="@style/SecondaryTextStyle"
                 android:textColor="@color/primary"
-                android:textSize="@dimen/small_text_size"
                 android:textAllCaps="false"
                 android:gravity="center_horizontal|center_vertical" />
 

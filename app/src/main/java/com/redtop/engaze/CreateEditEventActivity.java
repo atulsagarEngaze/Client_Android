@@ -91,6 +91,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         mContext = this;
         setContentView(R.layout.activity_create_edit_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_event_toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);

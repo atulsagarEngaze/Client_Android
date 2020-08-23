@@ -38,7 +38,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="@dimen/padding"
                     android:textColor="@color/primary"
-                    android:textSize="@dimen/small_text_size" >
+                    style="@style/SecondaryTextStyle"
+                    android:textSize="16sp" >
                 </TextView>
 
                 <ImageView
@@ -80,6 +81,7 @@
                         android:layout_gravity="top"
                         android:gravity="top"
                         android:maxWidth="130dip"
+                        android:fontFamily="sans-serif-light"
                         android:textColor="@color/primaryText"
                         android:textSize="@dimen/small_text_size" />
 
@@ -107,6 +109,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/label_runningEvent_acceptedLocationUnavailable"
                         android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
@@ -125,6 +128,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/label_runningEvent_declined"
                         android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
@@ -143,6 +147,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:maxWidth="80dip"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/label_runningEvent_yetToRespond"
                         android:textColor="@color/hintDisable"
                         android:textSize="@dimen/small_text_size" />
@@ -162,7 +167,7 @@
 
         <View
             android:id="@+id/user_location_divider"
-            android:layout_width="1dp"
+            android:layout_width=".5dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding"
             android:layout_marginTop="@dimen/padding"

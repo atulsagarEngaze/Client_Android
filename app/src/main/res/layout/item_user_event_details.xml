@@ -20,8 +20,9 @@
 
         <ImageView
             android:id="@+id/img_user_event_details"
-            android:layout_width="18dip"
-            android:layout_height="18dip"
+            android:layout_gravity="center_vertical"
+            android:layout_width="14dip"
+            android:layout_height="14dip"
             android:background="@drawable/ic_timer_primary_color"           
             android:text="On" />
 
@@ -29,8 +30,9 @@
             android:id="@+id/txt_user_event_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:textColor="@color/secondaryText"
+            android:textColor="@color/primaryText"
             android:textSize="@dimen/small_text_size" />
     </LinearLayout>
 
