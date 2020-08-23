@@ -359,7 +359,7 @@
     </style>
 
     <style name="IconStyle">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/darkGray</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">@dimen/padding</item>
         <item name="android:layout_marginLeft">@dimen/padding</item>

@@ -59,7 +59,7 @@
     <string name="label_meetNow_errorMessage">Event creation Failed!! Please try again..</string>
 
     <!-- Create Event -->
-    <string name="hint_add_friends">Enter Contacts</string>
+    <string name="hint_add_friends">Type Contacts name</string>
     <string name="title_createEvent_errorPopup">There was a problem.</string>
     <string name="label_createEvent_errorMessage">Event creation Failed!! Please try again..</string>
     <string name="event_invalid_input_message">"Please enter a valid input."</string>
@@ -152,7 +152,7 @@
     <string name="save_fail">"Unable to save the response. Please try again"</string>
     <string name="track_my_buddy_text_duration">how long you want to track</string>
     <string name="track_my_buddy_text_start_button">start</string>
-    <string name="track_my_buddy_location_hint">place your friends are going</string>
+    <string name="track_my_buddy_location_hint">Place your friends are going</string>
     <string name="track_my_buddy_add_friends_hint">Type contacts name you wish to track</string>
     <string name="track_my_buddy_event_create_successful">Tracking is started. Notification sent to your buddies to share their location.</string>
     <string name="track_my_buddy_text_notification">Track buddy request</string>
@@ -160,14 +160,14 @@
     <string name="share_my_location_notification">Share my location request</string>
     <string name="share_my_location_text_duration">how long you want share your loc.</string>
     <string name="share_my_location_text_start_button">start</string>
-    <string name="share_my_location_location_hint">choose the place you are going</string>
+    <string name="share_my_location_location_hint"><i>Choose the place you are going</i></string>
     <string name="share_my_location_add_friends_hint">Enter contacts who can view your location</string>
     <string name="sharemylocation_event_create_successful">Sharing of your location started. Notification sent to your buddies to view your location.</string>
     <string name="label_sharemylocation_errorMessage">Unable to share your location! Please try again..</string>
     <string name="track_location_timeinfo_text">"Started at %1$s, finishing after %2$s."</string>
     <string name="meet_now_text_duration">Tracking duration</string>
     <string name="meet_now_add_friends_hint">Type contacts name you want to meet</string>
-    <string name="meet_now_location_hint">choose the place you are meeting</string>
+    <string name="meet_now_location_hint"><i>Choose the place you are meeting</i></string>
     <string name="meet_now_event_create_successful">Meeting has started. Notification sent to your participants to share their location.</string>
 
     <!-- reoccurrence related messages> -->

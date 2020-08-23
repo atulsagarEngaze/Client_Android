@@ -4,17 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/create_event_toolbar"
         style="@style/ETMaterialTheme.ActionBar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,32 +25,31 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/Title"
                     style="@style/PrimaryTextStyle"
-                    android:layout_weight="5"
                     android:layout_width="0dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/padding_double"
+                    android:layout_weight="5"
                     android:background="@android:color/transparent"
                     android:hint="@string/event_title_hint"
                     android:inputType="textMultiLine"
                     android:paddingRight="@dimen/padding"
-                    android:layout_centerVertical="true"
-                    android:textColorHint="@color/hintDisable" >
-                </EditText>
+                    android:textColorHint="@color/secondaryText"></EditText>
 
                 <ImageView
                     android:id="@+id/event_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
                     android:layout_marginRight="@dimen/padding"
-                    android:background="@drawable/ic_event_black_24dp"/>
+                    android:background="@drawable/ic_event_black_24dp" />
 
             </LinearLayout>
 
@@ -60,26 +58,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/padding"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/ic_person_outline_black_24dp"></ImageView>
 
                 <com.redtop.engaze.common.customeviews.FlowLayout
                     android:id="@+id/participant_layout"
-                    android:layout_weight="1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_marginTop="@dimen/padding"
                     android:layout_marginRight="@dimen/padding"
-                    android:layout_marginTop="@dimen/padding" >
+                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_weight="1">
 
                     <com.redtop.engaze.common.customeviews.CustomAutoCompleteTextView
                         android:id="@+id/searchAutoComplete"
@@ -89,8 +87,9 @@
                         android:completionThreshold="1"
                         android:dropDownAnchor="@+id/participant_layout"
                         android:dropDownWidth="match_parent"
+                        android:fontFamily="sans-serif-light"
                         android:textColor="@color/secondaryText"
-                        android:textColorHint="@color/hintDisable"
+                        android:textColorHint="@color/secondaryText"
                         android:textSize="@dimen/primary_text_size" />
                 </com.redtop.engaze.common.customeviews.FlowLayout>
             </LinearLayout>
@@ -104,15 +103,15 @@
                 android:id="@+id/row_start_at_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_access_time_black_24dp"></ImageView>
 
                 <TextView
@@ -127,36 +126,34 @@
                 android:id="@+id/row_start_time"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/StartDateDisplay"
                     style="@style/PrimaryTextStyleEvent"
                     android:layout_marginLeft="56dip"
-                    android:text="@string/date_text" >
-                </TextView>
+                    android:text="@string/date_text"></TextView>
 
                 <TextView
                     android:id="@+id/StartTimeDisplay"
                     style="@style/PrimaryTextStyleEvent"
                     android:layout_marginLeft="220dip"
-                    android:text="Time" >
-                </TextView>
+                    android:text="Time"></TextView>
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/row_set_duration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_hourglass_empty_black_24dp"></ImageView>
 
                 <TextView
@@ -164,23 +161,21 @@
                     style="@style/SecondaryTextStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:text="Duration " >
-                </TextView>
+                    android:text="Duration "></TextView>
             </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/row_set_duration1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/Durationholder"
                     style="@style/PrimaryTextStyleEvent"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="56dip"
-                    android:ems="10" >
-                </TextView>
+                    android:ems="10"></TextView>
             </RelativeLayout>
 
             <View
@@ -193,19 +188,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_autorenew_black_24dp"></ImageView>
 
                 <TextView
                     android:id="@+id/label_recurrence"
-                    style="@style/PrimaryTextStyle"
+                    style="@style/SecondaryTextStyle"
                     android:text="Recurrence" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
@@ -224,29 +219,30 @@
                 android:id="@+id/ll_recurrence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/padding"
                 android:layout_marginLeft="56dip"
+                android:layout_marginBottom="@dimen/padding"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:id="@+id/rel_rec_patterns"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding"
-                    android:layout_marginLeft="@dimen/padding" >
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_marginBottom="@dimen/padding">
 
                     <RadioGroup
                         android:id="@+id/rel_rec_radio_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingBottom="@dimen/padding"
-                        android:paddingTop="@dimen/padding" >
+                        android:paddingTop="@dimen/padding"
+                        android:paddingBottom="@dimen/padding">
 
                         <RadioButton
                             android:id="@+id/rd_daily"
                             style="@style/radionbutton"
+                            android:fontFamily="sans-serif-light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
@@ -257,6 +253,7 @@
                         <RadioButton
                             android:id="@+id/rd_weekly"
                             style="@style/radionbutton"
+                            android:fontFamily="sans-serif-light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -267,6 +264,7 @@
                         <RadioButton
                             android:id="@+id/rd_monthly"
                             style="@style/radionbutton"
+                            android:fontFamily="sans-serif-light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -281,8 +279,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rel_rec_radio_group"
                         android:orientation="horizontal"
-                        android:paddingBottom="@dimen/paddinghalf"
-                        android:paddingTop="@dimen/paddinghalf" >
+                        android:paddingTop="@dimen/paddinghalf"
+                        android:paddingBottom="@dimen/paddinghalf">
 
                         <TextView
                             style="@style/PrimaryTextStyle"
@@ -317,14 +315,14 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rel_rec_radio_group"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/paddinghalf"
                         android:paddingTop="@dimen/paddinghalf"
-                        android:visibility="gone" >
+                        android:paddingBottom="@dimen/paddinghalf"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal">
 
                             <TextView
                                 style="@style/PrimaryTextStyle"
@@ -359,13 +357,14 @@
                             android:columnCount="3"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/padding"
-                            android:rowCount="3" >
+                            android:rowCount="3">
 
                             <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/chkmonday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/paddinghalf"
+                                android:fontFamily="sans-serif-light"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Mon"
                                 android:textColor="@color/primaryText"
@@ -377,6 +376,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
+                                android:fontFamily="sans-serif-light"
                                 android:text="Tues"
                                 android:textColor="@color/primaryText"
                                 android:textSize="@dimen/primary_text_size"
@@ -386,6 +386,7 @@
                                 android:id="@+id/chkwednesday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Wed"
                                 android:textColor="@color/primaryText"
@@ -395,6 +396,7 @@
                                 android:id="@+id/chkthursday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
                                 android:layout_marginBottom="@dimen/paddinghalf"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Thurs"
@@ -405,6 +407,7 @@
                                 android:id="@+id/chkfriday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Fri"
                                 android:textColor="@color/primaryText"
@@ -414,6 +417,7 @@
                                 android:id="@+id/chksaturday"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
                                 android:paddingRight="@dimen/paddingQuarter"
                                 android:text="Sat"
                                 android:textColor="@color/primaryText"
@@ -424,6 +428,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingRight="@dimen/paddingQuarter"
+                                android:fontFamily="sans-serif-light"
                                 android:text="Sun"
                                 android:textColor="@color/primaryText"
                                 app:buttonTint="@color/divider" />
@@ -436,9 +441,9 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rel_rec_radio_group"
                         android:orientation="horizontal"
-                        android:paddingBottom="@dimen/paddinghalf"
                         android:paddingTop="@dimen/paddinghalf"
-                        android:visibility="gone" >
+                        android:paddingBottom="@dimen/paddinghalf"
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/PrimaryTextStyle"
@@ -491,7 +496,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/padding" >
+                    android:paddingLeft="@dimen/padding">
 
                     <TextView
                         style="@style/PrimaryTextStyle"
@@ -528,14 +533,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_location_on_black_24dp"></ImageView>
 
                 <TextView
@@ -545,8 +550,7 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/event_location_hint"
-                    android:textColorHint="@color/hintDisable" >
-                </TextView>
+                    android:textColorHint="@color/hintDisable"></TextView>
 
                 <ImageView
                     android:id="@+id/icon_location_clear"
@@ -570,15 +574,15 @@
                 android:id="@+id/row_tracking_required"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_adjust_black_24dp"></ImageView>
 
                 <TextView
@@ -586,8 +590,7 @@
                     style="@style/SecondaryTextStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:text="Tracking " >
-                </TextView>
+                    android:text="Tracking "></TextView>
 
                 <!-- <Switch -->
                 <!-- android:id="@+id/tracking_on_off_switch" -->
@@ -603,7 +606,7 @@
                 android:id="@+id/row_tracking_offset"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TrackingStartOffeset"
@@ -621,15 +624,15 @@
                 android:id="@+id/row_reminder_offset_label"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_notifications_black_24dp"></ImageView>
 
                 <TextView
@@ -637,23 +640,21 @@
                     style="@style/SecondaryTextStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:text="Remind me " >
-                </TextView>
+                    android:text="Remind me "></TextView>
             </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/row_reminder_offset"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/ReminderOffeset"
                     style="@style/PrimaryTextStyleEvent"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="56dip"
-                    android:ems="10" >
-                </TextView>
+                    android:ems="10"></TextView>
             </RelativeLayout>
 
             <View
@@ -665,14 +666,15 @@
                 android:id="@+id/row_event_note"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/padding_one_half"
-                    android:layout_marginRight="@dimen/paddinghalf"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/ic_note_black_24dp"></ImageView>
 
                 <EditText
@@ -680,10 +682,10 @@
                     style="@style/PrimaryTextStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
                     android:hint="@string/event_note_hint"
                     android:inputType="text"
-                    android:textColorHint="@color/hintDisable" >
-                </EditText>
+                    android:textColorHint="@color/secondaryText"></EditText>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

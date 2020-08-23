@@ -13,12 +13,13 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:paddingLeft="@dimen/paddinghalf"
-        android:paddingTop="@dimen/paddinghalf"
+        android:paddingTop="@dimen/padding_one_half"
         android:paddingRight="@dimen/paddinghalf"
         android:paddingBottom="@dimen/padding">
 
         <TextView
-            style="@style/HeaderTextStyle"
+            style="@style/SecondaryTextStyle"
+            android:layout_marginBottom="@dimen/padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Tracking" />

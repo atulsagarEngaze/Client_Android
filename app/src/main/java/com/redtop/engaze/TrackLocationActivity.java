@@ -69,13 +69,9 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         populateControlsAndDefaultEvenData();
 
         imgView = (ImageView) findViewById(R.id.icon_track_location_clear);
-        imgView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mEventLocationTextView.setText("");
-                createOrUpdateEvent.destination = null;
-            }
+        imgView.setOnClickListener(v -> {
+            mEventLocationTextView.setText("");
+            createOrUpdateEvent.destination = null;
         });
     }
 

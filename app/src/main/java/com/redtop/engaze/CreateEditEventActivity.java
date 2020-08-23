@@ -19,6 +19,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -332,7 +333,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         mMembers = ContactAndGroupListManager.getAllContacts();
         mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
         mAutoCompleteInviteeTextView.setAdapter(mAdapter);
-        mAutoCompleteInviteeTextView.setHint(mHintFriendText);
+        mAutoCompleteInviteeTextView.setHint(Html.fromHtml("<i>" + mHintFriendText + "</i>"));
         mAddedMembers = new Hashtable<String, ContactOrGroup>();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

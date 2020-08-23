@@ -114,7 +114,7 @@ public class TrackingOffsetFragment extends DialogFragment {
 
                 }
                 TextView  dur = ((TextView)v);
-                Drawable draw = getResources().getDrawable(R.drawable.ic_check_black_24dp);
+                Drawable draw = getResources().getDrawable(R.drawable.ic_check_primary_24dp);
                 dur.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
                 dur.setTextColor(getResources().getColorStateList(R.color.primary));
                 dur.setText(dur.getText().toString().concat(getResources().getString(R.string.before)));
@@ -139,7 +139,7 @@ public class TrackingOffsetFragment extends DialogFragment {
         {
             period.setText(period.getText().toString().concat(getResources().getString(R.string.before)));
             period.setTextColor(getResources().getColorStateList(R.color.primary));
-            Drawable draw = getResources().getDrawable(R.drawable.ic_check_black_24dp);
+            Drawable draw = getResources().getDrawable(R.drawable.ic_check_primary_24dp);
             period.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
         }
     }

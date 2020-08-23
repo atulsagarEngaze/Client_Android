@@ -1,6 +1,7 @@
 package com.redtop.engaze.viewmanager;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -146,8 +147,8 @@ public class TrackLocationViewManager  {
 			break;				
 		}
 		
-		mAutoCompleteInviteeTextView.setHint(mHintFriendText);
-		mEventLocationTextView.setHint(mHintLocationText);
+		mAutoCompleteInviteeTextView.setHint(Html.fromHtml("<i>" + mHintFriendText+ "</i>"));
+		mEventLocationTextView.setHint(Html.fromHtml("<i>" + mHintLocationText + "</i>"));
 	}
 
 	public void setDurationText(String durationText) {

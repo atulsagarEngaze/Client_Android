@@ -13,14 +13,15 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:paddingLeft="@dimen/paddinghalf"
-        android:paddingTop="@dimen/paddinghalf"
+        android:paddingTop="@dimen/padding_one_half"
         android:paddingRight="@dimen/paddinghalf"
         android:paddingBottom="@dimen/paddinghalf">
 
         <TextView
-            style="@style/HeaderTextStyle"
+            style="@style/SecondaryTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding"
             android:text="Set Duration"></TextView>
 
         <EditText
@@ -67,12 +68,13 @@
             <TextView
 
                 android:id="@+id/save_event_duration"
-                style="@style/HeaderTextStyle"
+                style="@style/SecondaryTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="Done"
-                android:textColor="@color/primary" />
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                android:text="Done" />
 
         </RelativeLayout>
 

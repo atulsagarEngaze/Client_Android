@@ -109,7 +109,8 @@ public class DurationOffsetFragment extends DialogFragment {
                     dv.setTextColor(getResources().getColorStateList(R.color.primaryText));
                 }
                 TextView dur = ((TextView) v);
-                Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_black_24dp);
+
+                Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_primary_24dp);
                 dur.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
                 dur.setTextColor(getResources().getColorStateList(R.color.primary));
                 duration.setPeriod(dur.getTag().toString());
@@ -131,7 +132,7 @@ public class DurationOffsetFragment extends DialogFragment {
     private void setDefaultDurationPeriod(TextView period) {
         if (period.getTag().equals(duration.getPeriod())) {
             period.setTextColor(getResources().getColorStateList(R.color.primary));
-            Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_black_24dp);
+            Drawable draw = ContextCompat.getDrawable(mContext, R.drawable.ic_check_primary_24dp);
             period.setCompoundDrawablesWithIntrinsicBounds(null, null, draw, null);
         }
     }
