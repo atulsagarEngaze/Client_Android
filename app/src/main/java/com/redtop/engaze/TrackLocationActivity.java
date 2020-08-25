@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import com.redtop.engaze.Interface.IActionHandler;
@@ -53,6 +54,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_location_event);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.track_location_event_toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyleNoElevation);
         Window window = getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.BOTTOM);

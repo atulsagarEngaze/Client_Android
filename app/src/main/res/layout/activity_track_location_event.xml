@@ -10,7 +10,8 @@
     <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/track_location_event_toolbar"
-        style="@style/ETMaterialTheme.ActionBar" />
+        android:layout_marginTop="@dimen/paddinghalf"
+        style="@style/ETMaterialTheme.ActionBar.NoElevation" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +26,6 @@
                 android:id="@+id/rl_event_name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/paddinghalf"
                 android:orientation="horizontal">
 
                 <com.redtop.engaze.fontawesome.TextFont

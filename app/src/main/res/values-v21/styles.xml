@@ -45,15 +45,21 @@
     </style>
 
     <style name="ETMaterialTheme.ActionBar">
-        <item name="android:titleTextStyle">@color/secondaryText</item>
-        <item name="android:elevation">5dip</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:background">@color/toolBarLight</item>
-        <item name="colorControlNormal">@color/iconDark</item>
-        <item name="android:colorBackground">@color/toolBarLight</item>
+    <item name="android:titleTextStyle">@color/secondaryText</item>
+    <item name="android:elevation">5dip</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">0dp</item>
+    <item name="android:background">@color/toolBarLight</item>
+    <item name="colorControlNormal">@color/iconDark</item>
+    <item name="android:colorBackground">@color/toolBarLight</item>
 
+</style>
+
+    <style name="ETMaterialTheme.ActionBar.NoElevation" parent="ETMaterialTheme.ActionBar">
+        <item name="android:titleTextStyle">@color/secondaryText</item>
+        <item name="android:elevation">0dip</item>
+        <item name="android:background">@color/primaryBackground</item>
     </style>
 
     <style name="ETMaterialTheme.ActionMode" parent="@style/Widget.AppCompat.ActionMode">

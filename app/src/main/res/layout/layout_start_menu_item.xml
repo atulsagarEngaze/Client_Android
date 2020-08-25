@@ -9,15 +9,15 @@
         android:id="@+id/menu_item_start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
         android:background="?attr/selectableItemBackground"
         android:paddingLeft="@dimen/padding"
         android:paddingBottom="@dimen/paddingQuarter"
         android:paddingTop="@dimen/paddingQuarter"
         android:paddingRight="@dimen/padding"
+        style="@style/SecondaryTextStyle"
         android:text="@string/action_start"
-
-        android:textColor="@color/iconDark"
-        android:textSize="@dimen/small_text_size"
+        android:textColor="@color/primary"
         android:textStyle="bold" />
 
 </LinearLayout>
