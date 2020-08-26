@@ -8,6 +8,7 @@
         <item name="colorControlHighlight">@color/primary</item>
 
     </style>
+
     <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">true</item>
@@ -86,16 +87,16 @@
     </style>
 
     <style name="HomeMenuButton">
-        <item name="android:background">@drawable/ripple_gray</item>
-        <item name="android:layout_width">54dip</item>
-        <item name="android:layout_height">54dip</item>
+
+        <item name="android:layout_width">22dp</item>
+        <item name="android:layout_height">22dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginBottom">2dip</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:elevation">5dip</item>
+
     </style>
 
     <style name="radionbutton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
@@ -164,20 +165,13 @@
         <item name="android:layout_marginTop">@dimen/paddinghalf</item>
     </style>
 
-    <!-- <style name="DividerSecondary">
-         <item name="android:layout_width">match_parent</item>
-         <item name="android:layout_height">1dp</item>
-         <item name="android:background">@color/divider_secondary</item>
-         <item name="android:layout_marginBottom">@dimen/paddinghalf</item>
-         <item name="android:layout_marginTop">@dimen/paddinghalf</item>
-     </style>-->
-
     <style name="toolbarTextFontFamilyStyle">
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="toolbarTextFontFamilyStyleNoElevation">
         <item name="android:fontFamily">sans-serif-condensed-light</item>
         <item name="android:textColor">@color/primaryText</item>
@@ -365,8 +359,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:textColor">@color/icon</item>
-        <item name="android:textSize">@dimen/extra_small_text_size</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="Icon">

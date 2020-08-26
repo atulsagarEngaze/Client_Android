@@ -2,131 +2,117 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_main_menu_buttons"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:alpha=".5"
-        android:background="@color/primaryBackground" >
-    </LinearLayout>
+        android:background="@color/primaryBackground"
+        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/paddinghalf"
-        android:paddingTop="12dp" >
+        android:paddingBottom="@dimen/paddinghalf">
+
 
         <LinearLayout
+            android:id="@+id/ll_meet_now"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:background="@drawable/ripple_home_buttton"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:paddingTop="12dp">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_meet_now"
                 style="@style/HomeMenuButton"
+                android:layout_gravity="center_horizontal"
                 android:alpha="1.0"
-                android:background="@drawable/ripple_teal"
-                android:src="@drawable/ic_meetnow_white_24dp"
-                android:layout_gravity="center_horizontal"/>
+                android:background="@drawable/ic_group_24" />
 
             <TextView
                 android:id="@+id/txt_meet_now"
                 style="@style/HomeMenuText"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/label_home_menu_meetnow" >
-            </TextView>
+                android:text="@string/label_home_menu_meetnow"></TextView>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight=".25"
+            android:id="@+id/ll_meet_later"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:background="@drawable/ripple_home_buttton"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:paddingTop="12dp">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_meet_later"
                 style="@style/HomeMenuButton"
-                android:alpha="1.0"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/ripple_bluegray"
-                android:src="@drawable/ic_event_add" />
+                android:alpha="1.0"
+                android:background="@drawable/ic_event_22" />
 
             <TextView
                 android:id="@+id/txt_meet_later"
                 style="@style/HomeMenuText"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/label_home_menu_meetlater" >
-            </TextView>
+                android:text="@string/label_home_menu_meetlater"></TextView>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight=".25"
+            android:id="@+id/ll_track_buddy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:background="@drawable/ripple_home_buttton"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:paddingTop="12dp">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_track_buddy"
                 style="@style/HomeMenuButton"
-                android:background="@drawable/ripple_amber"
-                android:src="@drawable/ic_trackbuddy"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_location_on_primary_24dp" />
 
             <TextView
                 android:id="@+id/txt_track_buddy"
                 style="@style/HomeMenuText"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/label_home_menu_trackbuddy" >
-            </TextView>
+                android:background="@android:color/transparent"
+                android:text="@string/label_home_menu_trackbuddy"></TextView>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight=".25"
+            android:id="@+id/ll_share_mylocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:background="@drawable/ripple_home_buttton"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:paddingTop="12dp">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_share_mylocation"
                 style="@style/HomeMenuButton"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/ripple_lightgreen" 
-                android:src="@drawable/ic_trackme"/>
+                android:background="@drawable/ic_gps_fixed_24" />
 
             <TextView
                 android:id="@+id/txt_share_my_location"
                 style="@style/HomeMenuText"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/label_home_menu_sharemylocation" >
-            </TextView>
+                android:text="@string/label_home_menu_sharemylocation"></TextView>
         </LinearLayout>
 
-        <!-- <LinearLayout -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:orientation="vertical" > -->
-
-
-        <!-- <ImageButton -->
-        <!-- android:id="@+id/img_set_alert" -->
-        <!-- style="@style/HomeMenuButton" -->
-        <!-- android:background="@drawable/ripple_accent" -->
-        <!-- android:src="@drawable/ic_alarm_white_36x36" /> -->
-
-
-        <!-- <TextView -->
-        <!-- android:id="@+id/txt_set_alert" -->
-        <!-- style="@style/HomeMenuText" -->
-        <!-- android:text="Set alert" > -->
-        <!-- </TextView> -->
-        <!-- </LinearLayout> -->
     </LinearLayout>
 
 </FrameLayout>

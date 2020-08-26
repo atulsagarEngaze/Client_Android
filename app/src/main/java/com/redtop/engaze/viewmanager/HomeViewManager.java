@@ -54,10 +54,10 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 	private ImageButton mCurrentRunningEventListButton;
 	public ListView mHomeRunningEventList;
 	public TextView mTxtRunningEventListItemCount;
-	public ImageButton mImgBtnMeetNow;
-	public ImageButton mImgBtnMeetLater;
-	public ImageButton mImgBtnMeetTrackBuddy;
-	public ImageButton mImgBtnMeetShareMyLoc;
+	public View mImgBtnMeetNow;
+	public View mImgBtnMeetLater;
+	public View mImgBtnMeetTrackBuddy;
+	public View mImgBtnMeetShareMyLoc;
 
 	public RelativeLayout rlEventList ;	
 	private HomeActivity activity;
@@ -198,10 +198,23 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 
 	@Override
 	protected void setClickListener(){
-		mImgBtnMeetNow.setOnClickListener(this);
-		mImgBtnMeetLater.setOnClickListener(this);	
-		mImgBtnMeetTrackBuddy.setOnClickListener(this);
-		mImgBtnMeetShareMyLoc.setOnClickListener(this);
+
+		activity.findViewById(R.id.ll_meet_now).setOnClickListener(view -> {
+			activity.onMeetNowClicked();
+		});
+
+		activity.findViewById(R.id.ll_meet_later).setOnClickListener(view -> {
+			activity.onMeetLaterClicked();
+		});
+
+		activity.findViewById(R.id.ll_track_buddy).setOnClickListener(view -> {
+			activity.onTrackBuddyClicked();
+		});
+
+		activity.findViewById(R.id.ll_share_mylocation).setOnClickListener(view -> {
+			activity.onShareMyLocationClicked();
+		});
+
 		mCurrentPendingEventListButton.setOnClickListener(this);
 		mCurrentRunningEventListButton.setOnClickListener(this);
 		mCurrentShareMyLocationListButton.setOnClickListener(this);
@@ -215,22 +228,8 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()){		
-		case R.id.img_meet_now:			
-			activity.onMeetNowClicked();			
-			break;
-			
-		case R.id.img_meet_later:
-			activity.onMeetLaterClicked();
-			break;
-			
-		case R.id.img_share_mylocation:
-			activity.onShareMyLocationClicked();
-			break;
-			
-		case R.id.img_track_buddy:
-			activity.onTrackBuddyClicked();
-			break;
+		switch(v.getId()){
+
 			
 		case R.id.img_hn_pending_events:
 			activity.onShowCurrentPendingEventListButtonClicked();

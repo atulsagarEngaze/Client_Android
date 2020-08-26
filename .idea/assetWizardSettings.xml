@@ -158,7 +158,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/done/baseline_done_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/event/baseline_event_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -168,8 +168,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_check_white_24" />
+                            <entry key="color" value="212121" />
+                            <entry key="outputName" value="ic_event_22" />
                             <entry key="sourceFile" value="C:\Users\atul.sagar" />
                           </map>
                         </option>

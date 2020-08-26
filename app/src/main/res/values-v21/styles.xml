@@ -85,18 +85,19 @@
     </style>
 
     <style name="HomeMenuButton">
-        <item name="android:background">@drawable/ripple_gray</item>
-        <item name="android:layout_width">54dip</item>
-        <item name="android:layout_height">54dip</item>
+        <item name="android:tint">@color/iconDark</item>
+        <item name="android:background">@color/primaryBackground</item>
+        <item name="android:layout_width">22dp</item>
+        <item name="android:layout_height">22dp</item>
         <item name="android:padding">@dimen/paddinghalf</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">@dimen/padding_menu_button</item>
         <item name="android:layout_marginRight">@dimen/padding_menu_button</item>
-        <item name="android:layout_marginBottom">2dip</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:elevation">5dip</item>
+        <item name="android:layout_marginBottom">0dip</item>
+        <item name="android:layout_alignParentBottom">true</item>
+
     </style>
 
 </resources>
