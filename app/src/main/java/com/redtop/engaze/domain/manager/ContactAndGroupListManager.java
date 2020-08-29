@@ -91,23 +91,15 @@ public class ContactAndGroupListManager {
 
     public static ArrayList<ContactOrGroup> sortContacts(ArrayList<ContactOrGroup> contactsAndGroups) {
         if (contactsAndGroups.size() > 0) {
-            Collections.sort(contactsAndGroups, new Comparator<ContactOrGroup>() {
-
-                @Override
-                public int compare(ContactOrGroup lhs, ContactOrGroup rhs) {
-
-                    return lhs.getName().compareToIgnoreCase(rhs.getName());
-                }
-
-            });
+            Collections.sort(contactsAndGroups, (lhs, rhs) -> lhs.getName().compareToIgnoreCase(rhs.getName()));
         }
         return contactsAndGroups;
     }
 
     public static ArrayList<ContactOrGroup> getAllRegisteredContacts() {
         ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<ContactOrGroup>(InternalCaching.getRegisteredContactListFromCache().values());
-
-        return sortContacts(contactsAndGroups);
+        AppContext.context.setRegisteredContactList(sortContacts(contactsAndGroups));
+        return AppContext.context.sortedRegisteredContacts;
     }
 
     public static ArrayList<ContactOrGroup> getAllContacts() {
@@ -126,6 +118,7 @@ public class ContactAndGroupListManager {
 
         finalContacts.addAll(sortContacts(registered));
         finalContacts.addAll(sortContacts(unRegistered));
+        AppContext.context.setContactList(finalContacts);
         return finalContacts;
     }
 
@@ -305,22 +298,13 @@ public class ContactAndGroupListManager {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                cacheContactAndGroupList(new OnRefreshMemberListCompleteListner() {
+                cacheContactAndGroupList(memberList -> {
+                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
+                    AppContext.context.isContactListUpdated = false;
+                    AppContext.context.isRegisteredContactListUpdated=false;
 
-                    @Override
-                    public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                        PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
 
-
-                    }
-                }, new OnRefreshMemberListCompleteListner() {
-
-                    @Override
-                    public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-
-                        Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }, memberList -> Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show());
             }
         };
         thread.start();

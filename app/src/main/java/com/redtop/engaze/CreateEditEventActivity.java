@@ -41,6 +41,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.redtop.engaze.adapter.ContactListAutoCompleteAdapter;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
@@ -333,7 +334,12 @@ public class CreateEditEventActivity extends BaseEventActivity {
     private void populateControls() {
         mHintFriendText = getResources().getString(R.string.hint_add_friends);
         //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-        mMembers = ContactAndGroupListManager.getAllContacts();
+        if(AppContext.context.isContactListUpdated){
+            mMembers = AppContext.context.sortedAllContacts;
+        }
+        else {
+            mMembers = ContactAndGroupListManager.getAllContacts();
+        }
         mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
         mAutoCompleteInviteeTextView.setAdapter(mAdapter);
         mAutoCompleteInviteeTextView.setHint(Html.fromHtml("<i>" + mHintFriendText + "</i>"));

@@ -196,7 +196,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public Boolean accessingContactsFirstTime() {
-        if (AppContext.context.isFirstTimeLoading = true) {
+        if (AppContext.context.isFirstTimeLoading) {
             processMemberList();
             AppContext.context.isFirstTimeLoading = false;
             return true;
@@ -209,21 +209,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             registeredMemberListCached();
         } else if (PreffManager.getPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED)) {
             showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-            ContactAndGroupListManager.initializedRegisteredUser(new OnRefreshMemberListCompleteListner() {
-
-                @Override
-                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-                    hideProgressBar();
-                }
-            }, new OnRefreshMemberListCompleteListner() {
-
-                @Override
-                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-                    hideProgressBar();
-                    Toast.makeText(mContext,
-                            getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
-                }
+            ContactAndGroupListManager.initializedRegisteredUser(memberList -> {
+                PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
+                hideProgressBar();
+            }, memberList -> {
+                hideProgressBar();
+                Toast.makeText(mContext,
+                        getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
             });
         } else {
             ContactAndGroupListManager.refreshMemberList();

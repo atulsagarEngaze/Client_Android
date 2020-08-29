@@ -8,11 +8,14 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.ActionHandler;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.service.BackgroundServiceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 public class AppContext extends Application {
     public static final String TAG = AppContext.class
@@ -27,11 +30,13 @@ public class AppContext extends Application {
     public Duration defaultTrackingSettings;
     public Reminder defaultReminderSettings;
     public Duration defaultDurationSettings;
+    public ArrayList<ContactOrGroup> sortedRegisteredContacts;
+    public ArrayList<ContactOrGroup> sortedAllContacts;
+    public boolean isContactListUpdated = false;
+    public boolean isRegisteredContactListUpdated = false;
+
     public static AppContext context;
-
-
     public static ActionHandler actionHandler;
-
     public static JsonParser jsonParser;
 
     @Override
@@ -59,7 +64,18 @@ public class AppContext extends Application {
         }
     }
 
-    public void setDefaultSetting(){
+    public void setContactList(ArrayList<ContactOrGroup> sortedAllContacts) {
+        this.sortedAllContacts = sortedAllContacts;
+        isContactListUpdated = true;
+
+    }
+
+    public void setRegisteredContactList(ArrayList<ContactOrGroup> sortedRegisteredContacts) {
+        this.sortedRegisteredContacts = sortedRegisteredContacts;
+        isRegisteredContactListUpdated = true;
+    }
+
+    public void setDefaultSetting() {
         setDefaultTrackingSettings();
         setDefaultReminderSettings();
         setDefaultDurationSettings();
@@ -93,7 +109,7 @@ public class AppContext extends Application {
                 (Constants.EVENT_DEFAULT_DURATION,
                         Constants.EVENT_DEFAULT_PERIOD,
                         true);
-       PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
+        PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
     }
 
 }

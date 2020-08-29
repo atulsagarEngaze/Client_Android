@@ -88,14 +88,18 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
         if (!accessingContactsFirstTime()) {
-            //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-            mMembers = ContactAndGroupListManager.getAllContacts();
+            if (AppContext.context.isContactListUpdated) {
+                mMembers = AppContext.context.sortedAllContacts;
+            } else {
+                mMembers = ContactAndGroupListManager.getAllContacts();
+            }
+
             if (mMembers != null) {
                 mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
-                viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
+
             }
         }
-        //if activity is loaded from members list activity then add the selected contact
+        viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
         addIfAnyContactIsSelectedFromMemberListActivity();
     }
 
@@ -111,7 +115,6 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
     @Override
     protected void registeredMemberListCached() {
-        //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
         mMembers = ContactAndGroupListManager.getAllContacts();
         if (mMembers != null) {
             mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
@@ -236,15 +239,8 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 FragmentManager fm = getSupportFragmentManager();
                 DurationOffsetFragment editNameDialogFragment = DurationOffsetFragment.newInstance(createOrUpdateEvent.duration);
                 editNameDialogFragment.show(fm, "Duration");
-               /* intent = new Intent(TrackLocationActivity.this, DurationOffset.class);
-                intent.putExtra("com.redtop.engaze.entity.Duration", (Parcelable) createOrUpdateEvent.duration);
-                startActivityForResult(intent, DURATION_REQUEST_CODE);*/
+
                 break;
-            /*case R.id.btn_tracking_start:
-                createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
-                hideKeyboard(v);
-                SaveEvent();
-                break;*/
         }
     }
 
