@@ -115,7 +115,7 @@
 
                 <TextView
                     android:id="@+id/label_starting_at"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
                     android:text="Starting at" />
@@ -157,7 +157,7 @@
 
                 <TextView
                     android:id="@+id/Duration"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
                     android:text="Duration "></TextView>
@@ -199,12 +199,12 @@
 
                 <TextView
                     android:id="@+id/label_recurrence"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:text="Recurrence" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/chkrecurrence"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/padding"
@@ -586,7 +586,7 @@
 
                 <TextView
                     android:id="@+id/trackingtext"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
                     android:text="Tracking "></TextView>
@@ -636,7 +636,7 @@
 
                 <TextView
                     android:id="@+id/setReminderOffset"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
                     android:text="Remind me "></TextView>

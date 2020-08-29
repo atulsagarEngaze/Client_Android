@@ -3,27 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="com.redtop.engaze.FeedbackActivity" >
+    tools:context="com.redtop.engaze.FeedbackActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/feedback_toolbar"
-        style="@style/ETMaterialTheme.ActionBar" />    
+        style="@style/ETMaterialTheme.ActionBar" />
 
     <EditText
         android:id="@+id/txt_feedback"
+        style="@style/PrimaryTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"        
+        android:layout_height="wrap_content"
         android:layout_below="@id/feedback_toolbar"
         android:background="@null"
         android:hint="@string/label_feedback_hint"
         android:padding="@dimen/padding"
         android:singleLine="false"
         android:textAlignment="textStart"
-        android:textColorHint="@color/hintDisable"
-        android:textColor="@color/primaryText">
+        android:textColorHint="@color/hintDisable">
+
         <requestFocus />
-        </EditText>
+    </EditText>
 
 </RelativeLayout>

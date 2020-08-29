@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/txt_event_day"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/txt_event_date"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_event_day"
@@ -55,7 +55,7 @@
 
             <TextView
                 android:id="@+id/txt_event_month"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_event_date"
@@ -107,7 +107,7 @@
 
                 <TextView
                     android:id="@+id/txt_initiator_value"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/host_contact_icon"
@@ -118,7 +118,7 @@
 
                 <TextView
                     android:id="@+id/txt_event_timeToStart"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignWithParentIfMissing="true"
@@ -176,7 +176,7 @@
 
                 <TextView
                     android:id="@+id/txt_event_Desc"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:paddingRight="0dip"
@@ -203,7 +203,7 @@
 
                 <TextView
                     android:id="@+id/txt_event_start_time"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -215,7 +215,7 @@
 
                 <TextView
                     android:id="@+id/txt_event_time_bar"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/txt_event_start_time"
@@ -226,7 +226,7 @@
 
                 <TextView
                     android:id="@+id/txt_event_end_time"
-                    style="@style/SecondaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/txt_event_time_bar"
@@ -274,7 +274,7 @@
 
                     <TextView
                         android:id="@+id/txt_location"
-                        style="@style/SecondaryTextStyle"
+                        style="@style/SubHeadingStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/ic_event_location"
@@ -301,7 +301,7 @@
 
                     <TextView
                         android:id="@+id/txt_event_participant"
-                        style="@style/SecondaryTextStyle"
+                        style="@style/SubHeadingStyle"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"

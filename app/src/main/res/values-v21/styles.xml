@@ -68,7 +68,7 @@
         <item name="android:actionModeCloseDrawable">@drawable/event_back</item>
     </style>
 
-    <style name="FullWidthPrimaryButton" parent="FlatButton">
+    <style name="FullWidthPrimaryButton" parent="Button">
         <item name="android:background">@drawable/button_corner_radius</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_marginRight">@dimen/padding</item>

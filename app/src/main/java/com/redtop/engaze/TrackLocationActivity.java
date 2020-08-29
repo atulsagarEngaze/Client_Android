@@ -259,13 +259,9 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         // Inflate your custom view.
         View myCustomView = baseInflater.inflate(R.layout.layout_start_menu_item, null);
         MenuItem item = menu.findItem(R.id.track_action_start).setActionView(myCustomView);
-        item.getActionView().setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
-                SaveEvent();
-            }
+        item.getActionView().setOnClickListener(v -> {
+            createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
+            SaveEvent();
         });
 
         return true;
@@ -273,7 +269,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        /*// Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -282,7 +278,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 createOrUpdateEvent.ContactOrGroups = new ArrayList<ContactOrGroup>(mAddedMembers.values());
                 SaveEvent();
                 break;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

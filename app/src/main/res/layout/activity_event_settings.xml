@@ -37,7 +37,7 @@
 
                 <TextView
                     android:id="@+id/label_reminder_heading"
-                    style="@style/PrimaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_span="2"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
@@ -243,7 +243,7 @@
 
                 <TextView
                     android:id="@+id/label_tracking_heading"
-                    style="@style/PrimaryTextStyle"
+                    style="@style/SubHeadingStyle"
                     android:layout_weight="8"
                     android:gravity="center_vertical"
                     android:paddingStart="0dip"

@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/track_location_time_info"
-            style="@style/SecondaryTextStyle"
+            style="@style/SubHeadingStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -53,7 +53,7 @@
 
             <TextView
                 android:id="@+id/track_location_contact_view"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dip"
@@ -70,7 +70,7 @@
 
             <TextView
                 android:id="@+id/track_location_contact_poke"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -88,7 +88,7 @@
 
             <TextView
                 android:id="@+id/track_location_contact_extend"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -107,7 +107,7 @@
 
             <TextView
                 android:id="@+id/track_location_contact_stop"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

@@ -58,7 +58,7 @@
 
     <TextView
         android:id="@+id/eta_existing"
-        style="@style/SecondaryTextStyle"        
+        style="@style/SubHeadingStyle"
         android:textColor="@color/primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

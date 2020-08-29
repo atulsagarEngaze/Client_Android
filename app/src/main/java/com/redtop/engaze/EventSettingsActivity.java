@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,14 +41,12 @@ public class EventSettingsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.event_setting_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             getSupportActionBar().setTitle(R.string.title_event_settings);
-            //toolbar.setSubtitle(R.string.title_event);
-            toolbar.setNavigationOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
+            toolbar.setNavigationOnClickListener(v -> {
+                hideKeyboard(v);
+                onBackPressed();
             });
         }
         ImageView icon = null;
@@ -60,24 +57,18 @@ public class EventSettingsActivity extends BaseActivity {
         mTextTrackingValue = (EditText) findViewById(R.id.setting_tracking_value);
         mTextTrackingValue.setText(Integer.toString(mTracking.getTimeInterval()));
         mTextTrackingValue.setSelection(mTextTrackingValue.getText().length());
-        mTextTrackingValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
+        mTextTrackingValue.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard(v);
             }
         });
 
         mTextReminderValue = (EditText) findViewById(R.id.setting_reminder_value);
         mTextReminderValue.setText(Integer.toString(mReminder.getTimeInterval()));
         mTextReminderValue.setSelection(mTextReminderValue.getText().length());
-        mTextReminderValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
+        mTextReminderValue.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard(v);
             }
         });
 
@@ -110,36 +101,31 @@ public class EventSettingsActivity extends BaseActivity {
         for (int i = 0; i < notificationTypes.size(); i++) {
             TextView nt = notificationTypes.get(i);
 
-            nt.setOnClickListener(new OnClickListener() {
+            nt.setOnClickListener(v -> {
+                mTextReminderValue.clearFocus();
+                mTextTrackingValue.clearFocus();
+                ImageView selectedIcon = null;
+                TextView clieckedView = ((TextView) v);
+                for (int i13 = 0; i13 < notificationTypes.size(); i13++) {
+                    TextView noti = notificationTypes.get(i13);
+                    notificationTypeIcons.get(i13);
+                    notificationTypeIcons.get(i13).setVisibility(View.GONE);
+                    noti.setTextColor(getResources().getColorStateList(R.color.secondaryText));
 
-                @Override
-                public void onClick(View v) {
-                    mTextReminderValue.clearFocus();
-                    mTextTrackingValue.clearFocus();
-                    ImageView selectedIcon = null;
-                    TextView clieckedView = ((TextView) v);
-                    for (int i = 0; i < notificationTypes.size(); i++) {
-                        TextView noti = notificationTypes.get(i);
-                        notificationTypeIcons.get(i);
-                        notificationTypeIcons.get(i).setVisibility(View.GONE);
-                        noti.setTextColor(getResources().getColorStateList(R.color.secondaryText));
-
-                        if (noti.getId() == clieckedView.getId()) {
-                            selectedIcon = notificationTypeIcons.get(i);
-                        }
+                    if (noti.getId() == clieckedView.getId()) {
+                        selectedIcon = notificationTypeIcons.get(i13);
                     }
-                    selectedIcon.setVisibility(View.VISIBLE);
-                    mReminder.setNotificationType(clieckedView.getTag().toString());
-                    clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
                 }
+                selectedIcon.setVisibility(View.VISIBLE);
+                mReminder.setNotificationType(clieckedView.getTag().toString());
+                clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
             });
-
         }
 
 
         TextView period = null;
 
-        reminderPeriods = new ArrayList<TextView>();
+        reminderPeriods = new ArrayList<>();
         reminderPeriodIcons = new ArrayList<ImageView>();
 
         period = (TextView) findViewById(R.id.reminder_minute);
@@ -169,53 +155,33 @@ public class EventSettingsActivity extends BaseActivity {
         for (int i = 0; i < reminderPeriods.size(); i++) {
             TextView per = reminderPeriods.get(i);
 
-            per.setOnClickListener(new OnClickListener() {
+            per.setOnClickListener(v -> {
+                mTextReminderValue.clearFocus();
+                mTextTrackingValue.clearFocus();
+                ImageView selectedIcon = null;
+                TextView clieckedView = ((TextView) v);
+                for (int i1 = 0; i1 < reminderPeriods.size(); i1++) {
+                    TextView dv = reminderPeriods.get(i1);
+                    reminderPeriodIcons.get(i1).setVisibility(View.GONE);
 
-                @Override
-                public void onClick(View v) {
-                    mTextReminderValue.clearFocus();
-                    mTextTrackingValue.clearFocus();
-                    ImageView selectedIcon = null;
-                    TextView clieckedView = ((TextView) v);
-                    for (int i = 0; i < reminderPeriods.size(); i++) {
-                        TextView dv = reminderPeriods.get(i);
-                        reminderPeriodIcons.get(i).setVisibility(View.GONE);
-
-                        String duration = dv.getText().toString();
-                        if (duration.contains(getResources().getString(R.string.before))) {
-                            dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
-                            dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
-                        }
-                        if (dv.getId() == clieckedView.getId()) {
-                            selectedIcon = reminderPeriodIcons.get(i);
-                        }
+                    String duration = dv.getText().toString();
+                    if (duration.contains(getResources().getString(R.string.before))) {
+                        dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
+                        dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
                     }
-
-                    // TODO Auto-generated method stub
-                    selectedIcon.setVisibility(View.VISIBLE);
-
-                    clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
-                    clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
-                    mReminder.setPeriod(clieckedView.getTag().toString());
-
+                    if (dv.getId() == clieckedView.getId()) {
+                        selectedIcon = reminderPeriodIcons.get(i1);
+                    }
                 }
+                selectedIcon.setVisibility(View.VISIBLE);
+
+                clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
+                clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
+                mReminder.setPeriod(clieckedView.getTag().toString());
+
             });
         }
-
-        //Switch onOffSwitch = (Switch)  findViewById(R.id.setting_tracking_switch);
-        //onOffSwitch.setChecked(tracking.getTrackingState());
         ShowHideTrackingSection(mTracking.getTrackingState());
-
-        //		onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        //
-        //			@Override
-        //			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        //				ShowHideTrackingSection(isChecked);
-        //				tracking.setTrackingState(isChecked);
-        //				AppUtility.setPref("TrackingEnabled", Boolean.toString(isChecked), getApplicationContext());
-        //			}
-        //		});
-
         trackingPeriods = new ArrayList<TextView>();
         trackingPeriodIcons = new ArrayList<ImageView>();
 
@@ -242,34 +208,31 @@ public class EventSettingsActivity extends BaseActivity {
         for (int i = 0; i < trackingPeriods.size(); i++) {
             TextView per = trackingPeriods.get(i);
 
-            per.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTextReminderValue.clearFocus();
-                    mTextTrackingValue.clearFocus();
-                    ImageView selectedIcon = null;
-                    TextView clieckedView = ((TextView) v);
-                    for (int i = 0; i < trackingPeriods.size(); i++) {
-                        TextView dv = trackingPeriods.get(i);
-                        trackingPeriodIcons.get(i).setVisibility(View.GONE);
+            per.setOnClickListener(v -> {
+                mTextReminderValue.clearFocus();
+                mTextTrackingValue.clearFocus();
+                ImageView selectedIcon = null;
+                TextView clieckedView = ((TextView) v);
+                for (int i12 = 0; i12 < trackingPeriods.size(); i12++) {
+                    TextView dv = trackingPeriods.get(i12);
+                    trackingPeriodIcons.get(i12).setVisibility(View.GONE);
 
-                        String duration = dv.getText().toString();
-                        if (duration.contains(getResources().getString(R.string.before))) {
-                            dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
-                            dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
-                        }
-                        if (dv.getId() == clieckedView.getId()) {
-                            selectedIcon = trackingPeriodIcons.get(i);
-                        }
+                    String duration = dv.getText().toString();
+                    if (duration.contains(getResources().getString(R.string.before))) {
+                        dv.setText(duration.substring(0, duration.indexOf(getResources().getString(R.string.before))));
+                        dv.setTextColor(getResources().getColorStateList(R.color.secondaryText));
                     }
-
-                    // TODO Auto-generated method stub
-                    selectedIcon.setVisibility(View.VISIBLE);
-
-                    clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
-                    clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
-                    mTracking.setPeriod(clieckedView.getTag().toString());
+                    if (dv.getId() == clieckedView.getId()) {
+                        selectedIcon = trackingPeriodIcons.get(i12);
+                    }
                 }
+
+                // TODO Auto-generated method stub
+                selectedIcon.setVisibility(View.VISIBLE);
+
+                clieckedView.setTextColor(getResources().getColorStateList(R.color.primaryDark));
+                clieckedView.setText(clieckedView.getText().toString().concat(getResources().getString(R.string.before)));
+                mTracking.setPeriod(clieckedView.getTag().toString());
             });
         }
     }
@@ -340,10 +303,8 @@ public class EventSettingsActivity extends BaseActivity {
 
     private void setDefaultNotificationType(TextView notificationType, ImageView icon) {
         if (notificationType.getTag().equals(mReminder.getNotificationType())) {
-            // TODO Auto-generated method stub
             notificationType.setTextColor(getResources().getColorStateList(R.color.primaryDark));
             icon.setVisibility(View.VISIBLE);
         }
     }
-
 }

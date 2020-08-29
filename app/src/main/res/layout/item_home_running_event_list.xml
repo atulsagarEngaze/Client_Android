@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/event_initiator"
-            style="@style/SecondaryTextStyle"
+            style="@style/SubHeadingStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -53,7 +53,7 @@
 
             <TextView
                 android:id="@+id/event_view"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dip"
@@ -71,7 +71,7 @@
 
             <TextView
                 android:id="@+id/event_leave"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
@@ -88,7 +88,7 @@
 
             <TextView
                 android:id="@+id/event_end"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"

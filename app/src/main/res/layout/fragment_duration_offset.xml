@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/paddinghalf">
 
         <TextView
-            style="@style/SecondaryTextStyle"
+            style="@style/SubHeadingStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding"
@@ -68,7 +68,7 @@
             <TextView
 
                 android:id="@+id/save_event_duration"
-                style="@style/SecondaryTextStyle"
+                style="@style/SubHeadingStyle"
                 android:layout_width="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"

@@ -9,13 +9,6 @@
 
     </style>
 
-    <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">true</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
     <style name="ETMaterialTheme.ActionBar.TabText">
         <item name="android:textColor">@color/icon</item>
     </style>
@@ -66,12 +59,6 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-
-    <!-- <style name="ETMaterialTheme.ActionBar.Light" parent="ETMaterialTheme.ActionBar">
-         <item name="colorControlNormal">@color/icon</item>
-         <item name="android:textColorSecondary">@color/icon</item>
-         <item name="android:textColor">@color/icon</item>
-     </style>-->
     <style name="NoActionBarDialog" parent="Base.Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
@@ -87,7 +74,6 @@
     </style>
 
     <style name="HomeMenuButton">
-
         <item name="android:layout_width">22dp</item>
         <item name="android:layout_height">22dp</item>
         <item name="android:gravity">center_vertical</item>
@@ -113,41 +99,20 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
-    <style name="FlatButton">
+    <style name="Button">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:paddingLeft">@dimen/padding</item>
-        <item name="android:paddingRight">@dimen/padding</item>
-        <item name="android:typeface">sans</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">36dip</item>
-        <item name="android:layout_marginTop">@dimen/padding</item>
-        <item name="android:layout_marginBottom">@dimen/padding</item>
-        <item name="android:layout_marginLeft">@dimen/padding</item>
-        <item name="android:background">@color/white</item>
-        <item name="android:layout_alignParentRight">true</item>
+
     </style>
 
-
-    <!--<style name="radionbutton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
-         <item name="android:button">@drawable/radiobutton_drawable</item>
-         <item name="android:textColor">@color/primaryText</item>
-         <item name="android:textSize">16sp</item>
-         <item name="android:paddingLeft">@dimen/padding</item>
-         <item name="android:paddingRight">@dimen/padding</item>
-         <item name="android:typeface">sans</item>
-         <item name="android:layout_height">48dip</item>
-         <item name="android:layout_width">wrap_content</item>
-         <item name="android:gravity">center_vertical</item>
-         <item name="android:layout_gravity">center_vertical</item>
-         <item name="android:layout_centerVertical">true</item>
-     </style>
- -->
-
-
-    <!-- <item name="actionButtonStyle">@style/ActionBar.ActionButton</item> -->
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
@@ -211,7 +176,7 @@
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
-    <style name="SecondaryTextStyle">
+    <style name="SubHeadingStyle">
         <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingLeft">@dimen/padding</item>
@@ -224,7 +189,7 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <style name="EventSettingsTextStyle" parent="SecondaryTextStyle">
+    <style name="EventSettingsTextStyle" parent="PrimaryTextStyle">
         <item name="android:paddingLeft">0dip</item>
         <item name="android:paddingRight">0dip</item>
         <item name="android:layout_height">wrap_content</item>

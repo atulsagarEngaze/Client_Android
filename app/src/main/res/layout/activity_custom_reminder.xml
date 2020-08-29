@@ -63,7 +63,7 @@
         <Button                       
             android:id="@+id/save_event_reminder"
             android:text="DONE"           
-            style="@style/FlatButton"
+            style="@style/Button"
              />
     </RelativeLayout>
 

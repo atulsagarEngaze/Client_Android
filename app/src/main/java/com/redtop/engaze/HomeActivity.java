@@ -159,12 +159,6 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
         int id = item.getItemId();
         Intent intent = null;
         switch (id) {
-            //		case R.id.action_myevents:
-            //			if(mInternetStatus){
-            //				intent = new Intent(this, EventsActivity.class);
-            //				startActivity(intent);
-            //			}
-            //			break;
 
             case R.id.action_refresh:
                 showProgressBar(getResources().getString(R.string.message_general_progressDialog));

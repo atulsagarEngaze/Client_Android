@@ -41,16 +41,15 @@ public class FeedbackActivity extends BaseActivity {
 		mFeedbacktext = (EditText)findViewById(R.id.txt_feedback);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.feedback_toolbar);
 		if (toolbar != null) {
+			toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
 			setSupportActionBar(toolbar);
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_feedback);
 			//toolbar.setSubtitle(R.string.title_about);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override 
-				public void onClick(View v) {
-					onBackPressed();
-				} 
-			}); 
+			toolbar.setNavigationOnClickListener(v -> {
+				hideKeyboard(v);
+				onBackPressed();
+			});
 
 
 			toolbar.setOnTouchListener(new OnTouchListener() {
@@ -128,6 +127,7 @@ public class FeedbackActivity extends BaseActivity {
 	}
 
 	protected void SaveFeedback() {
+
 		showProgressBar(getResources().getString(R.string.message_general_progressDialog));
 
 		JSONObject jsonObject =  createFeedbackJson();
