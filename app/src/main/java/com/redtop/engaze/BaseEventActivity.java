@@ -6,9 +6,11 @@ import java.util.Hashtable;
 
 import org.json.JSONObject;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -29,6 +31,7 @@ import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
@@ -43,6 +46,9 @@ import com.redtop.engaze.fragment.TrackingOffsetFragment;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
+import static com.redtop.engaze.common.constant.RequestCode.Permission.SEND_SMS;
+
 public abstract class BaseEventActivity extends BaseActivity implements FragmentToActivity<Duration> {
     protected int mDurationTime = 0;
 
@@ -55,7 +61,6 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
     protected ImageView mEventTypeView;
     protected String TAG;
     protected AlertDialog mAlertDialog;
-    protected JSONObject mEventJobj;
     protected Boolean mFromEventsActivity = true;    //For Recurrence
     protected String mIsRecurrence = "false";
     public Event notificationselectedEvent;

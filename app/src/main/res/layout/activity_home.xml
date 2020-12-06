@@ -87,7 +87,13 @@
                     android:textSize="15sp" >
                 </TextView>
             </RelativeLayout>
-
+            <fragment
+                android:layout_below="@+id/ll_pick_location"
+                android:layout_width="match_parent"
+                android:name="com.redtop.engaze.fragment.HomeEventFragment"
+                android:layout_height="56dp"
+                android:id="@+id/fragment_home_events"
+                android:layout_marginTop="@dimen/paddinghalf"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,6 +149,8 @@
             layout="@layout/layout_location_search_view" >
         </include>
     </RelativeLayout>
+
+
 
    <fragment
         android:id="@+id/fragment_navigation_drawer"

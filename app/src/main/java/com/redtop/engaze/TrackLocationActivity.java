@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,7 +29,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.redtop.engaze.Interface.IActionHandler;
@@ -36,12 +43,16 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
+import static com.redtop.engaze.common.constant.RequestCode.Permission.SEND_SMS;
 
 public class TrackLocationActivity extends BaseEventActivity implements OnItemClickListener, OnClickListener, OnKeyListener, IActionHandler {
 
@@ -170,13 +181,61 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         AppContext.actionHandler.actionFailed(msg, action);
     }
 
+    private void checkPermissionAndSaveEvent(){
+        //For TrackBuddy event, background location sharing access is not required
+        if(mEventTypeId == 200 || android.os.Build.VERSION.SDK_INT <29) {
+            saveEvent( true);
+        }
+        else {
+
+            if (PermissionRequester.CheckPermission(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, ACCESS_BACKGROUND_LOCATION, this)) {
+                saveEvent(true);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_BACKGROUND_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    saveEvent(true);
+                } else {
+
+                    new AlertDialog.Builder(this)
+                            .setTitle("ACCESS_BACKGROUND_LOCATION permission required")
+                            .setMessage("we need ACCESS_BACKGROUND_LOCATION permission to share your location with your buddies")
+
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                    intent.setData(uri);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
     public void SaveEvent() {
         populateEventData();
 
         if (!validateInputData()) {
             return;
         }
-        saveEvent(true);
+        checkPermissionAndSaveEvent();
     }
 
     private Boolean validateInputData() {

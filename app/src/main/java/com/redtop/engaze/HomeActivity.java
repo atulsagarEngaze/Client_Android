@@ -223,6 +223,8 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
         } else {
             homeViewManager.showRunningEventListViewLayout(mRunningEventAdapter, mRunningEventList.size());
         }
+
+
     }
 
     public void refreshPendingEventList() {

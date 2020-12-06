@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat;
 
 public class PermissionRequester {
 
-    public static boolean CheckPermission(String[] permissions, int requestCode, AppCompatActivity activity) {
+    public static boolean   CheckPermission(String[] permissions, int requestCode, AppCompatActivity activity) {
         String[]permissionsToBeAsked = null;
         int index =0;
         for (String permission : permissions) {

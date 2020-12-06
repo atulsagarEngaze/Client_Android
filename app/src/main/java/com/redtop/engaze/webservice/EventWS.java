@@ -28,18 +28,15 @@ public class EventWS extends BaseWebService implements IEventWS {
         }
     }
 
-    public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventid, final OnAPICallCompleteListener onAPICallCompleteListener) {
+    public void saveUserResponse(final AcceptanceStatus acceptanceStatus, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            String url = ApiUrl.RESPOND_INVITE;
+
+            String url = ApiUrl.RESPOND_INVITE.replace("{eventId}", eventId)
+                    .replace("{participantId}", AppContext.context.loginId)
+                    .replace("{responseId}", Integer.toString( acceptanceStatus.getStatus()));
             // making json object request
             JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("EventId", eventid);
-            jsonObject.put("RequestorId", AppContext.context.loginId);
-            jsonObject.put("EventAcceptanceStateId", acceptanceStatus.getStatus());
-            jsonObject.put("TrackingAccepted", "true");
-
-            postData(jsonObject, url, onAPICallCompleteListener);
+            putData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

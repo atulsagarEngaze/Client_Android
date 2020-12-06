@@ -17,9 +17,9 @@ public class Config {
     public static final int  MIN_DISTANCE_IN_METER_LOCATION_UPDATE = 20;
 
     //APIs
-    public static final String RegisterBaseURL ="http://127.0.0.1:5000/";
-    public static final String EventBaseURL="http://127.0.0.1:6000/";
-    public static final String LocationBaseURL="http://127.0.0.1:7000/";
+    public static final String RegisterBaseURL ="http://redtopdev.in/";
+    public static final String EventBaseURL="http://redtopdev.in/";
+    public static final String LocationBaseURL="http://redtopdev.in/";
 
 
 }
