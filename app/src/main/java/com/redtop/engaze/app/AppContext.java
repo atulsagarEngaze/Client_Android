@@ -47,11 +47,12 @@ public class AppContext extends Application {
         //for testing
 
         loginId = PreffManager.getPref(Constants.LOGIN_ID);
+        jsonParser = new JsonParser();
         isFirstTimeLoading = true;
         if (loginId != null) {
             loginName = PreffManager.getPref(Constants.LOGIN_NAME);
             actionHandler = new ActionHandler();
-            jsonParser = new JsonParser();
+
 
 
             defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);

@@ -1,7 +1,6 @@
 package com.redtop.engaze;
 
 import org.json.JSONObject;
-import org.w3c.dom.Document;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,8 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.redtop.engaze.Interface.FragmentToActivity;
-import com.redtop.engaze.Interface.OnActionCompleteListner;
-import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.InternalCaching;
@@ -130,8 +127,7 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh imp
                     mContactsAndgroups = PreffManager.getPrefArrayList("Invitees");
                     JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(mContactsAndgroups, mEventId);
                     ParticipantManager.addRemoveParticipants(jObj, action -> {
-                        mEvent = InternalCaching.getEventFromCache(mEventId);
-                        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+                        mEvent = EventManager.getEvent(mEventId, true);
                         updateRecyclerViews();
                         AppContext.actionHandler.actionComplete(action);
                         locationhandler.post(locationRunnable);
@@ -143,7 +139,7 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh imp
                     mDestinationPlace = data.getParcelableExtra("DestinatonPlace");
 
                     EventManager.changeDestination(mDestinationPlace, mContext, mEvent, action -> {
-                        if (mEvent.destination !=null) {
+                        if (mEvent.destination != null) {
                             mDestinationlatlang = new LatLng(mEvent.destination.getLatitude(), mEvent.destination.getLongitude());
                         }
                         removeRoute();

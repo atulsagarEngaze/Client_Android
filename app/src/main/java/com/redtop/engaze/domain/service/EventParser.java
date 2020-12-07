@@ -32,8 +32,6 @@ public class EventParser {
     public static List<Event> parseEventDetailList(JSONArray jsonStr) {
         JSONArray eventDetailJsonArray = jsonStr;
         List<Event> eventList = new ArrayList<Event>();
-        String loginUser = AppContext.context.loginId;
-        Event event = null;
 
 
         try {

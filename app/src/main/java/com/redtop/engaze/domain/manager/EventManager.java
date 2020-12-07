@@ -57,6 +57,24 @@ public class EventManager {
 
     private final static IEventWS eventWS = new EventWS();
 
+    public static Event getEvent(String eventId, Boolean attachContactgroup) {
+        Event event = InternalCaching.getEventFromCache(eventId);
+        if (attachContactgroup) {
+            ParticipantManager.setContactsGroup(event.participants);
+        }
+
+        if (event.UsersLocationDetailList != null) {
+            for (UsersLocationDetail ud : event.UsersLocationDetailList) {
+                for (EventParticipant participant: event.participants){
+                    if(participant.userId.equals(ud.userId)){
+                        ud.contactOrGroup = participant.contactOrGroup;
+                    }
+                }
+            }
+        }
+        return event;
+    }
+
     public static List<Event> getRunningEventList() {
         List<Event> list = InternalCaching.getEventListFromCache();
         //list = removePastEvents(context, list);
@@ -171,10 +189,7 @@ public class EventManager {
                     event.endTime = DateUtil.convertUtcToLocalDateTime(event.endTime, null);
 
                     for (EventParticipant participant : event.participants) {
-                        if (AppContext.context.loginId.equals(participant.userId)) {
-                            continue;
-                        }
-                        participant.profileName = participant.contactOrGroup.getName();
+                        participant.setProfileName();
                     }
 
                     EventService.setEndEventAlarm(event);
@@ -193,21 +208,19 @@ public class EventManager {
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
                     listnerOnSuccess.eventSaveComplete(event);
-            }
+                }
 
-            @Override
-            public void apiCallFailure () {
-                listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
-            }
-        });
-    } catch(
-    JSONException e)
+                @Override
+                public void apiCallFailure() {
+                    listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
+                }
+            });
+        } catch (
+                JSONException e) {
+            listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
+        }
 
-    {
-        listnerOnFailure.actionFailed(null, Action.SAVEEVENT);
     }
-
-}
 
     public static void saveUserResponse(final AcceptanceStatus userAcceptanceResponse, final String eventid, final OnActionCompleteListner actionlistnerOnSuccess, final OnActionFailedListner listnerOnFailure) {
 
@@ -232,7 +245,6 @@ public class EventManager {
 
             @Override
             public void apiCallSuccess(JSONObject response) {
-                Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
 
@@ -458,7 +470,6 @@ public class EventManager {
             }
         });
     }
-
 
     public static void changeDestination(final EventPlace destinationPlace, final Context context, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listnerOnFailure) {
         String message = "";
@@ -763,13 +774,14 @@ public class EventManager {
 
             @Override
             public void apiCallSuccess(String response) {
-
                 try {
-
                     List<Event> eventList = EventParser.parseEventDetailList(new JSONArray(response));
                     for (Event eventData : eventList) {
                         eventData.startTime = DateUtil.convertUtcToLocalDateTime(eventData.startTime, null);
                         eventData.endTime = DateUtil.convertUtcToLocalDateTime(eventData.endTime, null);
+                        for (EventParticipant participant : eventData.participants) {
+                            participant.setProfileName();
+                        }
                     }
 
                     EventService.RemovePastEvents(eventList);
@@ -846,7 +858,7 @@ public class EventManager {
             case "LocationsOut":
                 for (Event e : list) {
                     members = e.participants;
-                    ContactAndGroupListManager.assignContactsToEventMembers(members);
+                    ParticipantManager.setContactsGroup(members);
                     eventType = e.eventType;
                     //Out going locations - 100 - Share my location - current user is initiator - add all members except me
                     if (eventType == EventType.SHAREMYLOACTION && ParticipantService.isCurrentUserInitiator(e.initiatorId)) {
@@ -864,7 +876,7 @@ public class EventManager {
             case "locationsIn":
                 for (Event e : list) {
                     members = e.participants;
-                    ContactAndGroupListManager.assignContactsToEventMembers(members);
+                    ParticipantManager.setContactsGroup(members);
                     eventType = e.eventType;
                     //In coming locations - 100 - Share my location - Current user is not Initiator - add only initiator but only if I have accepted earlier else it will be in my pending items
                     if (eventType == EventType.SHAREMYLOACTION && !ParticipantService.isCurrentUserInitiator(e.initiatorId) && e.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted) {

@@ -244,7 +244,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
     protected void createUserLocationList() {
         // TODO Auto-generated method stub
         mUsersLocationDetailList = new ArrayList<UsersLocationDetail>();
-        mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent, mContext));
+        mUsersLocationDetailList.addAll(UsersLocationDetail.createUserLocationListFromEventMembers(mEvent));
         arrangeListinAvailabilityOrder();
     }
 
@@ -293,7 +293,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             }
             if (!isExist) {
                 if (ParticipantService.isValidForLocationSharing(mEvent, em)) {
-                    mUsersLocationDetailList.add(UsersLocationDetail.createUserLocationListFromEventMember(mEvent, em));
+                    mUsersLocationDetailList.add(UsersLocationDetail.createUserLocationListFromEventMember(em));
                 }
             } else {
                 temUldList.remove(tUl);

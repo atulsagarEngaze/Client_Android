@@ -26,6 +26,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
+import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.ParticipantService;
 
 import androidx.core.app.ActivityCompat;
@@ -50,7 +51,7 @@ public class RunningEventMenuOptionsActivity extends BaseActivity implements OnI
 		mUserId = this.getIntent().getStringExtra("UserId");
 		mEventId = this.getIntent().getStringExtra("EventId");
 
-		mEvent = InternalCaching.getEventFromCache(mEventId);
+		mEvent = EventManager.getEvent(mEventId, true);
 		member = mEvent.getParticipant(mUserId);
 		mobileno = member.mobileNumber;
 

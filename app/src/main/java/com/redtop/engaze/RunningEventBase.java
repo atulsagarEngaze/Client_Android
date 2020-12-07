@@ -11,7 +11,6 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +36,7 @@ import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
+import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.fragment.ExtendEventFragment;
@@ -129,7 +129,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 		mRunningEventBroadcastManager = new RunningEventBroadcastReceiver(mContext);
 		mEventId = this.getIntent().getStringExtra("EventId");
 		mEventTypeId = this.getIntent().getIntExtra("EventTypeId", 0);
-		mEvent = InternalCaching.getEventFromCache(mEventId);
+		mEvent = EventManager.getEvent(mEventId, true);
 		if(mEvent!=null){
 			String eventTitle;
 			if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
@@ -142,7 +142,6 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 			mUserId = AppContext.context.loginId;
 			mGd = new GoogleDirection(mContext);		
 			initializeEventStartTimeForUI();
-			ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
 		}
 	}
 

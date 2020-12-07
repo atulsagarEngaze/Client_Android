@@ -99,7 +99,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
                         mRunningEventBroadcastManager.mFilter);
                 canRefreshUserLocation = true;
                 if (shouldExecuteOnResume && !((mUsersLocationDetailList == null || mUsersLocationDetailList.size() == 0))) {
-                    mEvent = InternalCaching.getEventFromCache(mEventId);
+                    mEvent = EventManager.getEvent(mEventId, true);
                     super.updateRecyclerViews();
                     super.locationhandler.post(super.locationRunnable);
                 } else {
@@ -124,7 +124,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
     protected void onPause() {
         if (!mIsActivityPauseForDialog) {
             isActivityRunning = false;
-            mEvent = InternalCaching.getEventFromCache(mEventId);
+            mEvent = EventManager.getEvent(mEventId, true);
             locationhandler.removeCallbacks(locationRunnable);
             EventManager.saveUsersLocationDetailList(mContext, mEvent, mUsersLocationDetailList);
             LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mRunningEventBroadcastManager);

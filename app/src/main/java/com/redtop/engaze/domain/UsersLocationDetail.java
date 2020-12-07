@@ -38,9 +38,11 @@ public class UsersLocationDetail implements Serializable {
     @Expose
     public String name;
 
+    @Expose
+    public String userName;
+
     public ContactOrGroup contactOrGroup;
     public String distance = "";
-    public String userName;
     public String currentKnownPlace;
 
 
@@ -91,41 +93,28 @@ public class UsersLocationDetail implements Serializable {
                 + "]";
     }
 
-    public static List<UsersLocationDetail> createUserLocationListFromEventMembers(Event event, Context context) {
+    public static List<UsersLocationDetail> createUserLocationListFromEventMembers(Event event) {
         ArrayList<EventParticipant> memberList = event.participants;
         ArrayList<UsersLocationDetail> usersLocationDetailList = new ArrayList<UsersLocationDetail>();
-        UsersLocationDetail uld = null;
+        UsersLocationDetail uld;
         for (EventParticipant mem : memberList) {
             if (ParticipantService.isValidForLocationSharing(event, mem)) {
-                uld = createUserLocationListFromEventMember(event, mem);
+                uld = createUserLocationListFromEventMember(mem);
                 usersLocationDetailList.add(uld);
             }
         }
         return usersLocationDetailList;
     }
 
-    public static UsersLocationDetail createUserLocationListFromEventMember(Event event, EventParticipant mem) {
+    public static UsersLocationDetail createUserLocationListFromEventMember(EventParticipant mem) {
 
         UsersLocationDetail uld = new UsersLocationDetail(mem.userId, null, null, "false", "", "location unavailable", "", mem.profileName);
-        ContactOrGroup cg = ContactAndGroupListManager.getContact(uld.userId);
-        Boolean isParticipantCurrentUser = ParticipantService.isParticipantCurrentUser(mem.userId);
-        if (cg == null) {
-            cg = new ContactOrGroup();
-            cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-            if (isParticipantCurrentUser || uld.userName.startsWith("~")) {
-                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.userName), 40, uld.userName.substring(1, 2).toUpperCase()));
-            } else {
-                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(uld.userName), 40, uld.userName.substring(0, 1).toUpperCase()));
-            }
-        } else {
-            uld.userName = cg.getName();
-        }
-        uld.contactOrGroup = cg;
+        uld.userName = mem.profileName;
+        uld.contactOrGroup = mem.contactOrGroup;
         uld.acceptanceStatus = mem.acceptanceStatus;
-        if (isParticipantCurrentUser) {
+        if (ParticipantService.isParticipantCurrentUser(mem.userId)) {
             uld.userName = "You";
         }
-
         return uld;
     }
 }

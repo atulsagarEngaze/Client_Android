@@ -5,8 +5,11 @@ package com.redtop.engaze.domain;
 
 import com.google.gson.annotations.Expose;
 import com.redtop.engaze.Interface.DataModel;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.ReminderFrom;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+import com.redtop.engaze.domain.service.ParticipantService;
 
 /**
  * @author Vijay.kumar
@@ -55,6 +58,7 @@ public class EventParticipant implements DataModel {
     public Boolean isUserLocationShared;
     public ContactOrGroup contactOrGroup;
 
+
     public EventParticipant(String userId, String profileName, int distanceReminder, ReminderFrom distanceReminderFrom) {
         this.userId = userId;
         this.profileName = profileName;
@@ -70,7 +74,7 @@ public class EventParticipant implements DataModel {
         this.acceptanceStatus = eventAcceptanceState;
     }
 
-    public EventParticipant(){
+    public EventParticipant() {
         this.isUserLocationShared = false;
         this.isTrackingAccepted = false;
         this.acceptanceStatus = AcceptanceStatus.Pending;
@@ -87,6 +91,25 @@ public class EventParticipant implements DataModel {
                 + ", trackingEndReason=" + trackingEndReason
                 + ", isTrackingActive=" + isTrackingActive
                 + ", userEventEndTime=" + userEventEndTime + "]";
+    }
+
+    public void setProfileName() {
+        if (ParticipantService.isParticipantCurrentUser(userId)) {
+            profileName = AppContext.context.loginName;
+            return;
+        }
+        ContactOrGroup cg = contactOrGroup;
+        if (contactOrGroup == null) {
+            cg = ContactAndGroupListManager.getContact(userId);
+        }
+        if (cg != null) {
+            profileName = cg.getName();
+            return;
+        }
+        if (profileName == null || profileName == "") {
+            profileName = userId.substring(0, 5);
+        }
+        profileName = "~" + profileName;
     }
 
 }

@@ -141,6 +141,8 @@ public class ParticipantService {
         return true;
     }
 
+
+
     public static ArrayList<EventParticipant> parseMemberList(JSONArray jsonStr) {
         EventParticipant mem = null;
         ArrayList<EventParticipant> list = new ArrayList<EventParticipant>();
@@ -275,7 +277,7 @@ public class ParticipantService {
             for (UsersLocationDetail userLocation : userLocationsFromServer)
 
                 for (UsersLocationDetail ud : userLocationList) {
-                    if (ud.userId!=null && ud.userId.equalsIgnoreCase(userLocation.userId)) {
+                    if (ud.userId != null && ud.userId.equalsIgnoreCase(userLocation.userId)) {
                         ud.latitude = userLocation.latitude;
                         ud.longitude = userLocation.longitude;
                         ud.createdOn = DateUtil.convertUtcToLocalDateTime(userLocation.createdOn, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));

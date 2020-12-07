@@ -68,27 +68,6 @@ public class ContactAndGroupListManager {
         PreffManager.setPrefArrayList("Groups", getAllGroups());
     }
 
-    public static void assignContactsToEventMembers(ArrayList<EventParticipant> eventMembers) {
-        Hashtable<String, ContactOrGroup> registeredList = InternalCaching.getRegisteredContactListFromCache();
-        ContactOrGroup cg;
-        for (EventParticipant mem : eventMembers) {
-            cg = mem.contactOrGroup;
-            if (cg == null) {
-                cg = registeredList.get(mem);
-                if (cg == null) {
-                    cg = new ContactOrGroup();
-                    cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-                    if (ParticipantService.isParticipantCurrentUser(mem.userId) || mem.profileName.startsWith("~")) {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.profileName), 40, mem.profileName.substring(1, 2).toUpperCase()));
-                    } else {
-                        cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(mem.profileName), 40, mem.profileName.substring(0, 1).toUpperCase()));
-                    }
-                }
-                mem.contactOrGroup = cg;
-            }
-        }
-    }
-
     public static ArrayList<ContactOrGroup> sortContacts(ArrayList<ContactOrGroup> contactsAndGroups) {
         if (contactsAndGroups.size() > 0) {
             Collections.sort(contactsAndGroups, (lhs, rhs) -> lhs.getName().compareToIgnoreCase(rhs.getName()));

@@ -40,7 +40,6 @@ import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.fragment.ExtendEventFragment;
-import com.redtop.engaze.fragment.TrackingOffsetFragment;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
@@ -59,8 +58,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventParticipantUpdatedByInitiator() {
-        mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+        mEvent = EventManager.getEvent(mEventId, true);
         updateRecyclerViews();
         if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
             runningEventAlertDialog("Tracking Updated!", mEvent.initiatorName + " has updated the participants list.", true);
@@ -82,8 +80,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventDestinationUpdatedByInitiator(String changedDestination) {
-        mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+        mEvent = EventManager.getEvent(mEventId, true);
         if (mEvent.destination != null) {
             mDestinationlatlang = new LatLng(mEvent.destination.getLatitude(), mEvent.destination.getLongitude());
         }
@@ -125,8 +122,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onParticipantLeft(String EventResponderName) {
-        mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+        mEvent = EventManager.getEvent(mEventId, true);
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
@@ -141,8 +137,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onUserResponse(int eventAcceptanceStateId, String eventResponderName) {
-        mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+        mEvent = EventManager.getEvent(mEventId, true);
         if (mEvent != null) {//incase event is already over
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
@@ -168,8 +163,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     }
 
     public void onEventExtendedByInitiator(String extendEventDuration) {
-        mEvent = InternalCaching.getEventFromCache(mEventId);
-        ContactAndGroupListManager.assignContactsToEventMembers(mEvent.participants);
+        mEvent = EventManager.getEvent(mEventId, true);
         UpdateTimeLeftItemOfRunningEventDetailsDataSet();
         mEventDetailAdapter.notifyDataSetChanged();
 

@@ -16,6 +16,10 @@ import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.service.EventRefreshService;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ALL_NECCESSARY;
 
 public class SplashActivity extends BaseActivity {
@@ -71,16 +75,18 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkRequiredPermissions() {
-        String[]permissions = new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_CONTACTS,
-        };
+        List<String> permissionsList = new ArrayList<String>();
+        permissionsList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        permissionsList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissionsList.add(Manifest.permission.READ_CONTACTS);
+
         if(android.os.Build.VERSION.SDK_INT >=29){
-            permissions[3] = Manifest.permission.ACCESS_BACKGROUND_LOCATION;
+            permissionsList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
+        String[] permissionArray = new String[permissionsList.size()];
+        permissionArray = permissionsList.toArray(permissionArray);
         if (PermissionRequester.CheckPermission(
-                permissions, ALL_NECCESSARY, this)) {
+                permissionArray, ALL_NECCESSARY, this)) {
 
             initiateMobileRegistrationAndProfileCreationProcess();
         }

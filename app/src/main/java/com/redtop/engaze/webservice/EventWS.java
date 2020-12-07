@@ -33,7 +33,7 @@ public class EventWS extends BaseWebService implements IEventWS {
 
             String url = ApiUrl.RESPOND_INVITE.replace("{eventId}", eventId)
                     .replace("{participantId}", AppContext.context.loginId)
-                    .replace("{responseId}", Integer.toString( acceptanceStatus.getStatus()));
+                    .replace("{status}", Integer.toString( acceptanceStatus.getStatus()));
             // making json object request
             JSONObject jsonObject = new JSONObject();
             putData(jsonObject, url, onAPICallCompleteListener);
