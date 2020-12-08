@@ -59,6 +59,9 @@ public class EventManager {
 
     public static Event getEvent(String eventId, Boolean attachContactgroup) {
         Event event = InternalCaching.getEventFromCache(eventId);
+        if(event==null){
+            return  null;
+        }
         if (attachContactgroup) {
             ParticipantManager.setContactsGroup(event.participants);
         }
