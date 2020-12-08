@@ -8,20 +8,20 @@ import com.redtop.engaze.app.AppContext;
 public class ProgressBar {
 
     private static ProgressDialog mDialog;
-    private static int  mCurrentActivityId = 0;
+    private static int mCurrentActivityId = 0;
 
-    public static void showProgressBar(String message ){
-        showProgressBar("",message);
+    public static void showProgressBar(String message) {
+        showProgressBar("", message);
     }
 
-    public static void showProgressBar(String title, String message ){
+    public static void showProgressBar(String title, String message) {
 
-        if(mDialog==null || mCurrentActivityId!=AppContext.context.currentActivity.hashCode()){
+        if (mDialog == null || mCurrentActivityId != AppContext.context.currentActivity.hashCode()) {
             mCurrentActivityId = AppContext.context.currentActivity.hashCode();
             mDialog = new ProgressDialog(AppContext.context.currentActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
 
-        if(!(title==null || title.equals(""))){
+        if (!(title == null || title.equals(""))) {
             mDialog.setTitle(title);
         }
         mDialog.setMessage(message);
@@ -33,8 +33,8 @@ public class ProgressBar {
         mDialog.show();
     }
 
-    public static void hideProgressBar(){
-        if(mDialog!=null && mDialog.isShowing()){
+    public static void hideProgressBar() {
+        if (mDialog != null && mCurrentActivityId == AppContext.context.currentActivity.hashCode() && mDialog.isShowing()) {
             mDialog.dismiss();
         }
     }

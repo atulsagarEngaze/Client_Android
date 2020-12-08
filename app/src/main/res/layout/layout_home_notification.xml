@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_home_notification_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/rl_home_trackbuddy_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_arrow_tb"
@@ -21,22 +21,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_marginBottom="@dimen/padding"
             android:background="@color/listBackground"
-            android:elevation="5dp" >
+            android:elevation="5dp">
 
             <TextView
                 android:id="@+id/txt_trackbuddy_header"
                 style="@style/HeaderTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/paddingQuarter"
                 android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding"
                 android:paddingTop="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingBottom="@dimen/paddingQuarter"
                 android:text="@string/header_home_notification_trackbuddy" />
 
 
@@ -47,8 +47,7 @@
                 android:layout_below="@+id/txt_trackbuddy_header"
                 android:divider="@drawable/home_list_divider"
                 android:dividerHeight="1dp"
-                android:paddingBottom="@dimen/paddinghalf" >
-            </ListView>
+                android:paddingBottom="@dimen/paddinghalf"></ListView>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -57,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_arrow_sml"
@@ -69,24 +68,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_marginBottom="@dimen/padding"
             android:background="@color/listBackground"
-            android:elevation="5dp" >
+            android:elevation="5dp">
 
             <TextView
                 android:id="@+id/txt_sharemylocation_header"
                 style="@style/HeaderTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/paddingQuarter"
                 android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding"
                 android:paddingTop="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingBottom="@dimen/paddingQuarter"
                 android:text="@string/header_home_notification_sharemylocation" />
-
 
 
             <ListView
@@ -96,8 +94,7 @@
                 android:layout_below="@+id/txt_sharemylocation_header"
                 android:divider="@drawable/home_list_divider"
                 android:dividerHeight="1dp"
-                android:paddingBottom="@dimen/paddinghalf" >
-            </ListView>
+                android:paddingBottom="@dimen/paddinghalf"></ListView>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -106,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_arrow_pe"
@@ -118,22 +115,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_marginBottom="@dimen/padding"
             android:background="@color/listBackground"
-            android:elevation="5dp" >
+            android:elevation="5dp">
 
             <TextView
                 android:id="@+id/txt_pending_events_header"
                 style="@style/HeaderTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/paddingQuarter"
                 android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding"
                 android:paddingTop="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingBottom="@dimen/paddingQuarter"
                 android:text="@string/header_home_notification_pendingevents" />
 
             <ListView
@@ -143,8 +140,7 @@
                 android:layout_below="@+id/txt_pending_events_header"
                 android:divider="@drawable/home_list_divider"
                 android:dividerHeight="1dp"
-                android:paddingBottom="@dimen/paddinghalf" >
-            </ListView>
+                android:paddingBottom="@dimen/paddinghalf"></ListView>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -153,7 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_arrow_re"
@@ -165,22 +161,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/paddinghalf"
-            android:layout_marginRight="@dimen/paddinghalf"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/paddinghalf"
+            android:layout_marginBottom="@dimen/padding"
             android:background="@color/listBackground"
-            android:elevation="5dp" >
+            android:elevation="5dp">
 
             <TextView
                 android:id="@+id/txt_running_events_header"
                 style="@style/HeaderTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/paddingQuarter"
                 android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding"
                 android:paddingTop="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:paddingBottom="@dimen/paddingQuarter"
                 android:text="@string/header_home_notification_runningevents" />
 
             <ListView
@@ -190,8 +186,7 @@
                 android:layout_below="@+id/txt_running_events_header"
                 android:divider="@drawable/home_list_divider"
                 android:dividerHeight="1dp"
-                android:paddingBottom="@dimen/paddinghalf" >
-            </ListView>
+                android:paddingBottom="@dimen/paddinghalf"></ListView>
         </RelativeLayout>
     </RelativeLayout>
 

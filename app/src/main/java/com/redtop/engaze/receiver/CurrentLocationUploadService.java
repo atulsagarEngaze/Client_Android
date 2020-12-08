@@ -68,9 +68,15 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
     private void updateCurrentLocationToServer(final Location currentLocation, final Context context) {
         Place place = mLh.getPlaceFromLatLang(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         UsersLocationDetail locationDetail = new UsersLocationDetail(PreffManager.getPref(Constants.LOGIN_ID), currentLocation.getLatitude(), currentLocation.getLongitude(), "1.0", "0");
-        if(place!=null) {
+        if (place != null) {
             locationDetail.address = place.getAddress();
             locationDetail.name = place.getName();
+            if (locationDetail.address == null || locationDetail.address == "") {
+                locationDetail.address = "Unknown";
+            }
+            if (locationDetail.name == null || locationDetail.name == "") {
+                locationDetail.name = "Unknown";
+            }
         }
         LocationManager.updateLocationToServer(context, locationDetail, new OnAPICallCompleteListener() {
             @Override

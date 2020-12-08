@@ -27,7 +27,7 @@
     <integer name="runningevent_max_extend_minutes">720</integer>
     <integer name="runningevent_min_extend_minutes">10</integer>
     <integer name="event_creation_duration_max_minutes">1440</integer>
-    <integer name="event_creation_duration_min_minutes">15</integer>
+    <integer name="event_creation_duration_min_minutes">1</integer>
     <integer name="event_creation_duration_max_hours">24</integer>
     <integer name="event_tracking_start_max_minutes">120</integer>
     <integer name="event_tracking_start_max_hours">2</integer>

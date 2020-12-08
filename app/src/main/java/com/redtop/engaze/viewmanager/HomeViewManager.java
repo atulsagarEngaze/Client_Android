@@ -234,10 +234,10 @@ public class HomeViewManager  extends MapCameraMovementHandleViewManager {
 		case R.id.img_hn_pending_events:
 			activity.onShowCurrentPendingEventListButtonClicked();
 			break;
-			
+
 		case R.id.img_hn_running_events:
-			activity.onShowCurrentRunningEventListButtonClicked();
-			break;
+				activity.onShowCurrentRunningEventListButtonClicked();
+				break;
 			
 		case R.id.img_hn_location_sharing:
 			activity.onShowCurrentShareMyLocationListButtonClicked();	

@@ -23,7 +23,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="4dp" >
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_hn_pending_events_sub"
                 style="@style/HomeNotificationButton"
                 android:layout_width="16dip"
@@ -59,7 +59,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="4dp" >
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_nh_running_events_sub"
                 style="@style/HomeNotificationButton"
                 android:paddingLeft="10dp"
@@ -97,7 +97,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="4dp" >
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_nh_sharing_location_events_sub"
                 style="@style/HomeNotificationButton"
                 android:layout_width="16dip"
@@ -133,7 +133,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="4dp" >
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/img_nh_track_buddy_events_sub"
                 style="@style/HomeNotificationButton"
                 android:layout_width="16dip"

@@ -65,13 +65,11 @@ public class EventWS extends BaseWebService implements IEventWS {
     public void leaveEvent(final String eventID, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String url = ApiUrl.LEAVE_EVENT;
+            String url = ApiUrl.LEAVE_EVENT.replace("{eventId}", eventID)
+                    .replace("{participantId}", AppContext.context.loginId);
             // making json object request
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("RequestorId", AppContext.context.loginId);
-            jsonObject.put("EventId", eventID);
-
-            postData(jsonObject, url, onAPICallCompleteListener);
+            putData(jsonObject, url, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

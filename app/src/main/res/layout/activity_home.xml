@@ -8,36 +8,35 @@
     android:clipChildren="false"
     android:fitsSystemWindows="true">
 
-   <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false" >
+        android:clipChildren="false">
 
         <RelativeLayout
             android:id="@+id/rl_map_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false" >
+            android:clipChildren="false">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/rl_main_menu_buttons" >
+                android:layout_above="@+id/rl_main_menu_buttons">
 
                 <fragment
                     android:id="@+id/home_map"
+                    class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
+                    android:layout_alignParentTop="true" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" >
+                    android:layout_centerInParent="true">
 
                     <ImageView
                         android:id="@+id/img_center_pin"
@@ -47,20 +46,18 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:local="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/home_toolbar"
-                style="@style/ETMaterialTheme.ActionBar" >
+                style="@style/ETMaterialTheme.ActionBar">
 
                 <include
+                    layout="@layout/layout_home_menu_notification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_gravity="right"
-                    layout="@layout/layout_home_menu_notification" >
-                </include>
-            </androidx.appcompat.widget.Toolbar >
+                    android:layout_gravity="right"></include>
+            </androidx.appcompat.widget.Toolbar>
 
             <RelativeLayout
                 android:id="@+id/ll_pick_location"
@@ -68,12 +65,12 @@
                 android:layout_height="42dp"
                 android:layout_below="@+id/home_toolbar"
                 android:layout_marginLeft="@dimen/paddinghalf"
-                android:layout_marginRight="@dimen/paddinghalf"
                 android:layout_marginTop="@dimen/paddinghalf"
+                android:layout_marginRight="@dimen/paddinghalf"
                 android:background="@color/primaryBackground"
                 android:elevation="5dip"
                 android:focusable="true"
-                android:focusableInTouchMode="true" >
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:id="@+id/txt_location"
@@ -84,75 +81,79 @@
                     android:background="@android:color/transparent"
                     android:hint="@string/location_search_bar_hint"
                     android:textColorHint="@color/secondaryText"
-                    android:textSize="15sp" >
-                </TextView>
+                    android:textSize="15sp"></TextView>
             </RelativeLayout>
-            <fragment
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_pick_location"
-                android:layout_width="match_parent"
-                android:name="com.redtop.engaze.fragment.HomeEventFragment"
-                android:layout_height="56dp"
-                android:id="@+id/fragment_home_events"
-                android:layout_marginTop="@dimen/paddinghalf"/>
+                android:visibility="gone" >
+
+                <fragment
+                    android:id="@+id/fragment_home_events"
+                    android:name="com.redtop.engaze.fragment.HomeEventFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="@dimen/paddinghalf" />
+                    <!--android:layout_below="@+id/ll_pick_location"-->
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dip"
                 android:background="@android:color/transparent"
                 android:elevation="5dip"
-                android:focusable="true" >
+                android:focusable="true">
 
                 <include
+                    layout="@layout/layout_home_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    layout="@layout/layout_home_notification"
-                    android:clipChildren="false" >
-                </include>
+                    android:clipChildren="false"></include>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_above="@+id/rl_main_menu_buttons"
-                android:paddingBottom="@dimen/paddinghalf" >
+                android:paddingBottom="@dimen/paddinghalf">
 
                 <ImageButton
                     android:id="@+id/img_my_location"
                     style="@style/CircularWhiteImageRightCorner"
-                    android:layout_above="@+id/internet_status"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_marginBottom="@dimen/padding"
+                    android:layout_above="@+id/internet_status"
                     android:layout_marginRight="12dip"
+                    android:layout_marginBottom="@dimen/padding"
                     android:src="@drawable/ic_gps_fixed_blue_24dp" />
 
                 <include
                     android:id="@+id/internet_status"
+                    layout="@layout/internet_unavailable_message"
                     android:layout_width="match_parent"
                     android:layout_height="48dip"
-                    android:layout_alignParentBottom="true"
-                    layout="@layout/internet_unavailable_message" >
-                </include>
+                    android:layout_alignParentBottom="true"></include>
             </RelativeLayout>
 
             <include
+                layout="@layout/layout_home_menu_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                layout="@layout/layout_home_menu_buttons" >
-            </include>
+                android:layout_alignParentBottom="true"></include>
         </RelativeLayout>
 
         <include
+            layout="@layout/layout_location_search_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            layout="@layout/layout_location_search_view" >
-        </include>
+            android:layout_height="match_parent"></include>
     </RelativeLayout>
 
 
-
-   <fragment
+    <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="com.redtop.engaze.fragment.NavDrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
