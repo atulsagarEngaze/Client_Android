@@ -103,7 +103,7 @@
     <string name="label_runningEvent_yetToRespond">"Awaiting Response"</string>
     <string name="label_runningEvent_declined">"Declined Invitation"</string>
     <string name="label_runningEvent_acceptedLocationUnavailable">"Accepted but location unavailable"</string>
-    <string name="label_runningEvent_acceptedLocationNotFound">"fetching address from server.."</string>
+    <string name="label_runningEvent_acceptedLocationNotFound">"Unknown"</string>
     <string name="message_runningEvent_pokedAllSuccessfully">"Poked All Participants Successfully!"</string>
     <string name="message_runningEvent_pokeAllFail">"Unable to Poke All. Please retry after some time."</string>
     <string name="message_runningEvent_pokeAllInterval">"You can do a Poke All again only after "</string>

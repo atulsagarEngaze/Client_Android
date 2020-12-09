@@ -74,7 +74,6 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
 
                     viewHolder.rlActiveWithNoLocationUser.setVisibility(View.VISIBLE);
                     viewHolder.locationImage.setVisibility(View.GONE);
-                    ;
                     viewHolder.rlActiveUser.setVisibility(View.GONE);
                     viewHolder.rlDeclinedUser.setVisibility(View.GONE);
                     viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
