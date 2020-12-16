@@ -1,9 +1,10 @@
 package com.redtop.engaze.service;
 
 import android.content.Intent;
-import com.google.android.gms.iid.InstanceIDListenerService;
 
-public class EventTrackerInstanceIDListenerService extends InstanceIDListenerService {
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
+public class EventTrackerInstanceIDListenerService extends FirebaseInstanceIdService  {
 
     private static final String TAG = "MyInstanceIDLS";
 
@@ -19,5 +20,5 @@ public class EventTrackerInstanceIDListenerService extends InstanceIDListenerSer
         Intent intent = new Intent(this, RegistrationIntentService.class);
         startService(intent);
     }
-    // [END refresh_token]
+
 }

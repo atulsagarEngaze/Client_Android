@@ -110,7 +110,6 @@
     <string name="nav_item_about">About</string>
     <string name="nav_item_feedback">Feedback</string>
     <string name="nav_item_logout">LOGOUT</string>
-    <string name="gcm_defaultSenderId">111568034099</string>
 
     <!-- GCM default sender id -->
     <string name="event_type_cricket">Cricket</string>

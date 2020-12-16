@@ -550,7 +550,11 @@ public class EventManager {
                 EventService.RemoveEndEventAlarm(eventid);
                 EventService.setEndEventAlarm(event);
                 InternalCaching.saveEventToCache(event);
-                listenerOnSuccess.actionComplete(Action.EXTENDEVENTENDTIME);
+                try {
+                    listenerOnSuccess.actionComplete(Action.EXTENDEVENTENDTIME);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
             }

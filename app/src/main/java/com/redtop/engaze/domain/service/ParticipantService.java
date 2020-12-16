@@ -80,18 +80,14 @@ public class ParticipantService {
         adb.setMessage("Do you want to poke " + userName + "?" + "\n" + "You can poke again only after 15 minutes.");
         adb.setIcon(android.R.drawable.ic_dialog_alert);
 
-        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //Call Poke API
-                pokeParticipants(userId, eventId, actionHadler);
-            }
+        adb.setPositiveButton("OK", (dialog, which) -> {
+            //Call Poke API
+            pokeParticipants(userId, eventId, actionHadler);
         });
 
-        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                actionHadler.actionCancelled(Action.POKEPARTICIPANT);
-            }
+        adb.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            actionHadler.actionCancelled(Action.POKEPARTICIPANT);
         });
         adb.show();
     }
@@ -109,23 +105,13 @@ public class ParticipantService {
             jobj.put("EventName", ed.name);
             jobj.put("EventId", ed.eventId);
 
-            ParticipantManager.pokeParticipants(jobj, new OnActionCompleteListner() {
-
-                @Override
-                public void actionComplete(Action action) {
-                    SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                    Date currentdate = Calendar.getInstance().getTime();
-                    String currentTimestamp = originalformat.format(currentdate);
-                    PreffManager.setPref(userId, currentTimestamp);
-                    actionHadler.actionComplete(Action.POKEPARTICIPANT);
-                }
-            }, new OnActionFailedListner() {
-
-                @Override
-                public void actionFailed(String msg, Action action) {
-                    actionHadler.actionFailed(msg, Action.POKEPARTICIPANT);
-                }
-            });
+            ParticipantManager.pokeParticipants(jobj, action -> {
+                SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date currentdate = Calendar.getInstance().getTime();
+                String currentTimestamp = originalformat.format(currentdate);
+                PreffManager.setPref(userId, currentTimestamp);
+                actionHadler.actionComplete(Action.POKEPARTICIPANT);
+            }, (msg, action) -> actionHadler.actionFailed(msg, Action.POKEPARTICIPANT));
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
