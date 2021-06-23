@@ -3,11 +3,14 @@ package com.redtop.engaze;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redtop.engaze.app.AppContext;
@@ -55,11 +58,13 @@ public class SplashActivity extends BaseActivity {
                                            String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case ALL_NECCESSARY: {
-                // If request is cancelled, the result arrays are empty.
-                if (PermissionRequester.hasPermissions(permissions)) {
+
+                ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
+                if (permissionNotGranted.size() == 0) {
                     initiateMobileRegistrationAndProfileCreationProcess();
-                } else {
-                    finish();
+                }                // If request is cancelled, the result arrays are empty.
+                else {
+                    showMandatoryPermissionAlertDialogAndCloseTheApp(permissionNotGranted);
                 }
                 return;
             }
@@ -85,7 +90,7 @@ public class SplashActivity extends BaseActivity {
         permissionsList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsList.add(Manifest.permission.READ_CONTACTS);
 
-        if(android.os.Build.VERSION.SDK_INT >=29){
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
             permissionsList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
         String[] permissionArray = new String[permissionsList.size()];
@@ -126,5 +131,25 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
 
         }
+
+    }
+
+    private void showMandatoryPermissionAlertDialogAndCloseTheApp(ArrayList<String> permissions) {
+
+        String permissionMessage = android.text.TextUtils.join(",", permissions)
+                + ( permissions.size()==1? " is" : " are") + " required to run the app!";
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Permission not granted");
+        alertDialogBuilder
+                .setMessage(permissionMessage)
+                .setCancelable(false)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    finishAffinity();
+
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

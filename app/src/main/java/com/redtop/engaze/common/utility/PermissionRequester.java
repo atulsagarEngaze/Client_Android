@@ -10,29 +10,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+
 
 public class PermissionRequester {
 
     public static boolean   CheckPermission(String[] permissions, int requestCode, AppCompatActivity activity) {
-        String[]permissionsToBeAsked = null;
-        int index =0;
+        ArrayList<String> permissionsToBeAsked = new ArrayList<>();
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(activity,
-                    permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                if(permissionsToBeAsked==null){
-                    permissionsToBeAsked = new String[permissions.length];
-                }
-                permissionsToBeAsked[index] =permission;
-                index++;
+            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToBeAsked.add(permission);
             }
         }
 
-        if (permissionsToBeAsked!=null) {
+        if (permissionsToBeAsked.size()>0) {
             //for time being we would directly ask for the permission
-
+            String[] permissionArray = new String[permissionsToBeAsked.size()];
             ActivityCompat.requestPermissions(activity,
-                    permissionsToBeAsked,
+                    permissionsToBeAsked.toArray(permissionArray),
                     requestCode);
 
             return false;
@@ -60,7 +55,7 @@ public class PermissionRequester {
     }
     // Here, thisActivity is the current activity
 
-    public static boolean hasPermissions(String... permissions) {
+    public static boolean hasPermissions(String[] permissions) {
         if (permissions != null) {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(AppContext.context, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -70,5 +65,16 @@ public class PermissionRequester {
         }
         return true;
     }
+    public static ArrayList<String> permissionsNotGranted(String[] permissions) {
+        ArrayList<String>permissionNotGrantedList = new ArrayList<>();
+        if (permissions != null) {
 
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(AppContext.context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    permissionNotGrantedList.add(permission);
+                }
+            }
+        }
+        return permissionNotGrantedList;
+    }
 }
