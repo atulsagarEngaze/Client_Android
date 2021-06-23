@@ -10,14 +10,20 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
 import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,7 +79,7 @@ public abstract class BaseWebService {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
             callCompleteListener.apiCallSuccess(response);
-        }, (Response.ErrorListener) error -> {
+        }, (ErrorListener) error -> {
             Log.d(TAG, "Volley Error: " + error.getMessage());
             callCompleteListener.apiCallFailure();
         }) {
@@ -118,7 +124,7 @@ public abstract class BaseWebService {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
             callCompleteListener.apiCallSuccess(response);
-        }, (Response.ErrorListener) error -> {
+        }, (ErrorListener) error -> {
             Log.d(TAG, "Volley Error: " + error.getMessage());
             callCompleteListener.apiCallFailure();
         }) {
@@ -153,6 +159,88 @@ public abstract class BaseWebService {
         // Adding request to request queue
         addToRequestQueue(jsonObjReq, AppContext.context);
     }
+
+    protected static void postDataArrayResponse(JSONObject jRequestobj, String url,
+                                   final OnAPICallCompleteListener callCompleteListener) {
+        Log.d(TAG, "Calling URL:" + url);
+        if(jRequestobj!=null){
+            Log.d(TAG, "Request Body:" + jRequestobj.toString());
+        }
+        JsonRequest<JSONArray> jsonObjReq = new JsonRequest<JSONArray>(Request.Method.POST,
+                url, jRequestobj.toString(), (Response.Listener<JSONArray>) response -> {
+            callCompleteListener.apiCallSuccess(response);
+        }, (ErrorListener) error -> {
+            Log.d(TAG, "Volley Error: " + error.getMessage());
+            callCompleteListener.apiCallFailure();
+        }) {
+
+            @Override
+            public byte[] getBody() {
+                return jRequestobj.toString().getBytes();
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonStringArray = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONArray result = null;
+
+                    if (jsonStringArray != null && jsonStringArray.length() > 0) {
+                        Log.d(TAG, jsonStringArray);
+                        result = new JSONArray(jsonStringArray);
+                    }
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch ( JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
+        };
+        jsonObjReq.setRetryPolicy(GetDefaultReTryPolicy());
+        // Adding request to request queue
+        addToRequestQueue(jsonObjReq, AppContext.context);
+    }
+
+    protected static void postDataStringResponse(JSONObject jRequestobj, String url,
+                                   final OnAPICallCompleteListener callCompleteListener) {
+        Log.d(TAG, "Calling URL:" + url);
+        if(jRequestobj!=null){
+            Log.d(TAG, "Request Body:" + jRequestobj.toString());
+        }
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    callCompleteListener.apiCallSuccess(response);
+                },
+                error -> {
+                    callCompleteListener.apiCallFailure();
+                }
+        ) {
+                @Override
+                public byte[] getBody() {
+                    return jRequestobj.toString().getBytes();
+                }
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        request.setRetryPolicy(GetDefaultReTryPolicy());
+        // Adding request to request queue
+        addToRequestQueue(request, AppContext.context);
+    }
+
+
 
     private static RetryPolicy GetDefaultReTryPolicy() {
         return new DefaultRetryPolicy(DEFAULT_MEDIUM_TIME_TIMEOUT,

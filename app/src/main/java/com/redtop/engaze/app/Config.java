@@ -17,7 +17,7 @@ public class Config {
     public static final int  MIN_DISTANCE_IN_METER_LOCATION_UPDATE = 20;
 
     //APIs
-    public static final String RegisterBaseURL ="http://redtopdev.in/";
+    public static final String RegisterBaseURL ="https://yvunorg2k3.execute-api.us-east-2.amazonaws.com/PreProduction/";
     public static final String EventBaseURL="http://redtopdev.in/";
     public static final String LocationBaseURL="http://redtopdev.in/";
 

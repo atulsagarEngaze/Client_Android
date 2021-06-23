@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -21,15 +20,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
@@ -69,28 +64,20 @@ public class ProfileActivity extends BaseActivity {
 		setContentView(R.layout.activity_profile);
 		TextView eulaTextView = (TextView)findViewById(R.id.linktermsandservice);
 		//checkbox.setText("");
-		eulaTextView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(mContext, EULAActivity.class);
-				intent.putExtra("caller", getIntent().getComponent().getClassName());
-				startActivity(intent);	
-				finish();
-			}
+		eulaTextView.setOnClickListener(v -> {
+			Intent intent = new Intent(mContext, EULAActivity.class);
+			intent.putExtra("caller", getIntent().getComponent().getClassName());
+			startActivity(intent);
+			finish();
 		});
 
 		TextView privacyPolicyTextView = (TextView)findViewById(R.id.linkprivacypolicy);
 		//checkbox.setText("");
-		privacyPolicyTextView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(mContext, PrivacyPolicyActivity.class);
-				intent.putExtra("caller", getIntent().getComponent().getClassName());
-				startActivity(intent);
-				finish();
-			}
+		privacyPolicyTextView.setOnClickListener(v -> {
+			Intent intent = new Intent(mContext, PrivacyPolicyActivity.class);
+			intent.putExtra("caller", getIntent().getComponent().getClassName());
+			startActivity(intent);
+			finish();
 		});
 
 		mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -105,18 +92,14 @@ public class ProfileActivity extends BaseActivity {
 			email.setText(emailAccount);
 		}		
 
-		email.setOnEditorActionListener(new OnEditorActionListener() {	  
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				boolean handled = false;
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					hideKeyboard(v);
-					creatJsonAndStartService();
-					handled = true;
-				}
-				return handled;
+		email.setOnEditorActionListener((v, actionId, event) -> {
+			boolean handled = false;
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				hideKeyboard(v);
+				createJsonAndStartService();
+				handled = true;
 			}
+			return handled;
 		});
 
 		EditText profileName = (EditText) findViewById(R.id.ProfileName);
@@ -147,13 +130,10 @@ public class ProfileActivity extends BaseActivity {
 		}
 
 		Save_Profile = findViewById(R.id.Save_Profile);
-		Save_Profile.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(AppContext.context.isInternetEnabled){
-					hideKeyboard(v);
-					creatJsonAndStartService();
-				}
+		Save_Profile.setOnClickListener(v -> {
+			if(AppContext.context.isInternetEnabled){
+				hideKeyboard(v);
+				createJsonAndStartService();
 			}
 		});
 	}
@@ -191,7 +171,7 @@ public class ProfileActivity extends BaseActivity {
 		}
 	}
 
-	private void creatJsonAndStartService(){
+	private void createJsonAndStartService(){
 		CreateJsonRequestObject();
 		if(validateInputData()){
 			mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
@@ -257,10 +237,10 @@ public class ProfileActivity extends BaseActivity {
 		try {
 			// get GCMID/DeviceID/MobileNumber from Preferences
 			mJRequestobj.put("GCMClientId", PreffManager.getPref(Constants.GCM_REGISTRATION_TOKEN));
-			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListener<JSONObject>() {
+			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListener<String>() {
 
 				@Override
-				public void apiCallSuccess(JSONObject response) {
+				public void apiCallSuccess(String response) {
 					if(mProgress.isShowing()){
 						mProgress.hide();
 					}
@@ -281,7 +261,7 @@ public class ProfileActivity extends BaseActivity {
 				}
 			}, AppContext.actionHandler);
 
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			Log.d(TAG, e.toString());
 			if(mProgress.isShowing()){
@@ -347,15 +327,12 @@ public class ProfileActivity extends BaseActivity {
 		alertDialogBuilder
 		.setMessage(message)
 		.setCancelable(false)
-		.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-				// if this button is clicked, close
-				// current activity
-				dialog.cancel();
-			}
+		.setPositiveButton("Ok", (dialog, id) -> {
+			// if this button is clicked, close
+			// current activity
+			dialog.cancel();
 		});
 
 		mAlertDialog = alertDialogBuilder.create();
 	}
-
 }

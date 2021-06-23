@@ -19,6 +19,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.R;
@@ -124,9 +125,9 @@ public class ContactAndGroupListManager {
             return;
         }
 
-        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONObject>() {
+        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONArray>() {
             @Override
-            public void apiCallSuccess(JSONObject response) {
+            public void apiCallSuccess(JSONArray response) {
                 try {
                     Hashtable<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
                     InternalCaching.saveRegisteredContactListToCache(registeredContacts);
@@ -149,10 +150,10 @@ public class ContactAndGroupListManager {
 
     }
 
-    private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONObject response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
+    private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
 
         Hashtable<String, ContactOrGroup> registeredContacts = new Hashtable<String, ContactOrGroup>();
-        JSONArray jUsers = response.getJSONArray("listOfRegisteredContact");
+        JSONArray jUsers = response;
         if (jUsers.length() == 0) {
             return registeredContacts;
         }

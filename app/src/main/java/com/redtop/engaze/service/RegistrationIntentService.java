@@ -21,7 +21,7 @@ public class RegistrationIntentService extends IntentService {
 
     public RegistrationIntentService() {
         super(TAG);
-        Log.i(TAG, "Constructore RegistrationIntentService");
+        Log.i(TAG, "Constructor RegistrationIntentService");
     }
 
     @Override
@@ -31,13 +31,10 @@ public class RegistrationIntentService extends IntentService {
         try {
 
             Log.i(TAG, "START get_token : ");
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                @Override
-                public void onSuccess(InstanceIdResult instanceIdResult) {
-                    String token = instanceIdResult.getToken();
-                    Log.i(TAG, "FCM Registration Token: " + token);
-                    PreffManager.setPref(Constants.GCM_REGISTRATION_TOKEN, token);
-                }
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+                String token = instanceIdResult.getToken();
+                Log.i(TAG, "FCM Registration Token: " + token);
+                PreffManager.setPref(Constants.GCM_REGISTRATION_TOKEN, token);
             });
 
         } catch (Exception e) {

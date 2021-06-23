@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -37,6 +39,9 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         AppUtility.deviceDensity = getResources().getDisplayMetrics().densityDpi;
         setContentView(R.layout.activity_splash);
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i("SplashActivity", "FCM Registration Token: " + token);
         //first time load ask for all the permissions needed
         if (AppContext.context.loginId == null) {
             checkRequiredPermissions();

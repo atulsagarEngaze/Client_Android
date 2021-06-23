@@ -33,19 +33,19 @@ public class ProfileManager {
 
         }
 
-        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListener<JSONObject>() {
+        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListener<String>() {
 
             @Override
-            public void apiCallSuccess(JSONObject response) {
+            public void apiCallSuccess(String response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
 
                 try {
-                    String loginID = (String) response.getString("id");
+                    String loginID = response.replace("\"","");
                     AppContext.context.loginId = loginID;
                     AppContext.context.loginName =jRequestobj.getString("ProfileName");
                     PreffManager.setPref(Constants.LOGIN_ID, loginID);
                     PreffManager.setPref(Constants.LOGIN_NAME, jRequestobj.getString("ProfileName"));
-                    listnerOnSuccess.apiCallSuccess(response);
+                    listnerOnSuccess.apiCallSuccess(loginID);
 
 
                 } catch (Exception ex) {

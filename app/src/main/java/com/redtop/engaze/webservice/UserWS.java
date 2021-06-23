@@ -19,7 +19,7 @@ public class UserWS extends BaseWebService implements IUserWS {
     public void saveProfile(JSONObject jRequestobj,
                             final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            postData(jRequestobj, ApiUrl.ACCOUNT_REGISTER, onAPICallCompleteListener);
+            postDataStringResponse(jRequestobj, ApiUrl.ACCOUNT_REGISTER, onAPICallCompleteListener);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();
@@ -46,7 +46,7 @@ public class UserWS extends BaseWebService implements IUserWS {
         try {
             JSONObject jsonObject = createContactsJSON(contactsAndgroups);
 
-            postData(jsonObject, ApiUrl.REGISTERED_CONTACTS, onAPICallCompleteListener);
+            postDataArrayResponse(jsonObject, ApiUrl.REGISTERED_CONTACTS, onAPICallCompleteListener);
 
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());

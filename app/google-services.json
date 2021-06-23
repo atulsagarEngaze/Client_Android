@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1082862149363",
-    "project_id": "api-5683656360332413945-35929",
-    "storage_bucket": "api-5683656360332413945-35929.appspot.com"
+    "project_number": "708188881969",
+    "project_id": "engaze-988e6",
+    "storage_bucket": "engaze-988e6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1082862149363:android:951f53f3299ede0c3a2186",
+        "mobilesdk_app_id": "1:708188881969:android:d0b27ef11f1c5735980110",
         "android_client_info": {
           "package_name": "com.redtop.engaze"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1082862149363-1r640hoq167n8r06n1dcm5l19186sskc.apps.googleusercontent.com",
+          "client_id": "708188881969-mcljc9vg57d3chqfabmi2al3scnfkgm8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDoj55kDW4m7JFBOLbhuCALY0zyDQudFl4"
+          "current_key": "AIzaSyDaH2cHHCv1QMQ1kxcXayP34HThSJ9IocA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1082862149363-1r640hoq167n8r06n1dcm5l19186sskc.apps.googleusercontent.com",
+              "client_id": "708188881969-mcljc9vg57d3chqfabmi2al3scnfkgm8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

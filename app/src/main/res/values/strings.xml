@@ -73,8 +73,8 @@
     <string name="no_intent_found">No application found to handle this action</string>
     <string name="app_name">Engaze</string>
     <!--     <string name="google_map_access_key">AIzaSyD2ldFcWp1LYIz1zCoQSsi0-RkcHh9XM78</string> -->
-    <string name="google_map_access_key">AIzaSyB3qF_1mFfeu2Jwt6Z9zmFK6GrbthVaLwI</string>
-
+<!--    <string name="google_map_access_key">AIzaSyAjlWDhJ_109rXfmY11IBwHPxeUPiPSPI8</string>-->
+    <string name="google_map_access_key">AIzaSyDaH2cHHCv1QMQ1kxcXayP34HThSJ9IocA</string>
     <string name="welcome_message">Cordify</string>
     <string name="welcome_message1">Co-ordination Simplified!!</string>
     <string name="action_settings">Settings</string>

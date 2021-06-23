@@ -69,7 +69,7 @@ public class EventManager {
         if (event.UsersLocationDetailList != null) {
             for (UsersLocationDetail ud : event.UsersLocationDetailList) {
                 for (EventParticipant participant: event.participants){
-                    if(participant.userId.equals(ud.userId)){
+                    if(participant.userId !=null && participant.userId.equals(ud.userId)){
                         ud.contactOrGroup = participant.contactOrGroup;
                     }
                 }
