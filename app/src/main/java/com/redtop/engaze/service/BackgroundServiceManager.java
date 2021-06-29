@@ -40,7 +40,7 @@ public class BackgroundServiceManager extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.v(TAG, "Background service manger started");
-        startBackgroundServices();
+        handleLocationListenerService();
         return START_STICKY;
     }
 
@@ -59,12 +59,9 @@ public class BackgroundServiceManager extends Service {
 
     public synchronized static void stopService(Context context) {
 
-        context.startService(new Intent(context, BackgroundServiceManager.class));
+        context.stopService(new Intent(context, BackgroundServiceManager.class));
     }
 
-    private void startBackgroundServices() {
-        handleLocationListenerService();
-    }
 
     private void handleLocationListenerService() {
 

@@ -109,9 +109,10 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
                 mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
 
             }
+
+            viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
+            addIfAnyContactIsSelectedFromMemberListActivity();
         }
-        viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
-        addIfAnyContactIsSelectedFromMemberListActivity();
     }
 
     private void addIfAnyContactIsSelectedFromMemberListActivity() {

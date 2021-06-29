@@ -222,9 +222,11 @@ public final class InternalCaching {
                 }
                 if (ed != null) {
                     event.UsersLocationDetailList = new ArrayList<UsersLocationDetail>();
-                    for (UsersLocationDetail ud : ed.UsersLocationDetailList) {
-                        event.UsersLocationDetailList.add(
-                                AppContext.jsonParser.deserialize(AppContext.jsonParser.Serialize(ud), UsersLocationDetail.class));
+                    if(ed.UsersLocationDetailList!=null) {
+                        for (UsersLocationDetail ud : ed.UsersLocationDetailList) {
+                            event.UsersLocationDetailList.add(
+                                    AppContext.jsonParser.deserialize(AppContext.jsonParser.Serialize(ud), UsersLocationDetail.class));
+                        }
                     }
 
                     event.AcceptNotificationId = ed.AcceptNotificationId;

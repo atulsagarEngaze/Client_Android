@@ -1,5 +1,6 @@
 package com.redtop.engaze.service;
 
+import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -12,8 +13,11 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.service.EventParser;
+import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.manager.EventNotificationManager;
 
@@ -46,11 +50,10 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
 
             if (mEventId != null) {
                 if (messageType.equals("EventEnd") || messageType.equals("EventDelete") || messageType.equals("RemovedFromEvent")) {
-                    InternalCaching.getEventFromCache(mEventId);
+
                     actionsBasedOnGCMMessageTypes(messageType, data);
                 } else {
                     EventManager.refreshEventList(eventDetailList -> {
-                        InternalCaching.getEventFromCache(mEventId);
                         actionsBasedOnGCMMessageTypes(messageType, data);
 
                     }, this);
@@ -63,6 +66,7 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
 
     private void actionsBasedOnGCMMessageTypes(String messageType, final JSONObject data) {
         try {
+            Event event;
             Intent intent = null;
             switch (messageType) {
                 case "EventUpdate":
@@ -103,7 +107,15 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "EventInvite":
-                    getEventDetail(data);
+                    event = InternalCaching.getEventFromCache(mEventId);
+                    if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+                        event.state = EventState.TRACKING_ON;
+                    }
+
+                    Intent eventReceived = new Intent(Veranstaltung.EVENT_RECEIVED);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventReceived);
+                    EventService.setEndEventAlarm(event);
+                    EventNotificationManager.showEventInviteNotification(event);
 
                     break;
 
@@ -175,7 +187,7 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "RemindContact":
-                    Event event = InternalCaching.getEventFromCache(mEventId);
+                    event = InternalCaching.getEventFromCache(mEventId);
                     if (ParticipantService.isNotifyUser(event)) {
                         EventNotificationManager.pokeNotification(mContext, mEventId);
                     }
