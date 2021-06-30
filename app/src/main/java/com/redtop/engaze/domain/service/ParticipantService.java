@@ -1,14 +1,11 @@
 package com.redtop.engaze.domain.service;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.location.Location;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.IActionHandler;
-import com.redtop.engaze.Interface.OnActionCompleteListner;
-import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.EventType;
@@ -121,7 +118,7 @@ public class ParticipantService {
     }
 
     public static Boolean isNotifyUser(Event event) {
-        if (event != null && event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Declined) {
+        if (event != null && event.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Rejected) {
             return false;
         }
         return true;

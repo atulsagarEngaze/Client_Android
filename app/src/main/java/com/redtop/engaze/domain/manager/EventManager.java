@@ -103,7 +103,7 @@ public class EventManager {
             if (list != null) {
                 for (Event e : list) {
                     if (e.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.Accepted &&
-                            e.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.Declined) {
+                            e.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.Rejected) {
                         pendingList.add(e);
                     }
                 }
@@ -267,7 +267,7 @@ public class EventManager {
                         }
                     } else {
                         event.getCurrentParticipant().
-                                acceptanceStatus = AcceptanceStatus.Declined;
+                                acceptanceStatus = AcceptanceStatus.Rejected;
                     }
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
@@ -356,7 +356,7 @@ public class EventManager {
 
                 try {
                     event.getCurrentParticipant().
-                            acceptanceStatus = AcceptanceStatus.Declined;
+                            acceptanceStatus = AcceptanceStatus.Rejected;
 
                     EventNotificationManager.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
@@ -606,7 +606,7 @@ public class EventManager {
         try {
             for (EventParticipant em : event.participants) {
                 if (em.userId.toLowerCase().equals(userId.toLowerCase())) {
-                    em.acceptanceStatus = AcceptanceStatus.Declined;
+                    em.acceptanceStatus = AcceptanceStatus.Rejected;
                 }
             }
             InternalCaching.saveEventToCache(event);
@@ -819,7 +819,7 @@ public class EventManager {
 
     public static void saveUsersLocationDetailList(Context context, Event event,
                                                    ArrayList<UsersLocationDetail> usersLocationDetailList) {
-        if (event != null && event.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.Declined
+        if (event != null && event.getCurrentParticipant().acceptanceStatus != AcceptanceStatus.Rejected
                 && usersLocationDetailList != null && usersLocationDetailList.size() > 0) {
             event.UsersLocationDetailList = usersLocationDetailList;
             InternalCaching.saveEventToCache(event);

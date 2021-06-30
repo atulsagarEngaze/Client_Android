@@ -66,7 +66,7 @@ public class ParticipantInfoFragment extends DialogFragment {
                     tvHeader.setText(getResources().getString(R.string.accepted_members_header));
                 } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Pending) {
                     tvHeader.setText(getResources().getString(R.string.pending_members_header));
-                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Declined) {
+                } else if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Rejected) {
                     tvHeader.setText(getResources().getString(R.string.declined_members_header));
                 }
             }

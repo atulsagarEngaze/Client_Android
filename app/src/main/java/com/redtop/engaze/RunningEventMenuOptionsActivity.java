@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.redtop.engaze.Interface.IActionHandler;
 import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -66,7 +65,7 @@ public class RunningEventMenuOptionsActivity extends BaseActivity implements OnI
 			NameImageItem item = new NameImageItem(images.getResourceId(i, -1), userOptions[i], i);
 			mUserMenuItems.add(item);
 		}
-		if (status == AcceptanceStatus.Declined || status == AcceptanceStatus.Pending) {
+		if (status == AcceptanceStatus.Rejected || status == AcceptanceStatus.Pending) {
 			mUserMenuItems.remove(1);
 		} else {
 			mUserMenuItems.remove(0);

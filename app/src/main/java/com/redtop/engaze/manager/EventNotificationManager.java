@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -18,6 +19,7 @@ import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -180,17 +182,17 @@ public class EventNotificationManager {
             String[] events = new String[2];
             if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
                 title = "Tracking request";
-                events[0] = new String(event.initiatorName + " wants to share his/her location");
-                events[1] = new String(parsedDate);
+                events[0] = event.initiatorName + " wants to share his/her location";
+                events[1] = parsedDate;
 
             } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
                 title = "Tracking request";
-                events[0] = new String(event.initiatorName + " wants to track your location");
-                events[1] = new String(parsedDate);
+                events[0] = event.initiatorName + " wants to track your location";
+                events[1] = parsedDate;
             } else {
                 title = event.name;
-                events[0] = new String(parsedDate);
-                events[1] = new String("From " + event.initiatorName);
+                events[0] = parsedDate;
+                events[1] = "From " + event.initiatorName;
             }
 
 
@@ -246,6 +248,19 @@ public class EventNotificationManager {
 
             if (!event.IsMute) {
                 mBuilder.setSound(notificationSound);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                String channelId = "123456";
+                NotificationChannel channel = new NotificationChannel(
+                        channelId,
+                        "Event Invitation",
+                        NotificationManager.IMPORTANCE_HIGH);
+                channel.setShowBadge(true);
+                channel.setDescription("Event invitation notification");
+                notificationManager.createNotificationChannel(channel);
+                mBuilder.setChannelId(channelId);
             }
 
             //notificication.bigContentView = remoteViews;
@@ -476,11 +491,11 @@ public class EventNotificationManager {
                     break;
 
                 case "reject":
-                    saveResponse(AcceptanceStatus.Declined, eventid);
+                    saveResponse(AcceptanceStatus.Rejected, eventid);
                     break;
 
                 case "leave":
-                    saveResponse(AcceptanceStatus.Declined, eventid);
+                    saveResponse(AcceptanceStatus.Rejected, eventid);
                     break;
 
                 case "snooze":
@@ -531,7 +546,7 @@ public class EventNotificationManager {
                     notificationManager.cancel(eventData.AcceptNotificationId);
                     break;
 
-                case Declined:
+                case Rejected:
                     notificationManager.cancel(eventData.AcceptNotificationId);
                     notificationManager.cancel(eventData.SnoozeNotificationId);
                     for (int notficationId : eventData.NotificationIds) {

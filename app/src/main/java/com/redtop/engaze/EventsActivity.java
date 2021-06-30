@@ -241,7 +241,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 			pef.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Pending));
 		}
 		if(def!=null){
-			def.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Declined));
+			def.updateEventFragment(mEventDetailHashmap.get(AcceptanceStatus.Rejected));
 		}	
 	}
 
@@ -266,7 +266,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 			case Pending:
 				pl.add(ed);
 				break;
-				case Declined:
+				case Rejected:
 				dl.add(ed);
 				break;
 
@@ -277,7 +277,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 		}		
 		mEventDetailHashmap.put(AcceptanceStatus.Accepted, al);
 		mEventDetailHashmap.put(AcceptanceStatus.Pending, pl);
-		mEventDetailHashmap.put(AcceptanceStatus.Declined, dl);
+		mEventDetailHashmap.put(AcceptanceStatus.Rejected, dl);
 
 	}
 
@@ -370,7 +370,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 				return true;
 			case R.id.context_action_decline:
 
-				EventManager.saveUserResponse(AcceptanceStatus.Declined,  event.eventId,
+				EventManager.saveUserResponse(AcceptanceStatus.Rejected,  event.eventId,
 						EventsActivity.this, EventsActivity.this);
 
 				mode.finish();

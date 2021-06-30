@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 public enum AcceptanceStatus {
     @Expose
-    Accepted(1), Declined(0), Pending(-1);
+    Accepted(1), Rejected(0), Pending(-1);
 
     private final int status;
 
@@ -22,7 +22,7 @@ public enum AcceptanceStatus {
         {
 
             case 0 :
-                return AcceptanceStatus.Declined;
+                return AcceptanceStatus.Rejected;
 
             case -1:
                 return AcceptanceStatus.Pending;

@@ -97,7 +97,7 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 			
 			@Override
 			public void onClick(View v) {
-				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.Declined);
+				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.Rejected);
 			}
 		});
 		if(EventService.isEventShareMyLocationEventForCurrentUser(rowItem)){

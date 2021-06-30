@@ -19,14 +19,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.redtop.engaze.BaseActivity;
 import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
@@ -187,7 +185,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
 
                         @Override
                         public void actionComplete(Action action) {
-                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.Declined;
+                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.Rejected;
                             if (callback != null) {
                                 callback.refreshTrackingEvents();
                             }

@@ -87,7 +87,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
 
                     @Override
                     public void actionComplete(Action action) {
-                        rowItem.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.Declined;
+                        rowItem.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.Rejected;
                         if (callback != null) {
                             callback.onEventLeaveClicked();
                         }

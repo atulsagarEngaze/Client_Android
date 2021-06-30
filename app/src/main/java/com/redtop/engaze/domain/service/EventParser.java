@@ -33,7 +33,6 @@ public class EventParser {
         JSONArray eventDetailJsonArray = jsonStr;
         List<Event> eventList = new ArrayList<Event>();
 
-
         try {
             for (int i = 0; i < eventDetailJsonArray.length(); i++) {
                 eventList.add(AppContext.jsonParser.deserialize

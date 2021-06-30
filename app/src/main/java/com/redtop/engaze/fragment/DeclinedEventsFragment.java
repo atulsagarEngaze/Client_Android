@@ -21,7 +21,7 @@ public class DeclinedEventsFragment extends EventsFragmentBase implements OnItem
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);				
 		mContext = getActivity();
-		mEventList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.Declined);
+		mEventList = ((EventsActivity)mContext).mEventDetailHashmap.get(AcceptanceStatus.Rejected);
 	}
 
 	@Override

@@ -24,9 +24,7 @@ import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.IntentConstants;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
@@ -235,7 +233,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
             @Override
             public void actionComplete(Action action) {
-                mEvent.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.Declined;
+                mEvent.getCurrentParticipant().acceptanceStatus = AcceptanceStatus.Rejected;
                 AppContext.actionHandler.actionComplete(action);
                 gotoPreviousPage();
 

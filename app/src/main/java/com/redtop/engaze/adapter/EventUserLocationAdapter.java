@@ -112,7 +112,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                 viewHolder.rlNotRespondedUser.setVisibility(View.VISIBLE);
                 viewHolder.locationImage.setVisibility(View.GONE);
 
-                if (ud.acceptanceStatus == AcceptanceStatus.Declined) {
+                if (ud.acceptanceStatus == AcceptanceStatus.Rejected) {
                     viewHolder.rlDeclinedUser.setVisibility(View.VISIBLE);
                     viewHolder.rlNotRespondedUser.setVisibility(View.GONE);
                 }

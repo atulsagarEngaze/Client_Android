@@ -96,7 +96,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 			if (member.acceptanceStatus == AcceptanceStatus.Accepted) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_lightgreen);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_check_green_48));
-			} else if (member.acceptanceStatus == AcceptanceStatus.Declined) {
+			} else if (member.acceptanceStatus == AcceptanceStatus.Rejected) {
 				ViewHelper.setRippleDrawable(holder.img_status, context, R.drawable.ripple_red);
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_decline_red_48));
 			} else {
