@@ -10,7 +10,7 @@
         android:layout_marginLeft="@dimen/padding"
         android:layout_marginRight="5dp"
         android:layout_alignParentLeft="true"
-        android:backgroundTint="#8A000000"/>
+        android:backgroundTint="@color/iconDark"/>
 
     <TextView
         android:id="@+id/name"

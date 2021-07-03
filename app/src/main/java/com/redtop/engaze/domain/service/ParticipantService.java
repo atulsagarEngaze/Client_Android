@@ -69,9 +69,9 @@ public class ParticipantService {
         }
     }
 
-    public static void pokeAlert(final String userId, String userName, final String eventId, final IActionHandler actionHadler) {
+    public static void pokeAlert( final String userId, String userName, final String eventId, final IActionHandler actionHadler) {
         AlertDialog.Builder adb = null;
-        adb = new AlertDialog.Builder(AppContext.context);
+        adb = new AlertDialog.Builder(AppContext.context.currentActivity);
 
         adb.setTitle("Poke");
         adb.setMessage("Do you want to poke " + userName + "?" + "\n" + "You can poke again only after 15 minutes.");

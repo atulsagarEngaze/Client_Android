@@ -22,11 +22,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Marker;
+import com.redtop.engaze.Interface.DialogDismissListener;
+import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.ParticipantService;
@@ -34,9 +37,11 @@ import com.redtop.engaze.domain.manager.LocationManager;
 
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 @SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
-public class RunningEventLocationRefresh extends RunningEventMarker {
+public class RunningEventLocationRefresh extends RunningEventMarker{
 
     private long currentThreadId;
 
@@ -149,7 +154,6 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
             e.printStackTrace();
         }
     }
-
 
     private class populateLocationListWithAddress extends AsyncTask<JSONArray, Void, String> {
 
@@ -317,15 +321,21 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 
     public void userLocationMenuClicked(View v, UsersLocationDetail uld) {
         mIsActivityPauseForDialog = true;
-        Intent intent = new Intent(mContext, RunningEventMenuOptionsActivity.class);
-        intent.putExtra("UserName", uld.userName);
-        intent.putExtra("UserId", uld.userId);
-        intent.putExtra("EventId", mEvent.eventId);
-        intent.putExtra("AcceptanceStatus", uld.acceptanceStatus.getStatus());
-        mContext.startActivity(intent);
+        FragmentManager fm = ((BaseActivity) mContext).getSupportFragmentManager();
+        RunningEventParticipantMenuOptionsFragment fragment = RunningEventParticipantMenuOptionsFragment.newInstance(
+                uld.userName, uld.userId, mEvent.eventId, uld.acceptanceStatus.getStatus());
+        fragment.show(fm, "RunningEventParticipantMenuOptions");
+
+        fragment.dialogDismissListener = () -> {
+
+            if (mClickedUserLocationView != null) {
+                setBackgroundOfRecycleViewItem((CardView) mClickedUserLocationView, Color.TRANSPARENT);
+                mClickedUserLocationView = null;
+            }
+        };
         canRefreshUserLocation = false;
         mClickedUserLocationView = v;
-        setBackgroundOfRecycleViewItem((CardView) mClickedUserLocationView, this.getResources().getColor(R.color.divider));
+        setBackgroundOfRecycleViewItem((CardView) mClickedUserLocationView, this.getResources().getColor(R.color.primaryLight));
     }
 
     public void userLocationItemClicked(View v, UsersLocationDetail uld) {

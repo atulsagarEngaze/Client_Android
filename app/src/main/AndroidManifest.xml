@@ -115,7 +115,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
         <activity
-            android:name=".RunningEventMenuOptionsActivity"
+            android:name=".RunningEventParticipantMenuOptionsFragment"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
         <activity
