@@ -70,6 +70,7 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         mUserName = getArguments().getString("UserName");
         mUserId = getArguments().getString("UserId");
@@ -93,6 +94,8 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
         } else {
             mUserMenuItems.remove(0);
         }
+
+
 
         NameImageAdapter adapter = new NameImageAdapter(mContext,
                 R.layout.item_name_image_row, mUserMenuItems);

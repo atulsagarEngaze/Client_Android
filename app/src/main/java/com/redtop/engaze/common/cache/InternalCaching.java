@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 import com.redtop.engaze.app.AppContext;
@@ -77,10 +76,10 @@ public final class InternalCaching {
     }
 
     public static void initializeCache() {
-        Hashtable<String, Event> cachedEvents = new Hashtable<String, Event>();
+        HashMap<String, Event> cachedEvents = new HashMap<String, Event>();
         writeObject(CACHE_EVENTS, cachedEvents);
         writeObject(CACHE_TRACK_EVENTS, cachedEvents);
-        Hashtable<String, ContactOrGroup> contacts = new Hashtable<String, ContactOrGroup>();
+        HashMap<String, ContactOrGroup> contacts = new HashMap<String, ContactOrGroup>();
         writeObject(CACHE_CONTACTS, contacts);
         writeObject(CACHE_REGISTERED_CONTACTS, contacts);
         ArrayList<EventPlace> cachedD = new ArrayList<EventPlace>();
@@ -90,7 +89,7 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static Event getEventFromCache(String eventId) {
         Event event = null;
-        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
+        HashMap<String, Event> cachedEntries = getCachedEventHashMap();
         event = cachedEntries.get(eventId);
         if (event == null) {
             cachedEntries = getCachedTrackEventHashMap();
@@ -102,7 +101,7 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static List<Event> getEventListFromCache() {
         ArrayList<Event> events = null;
-        Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_EVENTS);
+        HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_EVENTS);
         if (cachedEntries != null && cachedEntries.size() != 0) {
             events = new ArrayList<Event>(cachedEntries.values());
         } else {
@@ -114,7 +113,7 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     public static List<Event> getTrackEventListFromCache() {
         List<Event> events = null;
-        Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_TRACK_EVENTS);
+        HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_TRACK_EVENTS);
         if (cachedEntries != null && cachedEntries.size() != 0) {
             events = new ArrayList<Event>(cachedEntries.values());
         } else {
@@ -124,22 +123,22 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    private static Hashtable<String, Event> getCachedEventHashMap() {
+    private static HashMap<String, Event> getCachedEventHashMap() {
 
-        Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_EVENTS);
+        HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_EVENTS);
         return cachedEntries;
     }
 
     @SuppressWarnings("unchecked")
-    private static Hashtable<String, Event> getCachedTrackEventHashMap() {
+    private static HashMap<String, Event> getCachedTrackEventHashMap() {
 
-        Hashtable<String, Event> cachedEntries = (Hashtable<String, Event>) readObject(CACHE_TRACK_EVENTS);
+        HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_TRACK_EVENTS);
         return cachedEntries;
     }
 
     @SuppressWarnings("unchecked")
     public static void saveEventToCache(Event event) {
-        Hashtable<String, Event> cachedEntries;
+        HashMap<String, Event> cachedEntries;
         EventType eventType = event.eventType;
         if (eventType == EventType.SHAREMYLOACTION || eventType == EventType.TRACKBUDDY) {
             cachedEntries = getCachedTrackEventHashMap();
@@ -153,7 +152,7 @@ public final class InternalCaching {
     }
 
     public static void removeEventFromCache(String eventId) {
-        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
+        HashMap<String, Event> cachedEntries = getCachedEventHashMap();
         if (cachedEntries.containsKey(eventId)) {
             cachedEntries.remove(eventId);
             writeObject(CACHE_EVENTS, cachedEntries);
@@ -167,8 +166,8 @@ public final class InternalCaching {
     }
 
     public static void removeEventsFromCache(List<String> eventIdList) {
-        Hashtable<String, Event> cachedEntries = getCachedEventHashMap();
-        Hashtable<String, Event> cachedEntriesForTE = getCachedTrackEventHashMap();
+        HashMap<String, Event> cachedEntries = getCachedEventHashMap();
+        HashMap<String, Event> cachedEntriesForTE = getCachedTrackEventHashMap();
         int size = cachedEntries.size();
         int sizeTE = cachedEntriesForTE.size();
         for (String evenId : eventIdList) {
@@ -207,10 +206,10 @@ public final class InternalCaching {
         if (events != null && events.size() > 0) {
             Event ed;
             String eventId;
-            Hashtable<String, Event> oldcachedEntries = getCachedEventHashMap();
-            Hashtable<String, Event> oldcachedEntriesForTE = getCachedTrackEventHashMap();
-            Hashtable<String, Event> cachedEntries = new Hashtable<String, Event>();
-            Hashtable<String, Event> cachedEntriesForTE = new Hashtable<String, Event>();
+            HashMap<String, Event> oldcachedEntries = getCachedEventHashMap();
+            HashMap<String, Event> oldcachedEntriesForTE = getCachedTrackEventHashMap();
+            HashMap<String, Event> cachedEntries = new HashMap<String, Event>();
+            HashMap<String, Event> cachedEntriesForTE = new HashMap<String, Event>();
             EventType eventType;
             for (Event event : events) {
                 eventId = event.eventId;
@@ -272,7 +271,7 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    public static void saveRegisteredContactListToCache(Hashtable<String, ContactOrGroup> contacts) {
+    public static void saveRegisteredContactListToCache(HashMap<String, ContactOrGroup> contacts) {
         if (contacts != null) {
             writeObject(CACHE_REGISTERED_CONTACTS, contacts);
         }
@@ -285,12 +284,12 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    public static Hashtable<String, ContactOrGroup> getRegisteredContactListFromCache() {
+    public static HashMap<String, ContactOrGroup> getRegisteredContactListFromCache() {
         try {
-            Hashtable<String, ContactOrGroup> cachedEntries = (Hashtable<String, ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
+            HashMap<String, ContactOrGroup> cachedEntries = (HashMap<String, ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
             return cachedEntries;
         } catch (ClassCastException ex) {
-            Hashtable<String, ContactOrGroup> cachedEntries = new Hashtable<String, ContactOrGroup>();
+            HashMap<String, ContactOrGroup> cachedEntries = new HashMap<String, ContactOrGroup>();
             ArrayList<ContactOrGroup> CacheArray = (ArrayList<ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
             for (ContactOrGroup cg : CacheArray) {
                 cachedEntries.put(cg.getUserId(), cg);

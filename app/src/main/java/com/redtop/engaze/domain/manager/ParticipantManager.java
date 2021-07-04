@@ -20,7 +20,7 @@ import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
@@ -103,7 +103,7 @@ public class ParticipantManager {
     }
 
     public static void setContactsGroup(ArrayList<EventParticipant> eventMembers) {
-        Hashtable<String, ContactOrGroup> registeredList = InternalCaching.getRegisteredContactListFromCache();
+        HashMap<String, ContactOrGroup> registeredList = InternalCaching.getRegisteredContactListFromCache();
 
         for (EventParticipant mem : eventMembers) {
             if (mem.contactOrGroup == null) {

@@ -2,8 +2,7 @@ package com.redtop.engaze;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
-
+import java.util.HashMap;
 
 
 import android.app.Activity;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 @SuppressWarnings("deprecation")
 public class EventRecurrenceInfo extends Activity {
 	private LinearLayout mLlDailySettings, mLlWeekySettings, mLlMonthlySettings;	
-	private Hashtable<Integer, String> mWeekDays;
+	private HashMap<Integer, String> mWeekDays;
 	private TextView mPattern, mDays;
 	protected String mRecurrenceType;
 	protected String mNumberOfOccurences;
@@ -44,7 +43,7 @@ public class EventRecurrenceInfo extends Activity {
 	}
 
 	private void populateEventRecurrenceData() {		
-		mWeekDays = new Hashtable<Integer, String>();
+		mWeekDays = new HashMap<>();
 		mWeekDays.put(1, "Sun");
 		mWeekDays.put(2, "Mon");
 		mWeekDays.put(3, "Tues");

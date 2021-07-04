@@ -11,8 +11,6 @@ public class Constants {
 
 
     public static final int SNOOZING_REQUEST_CODE = 1;
-    //public static final String MAP_API_URL = "http://watchus-001-site1.smarterasp.net/Api/";
-    //public static final String MAP_API_URL = "http://watchus-001-site1.htempurl.com/Api/";
 
 
     public static final String TAG_ID_COUNTRY = "Code";
@@ -27,12 +25,6 @@ public class Constants {
 
     // preference file key
     public static final String USER_AUTH_TOKEN = "user_auth_token";
-
-    public static final String SUBFOLDER_JARVIS = "/eventtracker";
-    public static final int READ_DATA_MODEL_OBJECT_FROM_FILE = 111;
-    public static final int WRITE_DATA_MODEL_OBJECT_TO_FILE = 112;
-
-    public static final String FILE_HEADER_EVENT_DETAIL = "event_detail";
 
 
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
@@ -49,12 +41,9 @@ public class Constants {
     public static final int EventStartBroadcastId = 5;
     public static final int LocationServiceCheckBroadcastId = 6;
 
-    public static final String EVENT_LIST_UPDATE = "eventlistupdate";
-    public static final String CONTACT_LIST_UPDATE = "contactlistupdate";
+
     public static final String IS_REGISTERED_CONTACT_LIST_INITIALIZED = "isrcli";
     public static final String IS_CONTACT_LIST_INITIALIZED = "iscli";
-    public static final String IS_CONTACT_LIST_INITIALIZATION_PROCESS_OVER = "isclipo";
-    public static final String EVENT_LIST_LATEST = "eventListLatest";
 
 
     public static final String PARTICIPANTS_LOCATION_UPDATE_INTENT_ACTION = "com.redtop.engaze.PARTICIPANTS_LOCATION_UPDATE";
@@ -82,9 +71,11 @@ public class Constants {
     public static final int EVENT_DEFAULT_DURATION = 1;
     public static final String EVENT_DEFAULT_PERIOD = "hour";
 
-    public static final String DEFAULT_REMINDER_PREF_KEY ="defltRmndr";
-	public static final String DEFAULT_TRACKING_PREF_KEY ="defltrck";
-	public static final String DEFAULT_DURATION_PREF_KEY ="defdurtn";
+    public static final String DEFAULT_REMINDER_PREF_KEY = "defltRmndr";
+    public static final String DEFAULT_TRACKING_PREF_KEY = "defltrck";
+    public static final String DEFAULT_DURATION_PREF_KEY = "defdurtn";
+
+    public static final String LOCATION_UNKNOWN = "Unknown";
 
 
 }

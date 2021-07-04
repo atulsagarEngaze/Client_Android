@@ -29,6 +29,7 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
     public RunningEventActivity activity;
     private Boolean isUpdateInProgress = false;
     private Location lastLocation = null;
+    private UsersLocationDetail lastLocationUserLocationDetail = null;
     protected AppLocationService mLh;
 
     public CurrentLocationUploadService(Context context) {
@@ -56,8 +57,10 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
             return;
         }
 
-        if (lastLocation != null) {
-            if (lastLocation.distanceTo(currentLocation) > Config.MIN_DISTANCE_IN_METER_LOCATION_UPDATE) {
+        if (lastLocation != null && lastLocationUserLocationDetail != null) {
+            if (lastLocation.distanceTo(currentLocation) > Config.MIN_DISTANCE_IN_METER_LOCATION_UPDATE ||
+                    (lastLocationUserLocationDetail.address == Constants.LOCATION_UNKNOWN || lastLocationUserLocationDetail.name == Constants.LOCATION_UNKNOWN)
+            ) {
                 updateCurrentLocationToServer(currentLocation, context);
             }
         } else {
@@ -72,10 +75,10 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
             locationDetail.address = place.getAddress();
             locationDetail.name = place.getName();
             if (locationDetail.address == null || locationDetail.address == "") {
-                locationDetail.address = "Unknown";
+                locationDetail.address = Constants.LOCATION_UNKNOWN;
             }
             if (locationDetail.name == null || locationDetail.name == "") {
-                locationDetail.name = "Unknown";
+                locationDetail.name = Constants.LOCATION_UNKNOWN;
             }
         }
         LocationManager.updateLocationToServer(context, locationDetail, new OnAPICallCompleteListener() {
@@ -83,6 +86,7 @@ public class CurrentLocationUploadService extends LocalBroadcastReceiver {
             public void apiCallSuccess(Object response) {
                 isUpdateInProgress = false;
                 lastLocation = currentLocation;
+                lastLocationUserLocationDetail = locationDetail;
             }
 
             @Override

@@ -1,6 +1,6 @@
 package com.redtop.engaze.service;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -13,8 +13,6 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
 public class FirstTimeInitializationService extends IntentService {
@@ -45,16 +43,12 @@ public class FirstTimeInitializationService extends IntentService {
             ContactAndGroupListManager.cacheContactAndGroupList(new OnRefreshMemberListCompleteListner() {
 
                 @Override
-                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
+                public void RefreshMemberListComplete(HashMap<String, ContactOrGroup> memberList) {
                     PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
 
                 }
-            }, new OnRefreshMemberListCompleteListner() {
+            }, memberList -> {
 
-                @Override
-                public void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList) {
-
-                }
             });
         } catch (Exception e) {
             e.printStackTrace();

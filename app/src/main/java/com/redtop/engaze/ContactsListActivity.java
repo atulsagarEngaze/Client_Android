@@ -1,7 +1,7 @@
 package com.redtop.engaze;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -114,7 +114,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 	}
 	
 	@Override
-	protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList){
+	protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList){
 		if(memberList!=null && memberList.values().size()>0){
 
 			//mMembers = ContactAndGroupListManager.sortContacts(new ArrayList<ContactOrGroup>(memberList.values()));

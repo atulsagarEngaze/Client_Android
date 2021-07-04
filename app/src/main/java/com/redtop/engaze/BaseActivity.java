@@ -23,8 +23,7 @@ import com.redtop.engaze.common.utility.UserMessageHandler;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
-import java.util.Hashtable;
-
+import java.util.HashMap;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -224,7 +223,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList) {
+    protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList) {
 
     }
 

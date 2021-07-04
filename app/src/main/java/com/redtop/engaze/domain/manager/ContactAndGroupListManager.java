@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +56,7 @@ public class ContactAndGroupListManager {
         if(userId==null){
             return cg;
         }
-        Hashtable<String, ContactOrGroup> table = InternalCaching.getRegisteredContactListFromCache();
+        HashMap<String, ContactOrGroup> table = InternalCaching.getRegisteredContactListFromCache();
         if (table != null) {
             cg = table.get(userId);
         }
@@ -129,7 +128,7 @@ public class ContactAndGroupListManager {
             @Override
             public void apiCallSuccess(JSONArray response) {
                 try {
-                    Hashtable<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
+                    HashMap<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
                     InternalCaching.saveRegisteredContactListToCache(registeredContacts);
                     InternalCaching.saveContactListToCache(contactsAndgroups);
                     PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
@@ -150,9 +149,9 @@ public class ContactAndGroupListManager {
 
     }
 
-    private static Hashtable<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
+    private static HashMap<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
 
-        Hashtable<String, ContactOrGroup> registeredContacts = new Hashtable<String, ContactOrGroup>();
+        HashMap<String, ContactOrGroup> registeredContacts = new HashMap<>();
         JSONArray jUsers = response;
         if (jUsers.length() == 0) {
             return registeredContacts;

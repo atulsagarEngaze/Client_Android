@@ -2,7 +2,7 @@ package com.redtop.engaze;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import android.Manifest;
 import android.content.Context;
@@ -135,7 +135,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     @Override
-    protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList) {
+    protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList) {
         mMembers = (ArrayList<ContactOrGroup>) memberList.values();
         if (mMembers != null) {
             mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);

@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -78,7 +78,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
     private RadioButton mRdDailyView, mRdWeeklyView, mRdMonthlyView;
     private LinearLayout mLlRecurrenceView, mLlDailySettingsView, mLlWeekySettingsView, mLlMonthlySettingsView;
     private AppCompatCheckBox mChkrecurrence, mSelectedDateCheck;
-    private Hashtable<Integer, AppCompatCheckBox> mWeekDaysChecboxList;
+    private HashMap<Integer, AppCompatCheckBox> mWeekDaysChecboxList;
     private String mHintFriendText;
     private ImageView imgView;
 
@@ -319,7 +319,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         mRdMonthlyView = (RadioButton) findViewById(R.id.rd_monthly);
         mChkrecurrence = (AppCompatCheckBox) findViewById(R.id.chkrecurrence);
 
-        mWeekDaysChecboxList = new Hashtable<Integer, AppCompatCheckBox>();
+        mWeekDaysChecboxList = new HashMap<>();
         mWeekDaysChecboxList.put(1, (AppCompatCheckBox) findViewById(R.id.chksunday));
         mWeekDaysChecboxList.put(2, (AppCompatCheckBox) findViewById(R.id.chkmonday));
         mWeekDaysChecboxList.put(3, (AppCompatCheckBox) findViewById(R.id.chktuesday));
@@ -343,7 +343,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
         mAutoCompleteInviteeTextView.setAdapter(mAdapter);
         mAutoCompleteInviteeTextView.setHint(Html.fromHtml("<i>" + mHintFriendText + "</i>"));
-        mAddedMembers = new Hashtable<String, ContactOrGroup>();
+        mAddedMembers = new HashMap<String, ContactOrGroup>();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         cal = Calendar.getInstance();

@@ -114,10 +114,7 @@
             android:name=".CustomReminder"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
-        <activity
-            android:name=".RunningEventParticipantMenuOptionsFragment"
-            android:screenOrientation="portrait"
-            android:theme="@style/ETMaterialTheme"></activity>
+
         <activity
             android:name=".ContactsListActivity"
             android:screenOrientation="portrait"
@@ -147,9 +144,6 @@
             android:exported="true" />
 
         <receiver
-            android:name=".receiver.CurrentLocationUploadService"
-            android:enabled="true"></receiver>
-        <receiver
             android:name=".service.EventTrackerAlarmReceiverService"
             android:enabled="true"></receiver>
         <receiver android:name=".manager.EventNotificationManager$notificationActionsListener" />
@@ -163,17 +157,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-
-        <service
-            android:name=".service.BackgroundServiceManager"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-
         <service
             android:name=".service.EventTrackerGcmListenerService"
             android:enabled="true"

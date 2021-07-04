@@ -2,11 +2,7 @@ package com.redtop.engaze;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Hashtable;
-
-import org.json.JSONObject;
-
-import android.Manifest;
+import java.util.HashMap;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,7 +70,7 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
     protected Event createOrUpdateEvent;
     protected int mEventTypeId;
     protected String mCreateUpdateSuccessfulMessage;
-    protected Hashtable<String, ContactOrGroup> mAddedMembers;
+    protected HashMap<String, ContactOrGroup> mAddedMembers;
     ArrayList<ContactOrGroup> mMembers = new ArrayList<ContactOrGroup>();
     ContactListAutoCompleteAdapter mAdapter;
 
@@ -363,7 +359,7 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
         createOrUpdateEvent.eventType = EventType.getEventType(mEventTypeId);
         createOrUpdateEvent.initiatorId = AppContext.context.loginId;
         createOrUpdateEvent.initiatorName = AppContext.context.loginName;
-        mAddedMembers = new Hashtable<String, ContactOrGroup>();
+        mAddedMembers = new HashMap<>();
         Duration defaultDuration = AppContext.context.defaultDurationSettings;
         createOrUpdateEvent.duration = new Duration(defaultDuration.getTimeInterval(),
                 defaultDuration.getPeriod(),

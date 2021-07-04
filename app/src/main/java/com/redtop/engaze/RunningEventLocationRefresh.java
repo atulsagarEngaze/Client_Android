@@ -28,6 +28,7 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventParticipant;
@@ -41,7 +42,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 @SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
-public class RunningEventLocationRefresh extends RunningEventMarker{
+public class RunningEventLocationRefresh extends RunningEventMarker {
 
     private long currentThreadId;
 
@@ -272,6 +273,12 @@ public class RunningEventLocationRefresh extends RunningEventMarker{
             if (ud != null && ParticipantService.isParticipantCurrentUser(ud.userId)) {
                 ud.latitude = mMyCoordinates.latitude;
                 ud.longitude = mMyCoordinates.longitude;
+                if (ud.name == null || ud.name == "" || ud.name == Constants.LOCATION_UNKNOWN) {
+                    ud.name = "fetching..";
+                }
+                if (ud.address == null || ud.address == "" || ud.address == Constants.LOCATION_UNKNOWN) {
+                    ud.address = "fetching..";
+                }
                 SimpleDateFormat Simpledf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 ud.createdOn = Simpledf.format(Calendar.getInstance().getTime());
             }
@@ -280,7 +287,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker{
 
     protected void updateUserLocationList() {
 
-        ArrayList<UsersLocationDetail> temUldList = new ArrayList<UsersLocationDetail>();
+        ArrayList<UsersLocationDetail> temUldList = new ArrayList<>();
         UsersLocationDetail tUl = null;
         temUldList.addAll(mUsersLocationDetailList);
         for (EventParticipant em : mEvent.participants) {

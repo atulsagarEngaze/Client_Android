@@ -1,11 +1,11 @@
 package com.redtop.engaze.Interface;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import com.redtop.engaze.domain.ContactOrGroup;
 
 
 public interface OnRefreshMemberListCompleteListner {
-	void RefreshMemberListComplete(Hashtable<String, ContactOrGroup> memberList);
+	void RefreshMemberListComplete(HashMap<String, ContactOrGroup> memberList);
 
 }

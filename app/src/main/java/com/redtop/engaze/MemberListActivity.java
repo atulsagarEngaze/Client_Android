@@ -1,7 +1,7 @@
 package com.redtop.engaze;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.BroadcastReceiver;
@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.redtop.engaze.adapter.MemberAdapter;
-import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
@@ -30,7 +29,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 public class MemberListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener{
 
 	ListView listView;
-	List<String> rowItems;
 	public  String[] friends ;
 	//public ArrayList<ContactOrGroup>mMembers;
 	public ArrayList<ContactOrGroup>mAllMembers;
@@ -55,12 +53,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_friend_list);
 			//toolbar.setSubtitle(R.string.title_event);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					onBackPressed();
-				}
-			});
+			toolbar.setNavigationOnClickListener(v -> onBackPressed());
 		}
 
 		if(!accessingContactsFirstTime()){
@@ -92,36 +85,26 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 			listView.setAdapter(mAdapter);
 			mAdapter.notifyDataSetChanged();
 
-			listView.setOnItemClickListener(new OnItemClickListener()
-			{
-				@Override
-				public void onItemClick(AdapterView<?> adapter, View v, int position,
-						long arg3) 
-				{					
-					final ContactOrGroup value = (ContactOrGroup)adapter.getItemAtPosition(position);	
-					if(value.getUserId()!=null){	
+			listView.setOnItemClickListener((adapter, v, position, arg3) -> {
+				final ContactOrGroup value = (ContactOrGroup)adapter.getItemAtPosition(position);
+				if(value.getUserId()!=null){
 
-						AlertDialog.Builder adb = null;
-						adb = new AlertDialog.Builder(mContext);				
+					AlertDialog.Builder adb = null;
+					adb = new AlertDialog.Builder(mContext);
 
-						adb.setTitle("Meet " + value.getName());
-						adb.setMessage(getResources().getString(R.string.message_meetnow_memberlistactivity));
-						adb.setIcon(android.R.drawable.ic_dialog_alert);
+					adb.setTitle("Meet " + value.getName());
+					adb.setMessage(getResources().getString(R.string.message_meetnow_memberlistactivity));
+					adb.setIcon(android.R.drawable.ic_dialog_alert);
 
-						adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								Intent i = new Intent(mContext, TrackLocationActivity.class); 
-								i.putExtra("EventTypeId", 6);
-								i.putExtra("meetNowUserID", value.getUserId());
-								startActivity(i);
-							} });
+					adb.setPositiveButton("OK", (dialog, which) -> {
+						Intent i = new Intent(mContext, TrackLocationActivity.class);
+						i.putExtra("EventTypeId", 6);
+						i.putExtra("meetNowUserID", value.getUserId());
+						startActivity(i);
+					});
 
-						adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {							
-								dialog.dismiss();						
-							} });
-						adb.show();
-					}
+					adb.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+					adb.show();
 				}
 			});
 		}
@@ -135,7 +118,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 	}
 
 	@Override
-	protected void memberListRefreshed_success(Hashtable<String, ContactOrGroup> memberList){
+	protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList){
 		if(memberList!=null && memberList.values().size()>0){
 
 			//mMembers = ContactAndGroupListManager.sortContacts(new ArrayList<ContactOrGroup>(memberList.values()));
@@ -165,12 +148,8 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 		MenuItem searchItem = menu.findItem(R.id.menu_search_member);
 		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		//*** setOnQueryTextFocusChangeListener ***
-		searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+		searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
 
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-
-			}
 		});
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -183,7 +162,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
 
 			@Override
 			public boolean onQueryTextChange(String searchQuery) {
-				mAdapter.filter(searchQuery.toString().trim());
+				mAdapter.filter(searchQuery.trim());
 				listView.invalidate();
 				return true;
 			}
