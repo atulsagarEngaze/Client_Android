@@ -13,24 +13,25 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.common.utility.UserMessageHandler;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
 import java.util.HashMap;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public Context mContext;
     private ProgressDialog mDialog;
-    protected BroadcastReceiver mNetworkUpdateBroadcastReceiver;
+    protected BroadcastReceiver mBbroadcastReceiver;
 
 
     @Override
@@ -47,10 +48,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             mDialog = new ProgressDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         }
 
-        mNetworkUpdateBroadcastReceiver = new BroadcastReceiver() {
+
+        mBbroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Constants.NETWORK_STATUS_UPDATE)) {
+                String action = intent.getAction();
+                if (action.equals(Constants.NETWORK_STATUS_UPDATE)) {
                     AppContext.context.isInternetEnabled = AppUtility.isNetworkAvailable(context);
                     turnOnOfInternetAvailabilityMessage();
                     if (AppContext.context.isInternetEnabled) {
@@ -58,6 +61,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                     } else {
                         onInternetConnectionLost();
                     }
+                } else if (action.equals(Veranstaltung.CONTACT_LIST_REFRESH_PROCESS_COMPLETE)) {
+                    contact_list_refresh_process_complete();
                 }
 
             }
@@ -74,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mNetworkUpdateBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBbroadcastReceiver);
     }
 
     @Override
@@ -82,8 +87,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
 
         AppContext.context.currentActivity = this;
-        LocalBroadcastManager.getInstance(this).registerReceiver(mNetworkUpdateBroadcastReceiver,
-                new IntentFilter(Constants.NETWORK_STATUS_UPDATE));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.NETWORK_STATUS_UPDATE);
+        filter.addAction(Veranstaltung.CONTACT_LIST_REFRESH_PROCESS_COMPLETE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBbroadcastReceiver, filter);
         turnOnOfInternetAvailabilityMessage();
     }
 
@@ -115,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void hideKeyboard(View view) {
-        if(view!=null) {
+        if (view != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
@@ -191,44 +198,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.label_invitation_inviteUsing)));
     }
 
-    public Boolean accessingContactsFirstTime() {
-        if (AppContext.context.isFirstTimeLoading) {
-            processMemberList();
-            AppContext.context.isFirstTimeLoading = false;
-            return true;
-        }
-        return false;
+    public void contact_list_refresh_process_complete() {
     }
-
-    private void processMemberList() {
-        if (PreffManager.getPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED)) {
-            registeredMemberListCached();
-        } else if (PreffManager.getPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED)) {
-            showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-            ContactAndGroupListManager.initializedRegisteredUser(memberList -> {
-                PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-                hideProgressBar();
-            }, memberList -> {
-                hideProgressBar();
-                Toast.makeText(mContext,
-                        getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
-            });
-        } else {
-            ContactAndGroupListManager.refreshMemberList();
-        }
-    }
-
-
-    protected void registeredMemberListCached() {
-
-    }
-
-    protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList) {
-
-    }
-
-    protected void memberListRefreshed_fail() {
-
-    }
-
 }

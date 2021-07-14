@@ -56,6 +56,7 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.fragment.TrackingOffsetFragment;
+import com.redtop.engaze.service.ContactListRefreshIntentService;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
@@ -331,18 +332,14 @@ public class CreateEditEventActivity extends BaseEventActivity {
 
     }
 
-    private void populateControls() {
-        mHintFriendText = getResources().getString(R.string.hint_add_friends);
-        //mMembers = ContactAndGroupListManager.getAllRegisteredContacts(mContext);
-        if(AppContext.context.isContactListUpdated){
-            mMembers = AppContext.context.sortedAllContacts;
-        }
-        else {
-            mMembers = ContactAndGroupListManager.getAllContacts();
-        }
+    private void populateContactControl(){
         mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
         mAutoCompleteInviteeTextView.setAdapter(mAdapter);
         mAutoCompleteInviteeTextView.setHint(Html.fromHtml("<i>" + mHintFriendText + "</i>"));
+    }
+
+    private void populateControls() {
+        mHintFriendText = getResources().getString(R.string.hint_add_friends);
         mAddedMembers = new HashMap<String, ContactOrGroup>();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -413,6 +410,39 @@ public class CreateEditEventActivity extends BaseEventActivity {
         updateTime(mStartTimeDisplayView, startHours, startMinutes);
         updateDate(mStartDateDisplayView);
 
+        mMembers = AppContext.context.sortedContacts;
+        if (mMembers == null || mMembers.size() == 0) {
+            showProgressBar("Please wait while initializing contact list first time.");
+            startContactRefreshService();
+
+        } else {
+           populateContactControl();
+        }
+
+    }
+
+    private void startContactRefreshService() {
+        if (!ContactListRefreshIntentService.IsContactListRefreshServiceRunning) {
+            Intent serviceIntent = new Intent(mContext, ContactListRefreshIntentService.class);
+            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, false);
+            startService(serviceIntent);
+        }
+    }
+
+    @Override
+    public void contact_list_refresh_process_complete() {
+        String contactsRefreshStatus = PreffManager.getPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS);
+        String registeredContactsRefreshStatus = PreffManager.getPref(Constants.LAST_REGISTERED_CONTACT_LIST_REFRESH_STATUS);
+
+        if (contactsRefreshStatus.equals(Constants.FAILED) || registeredContactsRefreshStatus.equals(Constants.FAILED)) {
+            Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
+        }
+        if (contactsRefreshStatus.equals(Constants.SUCCESS)) {
+            mMembers = AppContext.context.sortedContacts;
+            populateContactControl();
+        }
+
+        hideProgressBar();
     }
 
     private void populateEventRecurrenceData() {

@@ -1,38 +1,35 @@
 package com.redtop.engaze.domain.manager;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
+import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
+import com.redtop.engaze.R;
+import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.utility.BitMapHelper;
+import com.redtop.engaze.common.utility.MaterialColor;
+import com.redtop.engaze.common.utility.PreffManager;
+import com.redtop.engaze.domain.ContactOrGroup;
+import com.redtop.engaze.webservice.IUserWS;
+import com.redtop.engaze.webservice.UserWS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.JsonArray;
-import com.redtop.engaze.Interface.OnAPICallCompleteListener;
-import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
-import com.redtop.engaze.R;
-import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.utility.BitMapHelper;
-import com.redtop.engaze.common.utility.MaterialColor;
-import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.webservice.IUserWS;
-import com.redtop.engaze.webservice.UserWS;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class ContactAndGroupListManager {
 
@@ -40,20 +37,9 @@ public class ContactAndGroupListManager {
 
     private final static IUserWS userWS = new UserWS();
 
-    public static void cacheContactAndGroupList(final OnRefreshMemberListCompleteListner listnerOnSuccess, final OnRefreshMemberListCompleteListner listnerOnFailure) {
-
-        PreffManager.setPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED, false);
-        HashMap<String, ContactOrGroup> contacts = getAllContactsFromDeviceContactList();
-        if (contacts != null && contacts.size() > 0) {
-            InternalCaching.saveContactListToCache(contacts);
-            PreffManager.setPrefBoolean(Constants.IS_CONTACT_LIST_INITIALIZED, true);
-            cacheRegisteredContacts(contacts, listnerOnSuccess, listnerOnFailure);
-        }
-    }
-
     public static ContactOrGroup getContact(String userId) {
         ContactOrGroup cg = null;
-        if(userId==null){
+        if (userId == null) {
             return cg;
         }
         HashMap<String, ContactOrGroup> table = InternalCaching.getRegisteredContactListFromCache();
@@ -75,29 +61,26 @@ public class ContactAndGroupListManager {
         return contactsAndGroups;
     }
 
-    public static ArrayList<ContactOrGroup> getAllRegisteredContacts() {
+   /* public static ArrayList<ContactOrGroup> getAllRegisteredContacts() {
         ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<ContactOrGroup>(InternalCaching.getRegisteredContactListFromCache().values());
         AppContext.context.setRegisteredContactList(sortContacts(contactsAndGroups));
         return AppContext.context.sortedRegisteredContacts;
-    }
+    }*/
 
-    public static ArrayList<ContactOrGroup> getAllContacts() {
-        ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<ContactOrGroup>(InternalCaching.getContactListFromCache().values());
-        ArrayList<ContactOrGroup> registered = new ArrayList<ContactOrGroup>();
-        ArrayList<ContactOrGroup> unRegistered = new ArrayList<ContactOrGroup>();
-        ArrayList<ContactOrGroup> finalContacts = new ArrayList<ContactOrGroup>();
+    public static  ArrayList<ContactOrGroup> getSortedContacts(){
+        ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<>(InternalCaching.getContactListFromCache().values());
+        ArrayList<ContactOrGroup> registered = new ArrayList<>(InternalCaching.getRegisteredContactListFromCache().values());
 
-        for (ContactOrGroup cg : contactsAndGroups) {
-            if (cg.getUserId() != null) {
-                registered.add(cg);
-            } else {
-                unRegistered.add(cg);
-            }
-        }
+        ArrayList<ContactOrGroup> finalContacts = new ArrayList<>();
+       for(ContactOrGroup rcg: registered){
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+               contactsAndGroups.removeIf(cg->cg.getName().equals(rcg.getName()));
+           }
+       }
 
         finalContacts.addAll(sortContacts(registered));
-        finalContacts.addAll(sortContacts(unRegistered));
-        AppContext.context.setContactList(finalContacts);
+        finalContacts.addAll(sortContacts(contactsAndGroups));
+
         return finalContacts;
     }
 
@@ -113,83 +96,7 @@ public class ContactAndGroupListManager {
         cacheRegisteredContacts(getAllContactsFromCache(), listnerOnSuccess, listnerOnFailure);
     }
 
-    private static void cacheRegisteredContacts(final HashMap<String, ContactOrGroup> contactsAndgroups,
-                                                final OnRefreshMemberListCompleteListner listnerOnSuccess,
-                                                final OnRefreshMemberListCompleteListner listnerOnFailure) {
-        if (!AppContext.context.isInternetEnabled) {
-            String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
-            //Toast.makeText(mContext,	message, Toast.LENGTH_SHORT).show();
-            Log.d(TAG, message);
-            listnerOnFailure.RefreshMemberListComplete(null);
-            return;
-        }
-
-        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONArray>() {
-            @Override
-            public void apiCallSuccess(JSONArray response) {
-                try {
-                    HashMap<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
-                    InternalCaching.saveRegisteredContactListToCache(registeredContacts);
-                    InternalCaching.saveContactListToCache(contactsAndgroups);
-                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-                    listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
-
-                } catch (Exception ex) {
-                    Log.d(TAG, ex.toString());
-                    ex.printStackTrace();
-                    listnerOnFailure.RefreshMemberListComplete(null);
-                }
-            }
-
-            @Override
-            public void apiCallFailure() {
-                listnerOnFailure.RefreshMemberListComplete(null);
-            }
-        });
-
-    }
-
-    private static HashMap<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
-
-        HashMap<String, ContactOrGroup> registeredContacts = new HashMap<>();
-        JSONArray jUsers = response;
-        if (jUsers.length() == 0) {
-            return registeredContacts;
-        }
-
-        for (ContactOrGroup cg : contactsAndgroups.values()) {
-            if (cg.getThumbnailUri() == null || cg.getThumbnailUri() == "") {
-                cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-                String startingchar = cg.getName().substring(0, 1);
-                if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
-                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
-                } else {
-                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
-                }
-            } else {
-                Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
-                cg.setImageBitmap(pofilePicBitmap);
-                cg.setIconImageBitmap(pofilePicBitmap);
-            }
-        }
-
-        String userId = "";
-        ContactOrGroup cg = null;
-        for (int i = 0, size = jUsers.length(); i < size; i++) {
-            JSONObject jsonObj = jUsers.getJSONObject(i);
-
-            cg = contactsAndgroups.get(jsonObj.getString("mobileNumberStoredInRequestorPhone"));
-            if (cg != null) {
-                userId = jsonObj.get("userId").toString();
-                cg.setUserId(userId);
-                registeredContacts.put(userId, cg);
-                contactsAndgroups.put(jsonObj.getString("mobileNumberStoredInRequestorPhone"), cg);
-            }
-        }
-        return registeredContacts;
-    }
-
-    private static HashMap<String, ContactOrGroup> getAllContactsFromDeviceContactList() {
+    public static HashMap<String, ContactOrGroup> getAllContactsFromDeviceContactList() {
         Cursor cursor = null;
         HashMap<String, ContactOrGroup> contacts = new HashMap<String, ContactOrGroup>();
         try {
@@ -249,6 +156,80 @@ public class ContactAndGroupListManager {
         return contacts;
     }
 
+    public static void cacheRegisteredContacts(final HashMap<String, ContactOrGroup> contactsAndgroups,
+                                               final OnRefreshMemberListCompleteListner listnerOnSuccess,
+                                               final OnRefreshMemberListCompleteListner listnerOnFailure) {
+        if (!AppContext.context.isInternetEnabled) {
+            String message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
+            //Toast.makeText(mContext,	message, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, message);
+            listnerOnFailure.RefreshMemberListComplete(null);
+            return;
+        }
+
+        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONArray>() {
+            @Override
+            public void apiCallSuccess(JSONArray response) {
+                try {
+                    HashMap<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
+                    InternalCaching.saveRegisteredContactListToCache(registeredContacts);
+                    listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
+
+                } catch (Exception ex) {
+                    Log.d(TAG, ex.toString());
+                    ex.printStackTrace();
+                    listnerOnFailure.RefreshMemberListComplete(null);
+                }
+            }
+
+            @Override
+            public void apiCallFailure() {
+                listnerOnFailure.RefreshMemberListComplete(null);
+            }
+        });
+
+    }
+
+    private static HashMap<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
+
+        HashMap<String, ContactOrGroup> registeredContacts = new HashMap<>();
+        JSONArray jUsers = response;
+        if (jUsers.length() == 0) {
+            return registeredContacts;
+        }
+
+        for (ContactOrGroup cg : contactsAndgroups.values()) {
+            if (cg.getThumbnailUri() == null || cg.getThumbnailUri() == "") {
+                cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
+                String startingchar = cg.getName().substring(0, 1);
+                if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
+                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
+                } else {
+                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
+                }
+            } else {
+                Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
+                cg.setImageBitmap(pofilePicBitmap);
+                cg.setIconImageBitmap(pofilePicBitmap);
+            }
+        }
+
+        String userId = "";
+        ContactOrGroup cg = null;
+        for (int i = 0, size = jUsers.length(); i < size; i++) {
+            JSONObject jsonObj = jUsers.getJSONObject(i);
+
+            cg = contactsAndgroups.get(jsonObj.getString("mobileNumberStoredInRequestorPhone"));
+            if (cg != null) {
+                userId = jsonObj.get("userId").toString();
+                cg.setUserId(userId);
+                registeredContacts.put(userId, cg);
+                contactsAndgroups.put(jsonObj.getString("mobileNumberStoredInRequestorPhone"), cg);
+            }
+        }
+        return registeredContacts;
+    }
+
     private static ArrayList<String> getPhoneNumbers(String id) {
         ArrayList<String> numbers = new ArrayList<String>();
         //Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " + id, null, null);
@@ -269,24 +250,5 @@ public class ContactAndGroupListManager {
         new ContactOrGroup("group", 123, null);
 
         return groups;
-    }
-
-    public static void refreshMemberList() {
-
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                cacheContactAndGroupList(memberList -> {
-                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-                    AppContext.context.isContactListUpdated = false;
-                    AppContext.context.isRegisteredContactListUpdated=false;
-
-
-                }, memberList -> Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show());
-            }
-        };
-        thread.start();
-
     }
 }

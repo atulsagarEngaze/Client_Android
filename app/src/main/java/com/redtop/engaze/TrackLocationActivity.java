@@ -44,11 +44,13 @@ import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.PermissionRequester;
+import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
+import com.redtop.engaze.service.ContactListRefreshIntentService;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
@@ -98,18 +100,15 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             createOrUpdateEvent.destination = (EventPlace) this.getIntent().getParcelableExtra(IntentConstants.DESTINATION_LOCATION);
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
-        if (!accessingContactsFirstTime()) {
-            if (AppContext.context.isContactListUpdated) {
-                mMembers = AppContext.context.sortedAllContacts;
-            } else {
-                mMembers = ContactAndGroupListManager.getAllContacts();
-            }
 
-            if (mMembers != null) {
-                mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
+        mMembers = AppContext.context.sortedContacts;
+        if (mMembers == null || mMembers.size() == 0) {
+            showProgressBar("Please wait while initializing contact list first time.");
+            startContactRefreshService();
 
-            }
+        } else {
 
+            mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
             viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
             addIfAnyContactIsSelectedFromMemberListActivity();
         }
@@ -125,27 +124,31 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         }
     }
 
-    @Override
-    protected void registeredMemberListCached() {
-        mMembers = ContactAndGroupListManager.getAllContacts();
-        if (mMembers != null) {
-            mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
-            viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
+    private void startContactRefreshService() {
+        if (!ContactListRefreshIntentService.IsContactListRefreshServiceRunning) {
+            Intent serviceIntent = new Intent(mContext, ContactListRefreshIntentService.class);
+            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, false);
+            startService(serviceIntent);
         }
     }
 
     @Override
-    protected void memberListRefreshed_success(HashMap<String, ContactOrGroup> memberList) {
-        mMembers = (ArrayList<ContactOrGroup>) memberList.values();
-        if (mMembers != null) {
-            mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
-            viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
+    public void contact_list_refresh_process_complete() {
+        String contactsRefreshStatus = PreffManager.getPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS);
+        String registeredContactsRefreshStatus = PreffManager.getPref(Constants.LAST_REGISTERED_CONTACT_LIST_REFRESH_STATUS);
+
+        if (contactsRefreshStatus.equals(Constants.FAILED) || registeredContactsRefreshStatus.equals(Constants.FAILED)) {
+            Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
         }
-    }
+        if (contactsRefreshStatus.equals(Constants.SUCCESS)) {
+            mMembers = AppContext.context.sortedContacts;
+            if (mMembers != null) {
+                mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
+                viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);
+            }
+        }
 
-    @Override
-    protected void memberListRefreshed_fail() {
-
+        hideProgressBar();
     }
 
     private void initializeBasedOnEventType() {
@@ -182,12 +185,11 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
         AppContext.actionHandler.actionFailed(msg, action);
     }
 
-    private void checkPermissionAndSaveEvent(){
+    private void checkPermissionAndSaveEvent() {
         //For TrackBuddy event, background location sharing access is not required
-        if(mEventTypeId == 200 || android.os.Build.VERSION.SDK_INT <29) {
-            saveEvent( true);
-        }
-        else {
+        if (mEventTypeId == 200 || android.os.Build.VERSION.SDK_INT < 29) {
+            saveEvent(true);
+        } else {
 
             if (PermissionRequester.CheckPermission(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, ACCESS_BACKGROUND_LOCATION, this)) {
                 saveEvent(true);

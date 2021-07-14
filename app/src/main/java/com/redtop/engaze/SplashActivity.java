@@ -103,7 +103,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void startHomeActivity() {
-        if (!accessingContactsFirstTime()) {
+        if (AppContext.context.IsAppLoadingFirstTime()) {
             mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
             mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -112,15 +112,10 @@ public class SplashActivity extends BaseActivity {
             mProgress.setCanceledOnTouchOutside(false);
             mProgress.setIndeterminate(true);
             mProgress.show();
-            AppContext.context.isFirstTimeLoading = false;
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    mProgress.hide();
-                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(intent);
-                }
+            new Handler().postDelayed(() -> {
+                mProgress.hide();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
             }, 3000);
 
         } else {

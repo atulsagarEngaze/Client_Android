@@ -80,9 +80,14 @@ public class PreffManager {
     }
 
     public static Boolean getPrefBoolean(String key) {
+
+        return getPrefBoolean(key, false);
+    }
+
+    public static Boolean getPrefBoolean(String key, Boolean defValue) {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(AppContext.context);
-        return preferences.getBoolean(key, false);
+        return preferences.getBoolean(key, defValue);
     }
 
     public static Long getPrefLong(String key) {

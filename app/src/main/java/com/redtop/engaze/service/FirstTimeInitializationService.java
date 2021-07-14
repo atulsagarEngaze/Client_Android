@@ -18,7 +18,7 @@ import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 public class FirstTimeInitializationService extends IntentService {
 
     private static final String TAG = FirstTimeInitializationService.class.getName();
-    ;
+
     private Context mContext;
 
     public FirstTimeInitializationService() {
@@ -29,29 +29,16 @@ public class FirstTimeInitializationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         mContext = this;
-        //EventService.setLocationServiceCheckAlarm();
         AppContext.context.setDefaultSetting();
         InternalCaching.initializeCache();
         initializeContactList();
     }
 
     private void initializeContactList() {
-        try {
-
-            PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, false);
-
-            ContactAndGroupListManager.cacheContactAndGroupList(new OnRefreshMemberListCompleteListner() {
-
-                @Override
-                public void RefreshMemberListComplete(HashMap<String, ContactOrGroup> memberList) {
-                    PreffManager.setPrefBoolean(Constants.IS_REGISTERED_CONTACT_LIST_INITIALIZED, true);
-
-                }
-            }, memberList -> {
-
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!ContactListRefreshIntentService.IsContactListRefreshServiceRunning) {
+            Intent serviceIntent = new Intent(mContext, ContactListRefreshIntentService.class);
+            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, false);
+            startService(serviceIntent);
         }
     }
 }

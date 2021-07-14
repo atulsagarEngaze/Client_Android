@@ -171,6 +171,7 @@
             </intent-filter>
         </service>
         <service android:name=".service.FirstTimeInitializationService" />
+        <service android:name=".service.ContactListRefreshIntentService" />
         <service android:name=".service.EventRefreshService" />
         <service android:name=".service.EventDistanceReminderService" />
 

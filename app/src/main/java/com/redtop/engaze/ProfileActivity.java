@@ -138,8 +138,8 @@ public class ProfileActivity extends BaseActivity {
 		});
 	}
 	private void startInitializationService() {
-		Intent registeredContactsRefreshServiceIntent = new Intent(mContext, FirstTimeInitializationService.class);
-		startService(registeredContactsRefreshServiceIntent);		
+		Intent intent = new Intent(mContext, FirstTimeInitializationService.class);
+		startService(intent);
 	}
 	@Override
 	protected void onResume() {

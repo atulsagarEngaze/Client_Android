@@ -4,7 +4,6 @@ import android.app.Application;
 import android.os.Handler;
 import android.util.Log;
 
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.constant.Constants;
@@ -13,9 +12,9 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.receiver.CurrentLocationUploadService;
-import com.redtop.engaze.service.BackgroundServiceManager;
 import com.redtop.engaze.service.MyCurrentLocationListener;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +25,7 @@ public class AppContext extends Application {
     public static final String TAG = AppContext.class
             .getSimpleName();
 
-    public boolean isFirstTimeLoading = false;
+    private boolean isFirstTimeLoading = false;
     public String loginId;
     public String loginName;
     public Boolean isInternetEnabled = true;
@@ -36,7 +35,7 @@ public class AppContext extends Application {
     public Reminder defaultReminderSettings;
     public Duration defaultDurationSettings;
     public ArrayList<ContactOrGroup> sortedRegisteredContacts;
-    public ArrayList<ContactOrGroup> sortedAllContacts;
+    public ArrayList<ContactOrGroup> sortedContacts;
     public boolean isContactListUpdated = false;
     public boolean isRegisteredContactListUpdated = false;
 
@@ -56,7 +55,7 @@ public class AppContext extends Application {
 
         loginId = PreffManager.getPref(Constants.LOGIN_ID);
         jsonParser = new JsonParser();
-        isFirstTimeLoading = true;
+        isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
         if (loginId != null) {
             loginName = PreffManager.getPref(Constants.LOGIN_NAME);
             actionHandler = new ActionHandler();
@@ -67,22 +66,26 @@ public class AppContext extends Application {
             defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
 
             StartLocationListenerAndLocationUpdater();
+            AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
             //starting the BackgroundServiceManager
             //BackgroundServiceManager.startService(context);
 
         }
     }
 
-    public void setContactList(ArrayList<ContactOrGroup> sortedAllContacts) {
-        this.sortedAllContacts = sortedAllContacts;
-        isContactListUpdated = true;
-
+    public Boolean IsAppLoadingFirstTime() {
+        if (isFirstTimeLoading) {
+            isFirstTimeLoading = false;
+            PreffManager.setPrefBoolean("IsFirstTimeLoading", isFirstTimeLoading);
+            return true;
+        }
+        return isFirstTimeLoading;
     }
 
-    public void setRegisteredContactList(ArrayList<ContactOrGroup> sortedRegisteredContacts) {
+    /*public void setRegisteredContactList(ArrayList<ContactOrGroup> sortedRegisteredContacts) {
         this.sortedRegisteredContacts = sortedRegisteredContacts;
         isRegisteredContactListUpdated = true;
-    }
+    }*/
 
     public void setDefaultSetting() {
         setDefaultTrackingSettings();
@@ -121,7 +124,7 @@ public class AppContext extends Application {
         PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
     }
 
-    private void StartLocationListenerAndLocationUpdater(){
+    private void StartLocationListenerAndLocationUpdater() {
 
         CurrentLocationUploadService.register(this);
         startLocationListenerService();
@@ -133,7 +136,7 @@ public class AppContext extends Application {
                 startLocationListenerService();
             } else {
                 stopLocationListenerService();
-                }
+            }
             runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);
 
         };

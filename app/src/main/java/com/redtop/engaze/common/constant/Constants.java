@@ -41,9 +41,12 @@ public class Constants {
     public static final int EventStartBroadcastId = 5;
     public static final int LocationServiceCheckBroadcastId = 6;
 
+    public static final String LAST_CONTACT_LIST_REFRESH_STATUS = "lclrs";
+    public static final String LAST_REGISTERED_CONTACT_LIST_REFRESH_STATUS = "lrclrs";
+    public static final String REFRESH_ONLY_REGISTERED_CONTACTS = "rorc";
 
-    public static final String IS_REGISTERED_CONTACT_LIST_INITIALIZED = "isrcli";
-    public static final String IS_CONTACT_LIST_INITIALIZED = "iscli";
+    public static String SUCCESS = "success";
+    public static String FAILED = "failed";
 
 
     public static final String PARTICIPANTS_LOCATION_UPDATE_INTENT_ACTION = "com.redtop.engaze.PARTICIPANTS_LOCATION_UPDATE";
