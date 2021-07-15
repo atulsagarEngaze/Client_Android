@@ -19,6 +19,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
+import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.service.EventRefreshService;
 
 import java.lang.reflect.Array;
@@ -119,6 +120,7 @@ public class SplashActivity extends BaseActivity {
             }, 3000);
 
         } else {
+            EventManager.RemoveALlPastEvents();
             Intent refreshServiceIntent = new Intent(this, EventRefreshService.class);
             startService(refreshServiceIntent);
 

@@ -59,8 +59,8 @@ public class EventManager {
 
     public static Event getEvent(String eventId, Boolean attachContactgroup) {
         Event event = InternalCaching.getEventFromCache(eventId);
-        if(event==null){
-            return  null;
+        if (event == null) {
+            return null;
         }
         if (attachContactgroup) {
             ParticipantManager.setContactsGroup(event.participants);
@@ -68,8 +68,8 @@ public class EventManager {
 
         if (event.UsersLocationDetailList != null) {
             for (UsersLocationDetail ud : event.UsersLocationDetailList) {
-                for (EventParticipant participant: event.participants){
-                    if(participant.userId !=null && participant.userId.equals(ud.userId)){
+                for (EventParticipant participant : event.participants) {
+                    if (participant.userId != null && participant.userId.equals(ud.userId)) {
                         ud.contactOrGroup = participant.contactOrGroup;
                     }
                 }
@@ -778,6 +778,7 @@ public class EventManager {
 
         eventWS.RefreshEventListFromServer(new OnAPICallCompleteListener<String>() {
 
+            @SuppressLint("NewApi")
             @Override
             public void apiCallSuccess(String response) {
                 try {
@@ -790,9 +791,11 @@ public class EventManager {
                         }
                     }
 
-                    EventService.RemovePastEvents(eventList);
-                    EventService.upDateEventStatus(eventList);
-                    InternalCaching.saveEventListToCache(eventList);
+                    if (eventList.size() > 0) {
+                        EventService.RemovePastEvents(eventList);
+                        EventService.upDateEventStatus(eventList);
+                        InternalCaching.saveEventListToCache(eventList);
+                    }
                     if (listnerOnSuccess != null) {
                         listnerOnSuccess.RefreshEventListComplete(eventList);
                     }
@@ -815,6 +818,15 @@ public class EventManager {
                 }
             }
         });
+    }
+
+    @SuppressLint("NewApi")
+    public static void RemoveALlPastEvents(){
+        ArrayList<String> eventIds = new ArrayList<>();
+        InternalCaching.getEventListFromCache().forEach(event -> eventIds.add(event.eventId));
+        if (eventIds.size() > 0) {
+            InternalCaching.removeEventsFromCache(eventIds);
+        }
     }
 
     public static void saveUsersLocationDetailList(Context context, Event event,
