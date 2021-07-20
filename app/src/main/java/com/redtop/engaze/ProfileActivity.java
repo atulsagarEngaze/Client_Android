@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.service.FirstTimeInitializationService;
 import com.redtop.engaze.service.RegistrationIntentService;
@@ -53,8 +54,8 @@ public class ProfileActivity extends BaseActivity {
 	private ImageView img;
 	private Uri selectedImageUri;
 	private BroadcastReceiver mRegistrationBroadcastReceiver;
-	private AlertDialog mAlertDialog; 
-	private JSONObject mJRequestobj;	
+	private AlertDialog mAlertDialog;
+	private IntentFilter mFilter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,27 @@ public class ProfileActivity extends BaseActivity {
 
 		mRegistrationBroadcastReceiver = new BroadcastReceiver() {
 			@Override
-			public void onReceive(Context context, Intent intent) {	                
-				SaveProfile();
+			public void onReceive(Context context, Intent intent) {
+				if (mProgress.isShowing()) {
+					mProgress.hide();
+				}
+				if(intent.getAction().equals(Veranstaltung.REGISTRATION_COMPLETE)) {
+
+					Intent splashIntent = new Intent(mContext, SplashActivity.class);
+					startActivity(splashIntent);
+				}
+				else if(intent.getAction().equals(Veranstaltung.REGISTRATION_FAILED)){
+					Toast.makeText(getApplicationContext(),
+							getResources().getString(R.string.message_userReg_errorSaving),
+							Toast.LENGTH_LONG).show();
+				}
 			}
 		};
+
+		mFilter = new IntentFilter();
+		mFilter.addAction(Veranstaltung.REGISTRATION_COMPLETE);
+		mFilter.addAction(Veranstaltung.REGISTRATION_FAILED);
+
 		EditText email = (EditText) findViewById(R.id.Email);
 		String emailAccount = PreffManager.getPref(Constants.EMAIL_ACCOUNT);
 		if(emailAccount!=null && !emailAccount.equals("")){
@@ -145,8 +163,7 @@ public class ProfileActivity extends BaseActivity {
 	protected void onResume() {
 		turnOnOfInternetAvailabilityMessage();
 		super.onResume();
-		LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-				new IntentFilter(Constants.REGISTRATION_COMPLETE));
+		LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,mFilter);
 	}
 
 	@Override
@@ -172,8 +189,8 @@ public class ProfileActivity extends BaseActivity {
 	}
 
 	private void createJsonAndStartService(){
-		CreateJsonRequestObject();
-		if(validateInputData()){
+		JSONObject jsonProfileObject = CreateJsonRequestObject();
+		if(validateInputData(jsonProfileObject)){
 			mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
 			mProgress.setMessage(getResources().getString(R.string.message_userReg_saveInProgress));
 			mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -183,6 +200,7 @@ public class ProfileActivity extends BaseActivity {
 			mProgress.setIndeterminate(true);
 			mProgress.show();
 			Intent intent = new Intent(mContext, RegistrationIntentService.class);
+			intent.putExtra("profileObject", jsonProfileObject.toString());
 			Log.i(TAG, "Start : RegistrationIntentService" );
 			startService(intent);
 		}
@@ -201,7 +219,7 @@ public class ProfileActivity extends BaseActivity {
 		return null;
 	}	
 
-	private void CreateJsonRequestObject(){
+	private JSONObject CreateJsonRequestObject(){
 
 		String encodedImage ="";
 
@@ -217,67 +235,27 @@ public class ProfileActivity extends BaseActivity {
 		}
 
 		// making json object request
-		mJRequestobj = new JSONObject();
+		JSONObject jsonProfileObject = new JSONObject();
 		try {
-			profileName = ((EditText) findViewById(R.id.ProfileName)).getText().toString().trim();
-			mJRequestobj.put("ProfileName", profileName);
-			mJRequestobj.put("Email", ((EditText) findViewById(R.id.Email)).getText().toString().trim());
-			mJRequestobj.put("ImageUrl", encodedImage);
-			mJRequestobj.put("DeviceId", PreffManager.getPref(Constants.DEVICE_ID));
-			mJRequestobj.put("CountryCode", PreffManager.getPref(Constants.COUNTRY_CODE));
-			mJRequestobj.put("MobileNumber", PreffManager.getPref(Constants.MOBILE_NUMBER));
+			jsonProfileObject.put("ProfileName", ((EditText) findViewById(R.id.ProfileName)).getText().toString().trim());
+			jsonProfileObject.put("Email", ((EditText) findViewById(R.id.Email)).getText().toString().trim());
+			jsonProfileObject.put("ImageUrl", encodedImage);
+			jsonProfileObject.put("DeviceId", PreffManager.getPref(Constants.DEVICE_ID));
+			jsonProfileObject.put("CountryCode", PreffManager.getPref(Constants.COUNTRY_CODE));
+			jsonProfileObject.put("MobileNumber", PreffManager.getPref(Constants.MOBILE_NUMBER));
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
+
+		return jsonProfileObject;
 	}
 
-	private void SaveProfile() {
-		try {
-			// get GCMID/DeviceID/MobileNumber from Preferences
-			mJRequestobj.put("GCMClientId", PreffManager.getPref(Constants.GCM_REGISTRATION_TOKEN));
-			ProfileManager.saveProfile(mContext, mJRequestobj, new OnAPICallCompleteListener<String>() {
-
-				@Override
-				public void apiCallSuccess(String response) {
-					if(mProgress.isShowing()){
-						mProgress.hide();
-					}
-
-					Intent intent = new Intent(mContext, SplashActivity.class);
-					startActivity(intent);
-
-				}
-
-				@Override
-				public void apiCallFailure() {
-					if(mProgress.isShowing()){
-						mProgress.hide();
-					}
-					Toast.makeText(getApplicationContext(),
-							getResources().getString(R.string.message_userReg_errorSaving),
-							Toast.LENGTH_LONG).show();
-				}
-			}, AppContext.actionHandler);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.d(TAG, e.toString());
-			if(mProgress.isShowing()){
-				mProgress.hide();
-			}
-			Toast.makeText(getApplicationContext(),
-					getResources().getString(R.string.message_userReg_errorSaving),
-					Toast.LENGTH_LONG).show();
-		}		
-	}	
-
-
-	private Boolean validateInputData(){
+	private Boolean validateInputData(JSONObject jsonProfileObject){
 
 		try {
-			String profileName = mJRequestobj.getString("ProfileName");
+			String profileName = jsonProfileObject.getString("ProfileName");
 			if(profileName.isEmpty() || profileName.trim().length() == 0){
 				setAlertDialog("Profile name is blank!",getResources().getString(R.string.message_userReg_name_blank));
 				mAlertDialog.show();				
@@ -295,7 +273,7 @@ public class ProfileActivity extends BaseActivity {
 					return false;
 				}
 			}
-			String emailId = mJRequestobj.getString("Email");
+			String emailId = jsonProfileObject.getString("Email");
 			if(emailId.isEmpty() || !(android.util.Patterns.EMAIL_ADDRESS.matcher(emailId).matches())){				
 
 				setAlertDialog("Invalid email!",getResources().getString(R.string.message_userReg_emailValidation));

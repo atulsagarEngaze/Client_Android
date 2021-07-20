@@ -34,10 +34,7 @@ public class AppContext extends Application {
     public Duration defaultTrackingSettings;
     public Reminder defaultReminderSettings;
     public Duration defaultDurationSettings;
-    public ArrayList<ContactOrGroup> sortedRegisteredContacts;
     public ArrayList<ContactOrGroup> sortedContacts;
-    public boolean isContactListUpdated = false;
-    public boolean isRegisteredContactListUpdated = false;
 
     public static AppContext context;
     public static ActionHandler actionHandler;
@@ -67,8 +64,6 @@ public class AppContext extends Application {
 
             StartLocationListenerAndLocationUpdater();
             AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
-            //starting the BackgroundServiceManager
-            //BackgroundServiceManager.startService(context);
 
         }
     }
@@ -81,11 +76,6 @@ public class AppContext extends Application {
         }
         return isFirstTimeLoading;
     }
-
-    /*public void setRegisteredContactList(ArrayList<ContactOrGroup> sortedRegisteredContacts) {
-        this.sortedRegisteredContacts = sortedRegisteredContacts;
-        isRegisteredContactListUpdated = true;
-    }*/
 
     public void setDefaultSetting() {
         setDefaultTrackingSettings();

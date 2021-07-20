@@ -1,23 +1,35 @@
 package com.redtop.engaze.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.redtop.engaze.Interface.OnAPICallCompleteListener;
+import com.redtop.engaze.R;
+import com.redtop.engaze.SplashActivity;
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
+import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
+import com.redtop.engaze.manager.ProfileManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = IntentService.class.getName();
-    private static final String[] TOPICS = {"global"};
-    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+
+    private Context mContext;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -26,8 +38,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        mContext =  this;
         try {
 
             Log.i(TAG, "START get_token : ");
@@ -35,14 +46,45 @@ public class RegistrationIntentService extends IntentService {
                 String token = instanceIdResult.getToken();
                 Log.i(TAG, "FCM Registration Token: " + token);
                 PreffManager.setPref(Constants.GCM_REGISTRATION_TOKEN, token);
+
+                try {
+                    SaveProfile(new JSONObject(intent.getStringExtra("profileObject")),token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Profile Object is not in correct format", e);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Veranstaltung.REGISTRATION_FAILED));
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "Failed to complete the registration", ex);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Veranstaltung.REGISTRATION_FAILED));
+                }
             });
 
         } catch (Exception e) {
-            Log.d(TAG, "Failed to complete token refresh", e);
-            sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, false).apply();
+            Log.d(TAG, "Failed to complete the registration", e);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Veranstaltung.REGISTRATION_FAILED));
         }
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+    }
+
+    private void SaveProfile(JSONObject jasonProfileObject, String fcmToken) throws JSONException {
+
+            jasonProfileObject.put("GCMClientId", fcmToken);
+            ProfileManager.saveProfile(mContext, jasonProfileObject, new OnAPICallCompleteListener<String>() {
+
+                @Override
+                public void apiCallSuccess(String response) {
+                    // Notify UI that registration has completed, so the progress indicator can be hidden.
+                    Intent registrationComplete = new Intent(Veranstaltung.REGISTRATION_COMPLETE);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(registrationComplete);
+
+                }
+
+                @Override
+                public void apiCallFailure() {
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Veranstaltung.REGISTRATION_FAILED));
+                }
+            }, AppContext.actionHandler);
+
+
     }
 }

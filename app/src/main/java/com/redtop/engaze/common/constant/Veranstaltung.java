@@ -28,4 +28,6 @@ public class Veranstaltung {
     public static final String CURRENT_LOCATION_FOUND = "currentLocationFound";
     public static final String NEED_LOCATION_INSTANT = "needlocationinstantly";
     public static final String CONTACT_LIST_REFRESH_PROCESS_COMPLETE = "contactlistrefreshprocesscomplete";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String REGISTRATION_FAILED = "registrationFailed";
 }

@@ -26,8 +26,6 @@ public class Constants {
     // preference file key
     public static final String USER_AUTH_TOKEN = "user_auth_token";
 
-
-    public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String NETWORK_STATUS_UPDATE = "networkStatusUpdate";
     public static final String GCM_REGISTRATION_TOKEN = "gcmregistrationToken";
     public static final String CURRENT_LATITUDE = "latitude";
