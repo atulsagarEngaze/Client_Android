@@ -59,7 +59,7 @@ public class EventNotificationManager {
     static int notificationId = 0;
     static String currentNotificationEventId;
     static Boolean isPokeNotification = false;
-    static String notificationType;
+    static String notificationType = "";
 
     // Used to track if notification is active in the task bar
     static boolean isNotificActive = false;
@@ -145,13 +145,15 @@ public class EventNotificationManager {
 
         mBuilder.setContentIntent(resultPendingIntent);
 
-        NotificationManager mNotificationManager =
+        NotificationManager notificationManager =
                 (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
 
+        setNotificationChannel(mBuilder, notificationManager, event.name, durationMessage);
+
+        notificationManager.notify(notificationId, mBuilder.build());
         event.SnoozeNotificationId = notificationId;
         InternalCaching.saveEventToCache(event);
-        mNotificationManager.notify(notificationId, mBuilder.build());
         currentNotificationEventId = event.eventId;
         isNotificActive = true;
 
@@ -176,8 +178,7 @@ public class EventNotificationManager {
 
             /* Add Big View Specific Configuration */
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(AppContext.context);
+
             String title = "";
             String[] events = new String[2];
             if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
@@ -194,19 +195,9 @@ public class EventNotificationManager {
                 events[0] = parsedDate;
                 events[1] = "From " + event.initiatorName;
             }
-
-
             // Sets a title for the Inbox style big view
             inboxStyle.setBigContentTitle(title);
-            mBuilder.setContentTitle(title);
-            mBuilder.setContentText(events[0]);
-            // Moves events into the big view
-            for (int i = 0; i < events.length; i++) {
-                inboxStyle.addLine(events[i]);
 
-            }
-
-            mBuilder.setStyle(inboxStyle);
             Intent acceptResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             acceptResponseIntent.putExtra("eventid", event.eventId);
             acceptResponseIntent.putExtra("responseCode", "accept");
@@ -236,7 +227,19 @@ public class EventNotificationManager {
             PendingIntent pendingIntent = tStackBuilder.getPendingIntent(0,
                     PendingIntent.FLAG_CANCEL_CURRENT);
 
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(AppContext.context);
+
+            // Moves events into the big view
+            for (int i = 0; i < events.length; i++) {
+                inboxStyle.addLine(events[i]);
+
+            }
+
             mBuilder
+                    .setContentText(events[0])
+                    .setContentTitle(title)
+                    .setStyle(inboxStyle)
                     // Set Icon
                     .setSmallIcon(R.drawable.logo_notification)
                     // Dismiss Notification
@@ -250,20 +253,7 @@ public class EventNotificationManager {
                 mBuilder.setSound(notificationSound);
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-                String channelId = "123456";
-                NotificationChannel channel = new NotificationChannel(
-                        channelId,
-                        "Event Invitation",
-                        NotificationManager.IMPORTANCE_HIGH);
-                channel.setShowBadge(true);
-                channel.setDescription("Event invitation notification");
-                notificationManager.createNotificationChannel(channel);
-                mBuilder.setChannelId(channelId);
-            }
-
-            //notificication.bigContentView = remoteViews;
+            setNotificationChannel(mBuilder, notificationManager, "Event Invitation", "Event Invitation");
 
             // Post the notification
             notificationManager.notify(notificationId, mBuilder.build());
@@ -417,6 +407,70 @@ public class EventNotificationManager {
         showGenericNotification(event, notificationMessage, notificationTitle);
     }
 
+    public static void cancelAllNotifications(Event eventData) {
+        try {
+            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
+            // If the notification is still active close it
+            notificationManager.cancel(eventData.AcceptNotificationId);
+            notificationManager.cancel(eventData.SnoozeNotificationId);
+            for (int notficationId : eventData.NotificationIds) {
+                notificationManager.cancel(notficationId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void cancelNotification(Event eventData) {
+        try {
+            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            switch (eventData.getCurrentParticipant().acceptanceStatus) {
+                case Accepted:
+                    notificationManager.cancel(eventData.AcceptNotificationId);
+                    break;
+
+                case Rejected:
+                    notificationManager.cancel(eventData.AcceptNotificationId);
+                    notificationManager.cancel(eventData.SnoozeNotificationId);
+                    for (int notficationId : eventData.NotificationIds) {
+                        notificationManager.cancel(notficationId);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void ringAlarm() {
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alert == null) {
+            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            if (alert == null) {
+                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            }
+        }
+
+        ringtone = RingtoneManager.getRingtone(AppContext.context, alert);
+        if (!ringtone.isPlaying()) {
+            ringtone.play();
+        }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (ringtone.isPlaying()) {
+                    ringtone.stop();
+                }
+            }
+        }, distanceAlarmDuration);
+    }
+
     private static void saveResponse(final AcceptanceStatus status, final String eventid) {
         try {
             //responseInProcessEvents.
@@ -478,6 +532,136 @@ public class EventNotificationManager {
         }
     }
 
+    private static void setAlarm(String reminderType, String eventId, int reminderInterval) {
+        //eDetail.getReminderType()
+        Calendar cal = Calendar.getInstance();
+
+        cal.add(Calendar.MINUTE, reminderInterval);
+        Date reminderDate = cal.getTime();
+        Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+        intentAlarm.putExtra("AlarmType", "Reminder");
+        intentAlarm.putExtra("ReminderType", reminderType);
+        intentAlarm.putExtra("EventId", eventId);
+        AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+        //set the alarm for particular time
+        alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.ReminderBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+
+    }
+
+    private static void showGenericNotification(Event event, String msg, String title) {
+
+        // Define that we have the intention of opening MoreInfoNotification
+        Intent activityIntent = new Intent(AppContext.context, EventsActivity.class);
+
+        // Used to stack tasks across activites so we go to the proper place when back is clicked
+        TaskStackBuilder tStackBuilder = TaskStackBuilder.create(AppContext.context);
+
+        // Add all parents of this activity to the stack
+        tStackBuilder.addParentStack(HomeActivity.class);
+
+        // Add our new Intent to the stack
+        tStackBuilder.addNextIntent(activityIntent);
+
+        // Define an Intent and an action to perform with it by another application
+        // FLAG_UPDATE_CURRENT : If the intent exists keep it but update it if needed
+        PendingIntent pendingIntent = tStackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        if (title == "") {
+            title = event.name;
+        }
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle
+                .setBigContentTitle(title)
+                .bigText(msg);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(AppContext.context);
+
+        /*NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        mBuilder.setStyle(inboxStyle);*/
+
+        mBuilder
+                .setContentTitle(title)
+                .setContentText(msg)
+                // Set Icon
+                .setSmallIcon(R.drawable.logo_notification)
+                // Dismiss Notification
+                .setAutoCancel(false)
+                //.setSound(notificationSound)
+                .setContentIntent(pendingIntent)
+                .setStyle(bigTextStyle);
+
+        if (!event.IsMute) {
+            if (isPokeNotification) {
+                mBuilder.setSound(pokenotificationSound);
+            } else {
+                mBuilder.setSound(notificationSound);
+            }
+        }
+        switch (notificationType) {
+            case "POKE":
+                isPokeNotification = false;
+                mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                break;
+            case "APPROACHING":
+                Intent approachingAlarmDismissIntent = new Intent(AppContext.context, notificationActionsListener.class);
+                approachingAlarmDismissIntent.putExtra("eventid", event.eventId);
+                approachingAlarmDismissIntent.putExtra("responseCode", "approachingAlarmDismiss");
+                PendingIntent approachingAlarmPendingIntent =
+                        PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                mBuilder.addAction(R.drawable.ic_clear_black_18dp, "Dismiss", approachingAlarmPendingIntent);
+                break;
+            default:
+                break;
+        }
+
+        NotificationManager notificationManager =
+                (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationId = getIncrementedNotificationId();
+        setNotificationChannel(mBuilder, notificationManager, title, msg);
+
+        // Post the notification
+        notificationManager.notify(notificationId, mBuilder.build());
+
+        // Used so that we can't stop a notification that has already been stopped
+        isNotificActive = true;
+        event.NotificationIds.add(notificationId);
+        InternalCaching.saveEventToCache(event);
+    }
+
+    private static void setNotificationChannel(NotificationCompat.Builder builder, NotificationManager notificationManager, String title, String description){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "123456";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    title,
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setShowBadge(true);
+            channel.setDescription(description);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+    }
+
+    private static int getIncrementedNotificationId() {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(AppContext.context);
+        int notificationId = preferences.getInt("notificationId", 0);
+        if (notificationId == 0 || notificationId == 99999999) {
+            notificationId = 1;
+        } else {
+            notificationId = notificationId + 1;
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("notificationId", notificationId);
+        editor.commit();
+
+        return notificationId;
+    }
+
     public static class notificationActionsListener extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -521,170 +705,6 @@ public class EventNotificationManager {
                     break;
             }
         }
-    }
-
-    public static void cancelAllNotifications(Event eventData) {
-        try {
-            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
-            // If the notification is still active close it
-            notificationManager.cancel(eventData.AcceptNotificationId);
-            notificationManager.cancel(eventData.SnoozeNotificationId);
-            for (int notficationId : eventData.NotificationIds) {
-                notificationManager.cancel(notficationId);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void cancelNotification(Event eventData) {
-        try {
-            NotificationManager notificationManager = (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            switch (eventData.getCurrentParticipant().acceptanceStatus) {
-                case Accepted:
-                    notificationManager.cancel(eventData.AcceptNotificationId);
-                    break;
-
-                case Rejected:
-                    notificationManager.cancel(eventData.AcceptNotificationId);
-                    notificationManager.cancel(eventData.SnoozeNotificationId);
-                    for (int notficationId : eventData.NotificationIds) {
-                        notificationManager.cancel(notficationId);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void setAlarm(String reminderType, String eventId, int reminderInterval) {
-        //eDetail.getReminderType()
-        Calendar cal = Calendar.getInstance();
-
-        cal.add(Calendar.MINUTE, reminderInterval);
-        Date reminderDate = cal.getTime();
-        Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
-        intentAlarm.putExtra("AlarmType", "Reminder");
-        intentAlarm.putExtra("ReminderType", reminderType);
-        intentAlarm.putExtra("EventId", eventId);
-        AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
-        //set the alarm for particular time
-        alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.ReminderBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-
-    }
-
-    public static void ringAlarm() {
-        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alert == null) {
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            if (alert == null) {
-                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            }
-        }
-
-        ringtone = RingtoneManager.getRingtone(AppContext.context, alert);
-        if (!ringtone.isPlaying()) {
-            ringtone.play();
-        }
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                if (ringtone.isPlaying()) {
-                    ringtone.stop();
-                }
-            }
-        }, distanceAlarmDuration);
-    }
-
-    public static void showGenericNotification(Event event, String msg, String title) {
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(AppContext.context);
-        String notificationMessage = msg;
-        if (title == "") {
-            title = event.name;
-        }
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(HomeActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        Intent activityIntent = new Intent(AppContext.context, HomeActivity.class);
-        stackBuilder.addNextIntent(activityIntent);
-
-
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(AppContext.context)
-                        .setSmallIcon(R.drawable.logo_notification)
-                        .setContentTitle(title)
-                        .setContentText(notificationMessage)
-                        .setAutoCancel(true);
-
-
-        if (!event.IsMute) {
-            if (isPokeNotification) {
-                mBuilder.setSound(pokenotificationSound);
-            } else {
-                mBuilder.setSound(notificationSound);
-            }
-        }
-
-        switch (notificationType) {
-            case "POKE":
-                isPokeNotification = false;
-                mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-                break;
-            case "APPROACHING":
-                Intent approachingAlarmDismissIntent = new Intent(AppContext.context, notificationActionsListener.class);
-                approachingAlarmDismissIntent.putExtra("eventid", event.eventId);
-                approachingAlarmDismissIntent.putExtra("responseCode", "approachingAlarmDismiss");
-                PendingIntent approachingAlarmPendingIntent =
-                        PendingIntent.getBroadcast(AppContext.context, getIncrementedNotificationId(), approachingAlarmDismissIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                mBuilder.addAction(R.drawable.ic_clear_black_18dp, "Dismiss", approachingAlarmPendingIntent);
-                break;
-            default:
-                break;
-        }
-
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle(title);
-        bigTextStyle.bigText(notificationMessage);
-        mBuilder.setStyle(bigTextStyle);
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) AppContext.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        notificationId = getIncrementedNotificationId();
-        event.NotificationIds.add(notificationId);
-        InternalCaching.saveEventToCache(event);
-        mNotificationManager.notify(notificationId, mBuilder.build());
-        //currentNotificationEventId = event.EventId;
-        isNotificActive = true;
-    }
-
-    public static int getIncrementedNotificationId() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(AppContext.context);
-        int notificationId = preferences.getInt("notificationId", 0);
-        if (notificationId == 0 || notificationId == 99999999) {
-            notificationId = 1;
-        } else {
-            notificationId = notificationId + 1;
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("notificationId", notificationId);
-        editor.commit();
-
-        return notificationId;
     }
 }
 
