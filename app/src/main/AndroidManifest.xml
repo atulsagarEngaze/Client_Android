@@ -145,7 +145,8 @@
 
         <receiver
             android:name=".service.EventTrackerAlarmReceiverService"
-            android:enabled="true"></receiver>
+            android:enabled="true"
+            android:exported="true"></receiver>
         <receiver android:name=".manager.EventNotificationManager$notificationActionsListener" />
         <receiver android:name=".receiver.NetworkUpdateReceiver">
             <intent-filter>
@@ -160,7 +161,7 @@
         <service
             android:name=".service.EventTrackerGcmListenerService"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -174,11 +175,8 @@
         <service android:name=".service.ContactListRefreshIntentService" />
         <service android:name=".service.EventRefreshService" />
         <service android:name=".service.EventDistanceReminderService" />
-
         <service android:name=".service.RegistrationIntentService" />
-        <service
-            android:name=".service.MyCurrentLocationListener"
-            android:enabled="true" />
+
     </application>
 
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -199,5 +197,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="com.redtop.engaze.locationapi.maps.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.redtop.engaze.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.redtop.engaze.app;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.receiver.CurrentLocationUploadService;
+import com.redtop.engaze.service.FirstTimeInitializationService;
 import com.redtop.engaze.service.MyCurrentLocationListener;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,7 +118,6 @@ public class AppContext extends Application {
 
     private void StartLocationListenerAndLocationUpdater() {
 
-        CurrentLocationUploadService.register(this);
         startLocationListenerService();
 
         runningEventCheckHandler = new Handler();
@@ -137,16 +138,15 @@ public class AppContext extends Application {
 
     public void startLocationListenerService() {
 
-        if (!AppUtility.isBackgroundServiceRunning(MyCurrentLocationListener.class, this)) {
+        if (!MyCurrentLocationListener.IsLocationServiceRunning) {
             MyCurrentLocationListener.startService(this);
         }
     }
 
     public void stopLocationListenerService() {
 
-        if (AppUtility.isBackgroundServiceRunning(MyCurrentLocationListener.class, this)) {
+        if (MyCurrentLocationListener.IsLocationServiceRunning) {
             MyCurrentLocationListener.stopService(this);
         }
     }
-
 }

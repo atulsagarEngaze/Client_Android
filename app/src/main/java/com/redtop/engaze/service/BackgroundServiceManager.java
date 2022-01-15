@@ -65,8 +65,6 @@ public class BackgroundServiceManager extends Service {
 
     private void handleLocationListenerService() {
 
-        CurrentLocationUploadService.register(this);
-
         startLocationListenerService();
 
         runningEventCheckHandler = new Handler();

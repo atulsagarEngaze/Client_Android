@@ -145,5 +145,4 @@ public class EventWS extends BaseWebService implements IEventWS {
             onAPICallCompleteListener.apiCallFailure();
         }
     }
-
 }
