@@ -195,15 +195,9 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		adb.setMessage(getResources().getString(R.string.message_mobVer_confirmNumber) + " : " + mCountryCode.getText().toString() + " " + mMobileNumber);
 		adb.setIcon(android.R.drawable.ic_dialog_alert);
 
-		adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				checkPermissionAndSendSMS();
-			} });
+		adb.setPositiveButton("OK", (dialog, which) -> checkPermissionAndSendSMS());
 
-		adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {							
-				dialog.dismiss();				
-			} });
+		adb.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 		adb.show();
 	}
 
@@ -295,14 +289,13 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 
 	private void checkPermissionAndSendSMS(){
 		if(countryCode.equals("+91")){
-			if(PermissionRequester.CheckPermission(new String[]{Manifest.permission.SEND_SMS}, SEND_SMS,this)){
+			if(PermissionRequester.CheckPermission(new String[]{Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS}, SEND_SMS,this)){
 				sendSmsAndWait();
 			}
 		}
 	}
 	
 	private void sendSmsAndWait() {
-
 
 		mOTP = String.valueOf(AppUtility.getRandamNumber());
 		String smsText = "OTP " + mOTP;

@@ -105,6 +105,7 @@ public class SplashActivity extends BaseActivity {
 
     private void startHomeActivity() {
         if (AppContext.context.IsAppLoadingFirstTime()) {
+
             mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
             mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -114,6 +115,7 @@ public class SplashActivity extends BaseActivity {
             mProgress.setIndeterminate(true);
             mProgress.show();
             new Handler().postDelayed(() -> {
+                AppContext.context.setDefaultValuesAndStartLocationService();
                 mProgress.hide();
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);

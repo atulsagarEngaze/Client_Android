@@ -56,18 +56,22 @@ public class AppContext extends Application {
         jsonParser = new JsonParser();
         isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
         if (loginId != null) {
-            loginName = PreffManager.getPref(Constants.LOGIN_NAME);
-            actionHandler = new ActionHandler();
-
-
-            defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
-            defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
-            defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
-
-            StartLocationListenerAndLocationUpdater();
-            AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
+            setDefaultValuesAndStartLocationService();
 
         }
+    }
+
+    public void setDefaultValuesAndStartLocationService(){
+        loginName = PreffManager.getPref(Constants.LOGIN_NAME);
+        actionHandler = new ActionHandler();
+
+
+        defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
+        defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
+        defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
+
+        StartLocationListenerAndLocationUpdater();
+        AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
     }
 
     public Boolean IsAppLoadingFirstTime() {
