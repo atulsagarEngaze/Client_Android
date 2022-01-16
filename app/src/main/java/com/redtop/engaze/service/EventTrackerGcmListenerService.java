@@ -12,9 +12,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Veranstaltung;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.domain.Event;
+import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
@@ -66,7 +68,11 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
 
     private void actionsBasedOnGCMMessageTypes(String messageType, final JSONObject data) {
         try {
-            Event event;
+            Event event  = InternalCaching.getEventFromCache(mEventId);
+            if(event==null){
+                // do nothing as event is already over or does not exist in the user list.
+                return;
+            }
             Intent intent = null;
             switch (messageType) {
                 case "EventUpdate":
@@ -76,9 +82,16 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "EventResponse": {
-                    final String userId = data.get("EventResponderId").toString();
-                    final String userName = data.get("EventResponderName").toString();
-                    final int eventAcceptanceStateId = Integer.parseInt(data.get("EventAcceptanceStateId").toString());
+                    final String userId = data.get("ResponderId").toString();
+                    String responderProfileName = "";
+                    for (EventParticipant em : event.participants) {
+                        if (em.userId.toLowerCase().equals(userId.toLowerCase())) {
+                            responderProfileName = em.profileName;
+                            break;
+                        }
+                    }
+                    final String userName = responderProfileName;
+                    final int eventAcceptanceStateId = Integer.parseInt(data.get("EventAcceptanceState").toString());
                     EventManager.updateEventWithParticipantResponse(mEventId, userId, userName, eventAcceptanceStateId, action -> {
                         Intent intent18 = new Intent(Veranstaltung.EVENT_USER_RESPONSE);
                         intent18.putExtra("eventId", mEventId);
@@ -93,8 +106,15 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                 }
 
                 case "EventLeave":
-                    final String userId = data.get("EventResponderId").toString();
-                    final String userName = data.get("EventResponderName").toString();
+                    final String userId = data.get("ResponderId").toString();
+                    String responderProfileName = "";
+                    for (EventParticipant em : event.participants) {
+                        if (em.userId.toLowerCase().equals(userId.toLowerCase())) {
+                            responderProfileName = em.profileName;
+                            break;
+                        }
+                    }
+                    final String userName = responderProfileName;
                     EventManager.updateEventWithParticipantLeft(mContext, mEventId, userId, userName, action -> {
                         Intent intent17 = new Intent(Veranstaltung.PARTICIPANT_LEFT_EVENT);
                         intent17.putExtra("eventId", mEventId);
@@ -107,7 +127,6 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "EventInvite":
-                    event = InternalCaching.getEventFromCache(mEventId);
                     if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
                         event.state = EventState.TRACKING_ON;
                     }
@@ -187,7 +206,6 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "RemindContact":
-                    event = InternalCaching.getEventFromCache(mEventId);
                     if (ParticipantService.isNotifyUser(event)) {
                         EventNotificationManager.pokeNotification(mContext, mEventId);
                     }
