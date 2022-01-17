@@ -156,61 +156,53 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 
     private void initializeClickEvents() {
 
-        mListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3) {
-                ContactOrGroup value = (ContactOrGroup) adapter.getItemAtPosition(position);
-                //v.setSelected(true);
+        mListView.setOnItemClickListener((adapter, v, position, arg3) -> {
+            ContactOrGroup value = (ContactOrGroup) adapter.getItemAtPosition(position);
+            //v.setSelected(true);
 
-                if (mAddedMembers.size() < 10) {
+            if (mAddedMembers.size() < 10) {
 
-                    if (mAddedMembers.size() == 0) {
-                        //removeHintText();
-                        mAddInvitees.setVisibility(View.VISIBLE);
-                        mInviteeSection.setVisibility(View.VISIBLE);
+                if (mAddedMembers.size() == 0) {
+                    //removeHintText();
+                    mAddInvitees.setVisibility(View.VISIBLE);
+                    mInviteeSection.setVisibility(View.VISIBLE);
+                }
+
+                Boolean alreadyAdded = false;
+                for (ContactOrGroup cg : mAddedMembers) {
+                    if (cg.userId != null && cg.userId.equals(value.userId)) {
+                        alreadyAdded = true;
+                        break;
                     }
-
-                    Boolean alreadyAdded = false;
-                    for (ContactOrGroup cg : mAddedMembers) {
-                        if (cg.userId != null && cg.userId.equals(value.userId)) {
-                            alreadyAdded = true;
-                            break;
-                        }
-                    }
-                    if (!alreadyAdded) {
-                        mAddedMembers.add(value);
-                        createContactLayoutItem(value);
-                        contactGroupPositions.add(position);
-                    } else {
-                        Toast.makeText(mContext,
-                                "User is already added", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                    mSearchView.setQuery("", false);
-                    mSearchView.clearFocus();
-                    mListView.clearTextFilter();
-                    mAdapter.getFilter().filter("");
+                }
+                if (!alreadyAdded) {
+                    mAddedMembers.add(value);
+                    createContactLayoutItem(value);
+                    contactGroupPositions.add(position);
                 } else {
                     Toast.makeText(mContext,
-                            "You have reached maximum limit of participants!", Toast.LENGTH_SHORT).show();
+                            "User is already added", Toast.LENGTH_SHORT).show();
                 }
+
+
+                mSearchView.setQuery("", false);
+                mSearchView.clearFocus();
+                mListView.clearTextFilter();
+                mAdapter.getFilter().filter("");
+            } else {
+                Toast.makeText(mContext,
+                        "You have reached maximum limit of participants!", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        mAddInvitees.setOnClickListener(new OnClickListener() {
+        mAddInvitees.setOnClickListener(v -> {
+            PreffManager.setPrefArrayList("Invitees", mAddedMembers);
+            Intent intent = new Intent();
 
-            @Override
-            public void onClick(View v) {
-                PreffManager.setPrefArrayList("Invitees", mAddedMembers);
-                Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
 
-                setResult(RESULT_OK, intent);
-                finish();
-
-            }
         });
     }
 

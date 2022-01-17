@@ -57,6 +57,7 @@ public class AppContext extends Application {
         isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
         if (loginId != null) {
             setDefaultValuesAndStartLocationService();
+            AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
 
         }
     }
@@ -71,7 +72,7 @@ public class AppContext extends Application {
         defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
 
         StartLocationListenerAndLocationUpdater();
-        AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
+
     }
 
     public Boolean IsAppLoadingFirstTime() {

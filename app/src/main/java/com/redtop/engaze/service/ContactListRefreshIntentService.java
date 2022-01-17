@@ -25,9 +25,19 @@ public class ContactListRefreshIntentService extends IntentService {
     private Context mContext;
     public static boolean IsContactListRefreshServiceRunning = false;
 
+
+
     public ContactListRefreshIntentService() {
         super(TAG);
         Log.d(TAG, "Constructor");
+    }
+
+    public static void start(Context context, Boolean refreshOnlyRegisteredContacts) {
+        if (!IsContactListRefreshServiceRunning) {
+            Intent serviceIntent = new Intent(context, ContactListRefreshIntentService.class);
+            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, refreshOnlyRegisteredContacts);
+            context.startService(serviceIntent);
+        }
     }
 
     @Override

@@ -3,12 +3,14 @@ package com.redtop.engaze;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -19,7 +21,9 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
+import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.service.ContactListRefreshIntentService;
 import com.redtop.engaze.service.EventRefreshService;
 
 import java.lang.reflect.Array;
@@ -114,12 +118,9 @@ public class SplashActivity extends BaseActivity {
             mProgress.setCanceledOnTouchOutside(false);
             mProgress.setIndeterminate(true);
             mProgress.show();
-            new Handler().postDelayed(() -> {
-                AppContext.context.setDefaultValuesAndStartLocationService();
-                mProgress.hide();
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
-            }, 3000);
+            AppContext.context.setDefaultValuesAndStartLocationService();
+            ContactListRefreshIntentService.start(this, true);
+            //new Handler().postDelayed(() -> {  }, 3000);
 
         } else {
             EventManager.RemoveALlPastEvents();
@@ -130,6 +131,25 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
 
         }
+
+    }
+
+    @Override
+    public void contact_list_refresh_process_complete() {
+
+        String contactsRefreshStatus = PreffManager.getPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS);
+        String registeredContactsRefreshStatus = PreffManager.getPref(Constants.LAST_REGISTERED_CONTACT_LIST_REFRESH_STATUS);
+
+        if(contactsRefreshStatus.equals(Constants.SUCCESS) && registeredContactsRefreshStatus.equals(Constants.SUCCESS)){
+            AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
+        }
+        else{
+            Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
+        }
+
+        mProgress.hide();
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
 
     }
 

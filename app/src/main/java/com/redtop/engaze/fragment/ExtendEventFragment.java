@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.redtop.engaze.BaseEventActivity;
+import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivityResults;
@@ -85,7 +86,13 @@ public class ExtendEventFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this.getActivity();
-        callBackToActivity = (RunningEventActivityResults) mContext;
+        if (mContext instanceof RunningEventActivityResults){
+            callBackToActivity = (RunningEventActivityResults) mContext;
+        }
+        else if (mContext instanceof HomeActivity){
+            callBackToActivity = (HomeActivity) mContext;
+        }
+
         snoozeDuration = new Duration(30, "minute", true);
 
     }

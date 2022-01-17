@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentManager;
 
 import com.redtop.engaze.BaseEventActivity;
+import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
@@ -101,121 +102,85 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         if (rowItem.getMember().acceptanceStatus == AcceptanceStatus.Accepted) {
             holder.txtPoke.setVisibility(View.GONE);
         }
-        holder.txtPoke.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParticipantService.pokeParticipant(rowItem.getMember().userId, cg.getName(), event.eventId, AppContext.actionHandler);
-            }
-        });
+        holder.txtPoke.setOnClickListener(v -> ParticipantService.pokeParticipant(rowItem.getMember().userId, cg.getName(), event.eventId, AppContext.actionHandler));
 
         if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
             holder.txtExtend.setVisibility(View.VISIBLE);
         }
 
-        holder.txtExtend.setOnClickListener(new OnClickListener() {
+        holder.txtExtend.setOnClickListener(v -> {
+            ((HomeActivity) mContext).notificationSelectedEvent = event;
 
-            @Override
-            public void onClick(View v) {
-                ((BaseEventActivity) mContext).notificationselectedEvent = event;
-
-                FragmentManager fm =  ((BaseEventActivity) mContext).getSupportFragmentManager();
-                ExtendEventFragment fragment = ExtendEventFragment.newInstance();
-                fragment.show(fm, "Extend");
-            }
+            FragmentManager fm =  ((HomeActivity) mContext).getSupportFragmentManager();
+            ExtendEventFragment fragment = ExtendEventFragment.newInstance();
+            fragment.show(fm, "Extend");
         });
-        holder.txtStop.setOnClickListener(new OnClickListener() {
+        holder.txtStop.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
-
-                ProgressBar.showProgressBar("Please wait");
-                if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
-                    //Current user is initiator...so he can either end the event or remove the member.
-                    if (event.getParticipantCount() <= 2) {
-                        //End the event since it is a 1 to 1 event
-                        ProgressBar.showProgressBar("Please wait");
-                        EventManager.endEvent(event, new OnActionCompleteListner() {
-                            @Override
-                            public void actionComplete(Action action) {
-                                if (callback != null) {
-                                    callback.refreshTrackingEvents();
-                                }
-                                ProgressBar.hideProgressBar();
-                            }
-                        }, new OnActionFailedListner() {
-
-                            @Override
-                            public void actionFailed(String msg, Action action) {
-                                EventManager.refreshEventList(null, null);
-                                AppContext.actionHandler.actionFailed(msg, action);
-                            }
-                        });
-
-                    } else {
-                        //remove the row item member alone since there are still other members in the event.
-                        ProgressBar.showProgressBar("Please wait");
-                        event.ContactOrGroups.remove(event.getCurrentParticipant().contactOrGroup);
-
-                        JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.eventId);
-                        ParticipantManager.addRemoveParticipants(jObj, new OnActionCompleteListner() {
-                            @Override
-                            public void actionComplete(Action action) {
-                                //updateRecyclerViews();
-                                if (callback != null) {
-                                    callback.refreshTrackingEvents();
-                                }
-                                //locationhandler.post(locationRunnable);
-                                ProgressBar.hideProgressBar();
-                            }
-                        }, new OnActionFailedListner() {
-
-                            @Override
-                            public void actionFailed(String msg, Action action) {
-                                EventManager.refreshEventList(null, null);
-                                AppContext.actionHandler.actionFailed(msg, action);
-                            }
-                        });
-                    }
-
-                } else {
-                    //Current user is just a participant, so he can only leave the event.
-
+            ProgressBar.showProgressBar("Please wait");
+            if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
+                //Current user is initiator...so he can either end the event or remove the member.
+                if (event.getParticipantCount() <= 2) {
+                    //End the event since it is a 1 to 1 event
                     ProgressBar.showProgressBar("Please wait");
-                    EventManager.leaveEvent(event, new OnActionCompleteListner() {
-
+                    EventManager.endEvent(event, new OnActionCompleteListner() {
                         @Override
                         public void actionComplete(Action action) {
-                            rowItem.getMember().acceptanceStatus = AcceptanceStatus.Rejected;
                             if (callback != null) {
                                 callback.refreshTrackingEvents();
                             }
                             ProgressBar.hideProgressBar();
                         }
-                    }, new OnActionFailedListner() {
-
-                        @Override
-                        public void actionFailed(String msg, Action action) {
-                            EventManager.refreshEventList(null, null);
-                            AppContext.actionHandler.actionFailed(msg, action);
-
-                        }
+                    }, (msg, action) -> {
+                        EventManager.refreshEventList(null, null);
+                        AppContext.actionHandler.actionFailed(msg, action);
                     });
 
+                } else {
+                    //remove the row item member alone since there are still other members in the event.
+                    ProgressBar.showProgressBar("Please wait");
+                    event.ContactOrGroups.remove(event.getCurrentParticipant().contactOrGroup);
+
+                    JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.eventId);
+                    ParticipantManager.addRemoveParticipants(jObj, action -> {
+                        //updateRecyclerViews();
+                        if (callback != null) {
+                            callback.refreshTrackingEvents();
+                        }
+                        //locationhandler.post(locationRunnable);
+                        ProgressBar.hideProgressBar();
+                    }, (msg, action) -> {
+                        EventManager.refreshEventList(null, null);
+                        AppContext.actionHandler.actionFailed(msg, action);
+                    });
                 }
+
+            } else {
+                //Current user is just a participant, so he can only leave the event.
+
+                ProgressBar.showProgressBar("Please wait");
+                EventManager.leaveEvent(event, action -> {
+                    rowItem.getMember().acceptanceStatus = AcceptanceStatus.Rejected;
+                    if (callback != null) {
+                        callback.refreshTrackingEvents();
+                    }
+                    ProgressBar.hideProgressBar();
+                }, (msg, action) -> {
+                    EventManager.refreshEventList(null, null);
+                    AppContext.actionHandler.actionFailed(msg, action);
+
+                });
+
             }
         });
 
-        holder.txtView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                ProgressBar.showProgressBar("Please wait");
-                Intent intent = new Intent(mContext, RunningEventActivity.class);
-                intent.putExtra("EventId", event.eventId);
-                intent.putExtra("EventTypeId", event.eventType);
-                mContext.startActivity(intent);
-                ProgressBar.hideProgressBar();
-            }
+        holder.txtView.setOnClickListener(v -> {
+            ProgressBar.showProgressBar("Please wait");
+            Intent intent = new Intent(mContext, RunningEventActivity.class);
+            intent.putExtra("EventId", event.eventId);
+            intent.putExtra("EventTypeId", event.eventType);
+            mContext.startActivity(intent);
+            ProgressBar.hideProgressBar();
         });
         return convertView;
     }
