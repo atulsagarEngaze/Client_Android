@@ -15,6 +15,7 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.webservice.IParticipantWS;
+import com.redtop.engaze.webservice.ParticipantWS;
 import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
 
 import org.json.JSONObject;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
 
-    private final static IParticipantWS participantWS = new ParticipantWSProxy();
+    private final static IParticipantWS participantWS = new ParticipantWS();
 
     public static void pokeParticipants(JSONObject pokeParticipantsJSON,
                                         final OnActionCompleteListner onActionCompleteListner,

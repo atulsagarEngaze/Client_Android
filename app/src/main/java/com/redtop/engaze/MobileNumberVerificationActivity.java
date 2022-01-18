@@ -98,7 +98,6 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
 			getSupportActionBar().setTitle(getResources().getString(R.string.title_mobile_verification));
-			toolbar.setTitleTextColor(getResources().getColor(R.color.icon));
 		}
 		mButtonVerify.setOnClickListener(new OnClickListener() {
 

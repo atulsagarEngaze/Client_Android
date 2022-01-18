@@ -90,10 +90,11 @@ public class GoogleDirection {
 	}
 
 	public String request(LatLng start, LatLng end, String mode) {
-		final String url = "http://maps.googleapis.com/maps/api/directions/xml?"
-				+ "origin=" + start.latitude + "," + start.longitude  
-				+ "&destination=" + end.latitude + "," + end.longitude 
-				+ "&sensor=false&units=metric&mode=" + mode;
+		final String url = "https://maps.googleapis.com/maps/api/directions/xml?"
+				+ "origin=" + start.latitude + "," + start.longitude
+				+ "&destination=" + end.latitude + "," + end.longitude
+				+ "&sensor=false&units=metric&mode=" + mode
+				+ "&key=AIzaSyDaH2cHHCv1QMQ1kxcXayP34HThSJ9IocA";
 
 		if(isLogging)
 			Log.i("GoogleDirection", "URL : " + url);
@@ -401,13 +402,13 @@ public class GoogleDirection {
 	}
 
 	public interface OnDirectionResponseListener {
-		public void onResponse(String status, Document doc, GoogleDirection gd);
+		void onResponse(String status, Document doc, GoogleDirection gd);
 	}
 
 	public interface OnAnimateListener {
-		public void onFinish();
-		public void onStart();
-		public void onProgress(int progress, int total);
+		void onFinish();
+		void onStart();
+		void onProgress(int progress, int total);
 	}
 
 

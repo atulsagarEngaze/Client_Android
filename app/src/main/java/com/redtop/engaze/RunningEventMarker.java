@@ -66,17 +66,15 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 			return;
 		}
 		Handler h = new Handler();
-		Runnable r = new Runnable() {
-			public void run() {	
-				for (final Marker marker : markerUserLocation.keySet() ){
-					final UsersLocationDetail ud = markerUserLocation.get(marker);
-					if(ud==null){//for destination
-						continue;
-					}
-					getETADurationAndCreateMarker(ud, marker);
-				}					
-			}	
-		};	
+		Runnable r = () -> {
+			for (final Marker marker : markerUserLocation.keySet() ){
+				final UsersLocationDetail ud = markerUserLocation.get(marker);
+				if(ud==null){//for destination
+					continue;
+				}
+				getETADurationAndCreateMarker(ud, marker);
+			}
+		};
 		h.post(r);
 	}
 
@@ -163,32 +161,26 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 		final Marker marker = userLocationMarker;
 		try {
 			GoogleDirection gd = new GoogleDirection(mContext);
-			gd.setOnDirectionResponseListener(new GoogleDirection.OnDirectionResponseListener() {
-
-				@Override
-				public void onResponse(String status, Document doc,
-						GoogleDirection gd) 
+			gd.setOnDirectionResponseListener((status, doc, gd1) -> {
+				try
 				{
-					try 
-					{
-						if(status.equalsIgnoreCase("failed")){
-							ud.distance = "unable to find";
-							ud.eta = "unable to find";
-							mDistance ="unable to find";	
+					if(status.equalsIgnoreCase("failed") || status.equals("REQUEST_DENIED")){
+						ud.distance = "unable to find";
+						ud.eta = "unable to find";
+						mDistance ="unable to find";
 
-						}
-						else{
-							ud.distance = gd.getTotalDistanceText(doc);
-							ud.eta = gd.getTotalDurationText(doc);
-						}
 					}
-					catch(Exception ex){
-						ud.distance = "No route";
-						ud.eta ="";
-						mDistance ="No route";								
-					}	
-					mETADistanceMarkers.add(MarkerHelper.drawTimeDistanceMarker(marker.getPosition(), ud, mMap,RunningEventMarker.this));
+					else{
+						ud.distance = gd1.getTotalDistanceText(doc);
+						ud.eta = gd1.getTotalDurationText(doc);
+					}
 				}
+				catch(Exception ex){
+					ud.distance = "No route";
+					ud.eta ="";
+					mDistance ="No route";
+				}
+				mETADistanceMarkers.add(MarkerHelper.drawTimeDistanceMarker(marker.getPosition(), ud, mMap,RunningEventMarker.this));
 			});
 
 

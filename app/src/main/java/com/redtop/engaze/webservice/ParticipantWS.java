@@ -13,7 +13,7 @@ public class ParticipantWS extends BaseWebService implements IParticipantWS {
                                         final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String JsonPostURL = MAP_API_URL + ApiUrl.POKEALL_CONTACTS;
+            String JsonPostURL = ApiUrl.POKEALL_CONTACTS;
 
             postData(pokeAllContactsJSON, JsonPostURL, onAPICallCompleteListener);
 
@@ -28,7 +28,7 @@ public class ParticipantWS extends BaseWebService implements IParticipantWS {
     public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
-            String url = MAP_API_URL + ApiUrl.UPDATE_PARTICIPANTS;
+            String url = ApiUrl.UPDATE_PARTICIPANTS;
 
             postData(jsonObject, url, onAPICallCompleteListener);
 
