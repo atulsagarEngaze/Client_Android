@@ -16,14 +16,14 @@
             xmlns:local="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_toolbar"
             style="@style/ETMaterialTheme.ActionBar"
-            android:background="@color/secondaryBackground" />
-
+            />
+<!--
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="48dip"
-            android:background="@drawable/logo" />
+            android:background="@drawable/logo" />-->
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -101,10 +101,13 @@
                 <!-- android:text="CheckBox" /> -->
 
                 <TextView
+                    android:layout_marginTop="@dimen/paddinghalf"
                     android:id="@+id/text_termsandservice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/small_text_size"
                     android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-condensed"
                     android:text="@string/label_userReg_agreement"
                     android:textColor="@color/secondaryText" />
             </LinearLayout>
@@ -122,6 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-condensed"
                     android:text="@string/link_userReg_termsOfService"
                     android:textColor="@color/secondaryText" />
 
@@ -137,6 +141,7 @@
                     android:id="@+id/linkprivacypolicy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
                     android:layout_centerVertical="true"
                     android:text="@string/link_userReg_privacyPolicy"
                     android:textColor="@color/secondaryText" />

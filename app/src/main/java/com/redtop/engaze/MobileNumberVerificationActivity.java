@@ -96,16 +96,13 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		mCountryCode.setText(GetCountryZipCode());	
 		Toolbar toolbar = (Toolbar) findViewById(R.id.registration_toolbar);
 		if (toolbar != null) {
+			toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
 			setSupportActionBar(toolbar);
 			getSupportActionBar().setTitle(getResources().getString(R.string.title_mobile_verification));
 		}
-		mButtonVerify.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				hideKeyboard(v);
-				validateAndSendSMS();
-			}
+		mButtonVerify.setOnClickListener(v -> {
+			hideKeyboard(v);
+			validateAndSendSMS();
 		});
 		mOtpText = (EditText)findViewById(R.id.txt_otp);
 		mButtonValidateOTP = (Button)findViewById(R.id.btn_otp);

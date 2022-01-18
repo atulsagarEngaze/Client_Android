@@ -13,30 +13,31 @@
         style="@style/ETMaterialTheme.ActionBar"
         />
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/img_logo"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="48dp"
-        android:background="@drawable/logo" />
+        android:background="@drawable/logo" />-->
 
     <RelativeLayout
         android:id="@+id/rl_number_verification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_double" >
+        android:layout_marginTop="48dp" >
 
         <TextView
             android:id="@+id/txtEnterMobileMsg"
             style="@style/SubHeadingStyle"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:text="@string/label_mobVer_instruction"
             android:textColor="@color/icon"
-            android:fontFamily="sans-serif-condensed"
             android:textSize="@dimen/abc_text_size_medium_material" />
 
         <RelativeLayout

@@ -142,9 +142,9 @@ public class ProfileActivity extends BaseActivity {
 
 		Toolbar toolbar = findViewById(R.id.profile_toolbar);
 		if (toolbar != null) {
+			toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
 			setSupportActionBar(toolbar);
 			getSupportActionBar().setTitle(getResources().getString(R.string.title_user_register));
-			toolbar.setTitleTextColor(getResources().getColor(R.color.icon));
 		}
 
 		Save_Profile = findViewById(R.id.Save_Profile);
