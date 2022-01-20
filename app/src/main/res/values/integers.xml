@@ -36,7 +36,7 @@
     <integer name="event_reminder_start_max_hours">24</integer>
     <integer name="event_reminder_start_max_days">1</integer>
     <integer name="event_reminder_start_max_weeks">1</integer>
-    <integer name="sms_timeout_period_millisecs">300000</integer>
+    <integer name="sms_timeout_period_millisecs">120000</integer>
     <integer name="sms_interval_millisecs">1000</integer>
     <integer name="minumim_reccurrence_value">2</integer>
     <integer name="not_selected_alpha">100</integer>

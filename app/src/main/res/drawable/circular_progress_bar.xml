@@ -5,16 +5,16 @@
         <shape
             android:innerRadiusRatio="2.7"
             android:shape="ring"
-            android:thicknessRatio="8.0"
+            android:thicknessRatio="30.0"
             android:useLevel="false" >
-            <solid android:color="@color/hintDisable" />
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
         <shape
             android:innerRadiusRatio="2.7"
             android:shape="ring"
-            android:thicknessRatio="8.0" >
+            android:thicknessRatio="30.0" >
             <solid android:color="@color/primaryDark" />
         </shape>
     </item>

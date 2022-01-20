@@ -26,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +56,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 	private  static Context mContext;
 	private Button mButtonValidateOTP;	
 	private RelativeLayout mRLMobileEnter;
-	private RelativeLayout mRLSmsWait;
+	private LinearLayout mRLSmsWait;
 	private ProgressCountDownTimer countDownTimer;
 	private int startTime ;
 	private int interval;
@@ -74,7 +75,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		getUserEmailAccount();
 		circularProgressBar = (ProgressBar) findViewById(R.id.circularProgressBar);
 		mRLMobileEnter = (RelativeLayout)findViewById(R.id.rl_number_verification);
-		mRLSmsWait = (RelativeLayout)findViewById(R.id.rl_verification_code);
+		mRLSmsWait = findViewById(R.id.rl_verification_code);
 		startTime = getResources().getInteger(R.integer.sms_timeout_period_millisecs);
 		interval = getResources().getInteger(R.integer.sms_interval_millisecs);
 		mMobileNumberEdittext = (EditText) findViewById(R.id.mobile_number);
@@ -106,37 +107,34 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 		});
 		mOtpText = (EditText)findViewById(R.id.txt_otp);
 		mButtonValidateOTP = (Button)findViewById(R.id.btn_otp);
-		mButtonValidateOTP.setOnClickListener(new OnClickListener() {			
-			@Override
-			public void onClick(View v) {				
-				showProgressBar("Validating OTP");
-				String otp = mOtpText.getText().toString();
-				if(mOTP.equals(otp)){
-					PreffManager
-					.setPref(Constants.USER_AUTH_TOKEN, "1");
-					PreffManager.setPref(Constants.MOBILE_NUMBER, mMobileNumber);
-					countDownTimer.cancel();
-					LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
-					gotoProfilePage();
+		mButtonValidateOTP.setOnClickListener(v -> {
+			showProgressBar("Validating OTP");
+			String otp = mOtpText.getText().toString();
+			if(mOTP.equals(otp)){
+				PreffManager
+				.setPref(Constants.USER_AUTH_TOKEN, "1");
+				PreffManager.setPref(Constants.MOBILE_NUMBER, mMobileNumber);
+				countDownTimer.cancel();
+				LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
+				gotoProfilePage();
 
-				}
-				else{
-
-					AlertDialog.Builder adb = null;
-					adb = new AlertDialog.Builder(mContext);
-
-					adb.setTitle("Invalid OTP");
-					adb.setMessage(getResources().getString(R.string.message_mobVer_invalidOtp));
-					adb.setIcon(android.R.drawable.ic_dialog_alert);
-
-					adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {							
-							mOtpText.setText("");
-						} });
-					adb.show();
-				}
-				hideProgressBar();
 			}
+			else{
+
+				AlertDialog.Builder adb = null;
+				adb = new AlertDialog.Builder(mContext);
+
+				adb.setTitle("Invalid OTP");
+				adb.setMessage(getResources().getString(R.string.message_mobVer_invalidOtp));
+				adb.setIcon(android.R.drawable.ic_dialog_alert);
+
+				adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						mOtpText.setText("");
+					} });
+				adb.show();
+			}
+			hideProgressBar();
 		});
 	}
 
@@ -160,6 +158,7 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
 				String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);

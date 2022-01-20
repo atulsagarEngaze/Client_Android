@@ -29,7 +29,6 @@
 
         <TextView
             android:id="@+id/txtEnterMobileMsg"
-            style="@style/SubHeadingStyle"
             android:layout_marginLeft="@dimen/padding"
             android:layout_marginRight="@dimen/padding"
             android:layout_width="wrap_content"
@@ -37,7 +36,7 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:text="@string/label_mobVer_instruction"
-            android:textColor="@color/icon"
+            style="@style/PrimaryTextStyle"
             android:textSize="@dimen/abc_text_size_medium_material" />
 
         <RelativeLayout
@@ -85,6 +84,7 @@
             android:layout_width="fill_parent"
             android:layout_height="48dip"
             android:layout_below="@+id/rl_mobileNumber"
+            android:layout_marginTop="@dimen/paddinghalf"
             android:layout_marginBottom="@dimen/padding"
             android:layout_marginLeft="@dimen/padding_double"
             android:layout_marginRight="@dimen/padding_double"
@@ -103,12 +103,12 @@
             android:layout_marginRight="@dimen/padding"
             android:gravity="center_horizontal"
             android:text="@string/label_mobVer_smsHint"
+            style="@style/PrimaryTextStyle"
             android:textColor="@color/secondaryText"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="@dimen/small_text_size" />
+            android:textSize="13dp" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_verification_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,16 +116,28 @@
         android:layout_marginLeft="@dimen/padding_one_half"
         android:layout_marginRight="@dimen/padding_one_half"
         android:layout_marginTop="@dimen/padding_one_half"
-        android:background="@drawable/otp_verificationt"
         android:elevation="5dp"
-        android:visibility="gone" >
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+
+            android:id="@+id/otp_validation_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="@dimen/padding"
+            android:layout_marginTop="@dimen/padding"
+            android:text="@string/message_mobVer_waitAndDetect"
+            style="@style/PrimaryTextStyle" />
 
         <RelativeLayout
             android:id="@+id/rl_circularProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/padding" >
+            android:layout_above="@+id/otp_validation_msg1"
+
+           >
 
             <ProgressBar
                 android:id="@+id/circularProgressBar"
@@ -134,8 +146,8 @@
                 android:layout_height="120dip"
                 android:layout_centerInParent="true"
                 android:indeterminate="false"
-                android:max="300"
-                android:progress="300"
+                android:max="120"
+                android:progress="120"
                 android:progressDrawable="@drawable/circular_progress_bar" />
 
             <TextView
@@ -145,18 +157,27 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:text="progress"
-                android:textColor="@color/icon"
+                style="@style/PrimaryTextStyle"
+                android:textColor="@color/primary"
                 android:textSize="@dimen/large_text_size" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_otp_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_circularProgressBar"
             android:layout_marginRight="@dimen/padding"
-            android:layout_marginTop="@dimen/padding_one_half" >
+            android:layout_marginTop="@dimen/paddinghalf"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/ll_otp_text"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="48dp"
+                android:layout_marginBottom="@dimen/padding">
             <TextView
                 android:id="@+id/lbl_otp"
                 style="@style/PrimaryTextStyle"
@@ -168,39 +189,40 @@
                 style="@style/PrimaryTextStyle"
                 android:layout_width="120dp"
                 android:layout_height="48dp"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/padding"
-                android:layout_toRightOf="@+id/lbl_otp"
+
                 android:background="@drawable/rect_corner_radius_bold_border"
                 android:focusable="true"
-                android:hint="Enter Otp"
                 android:inputType="number"
                 android:textColor="@color/primaryText"
                 android:textColorHint="@color/hintDisable"
                 android:textSize="@dimen/abc_text_size_medium_material" />
+                </LinearLayout>
 
             <Button
                 android:id="@+id/btn_otp"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_alignParentRight="true"
+                android:layout_height="48dip"
+                android:layout_width="fill_parent"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_below="@+id/txt_otp"
                 android:background="@drawable/button_corner_radius"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="Validate"
                 android:textColor="@color/primaryBackground" >
             </Button>
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/otp_validation_msg"
+            android:id="@+id/otp_enter_manual"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_otp_text"
             android:layout_margin="@dimen/padding"
             android:gravity="center_horizontal"
-            android:text="@string/message_mobVer_waitAndDetect"
+            android:text="(Enter the OTP in case if we fail to detect the SMS automatically)"
             android:textColor="@color/secondaryText"
+            style="@style/PrimaryTextStyle"
             android:textSize="@dimen/small_text_size" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

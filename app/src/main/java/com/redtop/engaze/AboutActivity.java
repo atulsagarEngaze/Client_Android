@@ -24,6 +24,7 @@ public class AboutActivity extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.about_toolbar);
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
+			toolbar.setTitleTextAppearance(this, R.style.toolbarTextFontFamilyStyle);
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 			getSupportActionBar().setTitle(R.string.title_about);
 			//toolbar.setSubtitle(R.string.title_about);
