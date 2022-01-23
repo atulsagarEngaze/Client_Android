@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
@@ -108,7 +109,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void startHomeActivity() {
-        if (AppContext.context.IsAppLoadingFirstTime()) {
+        Boolean isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
+        if (isFirstTimeLoading) {
 
             mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
             mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
@@ -118,9 +120,9 @@ public class SplashActivity extends BaseActivity {
             mProgress.setCanceledOnTouchOutside(false);
             mProgress.setIndeterminate(true);
             mProgress.show();
+            AppContext.context.PerformFirstTimeInitialization();
             AppContext.context.setDefaultValuesAndStartLocationService();
-            ContactListRefreshIntentService.start(this, true);
-            //new Handler().postDelayed(() -> {  }, 3000);
+            ContactListRefreshIntentService.start(this, false);
 
         } else {
             EventManager.RemoveALlPastEvents();
@@ -129,9 +131,7 @@ public class SplashActivity extends BaseActivity {
 
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-
         }
-
     }
 
     @Override
@@ -147,6 +147,7 @@ public class SplashActivity extends BaseActivity {
             Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
         }
 
+        PreffManager.setPrefBoolean("IsFirstTimeLoading", false);
         mProgress.hide();
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);

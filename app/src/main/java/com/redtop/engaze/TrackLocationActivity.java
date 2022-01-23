@@ -125,11 +125,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     private void startContactRefreshService() {
-        if (!ContactListRefreshIntentService.IsContactListRefreshServiceRunning) {
-            Intent serviceIntent = new Intent(mContext, ContactListRefreshIntentService.class);
-            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, false);
-            startService(serviceIntent);
-        }
+        ContactListRefreshIntentService.start(mContext,false);
     }
 
     @Override

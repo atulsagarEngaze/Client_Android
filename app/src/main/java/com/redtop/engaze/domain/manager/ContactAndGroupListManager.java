@@ -50,10 +50,6 @@ public class ContactAndGroupListManager {
         return cg;
     }
 
-    public static void cacheGroupList() {
-        PreffManager.setPrefArrayList("Groups", getAllGroups());
-    }
-
     public static ArrayList<ContactOrGroup> sortContacts(ArrayList<ContactOrGroup> contactsAndGroups) {
         if (contactsAndGroups.size() > 0) {
             Collections.sort(contactsAndGroups, (lhs, rhs) -> lhs.getName().compareToIgnoreCase(rhs.getName()));
@@ -61,15 +57,9 @@ public class ContactAndGroupListManager {
         return contactsAndGroups;
     }
 
-   /* public static ArrayList<ContactOrGroup> getAllRegisteredContacts() {
-        ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<ContactOrGroup>(InternalCaching.getRegisteredContactListFromCache().values());
-        AppContext.context.setRegisteredContactList(sortContacts(contactsAndGroups));
-        return AppContext.context.sortedRegisteredContacts;
-    }*/
-
     public static  ArrayList<ContactOrGroup> getSortedContacts(){
-        ArrayList<ContactOrGroup> contactsAndGroups = new ArrayList<>(InternalCaching.getContactListFromCache().values());
-        ArrayList<ContactOrGroup> registered = new ArrayList<>(InternalCaching.getRegisteredContactListFromCache().values());
+        ArrayList<ContactOrGroup> contactsAndGroups = InternalCaching.getContactListFromCache();
+        ArrayList<ContactOrGroup> registered = new ArrayList<ContactOrGroup>(InternalCaching.getRegisteredContactListFromCache().values());
 
         ArrayList<ContactOrGroup> finalContacts = new ArrayList<>();
        for(ContactOrGroup rcg: registered){
@@ -84,7 +74,7 @@ public class ContactAndGroupListManager {
         return finalContacts;
     }
 
-    public static HashMap<String, ContactOrGroup> getAllContactsFromCache() {
+    public static ArrayList<ContactOrGroup> getAllContactsFromCache() {
         return InternalCaching.getContactListFromCache();
     }
 
@@ -92,13 +82,11 @@ public class ContactAndGroupListManager {
         return PreffManager.getPrefArrayList("Groups");
     }
 
-    public static void initializedRegisteredUser(final OnRefreshMemberListCompleteListner listnerOnSuccess, final OnRefreshMemberListCompleteListner listnerOnFailure) {
-        cacheRegisteredContacts(getAllContactsFromCache(), listnerOnSuccess, listnerOnFailure);
-    }
 
-    public static HashMap<String, ContactOrGroup> getAllContactsFromDeviceContactList() {
+
+    public static ArrayList<ContactOrGroup> getAllContactsFromDeviceContactList() {
         Cursor cursor = null;
-        HashMap<String, ContactOrGroup> contacts = new HashMap<String, ContactOrGroup>();
+        ArrayList<ContactOrGroup> contacts = new ArrayList<>();
         try {
             ContactOrGroup cg;
             String[] columns = {ContactsContract.Contacts.PHOTO_THUMBNAIL_URI, ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER};
@@ -111,7 +99,6 @@ public class ContactAndGroupListManager {
 
             //Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " DESC");
 
-
             if (cursor.getCount() > 0) {
 
                 while (cursor.moveToNext()) {
@@ -120,9 +107,9 @@ public class ContactAndGroupListManager {
 
                     if (!has_phone.endsWith("0")) {
                         ArrayList<String> phoneNumbers = getPhoneNumbers(cursor.getString(ColumeIndex_ID));
-                        for (String phoneNumber : phoneNumbers) {
+
                             cg = new ContactOrGroup();
-                            cg.setMobileNumber(phoneNumber);
+                            cg.setMobileNumbers(phoneNumbers);
                             cg.setName(cursor.getString(ColumeIndex_DISPLAY_NAME));
 
                             cg.setThumbnailUri(thumbnail_uri);
@@ -140,8 +127,7 @@ public class ContactAndGroupListManager {
                                 cg.setImageBitmap(pofilePicBitmap);
                                 cg.setIconImageBitmap(pofilePicBitmap);
                             }
-                            contacts.put(phoneNumber, cg);
-                        }
+                            contacts.add(cg);
                     }
                 }
             }
@@ -156,7 +142,7 @@ public class ContactAndGroupListManager {
         return contacts;
     }
 
-    public static void cacheRegisteredContacts(final HashMap<String, ContactOrGroup> contactsAndgroups,
+    public static void cacheRegisteredContacts(final ArrayList<ContactOrGroup> contactsAndgroups,
                                                final OnRefreshMemberListCompleteListner listnerOnSuccess,
                                                final OnRefreshMemberListCompleteListner listnerOnFailure) {
         if (!AppContext.context.isInternetEnabled) {
@@ -167,11 +153,18 @@ public class ContactAndGroupListManager {
             return;
         }
 
-        userWS.AssignUserIdToRegisteredUser(contactsAndgroups, new OnAPICallCompleteListener<JSONArray>() {
+        HashMap<String, ContactOrGroup> cghasmap = new HashMap<>();
+        for (ContactOrGroup cg : contactsAndgroups) {
+            for (String mobileNumber : cg.getMobileNumbers()){
+                cghasmap.put(mobileNumber,cg);
+            }
+        }
+
+        userWS.AssignUserIdToRegisteredUser(cghasmap, new OnAPICallCompleteListener<JSONArray>() {
             @Override
             public void apiCallSuccess(JSONArray response) {
                 try {
-                    HashMap<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups);
+                    HashMap<String, ContactOrGroup> registeredContacts = prepareRegisteredContactList(response, contactsAndgroups, cghasmap);
                     InternalCaching.saveRegisteredContactListToCache(registeredContacts);
                     listnerOnSuccess.RefreshMemberListComplete(registeredContacts);
 
@@ -190,7 +183,7 @@ public class ContactAndGroupListManager {
 
     }
 
-    private static HashMap<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
+    private static HashMap<String, ContactOrGroup> prepareRegisteredContactList(JSONArray response, ArrayList<ContactOrGroup> contactOrGroupArrayList, HashMap<String, ContactOrGroup> contactsAndgroups) throws JSONException, IOException, ClassNotFoundException {
 
         HashMap<String, ContactOrGroup> registeredContacts = new HashMap<>();
         JSONArray jUsers = response;
@@ -198,7 +191,7 @@ public class ContactAndGroupListManager {
             return registeredContacts;
         }
 
-        for (ContactOrGroup cg : contactsAndgroups.values()) {
+        /*for (ContactOrGroup cg : contactOrGroupArrayList) {
             if (cg.getThumbnailUri() == null || cg.getThumbnailUri() == "") {
                 cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
                 String startingchar = cg.getName().substring(0, 1);
@@ -212,10 +205,10 @@ public class ContactAndGroupListManager {
                 cg.setImageBitmap(pofilePicBitmap);
                 cg.setIconImageBitmap(pofilePicBitmap);
             }
-        }
+        }*/
 
-        String userId = "";
-        ContactOrGroup cg = null;
+        String userId;
+        ContactOrGroup cg;
         for (int i = 0, size = jUsers.length(); i < size; i++) {
             JSONObject jsonObj = jUsers.getJSONObject(i);
 
@@ -224,7 +217,6 @@ public class ContactAndGroupListManager {
                 userId = jsonObj.get("userId").toString();
                 cg.setUserId(userId);
                 registeredContacts.put(userId, cg);
-                contactsAndgroups.put(jsonObj.getString("mobileNumberStoredInRequestorPhone"), cg);
             }
         }
         return registeredContacts;
@@ -242,13 +234,5 @@ public class ContactAndGroupListManager {
         phones.close();
 
         return numbers;
-    }
-
-    private static ArrayList<ContactOrGroup> getAllGroups() {
-
-        ArrayList<ContactOrGroup> groups = new ArrayList<ContactOrGroup>();
-        new ContactOrGroup("group", 123, null);
-
-        return groups;
     }
 }

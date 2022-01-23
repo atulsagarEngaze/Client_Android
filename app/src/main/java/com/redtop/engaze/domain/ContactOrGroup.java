@@ -36,7 +36,7 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 	private String thumbnailuri;
 
 	public ContactOrGroup( String name, int groupId, String userId) {
-		this.numbers = new ArrayList<String>();
+		this.numbers = new ArrayList<>();
 		this.name = name;
 		this.groupId = groupId;
 		this.userId = userId;
@@ -44,7 +44,7 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 
 	public ContactOrGroup() 
 	{ 	
-		this.numbers = new ArrayList<String>();
+		this.numbers = new ArrayList<>();
 	} 
 	public ContactOrGroup(Parcel in) 
 	{ 
@@ -168,10 +168,19 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 	{
 		name = contactName;
 	};
-	
+
+	public ArrayList<String> getMobileNumbers(){
+		return numbers;
+	}
+
+	public void setMobileNumbers(ArrayList<String> mobileNumbers)
+	{
+		numbers = mobileNumbers;
+	};
 	public String getMobileNumber(){
 		return number;
 	}
+
 
 	public void setMobileNumber(String mobileNumber)
 	{

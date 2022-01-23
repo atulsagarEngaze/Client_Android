@@ -121,13 +121,7 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setPadding(0, AppUtility.dpToPx(64, mContext), 0, 0);
-        mMap.setOnMapClickListener(new OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng arg0) {
-                homeViewManager.hideAllListViewLayout();
-            }
-        });
+        mMap.setOnMapClickListener(arg0 -> homeViewManager.hideAllListViewLayout());
 
         if (AppContext.context.isInternetEnabled) {
             runGPSEnableThread();
@@ -138,6 +132,12 @@ public class HomeActivity extends MapLocationSelectionActivity implements Runnin
         findLatLangOnCameraChange = false;
         initializeMapCameraChangeListner();
         homeViewManager.showPin();
+        try {
+            bringPinToMyLocation();
+        }
+        catch (Exception e){
+
+        }
     }
 
     @Override

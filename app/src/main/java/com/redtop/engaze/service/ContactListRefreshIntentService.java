@@ -1,6 +1,5 @@
 package com.redtop.engaze.service;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,7 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class ContactListRefreshIntentService extends IntentService {
 
@@ -24,8 +23,6 @@ public class ContactListRefreshIntentService extends IntentService {
 
     private Context mContext;
     public static boolean IsContactListRefreshServiceRunning = false;
-
-
 
     public ContactListRefreshIntentService() {
         super(TAG);
@@ -53,22 +50,24 @@ public class ContactListRefreshIntentService extends IntentService {
     }
 
     private void refreshContactList(boolean refreshOnlyRegisteredContacts) {
-        HashMap<String, ContactOrGroup> contacts;
+        ArrayList<ContactOrGroup> contacts;
         if (refreshOnlyRegisteredContacts) {
             contacts = InternalCaching.getContactListFromCache();
             refreshRegisteredContactList(contacts);
             return;
         }
 
-
         try {
             contacts = ContactAndGroupListManager.getAllContactsFromDeviceContactList();
-
-            if (contacts != null && contacts.size() > 0) {
-                InternalCaching.saveContactListToCache(contacts);
+            if(contacts==null ||contacts.size()==0){
+                PreffManager.setPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS, Constants.FAILED);
+                broadcastContactListRefreshedProcessComplete();
+                return;
             }
 
+            InternalCaching.saveContactListToCache(contacts);
             PreffManager.setPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS, Constants.SUCCESS);
+            refreshRegisteredContactList(contacts);
 
         } catch (Exception ex) {
             PreffManager.setPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS, Constants.FAILED);
@@ -76,11 +75,9 @@ public class ContactListRefreshIntentService extends IntentService {
             broadcastContactListRefreshedProcessComplete();
             return;
         }
-
-        refreshRegisteredContactList(contacts);
     }
 
-    private void refreshRegisteredContactList(HashMap<String, ContactOrGroup> contacts) {
+    private void refreshRegisteredContactList(ArrayList<ContactOrGroup> contacts) {
         try {
 
             if (contacts != null && contacts.size() > 0) {

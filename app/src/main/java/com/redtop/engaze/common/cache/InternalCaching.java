@@ -100,24 +100,24 @@ public final class InternalCaching {
 
     @SuppressWarnings("unchecked")
     public static List<Event> getEventListFromCache() {
-        ArrayList<Event> events = null;
+        ArrayList<Event> events;
         HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_EVENTS);
         if (cachedEntries != null && cachedEntries.size() != 0) {
-            events = new ArrayList<Event>(cachedEntries.values());
+            events = new ArrayList<>(cachedEntries.values());
         } else {
-            events = new ArrayList<Event>();
+            events = new ArrayList<>();
         }
         return events;
     }
 
     @SuppressWarnings("unchecked")
     public static List<Event> getTrackEventListFromCache() {
-        List<Event> events = null;
+        List<Event> events;
         HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_TRACK_EVENTS);
         if (cachedEntries != null && cachedEntries.size() != 0) {
-            events = new ArrayList<Event>(cachedEntries.values());
+            events = new ArrayList<>(cachedEntries.values());
         } else {
-            events = new ArrayList<Event>();
+            events = new ArrayList<>();
         }
         return events;
     }
@@ -125,8 +125,7 @@ public final class InternalCaching {
     @SuppressWarnings("unchecked")
     private static HashMap<String, Event> getCachedEventHashMap() {
 
-        HashMap<String, Event> cachedEntries = (HashMap<String, Event>) readObject(CACHE_EVENTS);
-        return cachedEntries;
+       return (HashMap<String, Event>) readObject(CACHE_EVENTS);
     }
 
     @SuppressWarnings("unchecked")
@@ -182,22 +181,6 @@ public final class InternalCaching {
         }
         if (sizeTE != cachedEntriesForTE.size()) {
             writeObject(CACHE_TRACK_EVENTS, cachedEntriesForTE);
-        }
-    }
-
-    public static void RemovePastEvents() {
-
-        List<Event> eventList = getEventListFromCache();
-        if (eventList != null) {
-            List<String> tobeRemoved = new ArrayList<String>();
-            for (Event event : eventList) {
-                if (EventService.isEventPast(event)) {
-                    tobeRemoved.add(event.eventId);
-                }
-            }
-            if (tobeRemoved.size() < 0) {
-                removeEventsFromCache(tobeRemoved);
-            }
         }
     }
 
@@ -264,7 +247,7 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    public static void saveContactListToCache(HashMap<String, ContactOrGroup> contacts) {
+    public static void saveContactListToCache(ArrayList<ContactOrGroup> contacts) {
         if (contacts != null) {
             writeObject(CACHE_CONTACTS, contacts);
         }
@@ -278,25 +261,14 @@ public final class InternalCaching {
     }
 
     @SuppressWarnings("unchecked")
-    public static HashMap<String, ContactOrGroup> getContactListFromCache() {
-        HashMap<String, ContactOrGroup> cachedEntries = (HashMap<String, ContactOrGroup>) readObject(CACHE_CONTACTS);
-        return cachedEntries;
+    public static ArrayList<ContactOrGroup> getContactListFromCache() {
+        return (ArrayList<ContactOrGroup>) readObject(CACHE_CONTACTS);
     }
 
     @SuppressWarnings("unchecked")
-    public static HashMap<String, ContactOrGroup> getRegisteredContactListFromCache() {
-        try {
-            HashMap<String, ContactOrGroup> cachedEntries = (HashMap<String, ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
-            return cachedEntries;
-        } catch (ClassCastException ex) {
-            HashMap<String, ContactOrGroup> cachedEntries = new HashMap<String, ContactOrGroup>();
-            ArrayList<ContactOrGroup> CacheArray = (ArrayList<ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
-            for (ContactOrGroup cg : CacheArray) {
-                cachedEntries.put(cg.getUserId(), cg);
-            }
-            writeObject(CACHE_REGISTERED_CONTACTS, cachedEntries);
-            return cachedEntries;
-        }
+    public static HashMap<String, ContactOrGroup>  getRegisteredContactListFromCache() {
+
+        return  (HashMap<String, ContactOrGroup>) readObject(CACHE_REGISTERED_CONTACTS);
     }
 
     @SuppressWarnings("unchecked")

@@ -71,7 +71,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
         mAllMembers = new ArrayList<>();
         mAllMembers.addAll( AppContext.context.sortedContacts);
         if (mAllMembers.size() == 0) {
-            swipeRefreshLayout.setRefreshing(true);
+            //swipeRefreshLayout.setRefreshing(true);
             startContactRefreshService();
 
         } else {
@@ -219,10 +219,6 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
     private void startContactRefreshService() {
-        if (!ContactListRefreshIntentService.IsContactListRefreshServiceRunning) {
-            Intent serviceIntent = new Intent(mContext, ContactListRefreshIntentService.class);
-            serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, false);
-            startService(serviceIntent);
-        }
+        ContactListRefreshIntentService.start(mContext,false);
     }
 }

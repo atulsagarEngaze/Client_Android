@@ -126,37 +126,6 @@ public class ParticipantService {
 
 
 
-    public static ArrayList<EventParticipant> parseMemberList(JSONArray jsonStr) {
-        EventParticipant mem = null;
-        ArrayList<EventParticipant> list = new ArrayList<EventParticipant>();
-        try {
-            for (int i = 0; i < jsonStr.length(); i++) {
-                JSONObject c = jsonStr.getJSONObject(i);
-
-                mem = new EventParticipant(
-                        AppUtility.convertNullToEmptyString(c.getString("UserId")),
-                        AppUtility.convertNullToEmptyString(c.getString("ProfileName")),
-                        AppUtility.convertNullToEmptyString(c.getString("MobileNumber")),
-                        AcceptanceStatus.getStatus(c.getInt("EventAcceptanceStateId"))
-                );
-                ContactOrGroup cg = ContactAndGroupListManager.getContact(c.getString("UserId"));
-                if (cg != null) {
-                    mem.profileName = cg.getName();
-                    mem.contactOrGroup = cg;
-                } else {
-                    mem.profileName = "~" + mem.profileName;
-                }
-                mem.isUserLocationShared = c.getBoolean("IsUserLocationShared");
-                list.add(mem);
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-
-    }
-
     public static boolean isCurrentUserInitiator(String initiatorId) {
         if (AppContext.context.loginId.equalsIgnoreCase(initiatorId)) {
             return true;

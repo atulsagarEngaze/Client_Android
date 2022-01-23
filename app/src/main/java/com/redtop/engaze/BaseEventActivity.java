@@ -403,6 +403,14 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
             participant = new EventParticipant();
             participant.userId = cg.getUserId();
             participant.mobileNumber = cg.getMobileNumber();
+            if(participant.mobileNumber==null ||participant.mobileNumber==""){
+                if(cg.getMobileNumbers()!=null && cg.getMobileNumbers().size()>0){
+                    participant.mobileNumber = cg.getMobileNumbers().get(0);
+                }
+                else{
+                    participant.mobileNumber = "";
+                }
+            }
             participant.contactOrGroup = cg;
             createOrUpdateEvent.participants.add(participant);
 

@@ -27,19 +27,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.service.FirstTimeInitializationService;
 import com.redtop.engaze.service.RegistrationIntentService;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import com.redtop.engaze.manager.ProfileManager;
 
 
 public class ProfileActivity extends BaseActivity {
@@ -61,7 +58,6 @@ public class ProfileActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext= this;
-		startInitializationService();
 		setContentView(R.layout.activity_profile);
 		TextView eulaTextView = (TextView)findViewById(R.id.linktermsandservice);
 		//checkbox.setText("");
@@ -155,10 +151,7 @@ public class ProfileActivity extends BaseActivity {
 			}
 		});
 	}
-	private void startInitializationService() {
-		Intent intent = new Intent(mContext, FirstTimeInitializationService.class);
-		startService(intent);
-	}
+
 	@Override
 	protected void onResume() {
 		turnOnOfInternetAvailabilityMessage();
