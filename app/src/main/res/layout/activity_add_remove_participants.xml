@@ -107,6 +107,6 @@
         android:layout_marginRight="@dimen/padding"
         android:layout_marginTop="-24dip"
         android:padding="@dimen/padding"
-        android:src="@drawable/ic_check_black_24dp" />
+        android:src="@drawable/ic_check_white_24" />
 
 </RelativeLayout>

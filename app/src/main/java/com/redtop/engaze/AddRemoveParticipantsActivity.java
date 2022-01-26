@@ -205,16 +205,15 @@ public class AddRemoveParticipantsActivity extends BaseActivity implements Swipe
         lblname.setText(cg.getName());
         lblname.setTag(cg);
 
-        contactLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFlowContainer.removeView(v);
-                if (mFlowContainer.getChildCount() == 0) {
-                    mInviteeSection.setVisibility(View.GONE);
-                    mAddInvitees.setVisibility(View.GONE);
-                }
-                mAddedMembers.remove(((LinearLayout) v).getChildAt(0).getTag());
+        ImageButton clearButton = (ImageButton)contactLayout.getChildAt(1);
+
+        clearButton.setOnClickListener(v -> {
+            mFlowContainer.removeView(contactLayout);
+            if (mFlowContainer.getChildCount() == 0) {
+                mInviteeSection.setVisibility(View.GONE);
+                mAddInvitees.setVisibility(View.GONE);
             }
+            mAddedMembers.remove(contactLayout.getChildAt(0).getTag());
         });
 
         mFlowContainer.addView(contactLayout, childrenCount - 1);

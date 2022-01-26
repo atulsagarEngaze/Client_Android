@@ -57,16 +57,16 @@ public class ContactAndGroupListManager {
         return contactsAndGroups;
     }
 
-    public static  ArrayList<ContactOrGroup> getSortedContacts(){
+    public static ArrayList<ContactOrGroup> getSortedContacts() {
         ArrayList<ContactOrGroup> contactsAndGroups = InternalCaching.getContactListFromCache();
         ArrayList<ContactOrGroup> registered = new ArrayList<ContactOrGroup>(InternalCaching.getRegisteredContactListFromCache().values());
 
         ArrayList<ContactOrGroup> finalContacts = new ArrayList<>();
-       for(ContactOrGroup rcg: registered){
-           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-               contactsAndGroups.removeIf(cg->cg.getName().equals(rcg.getName()));
-           }
-       }
+        for (ContactOrGroup rcg : registered) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                contactsAndGroups.removeIf(cg -> cg.getName().equals(rcg.getName()));
+            }
+        }
 
         finalContacts.addAll(sortContacts(registered));
         finalContacts.addAll(sortContacts(contactsAndGroups));
@@ -83,7 +83,6 @@ public class ContactAndGroupListManager {
     }
 
 
-
     public static ArrayList<ContactOrGroup> getAllContactsFromDeviceContactList() {
         Cursor cursor = null;
         ArrayList<ContactOrGroup> contacts = new ArrayList<>();
@@ -98,36 +97,42 @@ public class ContactAndGroupListManager {
             int ColumeIndex_HAS_PHONE_NUMBER = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
 
             //Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " DESC");
-
+            boolean isTeleMarketingNumber;
             if (cursor.getCount() > 0) {
-
                 while (cursor.moveToNext()) {
-                    String thumbnail_uri = cursor.getString(ColumeIndex_THUMBNAIL);
+                    isTeleMarketingNumber = false;
                     String has_phone = cursor.getString(ColumeIndex_HAS_PHONE_NUMBER);
-
                     if (!has_phone.endsWith("0")) {
                         ArrayList<String> phoneNumbers = getPhoneNumbers(cursor.getString(ColumeIndex_ID));
-
-                            cg = new ContactOrGroup();
-                            cg.setMobileNumbers(phoneNumbers);
-                            cg.setName(cursor.getString(ColumeIndex_DISPLAY_NAME));
-
-                            cg.setThumbnailUri(thumbnail_uri);
-
-                            if (thumbnail_uri == null || thumbnail_uri == "") {
-                                cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
-                                String startingchar = cg.getName().substring(0, 1);
-                                if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
-                                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
-                                } else {
-                                    cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
-                                }
-                            } else {
-                                Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
-                                cg.setImageBitmap(pofilePicBitmap);
-                                cg.setIconImageBitmap(pofilePicBitmap);
+                        for (String phoneNo : phoneNumbers) {
+                            if (phoneNo.length() < 10) {
+                                isTeleMarketingNumber = true;
                             }
-                            contacts.add(cg);
+                        }
+                        if (isTeleMarketingNumber) {
+                            continue;
+                        }
+                        String thumbnail_uri = cursor.getString(ColumeIndex_THUMBNAIL);
+                        cg = new ContactOrGroup();
+                        cg.setMobileNumbers(phoneNumbers);
+                        cg.setName(cursor.getString(ColumeIndex_DISPLAY_NAME));
+
+                        cg.setThumbnailUri(thumbnail_uri);
+
+                        if (thumbnail_uri == null || thumbnail_uri == "") {
+                            cg.setIconImageBitmap(ContactOrGroup.getAppUserIconBitmap());
+                            String startingchar = cg.getName().substring(0, 1);
+                            if (!(startingchar.matches("[0-9]") || startingchar.startsWith("+"))) {
+                                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForText(MaterialColor.getColor(cg.getName()), 40, startingchar.toUpperCase()));
+                            } else {
+                                cg.setImageBitmap(BitMapHelper.generateCircleBitmapForIcon(MaterialColor.getColor(cg.getName()), 40, Uri.parse("android.resource://com.redtop.engaze/drawable/ic_person_white_24dp")));
+                            }
+                        } else {
+                            Bitmap pofilePicBitmap = BitMapHelper.generateCircleBitmapForImage(54, Uri.parse(cg.getThumbnailUri()));
+                            cg.setImageBitmap(pofilePicBitmap);
+                            cg.setIconImageBitmap(pofilePicBitmap);
+                        }
+                        contacts.add(cg);
                     }
                 }
             }
@@ -155,8 +160,8 @@ public class ContactAndGroupListManager {
 
         HashMap<String, ContactOrGroup> cghasmap = new HashMap<>();
         for (ContactOrGroup cg : contactsAndgroups) {
-            for (String mobileNumber : cg.getMobileNumbers()){
-                cghasmap.put(mobileNumber,cg);
+            for (String mobileNumber : cg.getMobileNumbers()) {
+                cghasmap.put(mobileNumber, cg);
             }
         }
 
