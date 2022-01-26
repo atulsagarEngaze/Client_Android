@@ -1,11 +1,8 @@
 package com.redtop.engaze;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,34 +10,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.redtop.engaze.adapter.MemberAdapter;
+import com.redtop.engaze.adapter.ContactOrGroupListAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.service.ContactListRefreshIntentService;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MemberListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+public class ContactGroupListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     ListView listView;
-    public String[] friends;
-    //public ArrayList<ContactOrGroup>mMembers;
+
     public ArrayList<ContactOrGroup> mAllMembers;
-    public MemberAdapter mAdapter;
+    public ContactOrGroupListAdapter mAdapter;
     public BroadcastReceiver mMemberListBroadcastReceiver;
     public static Boolean isFirstTime = false;
 
@@ -55,7 +47,7 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        setContentView(R.layout.activity_friend_list);
+        setContentView(R.layout.activity_contact_group_list);
         mLl_nocontacts = findViewById(R.id.ll_drawer_contacts_help_text);
         listView = findViewById(R.id.friend_list);
         Toolbar toolbar = findViewById(R.id.friend_toolbar);
@@ -96,8 +88,8 @@ public class MemberListActivity extends BaseActivity implements SwipeRefreshLayo
         } else {
             mLl_nocontacts.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            mAdapter = new MemberAdapter(this,
-                    R.layout.member_list_item, mAllMembers);
+            mAdapter = new ContactOrGroupListAdapter(this,
+                    R.layout.item_contact_group_list, mAllMembers);
             listView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
 

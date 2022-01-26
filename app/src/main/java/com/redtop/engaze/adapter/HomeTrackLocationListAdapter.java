@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.google.gson.JsonArray;
 import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.OnActionCompleteListner;
@@ -123,14 +125,11 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                 if (event.getParticipantCount() <= 2) {
                     //End the event since it is a 1 to 1 event
                     ProgressBar.showProgressBar("Please wait");
-                    EventManager.endEvent(event, new OnActionCompleteListner() {
-                        @Override
-                        public void actionComplete(Action action) {
-                            if (callback != null) {
-                                callback.refreshTrackingEvents();
-                            }
-                            ProgressBar.hideProgressBar();
+                    EventManager.endEvent(event, action -> {
+                        if (callback != null) {
+                            callback.refreshTrackingEvents();
                         }
+                        ProgressBar.hideProgressBar();
                     }, (msg, action) -> {
                         EventManager.refreshEventList(null, null);
                         AppContext.actionHandler.actionFailed(msg, action);
@@ -141,8 +140,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
                     ProgressBar.showProgressBar("Please wait");
                     event.ContactOrGroups.remove(event.getCurrentParticipant().contactOrGroup);
 
-                    JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(event.ContactOrGroups, event.eventId);
-                    ParticipantManager.addRemoveParticipants(jObj, action -> {
+                    ParticipantManager.addRemoveParticipants(event.ContactOrGroups, event, action -> {
                         //updateRecyclerViews();
                         if (callback != null) {
                             callback.refreshTrackingEvents();

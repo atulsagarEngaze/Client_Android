@@ -8,16 +8,19 @@ import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
+import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;
 import com.redtop.engaze.domain.ContactOrGroup;
+import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.webservice.IParticipantWS;
 import com.redtop.engaze.webservice.ParticipantWS;
 import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ import java.util.HashMap;
 public class ParticipantManager {
     private final static String TAG = ParticipantManager.class.getName();
 
-    private final static IParticipantWS participantWS = new ParticipantWS();
+    private final static ParticipantWS participantWS = new ParticipantWS();
 
     public static void pokeParticipants(JSONObject pokeParticipantsJSON,
                                         final OnActionCompleteListner onActionCompleteListner,
@@ -64,7 +67,7 @@ public class ParticipantManager {
         });
     }
 
-    public static void addRemoveParticipants(JSONObject addRemoveContactsJSON, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
+    public static void addRemoveParticipants(final ArrayList<ContactOrGroup>contactorGroupList, final Event event, final OnActionCompleteListner listenerOnSuccess, final OnActionFailedListner listenerOnFailure) {
         String message = "";
         if (!AppContext.context.isInternetEnabled) {
             message = AppContext.context.getResources().getString(R.string.message_general_no_internet_responseFail);
@@ -72,18 +75,37 @@ public class ParticipantManager {
             listenerOnFailure.actionFailed(message, Action.ADDREMOVEPARTICIPANTS);
             return;
         }
+        JSONArray newParticipantJArry =  ParticipantService.createUpdateParticipantsJSON(contactorGroupList);
+        newParticipantJArry.put(event.getCurrentParticipant().userId);
 
-        participantWS.addRemoveParticipants(addRemoveContactsJSON, new OnAPICallCompleteListener<JSONObject>() {
+        participantWS.addRemoveParticipants(newParticipantJArry,  event.eventId, new OnAPICallCompleteListener<String>() {
 
             @Override
-            public void apiCallSuccess(JSONObject response) {
-                Log.d(TAG, "EventResponse:" + response.toString());
+            public void apiCallSuccess(String response) {
+                Log.d(TAG, "EventResponse:" + response);
                 try {
+                    ArrayList<ContactOrGroup> tempCGList = new ArrayList<>(contactorGroupList);
+                    event.ContactOrGroups = contactorGroupList;
+                    ArrayList<EventParticipant> existingParticipantList = new ArrayList<>();
 
-
-                  /*  List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
-                    Event event = eventList.get(0);
-                    InternalCaching.saveEventToCache(event);*/
+                    for (EventParticipant participant : event.participants) {
+                        for (ContactOrGroup cg : event.ContactOrGroups) {
+                            if(cg.userId.equals(participant.userId)){
+                                existingParticipantList.add(participant);
+                                tempCGList.remove(cg);
+                                break;
+                            }
+                        }
+                    }
+                    existingParticipantList.add(event.getCurrentParticipant());
+                    event.participants = existingParticipantList;
+                    ArrayList<EventParticipant> newParticipantList =
+                            CreateParticipantListFromContactGroupLst(tempCGList);
+                    for(EventParticipant newParticipant :newParticipantList ){
+                        newParticipant.acceptanceStatus = AcceptanceStatus.Pending;
+                        event.participants.add(newParticipant);
+                    }
+                    InternalCaching.saveEventToCache(event);
                     listenerOnSuccess.actionComplete(Action.ADDREMOVEPARTICIPANTS);
 
                 } catch (Exception ex) {
@@ -101,6 +123,29 @@ public class ParticipantManager {
             }
         });
 
+    }
+
+    public static ArrayList<EventParticipant>CreateParticipantListFromContactGroupLst(ArrayList<ContactOrGroup> cgList){
+        ArrayList<EventParticipant> participants =  new ArrayList<>();
+        EventParticipant participant;
+        for (ContactOrGroup cg : cgList) {
+            participant = new EventParticipant();
+            participant.userId = cg.getUserId();
+            participant.mobileNumber = cg.getMobileNumber();
+            if(participant.mobileNumber==null ||participant.mobileNumber==""){
+                if(cg.getMobileNumbers()!=null && cg.getMobileNumbers().size()>0){
+                    participant.mobileNumber = cg.getMobileNumbers().get(0);
+                }
+                else{
+                    participant.mobileNumber = "";
+                }
+            }
+            participant.contactOrGroup = cg;
+            participants.add(participant);
+
+        }
+
+        return  participants;
     }
 
     public static void setContactsGroup(ArrayList<EventParticipant> eventMembers) {

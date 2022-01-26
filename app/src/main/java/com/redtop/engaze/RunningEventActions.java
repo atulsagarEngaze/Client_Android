@@ -267,7 +267,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
         PreffManager.setPrefArrayList("Invitees", contactList);
 
-        Intent i = new Intent(RunningEventActions.this, ContactsListActivity.class);
+        Intent i = new Intent(RunningEventActions.this, AddRemoveParticipantsActivity.class);
         startActivityForResult(i, ADDREMOVE_INVITEES_REQUEST_CODE);
     }
 

@@ -37,7 +37,7 @@ public class ParticipantWSProxy extends BaseWebService implements IParticipantWS
 
     }
 
-    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
+    public void addRemoveParticipants(JSONObject jsonObject, final String eventId, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
 
             onAPICallCompleteListener.apiCallSuccess(fakeJsonResponse);

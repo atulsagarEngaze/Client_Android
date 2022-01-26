@@ -101,7 +101,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             mEventLocationTextView.setText(AppUtility.createTextForDisplay(createOrUpdateEvent.destination.getName(), Constants.EDIT_ACTIVITY_LOCATION_TEXT_LENGTH));
         }
 
-        mMembers = AppContext.context.sortedContacts;
+        mMembers = new ArrayList<>(AppContext.context.sortedContacts);
         if (mMembers == null || mMembers.size() == 0) {
             showProgressBar("Please wait while initializing contact list first time.");
             startContactRefreshService();
@@ -137,7 +137,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
             Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
         }
         if (contactsRefreshStatus.equals(Constants.SUCCESS)) {
-            mMembers = AppContext.context.sortedContacts;
+            mMembers = new ArrayList<>(AppContext.context.sortedContacts);
             if (mMembers != null) {
                 mAdapter = new ContactListAutoCompleteAdapter(mContext, R.layout.item_contact_group_list, mMembers);
                 viewManager.bindAutoCompleteTextViewToAdapter(mAdapter);

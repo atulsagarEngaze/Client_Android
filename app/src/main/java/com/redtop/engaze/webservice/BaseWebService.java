@@ -12,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -48,6 +47,7 @@ public abstract class BaseWebService {
         return mRequestQueue;
     }
 
+
     protected static void getData(String url,
                                   final OnAPICallCompleteListener callCompleteListener) {
 
@@ -72,56 +72,23 @@ public abstract class BaseWebService {
 
     protected static void putData(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListener callCompleteListener) {
-        Log.d(TAG, "Calling URL:" + url);
-        if(jRequestobj!=null){
-            Log.d(TAG, "Request Body:" + jRequestobj.toString());
-        }
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-                url, jRequestobj, (Response.Listener<JSONObject>) response -> {
-            callCompleteListener.apiCallSuccess(response);
-        }, (ErrorListener) error -> {
-            Log.d(TAG, "Volley Error: " + error.getMessage());
-            callCompleteListener.apiCallFailure();
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
+        callAPI(jRequestobj,url,callCompleteListener,Request.Method.PUT);
 
-            @Override
-            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                try {
-                    String jsonString = new String(response.data,
-                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
-
-                    JSONObject result = null;
-
-                    if (jsonString != null && jsonString.length() > 0) {
-                        Log.d(TAG, jsonString);
-                        result = new JSONObject(jsonString);
-                    }
-
-                    return Response.success(result,
-                            HttpHeaderParser.parseCacheHeaders(response));
-                } catch (UnsupportedEncodingException e) {
-                    return Response.error(new ParseError(e));
-                } catch ( JSONException je) {
-                    return Response.error(new ParseError(je));
-                }
-            }
-        };
-        jsonObjReq.setRetryPolicy(GetDefaultReTryPolicy());
-        // Adding request to request queue
-        addToRequestQueue(jsonObjReq, AppContext.context);
     }
 
     protected static void postData(JSONObject jRequestobj, String url,
-                                   final OnAPICallCompleteListener callCompleteListener) {
+                                  final OnAPICallCompleteListener callCompleteListener) {
+        callAPI(jRequestobj,url,callCompleteListener,Request.Method.POST);
+
+    }
+
+    private static void callAPI(JSONObject jRequestobj, String url,
+                                final OnAPICallCompleteListener callCompleteListener, int httpMethod){
         Log.d(TAG, "Calling URL:" + url);
         if(jRequestobj!=null){
             Log.d(TAG, "Request Body:" + jRequestobj.toString());
         }
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(httpMethod,
                 url, jRequestobj, (Response.Listener<JSONObject>) response -> {
             callCompleteListener.apiCallSuccess(response);
         }, (ErrorListener) error -> {
@@ -159,6 +126,7 @@ public abstract class BaseWebService {
         // Adding request to request queue
         addToRequestQueue(jsonObjReq, AppContext.context);
     }
+
 
     protected static void postDataArrayResponse(JSONObject jRequestobj, String url,
                                    final OnAPICallCompleteListener callCompleteListener) {
@@ -210,14 +178,48 @@ public abstract class BaseWebService {
         addToRequestQueue(jsonObjReq, AppContext.context);
     }
 
-    protected static void postDataStringResponse(JSONObject jRequestobj, String url,
-                                   final OnAPICallCompleteListener callCompleteListener) {
-        Log.d(TAG, "Calling URL:" + url);
+
+    protected static void postArrayDataStringResponse(JSONArray  jRequestArray, String url,
+                                                      final OnAPICallCompleteListener callCompleteListener){
+        if(jRequestArray!=null){
+            Log.d(TAG, "Request Body:" + jRequestArray.toString());
+        }
+        callAPIStringResponse(jRequestArray.toString().getBytes(), url, callCompleteListener, Request.Method.POST);
+    }
+
+    protected static void putArrayDataStringResponse(JSONArray  jRequestArray, String url,
+                                                     final OnAPICallCompleteListener callCompleteListener) {
+        if(jRequestArray!=null){
+            Log.d(TAG, "Request Body:" + jRequestArray.toString());
+        }
+        callAPIStringResponse(jRequestArray.toString().getBytes(), url, callCompleteListener, Request.Method.PUT);
+    }
+
+    protected static void postJsonDataStringResponse(JSONObject jRequestobj, String url,
+                                                      final OnAPICallCompleteListener callCompleteListener){
         if(jRequestobj!=null){
             Log.d(TAG, "Request Body:" + jRequestobj.toString());
         }
+        callAPIStringResponse(jRequestobj.toString().getBytes(), url, callCompleteListener, Request.Method.POST);
+    }
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+    protected static void putJsonDataStringResponse(JSONObject jRequestobj, String url,
+                                                     final OnAPICallCompleteListener callCompleteListener) {
+        if(jRequestobj!=null){
+            Log.d(TAG, "Request Body:" + jRequestobj.toString());
+        }
+        callAPIStringResponse(jRequestobj.toString().getBytes(), url, callCompleteListener, Request.Method.PUT);
+    }
+
+
+
+
+    private static void callAPIStringResponse(byte[] data, String url,
+                                                 final OnAPICallCompleteListener callCompleteListener, int httpMethod) {
+        Log.d(TAG, "Calling URL:" + url);
+
+
+        StringRequest request = new StringRequest(httpMethod, url,
                 response -> {
                     callCompleteListener.apiCallSuccess(response);
                 },
@@ -225,10 +227,10 @@ public abstract class BaseWebService {
                     callCompleteListener.apiCallFailure();
                 }
         ) {
-                @Override
-                public byte[] getBody() {
-                    return jRequestobj.toString().getBytes();
-                }
+            @Override
+            public byte[] getBody() {
+                return data;
+            }
             @Override
             public String getBodyContentType() {
                 return "application/json";
@@ -241,17 +243,10 @@ public abstract class BaseWebService {
     }
 
 
-
     private static RetryPolicy GetDefaultReTryPolicy() {
         return new DefaultRetryPolicy(DEFAULT_MEDIUM_TIME_TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-    }
-
-    protected static <T> void addToRequestQueue(Request<T> req, String tag, Context context) {
-        // set the default tag if tag is empty
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue(context).add(req);
     }
 
     protected static <T> void addToRequestQueue(Request<T> req, Context context) {

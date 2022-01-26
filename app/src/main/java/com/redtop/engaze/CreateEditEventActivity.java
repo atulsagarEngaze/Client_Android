@@ -410,7 +410,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         updateTime(mStartTimeDisplayView, startHours, startMinutes);
         updateDate(mStartDateDisplayView);
 
-        mMembers = AppContext.context.sortedContacts;
+        mMembers = new ArrayList<>(AppContext.context.sortedContacts);
         if (mMembers == null || mMembers.size() == 0) {
             showProgressBar("Please wait while initializing contact list first time.");
             startContactRefreshService();

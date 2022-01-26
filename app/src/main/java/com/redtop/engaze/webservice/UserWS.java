@@ -19,7 +19,7 @@ public class UserWS extends BaseWebService implements IUserWS {
     public void saveProfile(JSONObject jRequestobj,
                             final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {
-            postDataStringResponse(jRequestobj, ApiUrl.ACCOUNT_REGISTER, onAPICallCompleteListener);
+            postJsonDataStringResponse(jRequestobj, ApiUrl.ACCOUNT_REGISTER, onAPICallCompleteListener);
         } catch (Exception ex) {
             Log.d(TAG, ex.toString());
             ex.printStackTrace();

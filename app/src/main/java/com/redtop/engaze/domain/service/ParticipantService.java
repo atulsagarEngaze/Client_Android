@@ -186,9 +186,8 @@ public class ParticipantService {
         return isValid;
     }
 
-    public static JSONObject createUpdateParticipantsJSON(ArrayList<ContactOrGroup> contactsAndgroups, String eventId) {
-        JSONObject userListJobj;
-        JSONObject jobj = new JSONObject();
+    public static JSONArray createUpdateParticipantsJSON(ArrayList<ContactOrGroup> contactsAndgroups) {
+
         JSONArray jsonarr = new JSONArray();
 
         String userId;
@@ -196,25 +195,21 @@ public class ParticipantService {
             if (contactsAndgroups != null) {
                 for (ContactOrGroup cg : contactsAndgroups) {
                     userId = cg.getUserId();
-                    userListJobj = new JSONObject();
+
                     if (userId != null && !userId.isEmpty()) {
-                        userListJobj.put("UserId", userId);
+                        jsonarr.put(userId);
 
                     } else {
-                        userListJobj.put("MobileNumber", cg.getNumbers().get(0));
+                        jsonarr.put(cg.getNumbers().get(0));
                     }
-                    jsonarr.put(userListJobj);
                 }
             }
 
-            jobj.put("EventId", eventId);
-            jobj.put("UserList", jsonarr);
-            jobj.put("RequestorId", AppContext.context.loginId);
         } catch (Exception e) {
             // TODO: handle exception
         }
 
-        return jobj;
+        return jsonarr;
     }
 
     public static void updateUserListWithLocation(ArrayList<UsersLocationDetail> userLocationsFromServer, List<UsersLocationDetail> userLocationList, LatLng destinationLatLang) {

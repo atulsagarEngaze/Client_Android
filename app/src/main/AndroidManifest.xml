@@ -89,7 +89,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme" />
         <activity
-            android:name=".MemberListActivity"
+            android:name=".ContactGroupListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme" />
         <activity
@@ -116,7 +116,7 @@
             android:theme="@style/ETMaterialTheme"></activity>
 
         <activity
-            android:name=".ContactsListActivity"
+            android:name=".AddRemoveParticipantsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ETMaterialTheme"></activity>
         <meta-data

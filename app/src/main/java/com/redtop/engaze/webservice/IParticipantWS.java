@@ -10,6 +10,6 @@ public interface IParticipantWS {
     public void pokeParticipants(JSONObject pokeAllContactsJSON,
                                  final OnAPICallCompleteListener onAPICallCompleteListener);
 
-    public void addRemoveParticipants(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener);
+    public void addRemoveParticipants(JSONObject jsonObject, final String eventId ,final OnAPICallCompleteListener onAPICallCompleteListener);
 
 }

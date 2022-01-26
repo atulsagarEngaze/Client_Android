@@ -1,5 +1,6 @@
 package com.redtop.engaze;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -125,8 +126,7 @@ public class RunningEventActivityResults extends RunningEventLocationRefresh imp
                 case ADDREMOVE_INVITEES_REQUEST_CODE:
                     showProgressBar(getResources().getString(R.string.message_general_progressDialog));
                     mContactsAndgroups = PreffManager.getPrefArrayList("Invitees");
-                    JSONObject jObj = ParticipantService.createUpdateParticipantsJSON(mContactsAndgroups, mEventId);
-                    ParticipantManager.addRemoveParticipants(jObj, action -> {
+                    ParticipantManager.addRemoveParticipants(mContactsAndgroups, mEvent, action -> {
                         mEvent = EventManager.getEvent(mEventId, true);
                         updateRecyclerViews();
                         AppContext.actionHandler.actionComplete(action);

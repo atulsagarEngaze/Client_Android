@@ -36,6 +36,7 @@ import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.fragment.TrackingOffsetFragment;
 
@@ -398,23 +399,9 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
         EventParticipant participant = null;
         setReminderOffset();
         setTrackingOffset();
-        createOrUpdateEvent.participants =  new ArrayList<>();
-        for (ContactOrGroup cg : createOrUpdateEvent.ContactOrGroups) {
-            participant = new EventParticipant();
-            participant.userId = cg.getUserId();
-            participant.mobileNumber = cg.getMobileNumber();
-            if(participant.mobileNumber==null ||participant.mobileNumber==""){
-                if(cg.getMobileNumbers()!=null && cg.getMobileNumbers().size()>0){
-                    participant.mobileNumber = cg.getMobileNumbers().get(0);
-                }
-                else{
-                    participant.mobileNumber = "";
-                }
-            }
-            participant.contactOrGroup = cg;
-            createOrUpdateEvent.participants.add(participant);
 
-        }
+        createOrUpdateEvent.participants = ParticipantManager
+                .CreateParticipantListFromContactGroupLst(createOrUpdateEvent.ContactOrGroups);
         createOrUpdateEvent.participants.add(createOrUpdateEvent.getCurrentParticipant());
 
         //createOrUpdateEvent.ReminderType = (mReminder.getNotificationType());

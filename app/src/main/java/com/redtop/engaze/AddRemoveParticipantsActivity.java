@@ -1,7 +1,6 @@
 package com.redtop.engaze;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,7 +20,6 @@ import android.widget.Toast;
 import com.redtop.engaze.adapter.ContactOrGroupListAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.service.ContactListRefreshIntentService;
@@ -33,18 +29,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class ContactsListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class AddRemoveParticipantsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
     private SearchView mSearchView;
     private ListView mListView;
-    public Handler mHandler;
     private ContactOrGroupListAdapter mAdapter;
 
     private ViewGroup mFlowContainer;
     private RelativeLayout mInviteeSection;
     private ImageButton mAddInvitees;
-    public static Boolean isFirstTime = false;
-
-    //ArrayList<ContactOrGroup> mMembers = new ArrayList<ContactOrGroup> ();
     ArrayList<ContactOrGroup> mAddedMembers;
     ArrayList<Integer> contactGroupPositions = new ArrayList<Integer>();
     private LinearLayout mLl_nocontacts;
@@ -54,9 +46,8 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         mContext = this;
-        setContentView(R.layout.activity_contact_group);
+        setContentView(R.layout.activity_add_remove_participants);
         Toolbar toolbar = findViewById(R.id.search_contact_toolbar);
         String caller = getIntent().getStringExtra("caller");
         if (caller != null && caller.equals(HomeActivity.class.toString())) {
@@ -66,12 +57,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             getSupportActionBar().setTitle(R.string.title_select_friends);
-            toolbar.setNavigationOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
         initializeElements();
         mAllMembers = AppContext.context.sortedContacts;
@@ -92,7 +78,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
         } else {
             mInviteeSection.setVisibility(View.GONE);
             mAddInvitees.setVisibility(View.GONE);
-            mAddedMembers = new ArrayList<ContactOrGroup>();
+            mAddedMembers = new ArrayList<>();
         }
 
         initializeClickEvents();
@@ -136,7 +122,7 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
     private void loadFriendList() {
 
         if (mAllMembers == null || mAllMembers.size() == 0) {
-            mAllMembers = new ArrayList<ContactOrGroup>();
+            mAllMembers = new ArrayList<>();
             inviteFriend();
             mLl_nocontacts.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.GONE);
@@ -154,12 +140,10 @@ public class ContactsListActivity extends BaseActivity implements SwipeRefreshLa
 
         mListView.setOnItemClickListener((adapter, v, position, arg3) -> {
             ContactOrGroup value = (ContactOrGroup) adapter.getItemAtPosition(position);
-            //v.setSelected(true);
 
             if (mAddedMembers.size() < 10) {
 
                 if (mAddedMembers.size() == 0) {
-                    //removeHintText();
                     mAddInvitees.setVisibility(View.VISIBLE);
                     mInviteeSection.setVisibility(View.VISIBLE);
                 }

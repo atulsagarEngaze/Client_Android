@@ -79,15 +79,13 @@ public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
             holder.btnInvite.setVisibility(View.GONE);
         }
 
-        holder.btnInvite.setOnClickListener(new OnClickListener() {
-            //@Override
-            public void onClick(View v) {
-                ProgressBar.showProgressBar(mContext.getResources().getString(R.string.message_general_progressDialog));
-                String num = rowItem.getNumbers().get(0);
-                mInviteJasonObj = createInvitationJson(num.toString());
-                SendInvite();
+        //@Override
+        holder.btnInvite.setOnClickListener(v -> {
+            ProgressBar.showProgressBar(mContext.getResources().getString(R.string.message_general_progressDialog));
+            String num = rowItem.getNumbers().get(0);
+            mInviteJasonObj = createInvitationJson(num.toString());
+            SendInvite();
 
-            }
         });
 
         //holder.imageView.setImageResource(rowItem.getGroupId()());

@@ -21,9 +21,6 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.common.utility.UserMessageHandler;
-import com.redtop.engaze.domain.ContactOrGroup;
-
-import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -168,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                intent = new Intent(this, MemberListActivity.class);
+                intent = new Intent(this, ContactGroupListActivity.class);
                 break;
             case 4:
                 intent = new Intent(this, EventSettingsActivity.class);
