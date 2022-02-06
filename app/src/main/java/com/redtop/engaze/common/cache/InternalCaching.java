@@ -76,14 +76,11 @@ public final class InternalCaching {
     }
 
     public static void initializeCache() {
-        HashMap<String, Event> cachedEvents = new HashMap<String, Event>();
-        writeObject(CACHE_EVENTS, cachedEvents);
-        writeObject(CACHE_TRACK_EVENTS, cachedEvents);
-        HashMap<String, ContactOrGroup> contacts = new HashMap<String, ContactOrGroup>();
-        writeObject(CACHE_CONTACTS, contacts);
-        writeObject(CACHE_REGISTERED_CONTACTS, contacts);
-        ArrayList<EventPlace> cachedD = new ArrayList<EventPlace>();
-        writeObject(CACHE_DESTINATIONS, cachedD);
+        writeObject(CACHE_EVENTS, new HashMap<String, Event>());
+        writeObject(CACHE_TRACK_EVENTS, new HashMap<String, Event>());
+        writeObject(CACHE_CONTACTS, new ArrayList<ContactOrGroup>());
+        writeObject(CACHE_REGISTERED_CONTACTS, new HashMap<String, ContactOrGroup>());
+        writeObject(CACHE_DESTINATIONS, new ArrayList<EventPlace>());
     }
 
     @SuppressWarnings("unchecked")

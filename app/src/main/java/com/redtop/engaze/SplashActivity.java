@@ -1,6 +1,7 @@
 package com.redtop.engaze;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,7 +33,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ALL_NECCESSARY;
+import static com.redtop.engaze.common.constant.RequestCode.Permission.READ_CONTACTS;
 
 public class SplashActivity extends BaseActivity {
 
@@ -51,32 +55,52 @@ public class SplashActivity extends BaseActivity {
 
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.i("SplashActivity", "FCM Registration Token: " + token);
+
+
         //first time load ask for all the permissions needed
         if (AppContext.context.loginId == null) {
-            checkRequiredPermissions();
+            initiateMobileRegistrationAndProfileCreationProcess();
         } else {
-            startHomeActivity();
+
+            Boolean isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
+            if (isFirstTimeLoading) {
+
+                if (PermissionRequester.CheckPermission(new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS, this)) {
+                    importContacts();
+                }
+
+            } else {
+                startHomeActivity();
+            }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case ALL_NECCESSARY: {
 
-                ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
-                if (permissionNotGranted.size() == 0) {
-                    initiateMobileRegistrationAndProfileCreationProcess();
-                }                // If request is cancelled, the result arrays are empty.
-                else {
-                    showMandatoryPermissionAlertDialogAndCloseTheApp(permissionNotGranted);
-                }
-                return;
+        ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
+        if (permissionNotGranted.size() != 0) {
+            showMandatoryPermissionAlertDialogAndCloseTheApp(permissionNotGranted);
+            return;
+        }
+
+        switch (requestCode) {
+            case READ_CONTACTS: {
+                importContacts();
+                break;
+
+            }
+            case ACCESS_BACKGROUND_LOCATION: {
+                AppContext.context.setDefaultValuesAndStartLocationService();
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                break;
             }
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+        return;
     }
 
     private void initiateMobileRegistrationAndProfileCreationProcess() {
@@ -90,48 +114,45 @@ public class SplashActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void checkRequiredPermissions() {
+    private void checkLocationPermissionsAndStartHomeActivity() {
         List<String> permissionsList = new ArrayList<String>();
         permissionsList.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissionsList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissionsList.add(Manifest.permission.READ_CONTACTS);
-
         if (android.os.Build.VERSION.SDK_INT >= 29) {
             permissionsList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
+
         String[] permissionArray = new String[permissionsList.size()];
         permissionArray = permissionsList.toArray(permissionArray);
         if (PermissionRequester.CheckPermission(
-                permissionArray, ALL_NECCESSARY, this)) {
+                permissionArray, ACCESS_BACKGROUND_LOCATION, this)) {
 
-            initiateMobileRegistrationAndProfileCreationProcess();
-        }
-    }
-
-    private void startHomeActivity() {
-        Boolean isFirstTimeLoading = PreffManager.getPrefBoolean("IsFirstTimeLoading", true);
-        if (isFirstTimeLoading) {
-
-            mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
-            mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
-            mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
-            mProgress.setCancelable(false);
-            mProgress.setCanceledOnTouchOutside(false);
-            mProgress.setIndeterminate(true);
-            mProgress.show();
-            AppContext.context.PerformFirstTimeInitialization();
             AppContext.context.setDefaultValuesAndStartLocationService();
-            ContactListRefreshIntentService.start(this, false);
-
-        } else {
-            EventManager.RemoveALlPastEvents();
-            Intent refreshServiceIntent = new Intent(this, EventRefreshService.class);
-            startService(refreshServiceIntent);
-
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
+    }
+
+
+    private void startHomeActivity() {
+        EventManager.RemoveALlPastEvents();
+        Intent refreshServiceIntent = new Intent(this, EventRefreshService.class);
+        startService(refreshServiceIntent);
+
+        checkLocationPermissionsAndStartHomeActivity();
+    }
+
+    private void importContacts() {
+        mProgress = new ProgressDialog(this, AlertDialog.THEME_HOLO_LIGHT);
+        mProgress.setMessage(getResources().getString(R.string.message_home_initialize));
+        mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        mProgress.setCancelable(false);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setIndeterminate(true);
+        mProgress.show();
+        AppContext.context.PerformFirstTimeInitialization();
+        ContactListRefreshIntentService.start(this, false);
     }
 
     @Override
@@ -140,32 +161,38 @@ public class SplashActivity extends BaseActivity {
         String contactsRefreshStatus = PreffManager.getPref(Constants.LAST_CONTACT_LIST_REFRESH_STATUS);
         String registeredContactsRefreshStatus = PreffManager.getPref(Constants.LAST_REGISTERED_CONTACT_LIST_REFRESH_STATUS);
 
-        if(contactsRefreshStatus.equals(Constants.SUCCESS) && registeredContactsRefreshStatus.equals(Constants.SUCCESS)){
+        if (contactsRefreshStatus.equals(Constants.SUCCESS) && registeredContactsRefreshStatus.equals(Constants.SUCCESS)) {
             AppContext.context.sortedContacts = ContactAndGroupListManager.getSortedContacts();
-        }
-        else{
+        } else {
             Toast.makeText(AppContext.context.currentActivity, AppContext.context.getResources().getString(R.string.message_contacts_errorRetrieveData), Toast.LENGTH_SHORT).show();
         }
 
         PreffManager.setPrefBoolean("IsFirstTimeLoading", false);
         mProgress.hide();
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
-
+        checkLocationPermissionsAndStartHomeActivity();
     }
 
     private void showMandatoryPermissionAlertDialogAndCloseTheApp(ArrayList<String> permissions) {
+        String message;
 
-        String permissionMessage = android.text.TextUtils.join(",", permissions)
-                + ( permissions.size()==1? " is" : " are") + " required to run the app!";
+        if(permissions.size()==1 && permissions.get(0).equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
+            message="Please go to the app Location Permission settings and enable 'allow all the time' for engaze";
+        }
+        else {
+
+
+            message = android.text.TextUtils.join(",", permissions)
+                    + (permissions.size() == 1 ? " is" : " are") + " required to run the app!";
+        }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Permission not granted");
         alertDialogBuilder
-                .setMessage(permissionMessage)
+                .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Ok", (dialogInterface, i) -> {
                     finishAffinity();
+                    ((Activity)mContext).finishAndRemoveTask();
 
                 });
 

@@ -28,35 +28,27 @@ public class SmsWS extends BaseWebService {
             Log.d(TAG, "Calling URL:" + JsonPostURL);
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
-                    JsonPostURL, smsGatewayObj, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(TAG, response.toString());
-                    String Status;
-                    try {
-                        Status = (String)response.getString("Status");
-                        if (Status == "true")
-                        {
-                            Log.d(TAG, "SMS Gateway Call Success: " + response);
-//							Toast.makeText(context,
-//									context.getResources().getString(R.string.message_smsGateway_success),
-//									Toast.LENGTH_LONG).show();
+                    JsonPostURL, smsGatewayObj, response -> {
+                        Log.d(TAG, response.toString());
+                        String Status;
+                        try {
+                            Status = (String)response.getString("Status");
+                            if (Status == "true")
+                            {
+                                Log.d(TAG, "SMS Gateway Call Success: " + response);
+    //							Toast.makeText(context,
+    //									context.getResources().getString(R.string.message_smsGateway_success),
+    //									Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Web Error: " + error.getMessage());
-                    Toast.makeText(context,
-                            context.getResources().getString(R.string.message_smsGateway_error),
-                            Toast.LENGTH_LONG).show();
-                }
+                    }, error -> {
+                Log.d(TAG, "Web Error: " + error.getMessage());
+                Toast.makeText(context,
+                        context.getResources().getString(R.string.message_smsGateway_error),
+                        Toast.LENGTH_LONG).show();
             })
             {
                 @Override

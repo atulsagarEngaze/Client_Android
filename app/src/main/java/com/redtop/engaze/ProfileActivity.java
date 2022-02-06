@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
@@ -49,16 +53,19 @@ public class ProfileActivity extends BaseActivity {
 	private static final int SELECT_PICTURE = 1;	 
 	private String selectedImagePath;
 	private ImageView img;
+	EditText email;
 	private Uri selectedImageUri;
 	private BroadcastReceiver mRegistrationBroadcastReceiver;
 	private AlertDialog mAlertDialog;
 	private IntentFilter mFilter;
+	protected static final int REQUEST_CODE_EMAIL = 10;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext= this;
 		setContentView(R.layout.activity_profile);
+		getUserEmailAccount();
 		TextView eulaTextView = (TextView)findViewById(R.id.linktermsandservice);
 		//checkbox.setText("");
 		eulaTextView.setOnClickListener(v -> {
@@ -99,12 +106,7 @@ public class ProfileActivity extends BaseActivity {
 		mFilter = new IntentFilter();
 		mFilter.addAction(Veranstaltung.REGISTRATION_COMPLETE);
 		mFilter.addAction(Veranstaltung.REGISTRATION_FAILED);
-
-		EditText email = (EditText) findViewById(R.id.Email);
-		String emailAccount = PreffManager.getPref(Constants.EMAIL_ACCOUNT);
-		if(emailAccount!=null && !emailAccount.equals("")){
-			email.setText(emailAccount);
-		}		
+		email = (EditText) findViewById(R.id.Email);
 
 		email.setOnEditorActionListener((v, actionId, event) -> {
 			boolean handled = false;
@@ -177,6 +179,13 @@ public class ProfileActivity extends BaseActivity {
 				dr.setCornerRadius(Math.min(dr.getMinimumWidth(), dr.getMinimumHeight()) / 2.0F);
 				dr.setAntiAlias(true);
 				img.setImageDrawable(dr);
+			}
+			else if(requestCode == REQUEST_CODE_EMAIL){
+				String emailAccount = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+				PreffManager.setPref(Constants.EMAIL_ACCOUNT, emailAccount);
+				if(emailAccount!=null && !emailAccount.equals("")){
+					email.setText(emailAccount);
+				}
 			}
 		}
 	}
@@ -305,5 +314,15 @@ public class ProfileActivity extends BaseActivity {
 		});
 
 		mAlertDialog = alertDialogBuilder.create();
+	}
+
+	private void getUserEmailAccount(){
+		try {
+			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+					new String[] { GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE }, false, null, null, null, null);
+			startActivityForResult(intent, REQUEST_CODE_EMAIL);
+		} catch (ActivityNotFoundException e) {
+			Log.d(TAG,  e.toString());
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.redtop.engaze.common.utility;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 
 
@@ -76,5 +78,24 @@ public class PermissionRequester {
             }
         }
         return permissionNotGrantedList;
+    }
+
+    public static void showMandatoryPermissionAlertDialogAndCloseTheApp(ArrayList<String> permissions, Activity activity) {
+
+        String permissionMessage = android.text.TextUtils.join(",", permissions)
+                + ( permissions.size()==1? " is" : " are") + " required to run the app!";
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle("Permission not granted");
+        alertDialogBuilder
+                .setMessage(permissionMessage)
+                .setCancelable(false)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    activity.finishAffinity();
+
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

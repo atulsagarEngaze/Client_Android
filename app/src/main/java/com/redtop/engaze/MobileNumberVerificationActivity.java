@@ -65,32 +65,27 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 	private ProgressBar circularProgressBar ;
 	private String countryCode;
 
-	protected static final int REQUEST_CODE_EMAIL = 10;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mobile_number_verification);				
 		mContext = this;
-		getUserEmailAccount();
 		circularProgressBar = (ProgressBar) findViewById(R.id.circularProgressBar);
 		mRLMobileEnter = (RelativeLayout)findViewById(R.id.rl_number_verification);
 		mRLSmsWait = findViewById(R.id.rl_verification_code);
 		startTime = getResources().getInteger(R.integer.sms_timeout_period_millisecs);
 		interval = getResources().getInteger(R.integer.sms_interval_millisecs);
 		mMobileNumberEdittext = (EditText) findViewById(R.id.mobile_number);
-		mMobileNumberEdittext.setOnEditorActionListener(new OnEditorActionListener() {		  
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				boolean handled = false;
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					hideKeyboard(v);
-					validateAndSendSMS();
-					handled = true;
-				}
-				return handled;
+		mMobileNumberEdittext.setOnEditorActionListener((v, actionId, event) -> {
+			boolean handled = false;
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				hideKeyboard(v);
+				validateAndSendSMS();
+				handled = true;
 			}
+			return handled;
 		});
 		mButtonVerify = (Button) findViewById(R.id.verify_no);
 		mCountryCode = (EditText) findViewById(R.id.country_code);
@@ -144,27 +139,6 @@ public class MobileNumberVerificationActivity extends BaseActivity {
 			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSMSReceiver);
 		}
 		super.onDestroy();		
-	}
-
-
-	private void getUserEmailAccount(){
-		try {
-			Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-					new String[] { GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE }, false, null, null, null, null);
-			startActivityForResult(intent, REQUEST_CODE_EMAIL);
-		} catch (ActivityNotFoundException e) {
-			Log.d(TAG,  e.toString());
-		}
-	}
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
-			if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
-				String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-				PreffManager.setPref(Constants.EMAIL_ACCOUNT, accountName);
-			}
-		}
 	}
 
 	private void validateAndSendSMS(){

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -47,6 +49,7 @@ import com.redtop.engaze.adapter.CachedLocationAdapter;
 import com.redtop.engaze.adapter.NewSuggestedLocationAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.cache.DestinationCacher;
 import com.redtop.engaze.common.constant.Constants;
@@ -55,6 +58,10 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.viewmanager.MapCameraMovementHandleViewManager;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
+import static com.redtop.engaze.common.constant.RequestCode.Permission.SEND_SMS;
 
 
 public abstract class MapLocationSelectionActivity extends MyCurrentLocationHandlerActivity implements LocationListener {
@@ -104,10 +111,37 @@ public abstract class MapLocationSelectionActivity extends MyCurrentLocationHand
 
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     protected void onResume() {
         super.onResume();
+        if(PermissionRequester.CheckPermission(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_BACKGROUND_LOCATION,this)){
+            requestLocationUpdate();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_BACKGROUND_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestLocationUpdate();
+                } else {
+
+                    ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
+                    PermissionRequester.showMandatoryPermissionAlertDialogAndCloseTheApp(permissionNotGranted, this);
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestLocationUpdate(){
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, (LocationListener) this);
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             isGPSOn = true;
@@ -118,7 +152,6 @@ public abstract class MapLocationSelectionActivity extends MyCurrentLocationHand
             mCachedLocationAdapter.mItems = DestinationCacher.getDestinationsFromCache(mContext);
             mapCameraMovementHandleViewManager.setCacheLocationListAdapter(mCachedLocationAdapter);
         }
-
     }
 
     protected void bringPinToMyLocation() {
