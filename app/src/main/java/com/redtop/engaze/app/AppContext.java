@@ -1,9 +1,6 @@
 package com.redtop.engaze.app;
 
 import android.app.Application;
-import android.os.Handler;
-import android.util.Log;
-
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -14,8 +11,7 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.service.MyCurrentLocationListener;
+import com.redtop.engaze.service.BackgroundLocationService;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,9 +34,6 @@ public class AppContext extends Application {
     public static AppContext context;
     public static ActionHandler actionHandler;
     public static JsonParser jsonParser;
-
-    private Handler runningEventCheckHandler = null;
-    private Runnable runningEventCheckRunnable = null;
 
     @Override
     public void onCreate() {
@@ -69,12 +62,10 @@ public class AppContext extends Application {
         loginName = PreffManager.getPref(Constants.LOGIN_NAME);
         actionHandler = new ActionHandler();
 
-
         defaultTrackingSettings = PreffManager.getPrefObject(Constants.DEFAULT_TRACKING_PREF_KEY, Duration.class);
         defaultReminderSettings = PreffManager.getPrefObject(Constants.DEFAULT_REMINDER_PREF_KEY, Reminder.class);
         defaultDurationSettings = PreffManager.getPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, Duration.class);
-
-        StartLocationListenerAndLocationUpdater();
+        BackgroundLocationService.start(AppContext.context);
 
     }
 
@@ -103,30 +94,6 @@ public class AppContext extends Application {
                         Constants.EVENT_DEFAULT_PERIOD,
                         true);
         PreffManager.setPrefObject(Constants.DEFAULT_DURATION_PREF_KEY, duration);
-    }
-
-    private void StartLocationListenerAndLocationUpdater() {
-        startLocationServiceBasedOnEvent();
-        runningEventCheckHandler = new Handler();
-        runningEventCheckRunnable = () -> {
-            startLocationServiceBasedOnEvent();
-            runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);
-        };
-        runningEventCheckHandler.removeCallbacks(runningEventCheckRunnable);
-        runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);
-    }
-
-    private void startLocationServiceBasedOnEvent(){
-        Log.v(TAG, "Running event check callback. Checking for any running event");
-        if (EventService.shouldShareLocation()) {
-            if (!MyCurrentLocationListener.IsLocationServiceRunning) {
-                MyCurrentLocationListener.startService(this);
-            }
-        } else {
-            if (MyCurrentLocationListener.IsLocationServiceRunning) {
-                MyCurrentLocationListener.stopService(this);
-            }
-        }
     }
 
 }

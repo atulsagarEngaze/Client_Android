@@ -18,7 +18,6 @@ import com.redtop.engaze.common.enums.ReminderFrom;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.manager.EventNotificationManager;
 import com.redtop.engaze.domain.manager.LocationManager;
 
 import android.app.IntentService;
@@ -194,7 +193,7 @@ public class EventDistanceReminderService extends IntentService implements Googl
             } else {
                 notificationMessage = mMember.profileName + " is just " + gd.getTotalDistanceValue(doc) + " mtrs away!";
             }
-            EventNotificationManager.approachingAlertNotification(mContext, mEvent, notificationMessage);
+            EventNotificationService.approachingAlertNotification(mContext, mEvent, notificationMessage);
 
             mEvent.ReminderEnabledMembers.remove(mEvent.ReminderEnabledMembers.indexOf(mMember));
             InternalCaching.saveEventToCache(mEvent);

@@ -1,4 +1,4 @@
-package com.redtop.engaze.manager;
+package com.redtop.engaze.service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,7 +42,6 @@ import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
 
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -51,10 +50,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 // AlarmManager : Allows you to schedule for your application to do something at a later date
 // even if it is in the background
 
-public class EventNotificationManager {
+public class EventNotificationService {
 
     private static ArrayList<String> responseInProcessEvents = new ArrayList<String>();
-    private final static String TAG = EventNotificationManager.class.getName();
+    private final static String TAG = EventNotificationService.class.getName();
     private static int distanceAlarmDuration = 15000;//milliseconds
     static int notificationId = 0;
     static String currentNotificationEventId;
@@ -482,23 +481,15 @@ public class EventNotificationManager {
 
             responseInProcessEvents.add(eventid);
             String msg = "";
-            EventManager.saveUserResponse(status, eventid, new OnActionCompleteListner() {
-
-                @Override
-                public void actionComplete(Action action) {
-                    responseInProcessEvents.remove(eventid);
-                    Intent intent = new Intent(Veranstaltung.EVENT_USER_RESPONSE);
-                    LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
-                    UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE);
-                    Toast.makeText(AppContext.context, UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
-                }
-            }, new OnActionFailedListner() {
-
-                @Override
-                public void actionFailed(String msg, Action action) {
-                    responseInProcessEvents.remove(eventid);
-                    Toast.makeText(AppContext.context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
-                }
+            EventManager.saveUserResponse(status, eventid, action -> {
+                responseInProcessEvents.remove(eventid);
+                Intent intent = new Intent(Veranstaltung.EVENT_USER_RESPONSE);
+                LocalBroadcastManager.getInstance(AppContext.context).sendBroadcast(intent);
+                UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE);
+                Toast.makeText(AppContext.context, UserMessageHandler.getSuccessMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
+            }, (msg1, action) -> {
+                responseInProcessEvents.remove(eventid);
+                Toast.makeText(AppContext.context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
             });
         } catch (Exception ex) {
             Toast.makeText(AppContext.context, UserMessageHandler.getFailureMessage(Action.SAVEUSERRESPONSE), Toast.LENGTH_SHORT).show();
@@ -672,6 +663,7 @@ public class EventNotificationManager {
             switch (responseCode) {
                 case "accept":
                     saveResponse(AcceptanceStatus.Accepted, eventid);
+                    BackgroundLocationService.start(AppContext.context);
                     break;
 
                 case "reject":

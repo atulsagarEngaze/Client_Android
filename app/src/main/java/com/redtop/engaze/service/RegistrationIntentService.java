@@ -3,22 +3,15 @@ package com.redtop.engaze.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
-import com.redtop.engaze.R;
-import com.redtop.engaze.SplashActivity;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.manager.ProfileManager;
+import com.redtop.engaze.domain.manager.ProfileManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 

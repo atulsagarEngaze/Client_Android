@@ -27,21 +27,25 @@ import com.redtop.engaze.receiver.CurrentLocationUploadService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 //this service upload the current address to server to be available to other users in the event
-public class MyCurrentLocationListener {
+public class MyCurrentLocationManager {
 
-    public static boolean IsLocationServiceRunning = false;
+    public static boolean IsLocationUpdateActive = false;
     private static FusedLocationProviderClient mFusedLocationProviderClient = null;
     private static LocationCallback mLocationCallback;
     private static BroadcastReceiver mBroadcastReceiver;
-    private static final String TAG = MyCurrentLocationListener.class.getName();
+    private static final String TAG = MyCurrentLocationManager.class.getName();
     private static CurrentLocationUploadService mCurrentLocationUploadService;
 
-    public MyCurrentLocationListener() {
+    public MyCurrentLocationManager() {
         super();
     }
 
     @SuppressLint("MissingPermission")
-    public synchronized static void startService(Context context) {
+    public synchronized static void startLocationUpdates(Context context) {
+        if(IsLocationUpdateActive){
+            return;
+        }
+
         if (mFusedLocationProviderClient == null) {
             mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
             LocationRequest locationRequest = createLocationRequest();
@@ -68,10 +72,13 @@ public class MyCurrentLocationListener {
             mCurrentLocationUploadService = new CurrentLocationUploadService();
         }
 
-        IsLocationServiceRunning = true;
+        IsLocationUpdateActive = true;
     }
 
-    public synchronized static void stopService(Context context) {
+    public synchronized static void stopLocationUpdates(Context context) {
+        if(!IsLocationUpdateActive){
+            return;
+        }
         if (mFusedLocationProviderClient != null && mLocationCallback != null) {
             Log.v(TAG, "Destroy Running event check callback");
             mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback);
@@ -83,7 +90,7 @@ public class MyCurrentLocationListener {
         mLocationCallback = null;
         mBroadcastReceiver = null;
         mCurrentLocationUploadService = null;
-        IsLocationServiceRunning = false;
+        IsLocationUpdateActive = false;
 
     }
 

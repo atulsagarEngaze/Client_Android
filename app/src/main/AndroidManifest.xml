@@ -147,7 +147,7 @@
             android:name=".service.EventTrackerAlarmReceiverService"
             android:enabled="true"
             android:exported="true"></receiver>
-        <receiver android:name=".manager.EventNotificationManager$notificationActionsListener" />
+        <receiver android:name=".service.EventNotificationService$notificationActionsListener" />
         <receiver android:name=".receiver.NetworkUpdateReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -175,6 +175,7 @@
         <service android:name=".service.EventRefreshService" />
         <service android:name=".service.EventDistanceReminderService" />
         <service android:name=".service.RegistrationIntentService" />
+        <service android:name=".service.BackgroundLocationService"/>
 
     </application>
 

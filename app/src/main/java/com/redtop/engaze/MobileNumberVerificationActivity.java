@@ -2,9 +2,7 @@ package com.redtop.engaze;
 
 
 import android.Manifest;
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,11 +16,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,16 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.AccountPicker;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.manager.SMSManager;
+import com.redtop.engaze.domain.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.*;

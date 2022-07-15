@@ -39,6 +39,7 @@ import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.fragment.TrackingOffsetFragment;
+import com.redtop.engaze.service.BackgroundLocationService;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -292,19 +293,18 @@ public abstract class BaseEventActivity extends BaseActivity implements Fragment
                 Toast.makeText(getApplicationContext(),
                         mCreateUpdateSuccessfulMessage,
                         Toast.LENGTH_LONG).show();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (createOrUpdateEvent.destination != null) {//when event is created without destination
-                            DestinationCacher.cacheDestination(createOrUpdateEvent.destination, mContext);
-                        }
+                new Handler().post(() -> {
+                    if (createOrUpdateEvent.destination != null) {//when event is created without destination
+                        DestinationCacher.cacheDestination(createOrUpdateEvent.destination, mContext);
                     }
                 });
 
                 if (createOrUpdateEvent.eventType == EventType.SHAREMYLOACTION) {
+                    BackgroundLocationService.start(AppContext.context);
                     gotoHomePage();
                 } else if (createOrUpdateEvent.eventType == EventType.TRACKBUDDY ||
                         createOrUpdateEvent.eventType == EventType.QUIK) {
+                    BackgroundLocationService.start(AppContext.context);
                     gotoTrackingPage(event.eventId);
                 } else {
                     gotoEventsPage();

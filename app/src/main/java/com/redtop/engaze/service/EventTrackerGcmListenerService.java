@@ -1,6 +1,5 @@
 package com.redtop.engaze.service;
 
-import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -12,16 +11,13 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.manager.EventNotificationManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -48,7 +44,7 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
             Log.d(TAG, "MessageType: " + messageType);
             Log.d(TAG, "Data: " + message);
 
-            mEventId = data.getString("EventId").toString();
+            mEventId = data.getString("EventId");
 
             if (mEventId != null) {
                 if (messageType.equals("EventEnd") || messageType.equals("EventDelete") || messageType.equals("RemovedFromEvent")) {
@@ -134,7 +130,7 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     Intent eventReceived = new Intent(Veranstaltung.EVENT_RECEIVED);
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventReceived);
                     EventService.setEndEventAlarm(event);
-                    EventNotificationManager.showEventInviteNotification(event);
+                    EventNotificationService.showEventInviteNotification(event);
 
                     break;
 
@@ -207,21 +203,10 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
 
                 case "RemindContact":
                     if (ParticipantService.isNotifyUser(event)) {
-                        EventNotificationManager.pokeNotification(mContext, mEventId);
+                        EventNotificationService.pokeNotification(mContext, mEventId);
                     }
                     break;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getEventDetail(JSONObject data) {
-        try {
-            EventManager.getEventDataFromServer(data.get("EventId").toString(), action -> {
-                Intent eventReceived = new Intent(Veranstaltung.EVENT_RECEIVED);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventReceived);
-            }, this);
         } catch (JSONException e) {
             e.printStackTrace();
         }

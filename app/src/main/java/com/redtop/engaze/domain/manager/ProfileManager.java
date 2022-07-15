@@ -1,4 +1,4 @@
-package com.redtop.engaze.manager;
+package com.redtop.engaze.domain.manager;
 
 import org.json.JSONObject;
 

@@ -7,9 +7,8 @@ import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.service.BackgroundServiceManager;
+import com.redtop.engaze.service.BackgroundLocationService;
 import com.redtop.engaze.service.EventDistanceReminderService;
-import com.redtop.engaze.service.MyCurrentLocationListener;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,9 +17,7 @@ import android.content.Intent;
 public class BootBroadcastReceiver extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (EventService.shouldShareLocation()) {
-			MyCurrentLocationListener.startService(context);
-		}
+		BackgroundLocationService.start(context);
 		EventService.setLocationServiceCheckAlarm();
 		startAlarms(context);
 	}

@@ -1,12 +1,12 @@
 package com.redtop.engaze.service;
 
+import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.manager.EventNotificationManager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,9 +38,9 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver {
                 if (eventData != null) {
                     String reminderType = intent.getStringExtra("ReminderType");
                     if (reminderType.equals("alarm")) {
-                        EventNotificationManager.ringAlarm();
+                        EventNotificationService.ringAlarm();
                     } else if (reminderType.equals("notification")) {
-                        EventNotificationManager.showReminderNotification(eventData);
+                        EventNotificationService.showReminderNotification(eventData);
                     }
                 }
                 break;
@@ -57,5 +57,6 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver {
             default:
                 break;
         }
+        BackgroundLocationService.start(AppContext.context);
     }
 }

@@ -1,4 +1,4 @@
-package com.redtop.engaze.manager;
+package com.redtop.engaze.domain.manager;
 
 import android.content.Context;
 import android.telephony.SmsManager;
@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.webservice.SmsWS;
 

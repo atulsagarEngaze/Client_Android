@@ -44,7 +44,8 @@ import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventParser;
 import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.manager.EventNotificationManager;
+import com.redtop.engaze.service.BackgroundLocationService;
+import com.redtop.engaze.service.EventNotificationService;
 import com.redtop.engaze.webservice.EventWS;
 import com.redtop.engaze.webservice.IEventWS;
 
@@ -150,7 +151,7 @@ public class EventManager {
             return;
         }
         event.state = EventState.EVENT_END;
-        EventNotificationManager.cancelAllNotifications(event);
+        EventNotificationService.cancelAllNotifications(event);
         InternalCaching.removeEventFromCache(eventid);
         checkForReccurrence(event);
     }
@@ -208,7 +209,7 @@ public class EventManager {
                         event.state = EventState.EVENT_OPEN;
                     }
 
-                    EventNotificationManager.cancelNotification(event);
+                    EventNotificationService.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
                     listnerOnSuccess.eventSaveComplete(event);
                 }
@@ -260,6 +261,7 @@ public class EventManager {
                         Date currentDate = Calendar.getInstance().getTime();
                         if (currentDate.getTime() >= startDate.getTime()) { //quick event
                             event.state = EventState.TRACKING_ON;
+
                         } else {
                             EventService.setEventStarAlarm(event);
                             EventService.setEventReminder(event);
@@ -269,8 +271,9 @@ public class EventManager {
                         event.getCurrentParticipant().
                                 acceptanceStatus = AcceptanceStatus.Rejected;
                     }
-                    EventNotificationManager.cancelNotification(event);
+                    EventNotificationService.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
+                    BackgroundLocationService.start(AppContext.context);
                     actionlistnerOnSuccess.actionComplete(Action.SAVEUSERRESPONSE);
 
 
@@ -312,7 +315,7 @@ public class EventManager {
                     }
                     InternalCaching.saveEventToCache(event);
                     EventService.setEndEventAlarm(event);
-                    EventNotificationManager.showEventInviteNotification(event);
+                    EventNotificationService.showEventInviteNotification(event);
                     listnerOnSuccess.actionComplete(Action.GETEVENTDATAFROMSERVER);
 
                 } catch (Exception ex) {
@@ -358,7 +361,7 @@ public class EventManager {
                     event.getCurrentParticipant().
                             acceptanceStatus = AcceptanceStatus.Rejected;
 
-                    EventNotificationManager.cancelNotification(event);
+                    EventNotificationService.cancelNotification(event);
                     InternalCaching.saveEventToCache(event);
                     listnerOnSuccess.actionComplete(Action.LEAVEEVENT);
 
@@ -400,7 +403,7 @@ public class EventManager {
             @Override
             public void apiCallSuccess(JSONObject response) {
                 try {
-                    EventNotificationManager.cancelAllNotifications(event);
+                    EventNotificationService.cancelAllNotifications(event);
                     EventService.RemoveEndEventAlarm(eventid);
                     InternalCaching.removeEventFromCache(eventid);
 
@@ -583,7 +586,7 @@ public class EventManager {
             }
             InternalCaching.saveEventToCache(event);
             if (ParticipantService.isNotifyUser(event) && ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
-                EventNotificationManager.showEventResponseNotification(AppContext.context, event, userName, eventAcceptanceStateId);
+                EventNotificationService.showEventResponseNotification(AppContext.context, event, userName, eventAcceptanceStateId);
             }
             listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTRESPONSE);
         } catch (Exception ex) {
@@ -611,7 +614,7 @@ public class EventManager {
             }
             InternalCaching.saveEventToCache(event);
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showEventLeftNotification(context, event, userName);
+                EventNotificationService.showEventLeftNotification(context, event, userName);
             }
             listnerOnSuccess.actionComplete(Action.UPDATEEVENTWITHPARTICIPANTLEFT);
         } catch (Exception ex) {
@@ -635,9 +638,9 @@ public class EventManager {
             event.state = EventState.EVENT_END;
             // Remove Event End Alarm and the entire event from cache
             EventService.RemoveEndEventAlarm(eventid);
-            EventNotificationManager.cancelAllNotifications(event);
+            EventNotificationService.cancelAllNotifications(event);
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showEventEndNotification(event);
+                EventNotificationService.showEventEndNotification(event);
             }
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.EVENTEXTENDEDBYINITIATOR);
@@ -660,7 +663,7 @@ public class EventManager {
         }
         try {
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showEventExtendedNotification(event);
+                EventNotificationService.showEventExtendedNotification(event);
             }
             //Remove old End Event Alarm and set new one
             EventService.RemoveEndEventAlarm(eventid);
@@ -685,7 +688,7 @@ public class EventManager {
         }
         try {
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showParticipantsUpdatedNotification(event);
+                EventNotificationService.showParticipantsUpdatedNotification(event);
             }
             listnerOnSuccess.actionComplete(Action.PARTICIPANTSUPDATEDBYINITIATOR);
         } catch (Exception ex) {
@@ -705,9 +708,9 @@ public class EventManager {
             return;
         }
         try {
-            EventNotificationManager.cancelAllNotifications(event);
+            EventNotificationService.cancelAllNotifications(event);
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showEventDeleteNotification(event);
+                EventNotificationService.showEventDeleteNotification(event);
             }
             EventService.RemoveEndEventAlarm(eventid);
             InternalCaching.removeEventFromCache(eventid);
@@ -730,7 +733,7 @@ public class EventManager {
         }
         try {
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showDestinationChangedNotification(event);
+                EventNotificationService.showDestinationChangedNotification(event);
             }
             listnerOnSuccess.actionComplete(Action.EVENTDESTINATIONCHANGEDBYINITIATOR);
         } catch (Exception ex) {
@@ -750,9 +753,9 @@ public class EventManager {
             return;
         }
         try {
-            EventNotificationManager.cancelNotification(event);
+            EventNotificationService.cancelNotification(event);
             if (ParticipantService.isNotifyUser(event)) {
-                EventNotificationManager.showRemovedFromEventNotification(event);
+                EventNotificationService.showRemovedFromEventNotification(event);
             }
             EventService.RemoveEndEventAlarm(eventid);
             InternalCaching.removeEventFromCache(eventid);
