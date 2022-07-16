@@ -31,8 +31,12 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.ViewHelper;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.fragment.ParticipantInfoFragment;
 
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.CALL_PHONE;
 
 @SuppressLint("SimpleDateFormat")
 public class CustomParticipantsInfoList extends BaseAdapter {
@@ -42,12 +46,14 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 	private String initiatorID;
 	private String source;
 	private String eventId;
+	ParticipantInfoFragment parentFragment;
 	//private final Integer[] imageId;
 	private static LayoutInflater inflater = null;
 
-	public CustomParticipantsInfoList(Context context,
+	public CustomParticipantsInfoList(ParticipantInfoFragment parentFragment, Context context,
 									  ArrayList<EventParticipant> arrayList, String initiatorID, String eventId, String source) {
 		//super(context, R.layout.event_participant_listitem, arrayList);
+		this.parentFragment = parentFragment;
 		this.context = context;
 		this.eventMembers = arrayList;
 		this.initiatorID = initiatorID;
@@ -73,7 +79,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 		View rowView;
 
 		final EventParticipant member = eventMembers.get(position);
-		final String mobileno = member.mobileNumber;
+		final String mobileno = member.contactOrGroup.getRegisteredMobileNumber();
 
 
 		rowView = inflater.inflate(R.layout.item_event_participant_list, null);
@@ -116,37 +122,12 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 			holder.tv.setText(participanName);
 
 			if (member.acceptanceStatus != AcceptanceStatus.Accepted) {
-				holder.img_poke.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						ParticipantService.pokeParticipant(member.userId, member.profileName, eventId, AppContext.actionHandler);
-					}
-				});
+				holder.img_poke.setOnClickListener(v -> ParticipantService.pokeParticipant(member.userId, member.profileName, eventId, AppContext.actionHandler));
 			} else {
 				holder.img_poke.setVisibility(View.GONE);
 			}
 
-			holder.img_call.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Intent callIntent = new Intent(Intent.ACTION_CALL);
-					callIntent.setData(Uri.parse("tel:" + mobileno));
-					if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-						// TODO: Consider calling
-						//    ActivityCompat#requestPermissions
-						// here to request the missing permissions, and then overriding
-						//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-						//                                          int[] grantResults)
-						// to handle the case where the user grants the permission. See the documentation
-						// for ActivityCompat#requestPermissions for more details.
-						return;
-					}
-					context.startActivity(callIntent);
-				}
-			});
+			holder.img_call.setOnClickListener(v -> parentFragment.onCallClick(mobileno));
 		}
 
 		return rowView;

@@ -28,13 +28,10 @@ import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.service.ContactListRefreshIntentService;
 import com.redtop.engaze.service.EventRefreshService;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
-import static com.redtop.engaze.common.constant.RequestCode.Permission.ALL_NECCESSARY;
 import static com.redtop.engaze.common.constant.RequestCode.Permission.READ_CONTACTS;
 
 public class SplashActivity extends BaseActivity {

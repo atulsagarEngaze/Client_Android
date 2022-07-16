@@ -131,16 +131,7 @@ public class ParticipantManager {
         for (ContactOrGroup cg : cgList) {
             participant = new EventParticipant();
             participant.userId = cg.getUserId();
-           participant.profileName = cg.getName();
-            participant.mobileNumber = cg.getMobileNumber();
-            if(participant.mobileNumber==null ||participant.mobileNumber==""){
-                if(cg.getMobileNumbers()!=null && cg.getMobileNumbers().size()>0){
-                    participant.mobileNumber = cg.getMobileNumbers().get(0);
-                }
-                else{
-                    participant.mobileNumber = "";
-                }
-            }
+            participant.profileName = cg.getName();
             participant.contactOrGroup = cg;
             participants.add(participant);
 

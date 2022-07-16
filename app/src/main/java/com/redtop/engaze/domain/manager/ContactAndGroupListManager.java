@@ -216,8 +216,9 @@ public class ContactAndGroupListManager {
         ContactOrGroup cg;
         for (int i = 0, size = jUsers.length(); i < size; i++) {
             JSONObject jsonObj = jUsers.getJSONObject(i);
-
-            cg = contactsAndgroups.get(jsonObj.getString("mobileNumberStoredInRequestorPhone"));
+             String mobileNumber =jsonObj.getString("mobileNumberStoredInRequestorPhone");
+            cg = contactsAndgroups.get(mobileNumber);
+            cg.setRegisteredMobileNumber(mobileNumber);
             if (cg != null) {
                 userId = jsonObj.get("userId").toString();
                 cg.setUserId(userId);

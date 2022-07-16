@@ -28,7 +28,7 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 	private String name;
 	public String userId;
 	private ArrayList<String> numbers;	
-	private String number;
+	private String registeredMobileNumber;
 	private int groupId;
 	private String bitmap;
 	private static String appUserIconBitmap;
@@ -177,15 +177,10 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 	{
 		numbers = mobileNumbers;
 	};
-	public String getMobileNumber(){
-		return number;
+
+	public String getRegisteredMobileNumber(){
+		return registeredMobileNumber;
 	}
-
-
-	public void setMobileNumber(String mobileNumber)
-	{
-		number = mobileNumber;
-	};
 
 	public ArrayList<String> getNumbers(){
 		return numbers;
@@ -196,9 +191,9 @@ public class ContactOrGroup  implements Parcelable, Serializable{
 		numbers = mobileNumbers;
 	};
 
-	public void setNumber(String mobileNumber)
+	public void setRegisteredMobileNumber(String mobileNumber)
 	{
-		numbers.add(mobileNumber);
+		registeredMobileNumber = mobileNumber;
 	};
 
 	public int getGroupId(){

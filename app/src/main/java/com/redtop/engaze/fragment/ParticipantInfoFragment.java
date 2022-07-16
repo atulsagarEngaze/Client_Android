@@ -1,6 +1,9 @@
 package com.redtop.engaze.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -20,9 +23,12 @@ import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.adapter.CustomParticipantsInfoList;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.domain.EventParticipant;
 
 import java.util.ArrayList;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.CALL_PHONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +40,7 @@ public class ParticipantInfoFragment extends DialogFragment {
     private Context mContext;
     private TextView tvHeader;
     private ArrayList<EventParticipant> eventMembers;
+    private String participantMobileNumber;
     public ParticipantInfoFragment() {
         // Required empty public constructor
     }
@@ -59,7 +66,7 @@ public class ParticipantInfoFragment extends DialogFragment {
         String initiatorID = getArguments().getString("InitiatorId");
         String eventId = getArguments().getString("EventId");
         ListView list = view.findViewById(R.id.list_event_participants);
-        CustomParticipantsInfoList adapter = new CustomParticipantsInfoList(getActivity(), eventMembers, initiatorID, eventId, source);
+        CustomParticipantsInfoList adapter = new CustomParticipantsInfoList(this, getActivity(), eventMembers, initiatorID, eventId, source);
         if (source != null && source.equals(RunningEventActivity.class.getName())) {
             if (eventMembers.size() > 0) {
                 if (eventMembers.get(0).acceptanceStatus == AcceptanceStatus.Accepted) {
@@ -74,6 +81,38 @@ public class ParticipantInfoFragment extends DialogFragment {
 
         list.setAdapter(adapter);
     }
+
+    public void onCallClick(String mobileNumber) {
+        participantMobileNumber = mobileNumber;
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + participantMobileNumber));
+
+        if (PermissionRequester.CheckPermission(new String[]{Manifest.permission.CALL_PHONE}, CALL_PHONE, this)) {
+            mContext.startActivity(callIntent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+
+        ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
+        if (permissionNotGranted.size() != 0) {
+            return;
+        }
+
+        switch (requestCode) {
+            case CALL_PHONE: {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + participantMobileNumber));
+                mContext.startActivity(callIntent);;
+                break;
+
+            }
+        }
+        return;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

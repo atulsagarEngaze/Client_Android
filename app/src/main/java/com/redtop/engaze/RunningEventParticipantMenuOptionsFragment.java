@@ -26,6 +26,7 @@ import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
+import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
@@ -33,8 +34,12 @@ import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.service.ParticipantService;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
+
+import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
+import static com.redtop.engaze.common.constant.RequestCode.Permission.CALL_PHONE;
 
 @SuppressWarnings("deprecation")
 public class RunningEventParticipantMenuOptionsFragment extends DialogFragment implements OnItemClickListener, IActionHandler {
@@ -79,7 +84,7 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
         AcceptanceStatus status = AcceptanceStatus.getStatus(acceptanceStatusId);
         mEvent = EventManager.getEvent(mEventId, true);
         member = mEvent.getParticipant(mUserId);
-        mobileno = member.mobileNumber;
+        mobileno = member.contactOrGroup.getRegisteredMobileNumber();
 
         mUserMenuItems = new ArrayList<>();
 
@@ -185,17 +190,31 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
         // TODO Auto-generated method stub
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + mobileno));
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
+        if (PermissionRequester.CheckPermission(new String[]{Manifest.permission.CALL_PHONE}, CALL_PHONE, this)) {
+            mContext.startActivity(callIntent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+
+        ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
+        if (permissionNotGranted.size() != 0) {
             return;
         }
-        mContext.startActivity(callIntent);
+
+        switch (requestCode) {
+            case CALL_PHONE: {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + mobileno));
+                mContext.startActivity(callIntent);;
+                break;
+
+            }
+        }
+        return;
     }
 
     public void onUserLocationItemMenuItemAlertClicked() {

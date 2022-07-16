@@ -30,8 +30,6 @@ public class EventParticipant implements DataModel {
     @Expose
     public String contactName;
     @Expose
-    public String mobileNumber;
-    @Expose
     public String gCMClientId;
 
     @Expose
@@ -66,11 +64,10 @@ public class EventParticipant implements DataModel {
         this.reminderFrom = distanceReminderFrom;//0 destination and 1 from current user
     }
 
-    public EventParticipant(String userId, String profileName, String mobileNumber,
+    public EventParticipant(String userId, String profileName,
                             AcceptanceStatus eventAcceptanceState) {
         this.userId = userId;
         this.profileName = profileName;
-        this.mobileNumber = mobileNumber;
         this.acceptanceStatus = eventAcceptanceState;
     }
 
@@ -83,7 +80,7 @@ public class EventParticipant implements DataModel {
     @Override
     public String toString() {
         return "UserList [eventId=" + eventId + ", userId=" + userId
-                + ", mobileNumber=" + mobileNumber + ", gCMClientId="
+                + ", mobileNumber=" + contactOrGroup.getRegisteredMobileNumber() + ", gCMClientId="
                 + gCMClientId
                 + ", isTrackingAccepted=" + isTrackingAccepted
                 + ", trackingStartTime=" + trackingStartTime
