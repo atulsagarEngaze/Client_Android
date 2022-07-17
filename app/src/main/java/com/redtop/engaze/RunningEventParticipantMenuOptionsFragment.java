@@ -202,6 +202,9 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
 
         ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
         if (permissionNotGranted.size() != 0) {
+            Toast.makeText(mContext,
+                    "App does not have permission to call.",
+                    Toast.LENGTH_LONG).show();
             return;
         }
 

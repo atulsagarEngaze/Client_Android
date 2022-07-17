@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
@@ -98,6 +99,10 @@ public class ParticipantInfoFragment extends DialogFragment {
 
         ArrayList<String> permissionNotGranted = PermissionRequester.permissionsNotGranted(permissions);
         if (permissionNotGranted.size() != 0) {
+
+            Toast.makeText(mContext,
+                    "App does not have permission to call.",
+                    Toast.LENGTH_LONG).show();
             return;
         }
 

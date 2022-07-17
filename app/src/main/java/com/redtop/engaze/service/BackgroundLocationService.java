@@ -159,6 +159,7 @@ public class BackgroundLocationService extends Service {
             if (EventService.shouldShareLocation()) {
                 MyCurrentLocationManager.startLocationUpdates(this);
             } else {
+                Log.v(TAG, "No running events. Shutting down background service");
                 MyCurrentLocationManager.stopLocationUpdates(this);
                 BackgroundLocationService.stop(this);
             }
