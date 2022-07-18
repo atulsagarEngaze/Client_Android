@@ -1,4 +1,4 @@
-package com.redtop.engaze.receiver;
+package com.redtop.engaze.service;
 
 import android.content.Context;
 import android.content.Intent;

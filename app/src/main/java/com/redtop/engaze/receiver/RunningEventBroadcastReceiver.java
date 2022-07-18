@@ -1,4 +1,4 @@
-package com.redtop.engaze.receiver;
+package com.redtop.engaze.service;
 
 import android.content.Context;
 import android.content.Intent;
@@ -81,7 +81,7 @@ public class RunningEventBroadcastReceiver extends LocalBroadcastReceiver {
 		case Veranstaltung.EVENT_PARTICIPANTS_UPDATED_BY_INITIATOR:
 			activity.onEventParticipantUpdatedByInitiator();
 			break;
-		}				
+		}
 
 	}
 }

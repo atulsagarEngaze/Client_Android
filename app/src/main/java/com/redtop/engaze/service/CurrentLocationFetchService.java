@@ -22,7 +22,6 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.app.Config;
-import com.redtop.engaze.receiver.CurrentLocationUploadService;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
