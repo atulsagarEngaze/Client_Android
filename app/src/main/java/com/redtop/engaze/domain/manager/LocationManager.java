@@ -1,18 +1,14 @@
 package com.redtop.engaze.domain.manager;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
-import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.webservice.ILocationWS;
-import com.redtop.engaze.webservice.LocationWS;
-import com.redtop.engaze.webservice.proxy.LocationWSProxy;
+import com.redtop.engaze.restApi.ILocationWS;
+import com.redtop.engaze.restApi.LocationWS;
 
 import org.json.JSONArray;
 import org.json.JSONException;

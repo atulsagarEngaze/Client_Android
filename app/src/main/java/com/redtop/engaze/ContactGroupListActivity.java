@@ -19,7 +19,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.service.ContactListRefreshIntentService;
+import com.redtop.engaze.service.ContactListRefreshService;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -211,6 +211,6 @@ public class ContactGroupListActivity extends BaseActivity implements SwipeRefre
     }
 
     private void startContactRefreshService() {
-        ContactListRefreshIntentService.start(mContext,false);
+        ContactListRefreshService.start(mContext,false);
     }
 }

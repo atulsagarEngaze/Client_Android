@@ -53,10 +53,9 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
 import com.redtop.engaze.fragment.TrackingOffsetFragment;
-import com.redtop.engaze.service.ContactListRefreshIntentService;
+import com.redtop.engaze.service.ContactListRefreshService;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
@@ -422,7 +421,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
     }
 
     private void startContactRefreshService() {
-        ContactListRefreshIntentService.start(mContext, false);
+        ContactListRefreshService.start(mContext, false);
     }
 
     @Override

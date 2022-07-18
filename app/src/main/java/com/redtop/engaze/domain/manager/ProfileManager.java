@@ -12,8 +12,8 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.webservice.IUserWS;
-import com.redtop.engaze.webservice.UserWS;
+import com.redtop.engaze.restApi.IUserWS;
+import com.redtop.engaze.restApi.UserWS;
 
 
 public class ProfileManager {

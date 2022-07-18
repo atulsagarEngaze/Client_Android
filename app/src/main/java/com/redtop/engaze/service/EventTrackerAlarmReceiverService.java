@@ -6,7 +6,6 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -52,7 +51,7 @@ public class EventTrackerAlarmReceiverService extends BroadcastReceiver {
                 break;
             case Constants.CHECK_LOCATION_SERVICE:
                 Log.d(TAG, "Alarm received to check location service");
-                EventService.setLocationServiceCheckAlarm();
+                EventManager.setLocationServiceCheckAlarm();
                 break;
             default:
                 break;

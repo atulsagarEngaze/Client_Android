@@ -8,8 +8,6 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnRefreshMemberListCompleteListner;
 import com.redtop.engaze.R;
@@ -19,8 +17,8 @@ import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.webservice.IUserWS;
-import com.redtop.engaze.webservice.UserWS;
+import com.redtop.engaze.restApi.IUserWS;
+import com.redtop.engaze.restApi.UserWS;
 
 import org.json.JSONArray;
 import org.json.JSONException;

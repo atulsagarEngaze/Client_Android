@@ -16,7 +16,6 @@ import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -123,13 +122,13 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "EventInvite":
-                    if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+                    if (event.isEventShareMyLocationEventForCurrentUser()) {
                         event.state = EventState.TRACKING_ON;
                     }
 
                     Intent eventReceived = new Intent(Veranstaltung.EVENT_RECEIVED);
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(eventReceived);
-                    EventService.setEndEventAlarm(event);
+                    EventManager.setEndEventAlarm(event);
                     EventNotificationService.showEventInviteNotification(event);
 
                     break;

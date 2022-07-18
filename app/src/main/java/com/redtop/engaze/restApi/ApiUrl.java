@@ -1,4 +1,4 @@
-package com.redtop.engaze.webservice;
+package com.redtop.engaze.restApi;
 
 import com.redtop.engaze.app.Config;
 

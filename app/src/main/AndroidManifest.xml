@@ -153,7 +153,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.BootBroadcastReceiver">
+        <receiver android:name=".service.BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -171,7 +171,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".service.ContactListRefreshIntentService" />
+        <service android:name=".service.ContactListRefreshService" />
         <service android:name=".service.EventRefreshService" />
         <service android:name=".service.EventDistanceReminderService" />
         <service android:name=".service.RegistrationIntentService" />

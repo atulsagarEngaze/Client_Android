@@ -1,4 +1,4 @@
-package com.redtop.engaze.receiver;
+package com.redtop.engaze.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,7 @@ import java.util.List;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.service.EventService;
-import com.redtop.engaze.service.BackgroundLocationService;
-import com.redtop.engaze.service.EventDistanceReminderService;
+import com.redtop.engaze.domain.manager.EventManager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,7 +16,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		BackgroundLocationService.start(context);
-		EventService.setLocationServiceCheckAlarm();
+		EventManager.setLocationServiceCheckAlarm();
 		startAlarms(context);
 	}
 	

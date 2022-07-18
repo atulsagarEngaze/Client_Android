@@ -20,7 +20,6 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.fragment.ParticipantInfoFragment;
 
 import androidx.cardview.widget.CardView;
@@ -131,7 +130,7 @@ public class EventDetailsOnMapAdapter extends RecyclerView.Adapter<EventDetailsO
                                 ((RunningEventActivity) mContext).mIsActivityPauseForDialog = true;
                                 ArrayList<EventParticipant> mems = new ArrayList<EventParticipant>();
                                 mems.addAll(mEvent.getParticipantsbyStatus(ud.acceptanceStatus));
-                                if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                                if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                                     mems.remove(mEvent.getCurrentParticipant());
                                 }
 

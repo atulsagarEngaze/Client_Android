@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.webservice.SmsWS;
+import com.redtop.engaze.restApi.SmsWS;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -24,8 +24,6 @@ import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.app.Config;
 import com.redtop.engaze.common.utility.Comparer;
 import com.redtop.engaze.common.utility.DateUtil;
@@ -37,7 +35,6 @@ import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.fragment.ExtendEventFragment;
 import com.redtop.engaze.receiver.RunningEventBroadcastReceiver;
@@ -132,7 +129,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 		mEvent = EventManager.getEvent(mEventId, true);
 		if(mEvent!=null){
 			String eventTitle;
-			if(EventService.isEventTrackBuddyEventForCurrentUser(mEvent)){
+			if(mEvent.isEventTrackBuddyEventForCurrentUser()){
 				eventTitle =  mContext.getResources().getString(R.string.title_running_event_track_buddies);
 			}
 			else{

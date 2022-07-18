@@ -4,29 +4,20 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redtop.engaze.app.AppContext;
-import com.redtop.engaze.common.cache.InternalCaching;
-import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.service.ContactListRefreshIntentService;
+import com.redtop.engaze.service.ContactListRefreshService;
 import com.redtop.engaze.service.EventRefreshService;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +140,7 @@ public class SplashActivity extends BaseActivity {
         mProgress.setIndeterminate(true);
         mProgress.show();
         AppContext.context.PerformFirstTimeInitialization();
-        ContactListRefreshIntentService.start(this, false);
+        ContactListRefreshService.start(this, false);
     }
 
     @Override

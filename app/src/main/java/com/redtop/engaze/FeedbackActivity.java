@@ -16,11 +16,10 @@ import android.view.ViewConfiguration;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.VolleyLog;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.LogReader;
-import com.redtop.engaze.webservice.FeedbackWS;
+import com.redtop.engaze.restApi.FeedbackWS;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;

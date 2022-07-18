@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -26,6 +30,7 @@ import com.redtop.engaze.Interface.OnEventSaveCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
+import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.PreffManager;
@@ -42,12 +47,12 @@ import com.redtop.engaze.domain.Reminder;
 import com.redtop.engaze.domain.TrackLocationMember;
 import com.redtop.engaze.domain.UsersLocationDetail;
 import com.redtop.engaze.domain.service.EventParser;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.service.BackgroundLocationService;
 import com.redtop.engaze.service.EventNotificationService;
-import com.redtop.engaze.webservice.EventWS;
-import com.redtop.engaze.webservice.IEventWS;
+import com.redtop.engaze.restApi.EventWS;
+import com.redtop.engaze.restApi.IEventWS;
+import com.redtop.engaze.service.EventTrackerAlarmReceiverService;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -90,7 +95,7 @@ public class EventManager {
                     runningList.add(event);
                 }
             }
-            EventService.SortListByStartDate(runningList);
+            SortListByStartDate(runningList);
         }
         return runningList;
     }
@@ -108,7 +113,7 @@ public class EventManager {
                         pendingList.add(e);
                     }
                 }
-                EventService.SortListByStartDate(pendingList);
+                SortListByStartDate(pendingList);
             }
         }
         return pendingList;
@@ -196,14 +201,14 @@ public class EventManager {
                         participant.setProfileName();
                     }
 
-                    EventService.setEndEventAlarm(event);
+                    setEndEventAlarm(event);
                     if (event.eventType == EventType.QUIK) {
                         event.state = EventState.TRACKING_ON;
                     } else if (event.eventType == EventType.GENERAL) {
-                        EventService.setTracking(event);
-                        EventService.setEventStarAlarm(event);
+                        setTracking(event);
+                        setEventStarAlarm(event);
                         if (reminder != null) {
-                            EventService.setEventReminder(event);
+                            setEventReminder(event);
 
                         }
                         event.state = EventState.EVENT_OPEN;
@@ -263,9 +268,9 @@ public class EventManager {
                             event.state = EventState.TRACKING_ON;
 
                         } else {
-                            EventService.setEventStarAlarm(event);
-                            EventService.setEventReminder(event);
-                            EventService.setTracking(event);
+                            setEventStarAlarm(event);
+                            setEventReminder(event);
+                            setTracking(event);
                         }
                     } else {
                         event.getCurrentParticipant().
@@ -310,11 +315,11 @@ public class EventManager {
 
                     List<Event> eventList = EventParser.parseEventDetailList(response.getJSONArray("ListOfEvents"));
                     Event event = eventList.get(0);
-                    if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+                    if (event.isEventShareMyLocationEventForCurrentUser()) {
                         event.state = EventState.TRACKING_ON;
                     }
                     InternalCaching.saveEventToCache(event);
-                    EventService.setEndEventAlarm(event);
+                    setEndEventAlarm(event);
                     EventNotificationService.showEventInviteNotification(event);
                     listnerOnSuccess.actionComplete(Action.GETEVENTDATAFROMSERVER);
 
@@ -404,7 +409,7 @@ public class EventManager {
             public void apiCallSuccess(JSONObject response) {
                 try {
                     EventNotificationService.cancelAllNotifications(event);
-                    EventService.RemoveEndEventAlarm(eventid);
+                    RemoveEndEventAlarm(eventid);
                     InternalCaching.removeEventFromCache(eventid);
 
                     // Remove the event related items from preferences
@@ -452,7 +457,7 @@ public class EventManager {
             public void apiCallSuccess(JSONObject response) {
                 Log.d(TAG, "EventResponse:" + response.toString());
                 try {
-                    EventService.RemoveEndEventAlarm(eventid);
+                    RemoveEndEventAlarm(eventid);
                     InternalCaching.removeEventFromCache(eventid);
                     //LocalBroadCast
                     Intent intent = new Intent(IntentConstants.EVENT_DELETE_BY_INITIATOR);
@@ -550,8 +555,8 @@ public class EventManager {
             @Override
             public void apiCallSuccess(JSONObject response) {
                 event.endTime = DateUtil.convertUtcToLocalDateTime(newUTCEndTime, null);
-                EventService.RemoveEndEventAlarm(eventid);
-                EventService.setEndEventAlarm(event);
+                RemoveEndEventAlarm(eventid);
+                setEndEventAlarm(event);
                 InternalCaching.saveEventToCache(event);
                 try {
                     listenerOnSuccess.actionComplete(Action.EXTENDEVENTENDTIME);
@@ -637,7 +642,7 @@ public class EventManager {
         try {
             event.state = EventState.EVENT_END;
             // Remove Event End Alarm and the entire event from cache
-            EventService.RemoveEndEventAlarm(eventid);
+            RemoveEndEventAlarm(eventid);
             EventNotificationService.cancelAllNotifications(event);
             if (ParticipantService.isNotifyUser(event)) {
                 EventNotificationService.showEventEndNotification(event);
@@ -666,8 +671,8 @@ public class EventManager {
                 EventNotificationService.showEventExtendedNotification(event);
             }
             //Remove old End Event Alarm and set new one
-            EventService.RemoveEndEventAlarm(eventid);
-            EventService.setEndEventAlarm(event);
+            RemoveEndEventAlarm(eventid);
+            setEndEventAlarm(event);
 
             listnerOnSuccess.actionComplete(Action.EVENTEXTENDEDBYINITIATOR);
         } catch (Exception ex) {
@@ -712,7 +717,7 @@ public class EventManager {
             if (ParticipantService.isNotifyUser(event)) {
                 EventNotificationService.showEventDeleteNotification(event);
             }
-            EventService.RemoveEndEventAlarm(eventid);
+            RemoveEndEventAlarm(eventid);
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.EVENTDELETEDBYINITIATOR);
         } catch (Exception ex) {
@@ -757,7 +762,7 @@ public class EventManager {
             if (ParticipantService.isNotifyUser(event)) {
                 EventNotificationService.showRemovedFromEventNotification(event);
             }
-            EventService.RemoveEndEventAlarm(eventid);
+            RemoveEndEventAlarm(eventid);
             InternalCaching.removeEventFromCache(eventid);
             listnerOnSuccess.actionComplete(Action.CURRENTPARTICIPANTREMOVEDBYINITIATOR);
         } catch (Exception ex) {
@@ -795,8 +800,8 @@ public class EventManager {
                     }
 
                     if (eventList.size() > 0) {
-                        EventService.RemovePastEvents(eventList);
-                        EventService.upDateEventStatus(eventList);
+                        RemovePastEvents(eventList);
+                        upDateEventStatus(eventList);
                         InternalCaching.saveEventListToCache(eventList);
                     }
                     if (listnerOnSuccess != null) {
@@ -925,6 +930,313 @@ public class EventManager {
     public static void removeBuddyFromSharing(Context mContext, String userId,
                                               OnActionCompleteListner onActionCompleteListner,
                                               OnActionFailedListner onActionFailedListner) {
+    }
+
+    public static void SortListByStartDate(List<Event> list) {
+        final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Collections.sort(list, new Comparator<Event>() {
+            public int compare(Event ed1, Event ed2) {
+
+
+                try {
+                    if (dateformat.parse(ed1.startTime).getTime() > dateformat.parse(ed2.startTime).getTime())
+                        return 1;
+                    else if (dateformat.parse(ed1.startTime).getTime() < dateformat.parse(ed2.startTime).getTime())
+                        return -1;
+                    else
+                        return 0;
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        });
+    }
+
+    public static void setEndEventAlarm(List<Event> eventList) {
+        for (Event event : eventList) {
+            setEndEventAlarm(event);
+        }
+    }
+
+    public static void setEndEventAlarm(Event event) {
+        try {
+
+            DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            //DateFormat writeFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm a");
+            Date endDate;
+            endDate = writeFormat.parse(event.endTime);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(endDate);
+            Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+            intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_OVER);
+            intentAlarm.putExtra("EventId", event.eventId);
+            AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+            //set the alarm for particular time
+            alarmManager.set(AlarmManager.RTC_WAKEUP, endDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.EventEndBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public static void setEventReminder(String eventId) {
+        Event eDetail = InternalCaching.getEventFromCache(eventId);
+        setEventReminder(eDetail);
+
+    }
+
+    public static void RemoveEndEventAlarm(String eventId) {
+        AlarmManager alarmManager = (AlarmManager) AppContext.context
+                .getSystemService(Context.ALARM_SERVICE);
+
+        Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+        intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_OVER);
+        intentAlarm.putExtra("EventId", eventId);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AppContext.context,
+                Constants.EventStartBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.cancel(pendingIntent);
+
+    }
+
+    public static void setEventStarAlarm(Event event) {
+        try {
+
+            DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            //DateFormat writeFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm a");
+            Date startDate;
+            startDate = writeFormat.parse(event.startTime);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+            intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_START);
+            intentAlarm.putExtra("EventId", event.eventId);
+            AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+            //set the alarm for particular time
+            alarmManager.set(AlarmManager.RTC_WAKEUP, startDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.EventStartBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public static void setEventReminder(Event event) {
+        try {
+
+            DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            //DateFormat writeFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm a");
+
+            Date startDate = writeFormat.parse(event.startTime);
+            Calendar cal = Calendar.getInstance();
+
+            cal.setTime(startDate);
+            cal.add(Calendar.MINUTE, (int)event.reminder.ReminderOffsetInMinute * -1);
+            Date reminderDate = cal.getTime();
+            //if(reminderDate.getTime() > currentDate.getTime()){
+
+            Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+            intentAlarm.putExtra("AlarmType", Veranstaltung.EVENT_REMINDER);
+            intentAlarm.putExtra("ReminderType", event.reminder.getNotificationType());
+            intentAlarm.putExtra("EventId", event.eventId);
+            AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+            //set the alarm for particular time
+            alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.ReminderBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+            //}
+
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public static void setTracking(Event event) {
+        try {
+
+            long trackingAlarmOffset = 0;
+
+            DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+            //tracking start time
+            Date startDate = writeFormat.parse(event.startTime);
+            Calendar cal = Calendar.getInstance();
+
+            Date currentDate = cal.getTime();
+            cal.setTime(startDate);
+
+            cal.add(Calendar.MINUTE, event.tracking.getOffSetInMinutes() * -1);
+            Date trackingStartDate = cal.getTime();
+
+
+            if (trackingStartDate.getTime() < currentDate.getTime()) {
+                trackingAlarmOffset = currentDate.getTime() + 5000;
+            } else {
+
+                trackingAlarmOffset = trackingStartDate.getTime();
+            }
+            Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+            intentAlarm.putExtra("AlarmType", Veranstaltung.TRACKING_STARTED);
+            intentAlarm.putExtra("EventId", event.eventId);
+            AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+            //set the alarm for particular time
+            alarmManager.set(AlarmManager.RTC_WAKEUP, trackingAlarmOffset, PendingIntent.getBroadcast(AppContext.context, Constants.TrackingStartBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public static void upDateEventStatus(List<Event> eventList) {
+        try {
+            SimpleDateFormat originalformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date startDate = null;
+            Calendar cal = null;
+            for (Event ed : eventList) {
+                cal = Calendar.getInstance();
+                startDate = originalformat.parse(ed.startTime);
+                cal.setTime(startDate);
+                cal.add(Calendar.MINUTE, ed.tracking.getOffSetInMinutes() * -1);
+                Date currentDate = Calendar.getInstance().getTime();
+                if (cal.getTime().getTime() - currentDate.getTime() < 0) {
+                    ed.state = EventState.TRACKING_ON;
+                } else {
+                    ed.state = EventState.EVENT_OPEN;
+                }
+            }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void RemovePastEvents(List<Event> eventList) {
+        List<Event> tobeRemoved = new ArrayList<Event>();
+        for (Event event : eventList) {
+            if (event.isEventPast()) {
+                tobeRemoved.add(event);
+            }
+        }
+        eventList.removeAll(tobeRemoved);
+    }
+
+
+
+    public static long getTimeToFinish(String eventEndTime, String format) {
+
+        DateFormat writeFormat = new SimpleDateFormat(format);
+        Date parsedEventEndTime = null;
+        try {
+            parsedEventEndTime = writeFormat.parse(eventEndTime);
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        long diff = (parsedEventEndTime.getTime() - new Date().getTime());
+        return diff;
+    }
+
+    public static long pendingEventTime(String eventEndTime) {
+
+        DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date parsedEventEndTime = null;
+        try {
+            parsedEventEndTime = writeFormat.parse(eventEndTime);
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        long diff = (parsedEventEndTime.getTime() - new Date().getTime());
+        return diff;
+    }
+
+    public static void removeLocationServiceCheckAlarm() {
+        AlarmManager alarmManager = (AlarmManager) AppContext.context
+                .getSystemService(Context.ALARM_SERVICE);
+
+        Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+        intentAlarm.putExtra("AlarmType", Constants.CHECK_LOCATION_SERVICE);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AppContext.context,
+                Constants.EventStartBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.cancel(pendingIntent);
+    }
+
+    public static void setLocationServiceCheckAlarm() {
+        try {
+
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MINUTE, 5);
+
+            Intent intentAlarm = new Intent(AppContext.context, EventTrackerAlarmReceiverService.class);
+            intentAlarm.putExtra("AlarmType", Constants.CHECK_LOCATION_SERVICE);
+
+            AlarmManager alarmManager = (AlarmManager) AppContext.context.getSystemService(Context.ALARM_SERVICE);
+            //remove existing alarm
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(AppContext.context,
+                    Constants.EventStartBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.cancel(pendingIntent);
+
+            //set new  alarm
+            alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTime().getTime(), PendingIntent.getBroadcast(AppContext.context, Constants.LocationServiceCheckBroadcastId, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public static Boolean isAnyEventInState(EventState state, Boolean checkOnlyWhenEventAccepted) {
+        List<Event> events = InternalCaching.getEventListFromCache();
+        if (events == null) {
+            return false;
+        }
+        for (Event ed : events) {
+            if (ed.state == state) {
+                if (checkOnlyWhenEventAccepted) {
+
+                    if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted
+                    ) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public static Boolean shouldShareLocation() {
+        List<Event> events = InternalCaching.getEventListFromCache();
+        List<Event> trackingEvents = InternalCaching.getTrackEventListFromCache();
+        if (events == null || events.size() == 0) {
+            return false;
+        }
+        for (Event ed : events) {
+            if (ed.getCurrentParticipant().acceptanceStatus == AcceptanceStatus.Accepted
+                    && ed.state == EventState.TRACKING_ON
+            ) {
+                return true;
+            }
+        }
+        if (trackingEvents == null || trackingEvents.size() == 0) {
+            return false;
+        }
+        for (Event ed : trackingEvents) {
+            if (ed.isEventShareMyLocationEventForCurrentUser()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

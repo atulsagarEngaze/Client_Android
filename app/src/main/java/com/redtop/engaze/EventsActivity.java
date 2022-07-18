@@ -37,7 +37,6 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 import com.redtop.engaze.fragment.AcceptedEventsFragment;
 import com.redtop.engaze.fragment.DeclinedEventsFragment;
@@ -246,7 +245,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 	}
 
 	public void loadEventDetailHashmap(List<Event>eventList){
-		EventService.SortListByStartDate(eventList);
+		EventManager.SortListByStartDate(eventList);
 		if(mEventDetailHashmap ==  null){
 			mEventDetailHashmap = new HashMap<AcceptanceStatus, List<Event>>();
 		}

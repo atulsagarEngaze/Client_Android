@@ -2,7 +2,6 @@ package com.redtop.engaze;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.redtop.engaze.Interface.IActionHandler;
@@ -50,11 +48,10 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;
 import com.redtop.engaze.fragment.DurationOffsetFragment;
-import com.redtop.engaze.service.ContactListRefreshIntentService;
+import com.redtop.engaze.service.ContactListRefreshService;
 import com.redtop.engaze.viewmanager.TrackLocationViewManager;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
-import static com.redtop.engaze.common.constant.RequestCode.Permission.SEND_SMS;
 
 public class TrackLocationActivity extends BaseEventActivity implements OnItemClickListener, OnClickListener, OnKeyListener, IActionHandler {
 
@@ -125,7 +122,7 @@ public class TrackLocationActivity extends BaseEventActivity implements OnItemCl
     }
 
     private void startContactRefreshService() {
-        ContactListRefreshIntentService.start(mContext,false);
+        ContactListRefreshService.start(mContext,false);
     }
 
     @Override

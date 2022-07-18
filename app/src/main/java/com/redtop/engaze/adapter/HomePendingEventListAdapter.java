@@ -23,7 +23,6 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.service.EventService;
 
 public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 	public List<Event> items;
@@ -100,11 +99,11 @@ public class HomePendingEventListAdapter extends ArrayAdapter<Event> {
 				((HomeActivity)mContext).saveEventState(eventId, AcceptanceStatus.Rejected);
 			}
 		});
-		if(EventService.isEventShareMyLocationEventForCurrentUser(rowItem)){
+		if(rowItem.isEventShareMyLocationEventForCurrentUser()){
 			holder.txtView.setVisibility(View.GONE);
 			holder.txtEventName.setText(mContext.getResources().getString(R.string.share_my_location_notification));
 		}
-		else if(EventService.isEventTrackBuddyEventForCurrentUser(rowItem)){
+		else if(rowItem.isEventTrackBuddyEventForCurrentUser()){
 			holder.txtView.setVisibility(View.GONE);
 			holder.txtEventName.setText(mContext.getResources().getString(R.string.track_my_buddy_text_notification)); 
 		}

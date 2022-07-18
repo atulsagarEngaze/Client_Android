@@ -1,8 +1,6 @@
 package com.redtop.engaze.service;
 
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,20 +9,17 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.Config;
-import com.redtop.engaze.domain.service.EventService;
+import com.redtop.engaze.domain.manager.EventManager;
 
 //this service upload the current address to server to be available to other users in the event
 public class BackgroundLocationService extends Service {
@@ -137,7 +132,7 @@ public class BackgroundLocationService extends Service {
     }
 
     public synchronized static void start(Context context) {
-        if(!isServiceRunning && EventService.shouldShareLocation()) {
+        if(!isServiceRunning && EventManager.shouldShareLocation()) {
             context.startForegroundService(new Intent(context, BackgroundLocationService.class));
             isServiceRunning = true;
         }
@@ -156,11 +151,11 @@ public class BackgroundLocationService extends Service {
         runningEventCheckHandler = new Handler();
         runningEventCheckRunnable = () -> {
             Log.v(TAG, "Running event check callback. Checking for any running event");
-            if (EventService.shouldShareLocation()) {
-                MyCurrentLocationManager.startLocationUpdates(this);
+            if (EventManager.shouldShareLocation()) {
+                CurrentLocationFetchService.startLocationUpdates(this);
             } else {
                 Log.v(TAG, "No running events. Shutting down background service");
-                MyCurrentLocationManager.stopLocationUpdates(this);
+                CurrentLocationFetchService.stopLocationUpdates(this);
                 BackgroundLocationService.stop(this);
             }
             runningEventCheckHandler.postDelayed(runningEventCheckRunnable, Config.RUNNING_EVENT_CHECK_INTERVAL);

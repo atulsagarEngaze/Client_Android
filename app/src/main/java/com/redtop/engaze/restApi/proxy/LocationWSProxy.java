@@ -1,4 +1,4 @@
-package com.redtop.engaze.webservice.proxy;
+package com.redtop.engaze.restApi.proxy;
 
 import android.location.Location;
 import android.util.Log;
@@ -7,8 +7,8 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.webservice.BaseWebService;
-import com.redtop.engaze.webservice.ILocationWS;
+import com.redtop.engaze.restApi.BaseWebService;
+import com.redtop.engaze.restApi.ILocationWS;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

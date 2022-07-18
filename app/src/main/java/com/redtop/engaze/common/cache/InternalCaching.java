@@ -18,7 +18,6 @@ import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.service.EventService;
 
 import android.content.Context;
 

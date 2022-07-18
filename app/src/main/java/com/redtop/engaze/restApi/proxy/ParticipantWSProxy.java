@@ -1,10 +1,10 @@
-package com.redtop.engaze.webservice.proxy;
+package com.redtop.engaze.restApi.proxy;
 
 import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
-import com.redtop.engaze.webservice.BaseWebService;
-import com.redtop.engaze.webservice.IParticipantWS;
+import com.redtop.engaze.restApi.BaseWebService;
+import com.redtop.engaze.restApi.IParticipantWS;
 
 import org.json.JSONException;
 import org.json.JSONObject;

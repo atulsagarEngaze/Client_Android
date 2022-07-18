@@ -13,13 +13,11 @@ import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.Interface.IActionHandler;
-import com.redtop.engaze.Interface.OnActionCompleteListner;
 import com.redtop.engaze.Interface.OnRefreshEventListCompleteListner;
 import com.redtop.engaze.adapter.HomePendingEventListAdapter;
 import com.redtop.engaze.adapter.HomeRunningEventListAdapter;

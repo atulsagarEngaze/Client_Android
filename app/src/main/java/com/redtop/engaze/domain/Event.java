@@ -1,6 +1,10 @@
 package com.redtop.engaze.domain;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.google.gson.annotations.Expose;
@@ -10,6 +14,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
+import com.redtop.engaze.domain.service.ParticipantService;
 
 public class Event implements DataModel {
 
@@ -146,6 +151,7 @@ public class Event implements DataModel {
     public void setCurrentParticipant(EventParticipant participant){
         this.currentParticipant = participant;
     }
+
     public  EventParticipant getCurrentParticipant() {
         if (currentParticipant == null) {
             for (EventParticipant participant : this.participants) {
@@ -195,5 +201,46 @@ public class Event implements DataModel {
         } else {
             return 0;
         }
+    }
+
+    public boolean isEventTrackBuddyEventForCurrentUser() {
+
+        boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(this.initiatorId);
+
+        if ((isCurrentUserInitiator && this.eventType == EventType.TRACKBUDDY) ||
+                (!isCurrentUserInitiator && this.eventType == EventType.SHAREMYLOACTION)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isEventShareMyLocationEventForCurrentUser() {
+
+        boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(this.initiatorId);
+
+        if ((isCurrentUserInitiator && this.eventType == EventType.SHAREMYLOACTION) ||
+                (!isCurrentUserInitiator && this.eventType == EventType.TRACKBUDDY)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean isEventPast() {
+
+        try {
+            Calendar cal = Calendar.getInstance();
+            Date currentDate = cal.getTime();
+            DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            cal.setTime(writeFormat.parse(this.endTime));
+            Date endDate = cal.getTime();
+            if (currentDate.getTime() > endDate.getTime()) {
+                return true;
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 }

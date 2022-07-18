@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -23,9 +22,8 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.webservice.IUserWS;
-import com.redtop.engaze.webservice.UserWS;
-import com.redtop.engaze.webservice.proxy.UserWSProxy;
+import com.redtop.engaze.restApi.IUserWS;
+import com.redtop.engaze.restApi.UserWS;
 
 public class ContactOrGroupListAdapter extends ArrayAdapter<ContactOrGroup> {
 

@@ -16,9 +16,7 @@ import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.webservice.IParticipantWS;
-import com.redtop.engaze.webservice.ParticipantWS;
-import com.redtop.engaze.webservice.proxy.ParticipantWSProxy;
+import com.redtop.engaze.restApi.ParticipantWS;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -26,16 +26,16 @@ import com.redtop.engaze.app.Config;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 //this service upload the current address to server to be available to other users in the event
-public class MyCurrentLocationManager {
+public class CurrentLocationFetchService {
 
     public static boolean IsLocationUpdateActive = false;
     private static FusedLocationProviderClient mFusedLocationProviderClient = null;
     private static LocationCallback mLocationCallback;
     private static BroadcastReceiver mBroadcastReceiver;
-    private static final String TAG = MyCurrentLocationManager.class.getName();
+    private static final String TAG = CurrentLocationFetchService.class.getName();
     private static CurrentLocationUploadService mCurrentLocationUploadService;
 
-    public MyCurrentLocationManager() {
+    public CurrentLocationFetchService() {
         super();
     }
 

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,7 +20,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.service.ContactListRefreshIntentService;
+import com.redtop.engaze.service.ContactListRefreshService;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -116,7 +114,7 @@ public class AddRemoveParticipantsActivity extends BaseActivity implements Swipe
     }
 
     private void startContactRefreshService() {
-        ContactListRefreshIntentService.start(mContext, false);
+        ContactListRefreshService.start(mContext, false);
     }
 
     private void loadFriendList() {

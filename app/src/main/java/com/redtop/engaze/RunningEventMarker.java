@@ -155,7 +155,6 @@ public class RunningEventMarker  extends RunningEventBase implements OnMarkerCli
 
 	}
 
-
 	private void getETADurationAndCreateMarker( UsersLocationDetail userlocationdetail, Marker userLocationMarker){
 		final UsersLocationDetail ud = userlocationdetail;
 		final Marker marker = userLocationMarker;

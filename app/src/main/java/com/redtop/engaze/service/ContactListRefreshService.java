@@ -17,21 +17,21 @@ import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 
 import java.util.ArrayList;
 
-public class ContactListRefreshIntentService extends IntentService {
+public class ContactListRefreshService extends IntentService {
 
-    private static final String TAG = ContactListRefreshIntentService.class.getName();
+    private static final String TAG = ContactListRefreshService.class.getName();
 
     private Context mContext;
     public static boolean IsContactListRefreshServiceRunning = false;
 
-    public ContactListRefreshIntentService() {
+    public ContactListRefreshService() {
         super(TAG);
         Log.d(TAG, "Constructor");
     }
 
     public static void start(Context context, Boolean refreshOnlyRegisteredContacts) {
         if (!IsContactListRefreshServiceRunning) {
-            Intent serviceIntent = new Intent(context, ContactListRefreshIntentService.class);
+            Intent serviceIntent = new Intent(context, ContactListRefreshService.class);
             serviceIntent.putExtra(Constants.REFRESH_ONLY_REGISTERED_CONTACTS, refreshOnlyRegisteredContacts);
             context.startService(serviceIntent);
         }

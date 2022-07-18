@@ -40,7 +40,6 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.domain.service.ParticipantService;
 
 import androidx.core.app.NotificationCompat;
@@ -180,12 +179,12 @@ public class EventNotificationService {
 
             String title = "";
             String[] events = new String[2];
-            if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+            if (event.isEventTrackBuddyEventForCurrentUser()) {
                 title = "Tracking request";
                 events[0] = event.initiatorName + " wants to share his/her location";
                 events[1] = parsedDate;
 
-            } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+            } else if (event.isEventShareMyLocationEventForCurrentUser()) {
                 title = "Tracking request";
                 events[0] = event.initiatorName + " wants to track your location";
                 events[1] = parsedDate;
@@ -270,11 +269,11 @@ public class EventNotificationService {
     public static void showEventExtendedNotification(Event event) {
         String notificationMessage = "";
         String title = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()) {
             title = "Tracking extended";
             notificationMessage = event.initiatorName + " has extended sharing his/her location";
 
-        } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        } else if (event.isEventShareMyLocationEventForCurrentUser()) {
             title = "Tracking extended";
             notificationMessage = event.initiatorName + " has extended tracking your location";
         } else {
@@ -286,8 +285,8 @@ public class EventNotificationService {
     public static void showDestinationChangedNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)
-                || EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()
+                || event.isEventShareMyLocationEventForCurrentUser()) {
             notificationTitle = "Tracking destination changed";
             notificationMessage = event.initiatorName + " has changed the destination ";
         } else {
@@ -300,8 +299,8 @@ public class EventNotificationService {
     public static void showParticipantsUpdatedNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)
-                || EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()
+                || event.isEventShareMyLocationEventForCurrentUser()) {
             notificationTitle = "Tracking participants updated";
             notificationMessage = event.initiatorName + " has added/removed participant(s) ";
         } else {
@@ -313,10 +312,10 @@ public class EventNotificationService {
     public static void showRemovedFromEventNotification(Event event) {
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()) {
             notificationTitle = "Removed from Tracking";
             notificationMessage = event.initiatorName + " has stopped sharing location with you";
-        } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        } else if (event.isEventShareMyLocationEventForCurrentUser()) {
             notificationTitle = "Removed from Tracking";
             notificationMessage = event.initiatorName + " has stopped tracking your location";
         } else {
@@ -335,10 +334,10 @@ public class EventNotificationService {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()) {
             notificationTitle = "Tracking ended";
             notificationMessage = event.initiatorName + " has stopped sharing location";
-        } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        } else if (event.isEventShareMyLocationEventForCurrentUser()) {
             notificationTitle = "Tracking ended";
             notificationMessage = event.initiatorName + " has stopped tracking your location";
         } else {
@@ -368,9 +367,9 @@ public class EventNotificationService {
 
         String notificationMessage = "";
         String notificationTitle = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()) {
             notificationTitle = "Tracking request";
-        } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        } else if (event.isEventShareMyLocationEventForCurrentUser()) {
             notificationTitle = "Tracking request";
         } else {
             notificationTitle = "";
@@ -394,9 +393,9 @@ public class EventNotificationService {
     public static void showEventLeftNotification(Context context, Event event, String userName) {
         String notificationTitle = "Tracking stopped";
         String notificationMessage = "";
-        if (EventService.isEventTrackBuddyEventForCurrentUser(event)) {
+        if (event.isEventTrackBuddyEventForCurrentUser()) {
             notificationMessage = userName + " has stopped sharing location";
-        } else if (EventService.isEventShareMyLocationEventForCurrentUser(event)) {
+        } else if (event.isEventShareMyLocationEventForCurrentUser()) {
             notificationMessage = userName + " has stopped viewing your location";
         } else {
             notificationTitle = "";

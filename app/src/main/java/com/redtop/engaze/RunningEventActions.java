@@ -36,7 +36,6 @@ import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.manager.EventManager;
 import com.redtop.engaze.domain.manager.ParticipantManager;
 import com.redtop.engaze.domain.service.EventParser;
-import com.redtop.engaze.domain.service.EventService;
 import com.redtop.engaze.fragment.ExtendEventFragment;
 
 import androidx.appcompat.app.AlertDialog;
@@ -58,7 +57,7 @@ public class RunningEventActions extends RunningEventActivityResults {
     public void onEventParticipantUpdatedByInitiator() {
         mEvent = EventManager.getEvent(mEventId, true);
         updateRecyclerViews();
-        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+        if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
             runningEventAlertDialog("Tracking Updated!", mEvent.initiatorName + " has updated the participants list.", true);
         } else {
             runningEventAlertDialog("Event Updated!", mEvent.name + ": " + mEvent.initiatorName + " has updated the participants list.", true);
@@ -67,7 +66,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onUserRemovedFromEventByInitiator() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                 runningEventAlertDialog("Removed from Tracking!", mEvent.initiatorName + " has removed you from this tracking event.", false);
             } else {
                 runningEventAlertDialog("Removed from Event!", mEvent.name + ": " + mEvent.initiatorName + " has removed you from this event.", false);
@@ -86,7 +85,7 @@ public class RunningEventActions extends RunningEventActivityResults {
         createDestinationMarker();
         mEnableAutoCameraAdjust = true;
         showAllMarkers();
-        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+        if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
             runningEventAlertDialog("Tracking Destination Changed!", mEvent.initiatorName + " has changed tracking Destination to " + changedDestination, true);
         } else {
             runningEventAlertDialog("Event Destination Changed!", mEvent.name + ": " + mEvent.initiatorName + " has changed this events Destination to " + changedDestination, true);
@@ -96,7 +95,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventEndedByInitiator() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                 runningEventAlertDialog("Tracking ended!", mEvent.initiatorName + " has stopped sharing location", false);
             } else {
 
@@ -109,7 +108,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     public void onEventOver() {
         if (isActivityRunning && !((Activity) mContext).isFinishing()) {
-            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                 runningEventAlertDialog("Tracking Over!", "Tracking ended at " + DateUtil.getTimeInHHMMa(mEvent.endTime, "yyyy-MM-dd'T'HH:mm:ss"), false);
             } else {
                 runningEventAlertDialog("Event Over!", mEvent.name + " finished at " + DateUtil.getTimeInHHMMa(mEvent.endTime, "yyyy-MM-dd'T'HH:mm:ss"), false);
@@ -125,7 +124,7 @@ public class RunningEventActions extends RunningEventActivityResults {
             updateRecyclerViews();
             arrangeListinAvailabilityOrder();
             String alertmsg = "";
-            if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+            if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                 alertmsg = EventResponderName + " has left stopped sharing location";
             } else {
                 alertmsg = EventResponderName + " has left " + mEvent.name;
@@ -143,13 +142,13 @@ public class RunningEventActions extends RunningEventActivityResults {
 
             if (eventAcceptanceStateId != -1) {
                 if (AcceptanceStatus.getStatus(eventAcceptanceStateId) == AcceptanceStatus.Accepted) {
-                    if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                    if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                         alertmsg = eventResponderName + " has accepted your tracking request";
                     } else {
                         alertmsg = eventResponderName + " has accepted " + mEvent.name;
                     }
                 } else {
-                    if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+                    if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
                         alertmsg = eventResponderName + " has rejected your tracking request";
                     } else {
                         alertmsg = eventResponderName + " has rejected " + mEvent.name;
@@ -165,7 +164,7 @@ public class RunningEventActions extends RunningEventActivityResults {
         UpdateTimeLeftItemOfRunningEventDetailsDataSet();
         mEventDetailAdapter.notifyDataSetChanged();
 
-        if (EventService.isEventTrackBuddyEventForCurrentUser(mEvent)) {
+        if (mEvent.isEventTrackBuddyEventForCurrentUser()) {
             runningEventAlertDialog("Tracking Extended!", mEvent.initiatorName + " has extended tracking by " + extendEventDuration + " minutes.", true);
         } else {
             runningEventAlertDialog("Event Extended!", mEvent.name + ": " + mEvent.initiatorName + " has extended this event by " + extendEventDuration + " minutes.", true);

@@ -1,7 +1,6 @@
-package com.redtop.engaze.webservice;
+package com.redtop.engaze.restApi;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -13,12 +12,10 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 

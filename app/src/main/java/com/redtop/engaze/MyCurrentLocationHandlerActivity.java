@@ -10,11 +10,10 @@ import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.redtop.engaze.Interface.OnGpsSetOnListner;
-import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.AppLocationService;
-import com.redtop.engaze.webservice.proxy.LocationWSProxy;
+import com.redtop.engaze.restApi.proxy.LocationWSProxy;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
