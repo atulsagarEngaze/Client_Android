@@ -7,8 +7,8 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.restApi.BaseWebService;
-import com.redtop.engaze.restApi.ILocationWS;
+import com.redtop.engaze.restApi.BaseWebApi;
+import com.redtop.engaze.restApi.ILocationApi;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Date;
 
-public class LocationWSProxy extends BaseWebService implements ILocationWS {
+public class LocationApiProxy extends BaseWebApi implements ILocationApi {
 
    public static Location location;
 

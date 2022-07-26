@@ -33,9 +33,8 @@ import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.manager.ParticipantManager;
-import com.redtop.engaze.domain.service.EventParser;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 import com.redtop.engaze.fragment.ExtendEventFragment;
 
 import androidx.appcompat.app.AlertDialog;
@@ -341,7 +340,7 @@ public class RunningEventActions extends RunningEventActivityResults {
 
     private void pokeAll() {
         showProgressBar(getResources().getString(R.string.message_general_progressDialog));
-        JSONObject jObj = EventParser.createPokeAllContactsJSON(mEvent);
+        JSONObject jObj = EventManager.createPokeAllContactsJSON(mEvent);
         ParticipantManager.pokeParticipants(jObj, new OnActionCompleteListner() {
 
             @Override

@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,23 +21,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Marker;
-import com.redtop.engaze.Interface.DialogDismissListener;
-import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.adapter.EventDetailsOnMapAdapter;
 import com.redtop.engaze.adapter.EventUserLocationAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.service.ParticipantService;
-import com.redtop.engaze.domain.manager.LocationManager;
+import com.redtop.engaze.manager.ParticipantManager;
+import com.redtop.engaze.manager.LocationManager;
 
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 @SuppressLint({"ResourceAsColor", "SimpleDateFormat"})
@@ -173,7 +168,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
                     userLocationsFromServer.add(udFromServer);
                 }
 
-                ParticipantService.updateUserListWithLocation(userLocationsFromServer, mUsersLocationDetailList, mDestinationlatlang);
+                ParticipantManager.updateUserListWithLocation(userLocationsFromServer, mUsersLocationDetailList, mDestinationlatlang);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -229,15 +224,15 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
         int size;
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_timer_gray, mEventStartTimeForUI, null));
         mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_hourglass_gray, getTimeLeft(), null));
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Accepted)).size();
+        size = (ParticipantManager.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Accepted)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_accepted, String.valueOf(size), AcceptanceStatus.getStatus(1))); // 1 is ACCEPTED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Pending)).size();
+        size = (ParticipantManager.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Pending)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_pending, String.valueOf(size), AcceptanceStatus.getStatus(-1))); // -1 is DECLINED
         }
-        size = (ParticipantService.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Rejected)).size();
+        size = (ParticipantManager.getMembersbyStatusForLocationSharing(mEvent, AcceptanceStatus.Rejected)).size();
         if (size > 0) {
             mRunningEventDetailList.add(new UsersLocationDetail(R.drawable.ic_user_declined, String.valueOf(size), AcceptanceStatus.getStatus(0))); // 0 is PENDING
         }
@@ -270,7 +265,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
 
     public void upDateMyLocationDetails() {
         for (UsersLocationDetail ud : mUsersLocationDetailList) {
-            if (ud != null && ParticipantService.isParticipantCurrentUser(ud.userId)) {
+            if (ud != null && ParticipantManager.isParticipantCurrentUser(ud.userId)) {
                 ud.latitude = mMyCoordinates.latitude;
                 ud.longitude = mMyCoordinates.longitude;
                 if (ud.name == null || ud.name == "" || ud.name == Constants.LOCATION_UNKNOWN) {
@@ -303,7 +298,7 @@ public class RunningEventLocationRefresh extends RunningEventMarker {
                 }
             }
             if (!isExist) {
-                if (ParticipantService.isValidForLocationSharing(mEvent, em)) {
+                if (ParticipantManager.isValidForLocationSharing(mEvent, em)) {
                     mUsersLocationDetailList.add(UsersLocationDetail.createUserLocationListFromEventMember(em));
                 }
             } else {

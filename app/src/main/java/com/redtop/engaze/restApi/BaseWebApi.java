@@ -25,9 +25,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-public abstract class BaseWebService {
+public abstract class BaseWebApi {
 
-    public static final String TAG = BaseWebService.class
+    public static final String TAG = BaseWebApi.class
             .getSimpleName();
 
     private static RequestQueue mRequestQueue;

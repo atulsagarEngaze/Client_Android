@@ -7,7 +7,7 @@ import com.redtop.engaze.domain.EventPlace;
 
 import org.json.JSONObject;
 
-public interface IEventWS {
+public interface IEventApi {
 
     public void SaveEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener);
 

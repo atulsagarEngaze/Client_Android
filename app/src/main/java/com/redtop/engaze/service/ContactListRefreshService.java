@@ -13,7 +13,7 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+import com.redtop.engaze.manager.ContactAndGroupListManager;
 
 import java.util.ArrayList;
 

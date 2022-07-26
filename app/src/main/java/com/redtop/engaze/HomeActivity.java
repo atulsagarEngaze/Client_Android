@@ -37,7 +37,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.TrackLocationMember;
-import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.manager.EventManager;
 import com.redtop.engaze.fragment.NavDrawerFragment;
 import com.redtop.engaze.receiver.HomeBroadcastReceiver;
 import com.redtop.engaze.viewmanager.HomeViewManager;

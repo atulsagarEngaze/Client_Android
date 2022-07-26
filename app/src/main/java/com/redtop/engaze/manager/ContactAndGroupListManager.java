@@ -1,4 +1,4 @@
-package com.redtop.engaze.domain.manager;
+package com.redtop.engaze.manager;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,8 +17,8 @@ import com.redtop.engaze.common.utility.BitMapHelper;
 import com.redtop.engaze.common.utility.MaterialColor;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.restApi.IUserWS;
-import com.redtop.engaze.restApi.UserWS;
+import com.redtop.engaze.restApi.IUserApi;
+import com.redtop.engaze.restApi.UserApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +33,7 @@ public class ContactAndGroupListManager {
 
     private final static String TAG = ContactAndGroupListManager.class.getName();
 
-    private final static IUserWS userWS = new UserWS();
+    private final static IUserApi userWS = new UserApi();
 
     public static ContactOrGroup getContact(String userId) {
         ContactOrGroup cg = null;

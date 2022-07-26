@@ -3,18 +3,18 @@ package com.redtop.engaze.restApi.proxy;
 import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
-import com.redtop.engaze.restApi.BaseWebService;
-import com.redtop.engaze.restApi.IParticipantWS;
+import com.redtop.engaze.restApi.BaseWebApi;
+import com.redtop.engaze.restApi.IParticipantApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ParticipantWSProxy extends BaseWebService implements IParticipantWS {
+public class ParticipantApiProxy extends BaseWebApi implements IParticipantApi {
 
-    private final static String TAG = ParticipantWSProxy.class.getName();
+    private final static String TAG = ParticipantApiProxy.class.getName();
     private JSONObject fakeJsonResponse;
 
-    public ParticipantWSProxy() {
+    public ParticipantApiProxy() {
         fakeJsonResponse = new JSONObject();
         try {
             fakeJsonResponse.put("status", "successful");

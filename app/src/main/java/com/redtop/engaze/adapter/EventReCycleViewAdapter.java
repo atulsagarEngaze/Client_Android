@@ -38,8 +38,8 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ContactAndGroupListManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -78,7 +78,7 @@ public class EventReCycleViewAdapter extends RecyclerView.Adapter<EventReCycleVi
         } else {
             viewHolder.profileImage.setBackground(ContactOrGroup.getAppUserIconDrawable());
         }
-        if (ParticipantService.isCurrentUserInitiator(ed.initiatorId)) {
+        if (ParticipantManager.isCurrentUserInitiator(ed.initiatorId)) {
             viewHolder.txtInitiator.setText("You");
         } else {
             viewHolder.txtInitiator.setText(ed.initiatorName);

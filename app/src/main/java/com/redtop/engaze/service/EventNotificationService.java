@@ -39,8 +39,8 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -125,7 +125,7 @@ public class EventNotificationService {
         }
 
         //if(!event.getCurrentMember().getUserId().equalsIgnoreCase(event.getInitiatorId()))
-        if (!ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
+        if (!ParticipantManager.isCurrentUserInitiator(event.initiatorId)) {
             Intent declineResponseIntent = new Intent(AppContext.context, notificationActionsListener.class);
             declineResponseIntent.putExtra("eventid", event.eventId);
             declineResponseIntent.putExtra("responseCode", "leave");

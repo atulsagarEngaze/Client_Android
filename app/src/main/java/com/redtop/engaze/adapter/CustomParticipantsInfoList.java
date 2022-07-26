@@ -2,19 +2,15 @@ package com.redtop.engaze.adapter;
 
 import java.util.ArrayList;
 
-import android.Manifest;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -30,13 +26,8 @@ import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.ViewHelper;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ParticipantManager;
 import com.redtop.engaze.fragment.ParticipantInfoFragment;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
-import static com.redtop.engaze.common.constant.RequestCode.Permission.CALL_PHONE;
 
 @SuppressLint("SimpleDateFormat")
 public class CustomParticipantsInfoList extends BaseAdapter {
@@ -111,7 +102,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 				//holder.img_status.setBackground(context.getResources().getDrawable(R.drawable.ic_exclam));
 			}
 		}
-		if (ParticipantService.isParticipantCurrentUser(member.userId)) {
+		if (ParticipantManager.isParticipantCurrentUser(member.userId)) {
 			holder.img_call.setVisibility(View.GONE);
 			//holder.img_sms.setVisibility(holder.img_sms.GONE);
 			holder.tv.setText("You");
@@ -122,7 +113,7 @@ public class CustomParticipantsInfoList extends BaseAdapter {
 			holder.tv.setText(participanName);
 
 			if (member.acceptanceStatus != AcceptanceStatus.Accepted) {
-				holder.img_poke.setOnClickListener(v -> ParticipantService.pokeParticipant(member.userId, member.profileName, eventId, AppContext.actionHandler));
+				holder.img_poke.setOnClickListener(v -> ParticipantManager.pokeParticipant(member.userId, member.profileName, eventId, AppContext.actionHandler));
 			} else {
 				holder.img_poke.setVisibility(View.GONE);
 			}

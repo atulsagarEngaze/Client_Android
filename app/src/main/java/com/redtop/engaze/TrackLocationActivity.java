@@ -43,7 +43,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+import com.redtop.engaze.manager.ContactAndGroupListManager;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.NameImageItem;

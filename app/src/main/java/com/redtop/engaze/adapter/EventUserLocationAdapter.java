@@ -28,7 +28,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.DateUtil;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,7 +63,7 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
                 viewHolder.divider.setVisibility(View.VISIBLE);
 
             }
-            if (ParticipantService.isParticipantCurrentUser(ud.userId)) {
+            if (ParticipantManager.isParticipantCurrentUser(ud.userId)) {
                 viewHolder.userOptionsImage.setVisibility(View.GONE);
             }
 

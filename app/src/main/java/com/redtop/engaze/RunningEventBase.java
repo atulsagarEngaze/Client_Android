@@ -34,8 +34,8 @@ import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventPlace;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 import com.redtop.engaze.fragment.ExtendEventFragment;
 import com.redtop.engaze.receiver.RunningEventBroadcastReceiver;
 import com.redtop.engaze.viewmanager.RunningEventViewManager;
@@ -167,7 +167,7 @@ public class RunningEventBase  extends MyCurrentLocationHandlerActivity {
 		}
 		switch (getTimeLeft()){
 		case "5 MINS" :
-			if(snoozeFlag != 1 && ParticipantService.isCurrentUserInitiator(mEvent.initiatorId)){
+			if(snoozeFlag != 1 && ParticipantManager.isCurrentUserInitiator(mEvent.initiatorId)){
 				snoozeFlag  = 1;
 				FragmentManager fm = getSupportFragmentManager();
 				ExtendEventFragment fragment = ExtendEventFragment.newInstance();

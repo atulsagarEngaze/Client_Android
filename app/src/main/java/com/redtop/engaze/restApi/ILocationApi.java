@@ -5,7 +5,7 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 
 import org.json.JSONObject;
 
-public interface ILocationWS {
+public interface ILocationApi {
 
     void updateLocation(JSONObject jsonObject,
                         final OnAPICallCompleteListener onAPICallCompleteListener);

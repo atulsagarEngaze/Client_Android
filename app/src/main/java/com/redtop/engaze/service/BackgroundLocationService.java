@@ -19,7 +19,7 @@ import androidx.core.app.NotificationCompat;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.Config;
-import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.manager.EventManager;
 
 //this service upload the current address to server to be available to other users in the event
 public class BackgroundLocationService extends Service {

@@ -15,8 +15,8 @@ import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -201,7 +201,7 @@ public class EventTrackerGcmListenerService extends FirebaseMessagingService imp
                     break;
 
                 case "RemindContact":
-                    if (ParticipantService.isNotifyUser(event)) {
+                    if (ParticipantManager.isNotifyUser(event)) {
                         EventNotificationService.pokeNotification(mContext, mEventId);
                     }
                     break;

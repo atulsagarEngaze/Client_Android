@@ -5,32 +5,23 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.google.gson.JsonArray;
-import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.HomeActivity;
-import com.redtop.engaze.Interface.OnActionCompleteListner;
-import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.TrackingType;
 import com.redtop.engaze.common.utility.DateUtil;
@@ -38,9 +29,8 @@ import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.TrackLocationMember;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.manager.ParticipantManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 import com.redtop.engaze.fragment.ExtendEventFragment;
 
 public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMember> {
@@ -104,9 +94,9 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         if (rowItem.getMember().acceptanceStatus == AcceptanceStatus.Accepted) {
             holder.txtPoke.setVisibility(View.GONE);
         }
-        holder.txtPoke.setOnClickListener(v -> ParticipantService.pokeParticipant(rowItem.getMember().userId, cg.getName(), event.eventId, AppContext.actionHandler));
+        holder.txtPoke.setOnClickListener(v -> ParticipantManager.pokeParticipant(rowItem.getMember().userId, cg.getName(), event.eventId, AppContext.actionHandler));
 
-        if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
+        if (ParticipantManager.isCurrentUserInitiator(event.initiatorId)) {
             holder.txtExtend.setVisibility(View.VISIBLE);
         }
 
@@ -120,7 +110,7 @@ public class HomeTrackLocationListAdapter extends ArrayAdapter<TrackLocationMemb
         holder.txtStop.setOnClickListener(v -> {
 
             ProgressBar.showProgressBar("Please wait");
-            if (ParticipantService.isCurrentUserInitiator(event.initiatorId)) {
+            if (ParticipantManager.isCurrentUserInitiator(event.initiatorId)) {
                 //Current user is initiator...so he can either end the event or remove the member.
                 if (event.getParticipantCount() <= 2) {
                     //End the event since it is a 1 to 1 event

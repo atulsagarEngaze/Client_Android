@@ -12,9 +12,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class UserWS extends BaseWebService implements IUserWS {
+public class UserApi extends BaseWebApi implements IUserApi {
 
-    private final static String TAG = SmsWS.class.getName();
+    private final static String TAG = SmsApi.class.getName();
 
     public void saveProfile(JSONObject jRequestobj,
                             final OnAPICallCompleteListener onAPICallCompleteListener) {

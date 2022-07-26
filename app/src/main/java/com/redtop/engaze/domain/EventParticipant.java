@@ -8,8 +8,8 @@ import com.redtop.engaze.Interface.DataModel;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.ReminderFrom;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ContactAndGroupListManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 /**
  * @author Vijay.kumar
@@ -91,7 +91,7 @@ public class EventParticipant implements DataModel {
     }
 
     public void setProfileName() {
-        if (ParticipantService.isParticipantCurrentUser(userId)) {
+        if (ParticipantManager.isParticipantCurrentUser(userId)) {
             profileName = AppContext.context.loginName;
             return;
         }

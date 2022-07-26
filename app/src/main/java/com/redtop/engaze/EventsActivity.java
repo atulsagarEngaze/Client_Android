@@ -36,8 +36,8 @@ import com.redtop.engaze.common.customeviews.SlidingTabLayout;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 import com.redtop.engaze.fragment.AcceptedEventsFragment;
 import com.redtop.engaze.fragment.DeclinedEventsFragment;
 import com.redtop.engaze.fragment.NavDrawerFragment;
@@ -385,7 +385,7 @@ public class EventsActivity extends BaseActivity implements NavDrawerFragment.Fr
 				return true;
 			case R.id.context_action_delete:
 
-				if(ParticipantService.isCurrentUserInitiator(event.initiatorId)){
+				if(ParticipantManager.isCurrentUserInitiator(event.initiatorId)){
 
 					AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
 					// adb.setView(alertDialogView);

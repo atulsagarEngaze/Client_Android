@@ -11,7 +11,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.domain.manager.ProfileManager;
+import com.redtop.engaze.manager.ProfileManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 

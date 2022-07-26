@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.domain.ContactOrGroup;
-import com.redtop.engaze.restApi.IUserWS;
+import com.redtop.engaze.restApi.IUserApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +13,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class UserWSProxy implements IUserWS {
+public class UserApiProxy implements IUserApi {
 
-    private final static String TAG = UserWSProxy.class.getName();
+    private final static String TAG = UserApiProxy.class.getName();
 
     public void sendInvite(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
 

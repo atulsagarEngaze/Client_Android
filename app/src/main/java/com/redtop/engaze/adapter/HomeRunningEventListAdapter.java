@@ -20,8 +20,8 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.ProgressBar;
 import com.redtop.engaze.domain.Event;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
     public List<Event> items;
@@ -56,7 +56,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_home_running_event_list, null);
             holder = new ViewHolder();
-            holder.txtEventName = (TextView) convertView.findViewById(R.id.event_name);//  rowItem.getName()
+            holder.txtEventName = convertView.findViewById(R.id.event_name);//  rowItem.getName()
             holder.txtInitiator = (TextView) convertView.findViewById(R.id.event_initiator);
             holder.txtLeave = (TextView) convertView.findViewById(R.id.event_leave);
             holder.txtEnd = (TextView) convertView.findViewById(R.id.event_end);
@@ -67,7 +67,7 @@ public class HomeRunningEventListAdapter extends ArrayAdapter<Event> {
             holder = (ViewHolder) convertView.getTag();
         final String eventId = rowItem.eventId;
 
-        if (ParticipantService.isCurrentUserInitiator(rowItem.initiatorId)) {
+        if (ParticipantManager.isCurrentUserInitiator(rowItem.initiatorId)) {
             holder.txtLeave.setVisibility(View.GONE);
             holder.txtEnd.setVisibility(View.VISIBLE);
         } else {

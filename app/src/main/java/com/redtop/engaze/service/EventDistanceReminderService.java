@@ -18,7 +18,7 @@ import com.redtop.engaze.common.enums.ReminderFrom;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.manager.LocationManager;
+import com.redtop.engaze.manager.LocationManager;
 
 import android.app.IntentService;
 import android.content.Context;

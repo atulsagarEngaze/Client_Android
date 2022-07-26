@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public interface IUserWS {
+public interface IUserApi {
 
     void saveProfile(JSONObject jRequestobj,
                      final OnAPICallCompleteListener onAPICallCompleteListener);

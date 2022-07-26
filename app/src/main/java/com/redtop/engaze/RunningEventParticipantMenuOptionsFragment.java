@@ -30,15 +30,12 @@ import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
 import com.redtop.engaze.domain.NameImageItem;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
-import static com.redtop.engaze.common.constant.RequestCode.Permission.ACCESS_BACKGROUND_LOCATION;
 import static com.redtop.engaze.common.constant.RequestCode.Permission.CALL_PHONE;
 
 @SuppressWarnings("deprecation")
@@ -228,7 +225,7 @@ public class RunningEventParticipantMenuOptionsFragment extends DialogFragment i
 
     public void onUserLocationItemMenuItemPokeClicked() {
 
-        ParticipantService.pokeParticipant(mUserId, mUserName, mEventId, this);
+        ParticipantManager.pokeParticipant(mUserId, mUserName, mEventId, this);
     }
 
     @Override

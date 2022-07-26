@@ -10,7 +10,7 @@ import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.ContactOrGroup;
 import com.redtop.engaze.domain.Duration;
 import com.redtop.engaze.domain.Reminder;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
+import com.redtop.engaze.manager.ContactAndGroupListManager;
 import com.redtop.engaze.service.BackgroundLocationService;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,17 +1,11 @@
 package com.redtop.engaze.domain;
 
-import android.content.Context;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.gson.annotations.Expose;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
-import com.redtop.engaze.common.utility.BitMapHelper;
-import com.redtop.engaze.common.utility.MaterialColor;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ParticipantManager;
 
 public class UsersLocationDetail implements Serializable {
 
@@ -98,7 +92,7 @@ public class UsersLocationDetail implements Serializable {
         ArrayList<UsersLocationDetail> usersLocationDetailList = new ArrayList<UsersLocationDetail>();
         UsersLocationDetail uld;
         for (EventParticipant mem : memberList) {
-            if (ParticipantService.isValidForLocationSharing(event, mem)) {
+            if (ParticipantManager.isValidForLocationSharing(event, mem)) {
                 uld = createUserLocationListFromEventMember(mem);
                 usersLocationDetailList.add(uld);
             }
@@ -112,7 +106,7 @@ public class UsersLocationDetail implements Serializable {
         uld.userName = mem.profileName;
         uld.contactOrGroup = mem.contactOrGroup;
         uld.acceptanceStatus = mem.acceptanceStatus;
-        if (ParticipantService.isParticipantCurrentUser(mem.userId)) {
+        if (ParticipantManager.isParticipantCurrentUser(mem.userId)) {
             uld.userName = "You";
         }
         return uld;

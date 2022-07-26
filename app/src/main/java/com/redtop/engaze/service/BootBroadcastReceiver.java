@@ -6,7 +6,7 @@ import java.util.List;
 import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.domain.Event;
 import com.redtop.engaze.domain.EventParticipant;
-import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.manager.EventManager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,8 +1,5 @@
 package com.redtop.engaze;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,15 +17,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.common.utility.GoogleDirection;
 import com.redtop.engaze.domain.Duration;
-import com.redtop.engaze.domain.manager.ContactAndGroupListManager;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.manager.ParticipantManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 @SuppressLint("ResourceAsColor")
 public class RunningEventActivityResults extends RunningEventLocationRefresh implements FragmentToActivity<Duration> {

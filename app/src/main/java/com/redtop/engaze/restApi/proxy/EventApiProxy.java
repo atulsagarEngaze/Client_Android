@@ -6,12 +6,12 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.domain.EventPlace;
-import com.redtop.engaze.webservice.IEventWS;
+import com.redtop.engaze.webservice.IEventApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EventWSProxy implements IEventWS {
+public class EventWSProxy implements IEventApi {
     private JSONObject fakeJsonResponse;
 
 

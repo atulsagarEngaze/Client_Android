@@ -9,9 +9,9 @@ import com.redtop.engaze.domain.EventPlace;
 
 import org.json.JSONObject;
 
-public class EventWS extends BaseWebService implements IEventWS {
+public class EventApi extends BaseWebApi implements IEventApi {
 
-    private final static String TAG = EventWS.class.getName();
+    private final static String TAG = EventApi.class.getName();
 
     public void SaveEvent(JSONObject jsonObject, final OnAPICallCompleteListener onAPICallCompleteListener) {
         try {

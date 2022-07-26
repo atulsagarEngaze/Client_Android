@@ -7,10 +7,8 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.redtop.engaze.Interface.OnActionFailedListner;
 import com.redtop.engaze.common.constant.Veranstaltung;
-import com.redtop.engaze.common.enums.Action;
-import com.redtop.engaze.domain.manager.EventManager;
+import com.redtop.engaze.manager.EventManager;
 
 public class EventRefreshService extends IntentService {
 

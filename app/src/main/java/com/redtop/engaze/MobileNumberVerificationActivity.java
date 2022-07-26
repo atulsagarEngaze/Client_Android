@@ -32,7 +32,7 @@ import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.PermissionRequester;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.domain.manager.SMSManager;
+import com.redtop.engaze.manager.SMSManager;
 import com.redtop.engaze.common.constant.Constants;
 
 import static com.redtop.engaze.common.constant.RequestCode.Permission.*;

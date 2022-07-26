@@ -14,10 +14,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.redtop.engaze.R;
 
 
-public class SmsWS extends BaseWebService {
+public class SmsApi extends BaseWebApi {
 
 
-    private final static String TAG = SmsWS.class.getName();
+    private final static String TAG = SmsApi.class.getName();
 
     public static void callSMSGateway(final Context context, JSONObject smsGatewayObj){
         try{

@@ -20,12 +20,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
 import com.redtop.engaze.common.utility.PreffManager;
-import com.redtop.engaze.common.cache.InternalCaching;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.ParticipantManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -232,7 +231,7 @@ public class RunningEventActivity extends RunningEventActions implements OnMapRe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu
         if (mEvent != null) {
-            if (ParticipantService.isCurrentUserInitiator(mEvent.initiatorId)) {
+            if (ParticipantManager.isCurrentUserInitiator(mEvent.initiatorId)) {
                 getMenuInflater().inflate(R.menu.menu_running_event_initiator, menu);
                 if ((mEvent.getParticipantsbyStatus(AcceptanceStatus.getStatus(1))).size() > 1) {
                     menu.removeItem(R.id.action_poke_all);

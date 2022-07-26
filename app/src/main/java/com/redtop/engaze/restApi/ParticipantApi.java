@@ -6,9 +6,9 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ParticipantWS extends BaseWebService  {
+public class ParticipantApi extends BaseWebApi {
 
-    private final static String TAG = ParticipantWS.class.getName();
+    private final static String TAG = ParticipantApi.class.getName();
 
     public void pokeParticipants(JSONObject pokeAllContactsJSON,
                                         final OnAPICallCompleteListener onAPICallCompleteListener) {

@@ -6,9 +6,9 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 
 import org.json.JSONObject;
 
-public class FeedbackWS extends BaseWebService {
+public class FeedbackWS extends BaseWebApi {
 
-    private final static String TAG = SmsWS.class.getName();
+    private final static String TAG = SmsApi.class.getName();
 
     public static void saveFeedback( JSONObject jsonObject,
                                                     OnAPICallCompleteListener onAPICallCompleteListener

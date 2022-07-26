@@ -14,7 +14,7 @@ import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.enums.EventState;
 import com.redtop.engaze.common.enums.EventType;
 import com.redtop.engaze.common.enums.RecurrenceType;
-import com.redtop.engaze.domain.service.ParticipantService;
+import com.redtop.engaze.manager.ParticipantManager;
 
 public class Event implements DataModel {
 
@@ -205,7 +205,7 @@ public class Event implements DataModel {
 
     public boolean isEventTrackBuddyEventForCurrentUser() {
 
-        boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(this.initiatorId);
+        boolean isCurrentUserInitiator = ParticipantManager.isCurrentUserInitiator(this.initiatorId);
 
         if ((isCurrentUserInitiator && this.eventType == EventType.TRACKBUDDY) ||
                 (!isCurrentUserInitiator && this.eventType == EventType.SHAREMYLOACTION)) {
@@ -216,7 +216,7 @@ public class Event implements DataModel {
 
     public boolean isEventShareMyLocationEventForCurrentUser() {
 
-        boolean isCurrentUserInitiator = ParticipantService.isCurrentUserInitiator(this.initiatorId);
+        boolean isCurrentUserInitiator = ParticipantManager.isCurrentUserInitiator(this.initiatorId);
 
         if ((isCurrentUserInitiator && this.eventType == EventType.SHAREMYLOACTION) ||
                 (!isCurrentUserInitiator && this.eventType == EventType.TRACKBUDDY)) {

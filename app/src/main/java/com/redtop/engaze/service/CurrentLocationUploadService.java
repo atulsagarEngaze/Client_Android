@@ -10,8 +10,8 @@ import com.redtop.engaze.common.constant.Constants;
 import com.redtop.engaze.common.utility.AppLocationService;
 import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.domain.manager.EventManager;
-import com.redtop.engaze.domain.manager.LocationManager;
+import com.redtop.engaze.manager.EventManager;
+import com.redtop.engaze.manager.LocationManager;
 
 
 public class CurrentLocationUploadService {

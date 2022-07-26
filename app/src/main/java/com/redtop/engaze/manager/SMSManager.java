@@ -1,4 +1,4 @@
-package com.redtop.engaze.domain.manager;
+package com.redtop.engaze.manager;
 
 import android.content.Context;
 import android.telephony.SmsManager;
@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.redtop.engaze.R;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.constant.Constants;
-import com.redtop.engaze.restApi.SmsWS;
+import com.redtop.engaze.restApi.SmsApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class SMSManager {
                 return ;
 
             }
-            SmsWS.callSMSGateway(context, mJRequestobj);
+            SmsApi.callSMSGateway(context, mJRequestobj);
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -5,7 +5,7 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 
 import org.json.JSONObject;
 
-public interface IParticipantWS {
+public interface IParticipantApi {
 
     public void pokeParticipants(JSONObject pokeAllContactsJSON,
                                  final OnAPICallCompleteListener onAPICallCompleteListener);

@@ -13,7 +13,7 @@ import com.redtop.engaze.Interface.OnGpsSetOnListner;
 import com.redtop.engaze.common.constant.IntentConstants;
 import com.redtop.engaze.common.constant.Veranstaltung;
 import com.redtop.engaze.common.utility.AppLocationService;
-import com.redtop.engaze.restApi.proxy.LocationWSProxy;
+import com.redtop.engaze.restApi.proxy.LocationApiProxy;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -72,7 +72,7 @@ public abstract class MyCurrentLocationHandlerActivity extends BaseActivity {
 				{
 					Location currentLocation = intent.getParcelableExtra(IntentConstants.CURRENT_LOCATION);
 					//for testing
-					LocationWSProxy.location = currentLocation;
+					LocationApiProxy.location = currentLocation;
 					mMyCoordinates = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 					onMyLocationFound(currentLocation);
 				}

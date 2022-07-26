@@ -1,4 +1,4 @@
-package com.redtop.engaze.domain.manager;
+package com.redtop.engaze.manager;
 
 import org.json.JSONObject;
 
@@ -12,14 +12,14 @@ import com.redtop.engaze.common.utility.PreffManager;
 import com.redtop.engaze.common.enums.Action;
 import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.Interface.OnActionFailedListner;
-import com.redtop.engaze.restApi.IUserWS;
-import com.redtop.engaze.restApi.UserWS;
+import com.redtop.engaze.restApi.IUserApi;
+import com.redtop.engaze.restApi.UserApi;
 
 
 public class ProfileManager {
     private final static String TAG = ProfileManager.class.getName();
 
-    private final static IUserWS userWS = new UserWS();
+    private final static IUserApi userApi = new UserApi();
 
     public static void saveProfile(final Context context, final JSONObject jRequestobj,
                                    final OnAPICallCompleteListener listnerOnSuccess,
@@ -33,7 +33,7 @@ public class ProfileManager {
 
         }
 
-        userWS.saveProfile(jRequestobj, new OnAPICallCompleteListener<String>() {
+        userApi.saveProfile(jRequestobj, new OnAPICallCompleteListener<String>() {
 
             @Override
             public void apiCallSuccess(String response) {

@@ -1,4 +1,4 @@
-package com.redtop.engaze.domain.manager;
+package com.redtop.engaze.manager;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,8 +7,8 @@ import com.redtop.engaze.Interface.OnAPICallCompleteListener;
 import com.redtop.engaze.common.utility.AppUtility;
 import com.redtop.engaze.common.utility.JsonParser;
 import com.redtop.engaze.domain.UsersLocationDetail;
-import com.redtop.engaze.restApi.ILocationWS;
-import com.redtop.engaze.restApi.LocationWS;
+import com.redtop.engaze.restApi.ILocationApi;
+import com.redtop.engaze.restApi.LocationApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +17,7 @@ import org.json.JSONObject;
 public class LocationManager {
 
     private final static String TAG = LocationManager.class.getName();
-    private final static ILocationWS locationWS = new LocationWS();
+    private final static ILocationApi locationApi = new LocationApi();
 
     public static void updateLocationToServer(final Context context, final UsersLocationDetail location, final OnAPICallCompleteListener onAPICallCompleteListener) {
         //this will be called from background service, app may not be running at that time
@@ -33,7 +33,7 @@ public class LocationManager {
             e.printStackTrace();
         }
 
-        locationWS.updateLocation(jsonObject, new OnAPICallCompleteListener<JSONObject>() {
+        locationApi.updateLocation(jsonObject, new OnAPICallCompleteListener<JSONObject>() {
             @Override
             public void apiCallSuccess(JSONObject response) {
                 onAPICallCompleteListener.apiCallSuccess(response);
@@ -50,7 +50,7 @@ public class LocationManager {
                                               final OnAPICallCompleteListener onAPICallCompleteListener) {
 
 
-        locationWS.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListener<String>() {
+        locationApi.getLocationsFromServer(userId, eventId, new OnAPICallCompleteListener<String>() {
             @Override
             public void apiCallSuccess(String response) {
 
