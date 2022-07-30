@@ -1,4 +1,4 @@
-package com.redtop.engaze;
+package com.redtop.engaze.fragment;
 
 import java.util.ArrayList;
 
@@ -20,8 +20,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.redtop.engaze.EtaDistanceAlertHelper;
 import com.redtop.engaze.Interface.DialogDismissListener;
 import com.redtop.engaze.Interface.IActionHandler;
+import com.redtop.engaze.R;
 import com.redtop.engaze.adapter.NameImageAdapter;
 import com.redtop.engaze.app.AppContext;
 import com.redtop.engaze.common.enums.AcceptanceStatus;

@@ -15,7 +15,7 @@ import com.redtop.engaze.domain.NameImageItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class EventTypeList extends AppCompatActivity implements OnItemClickListener {
+public class EventTypeListActivity extends AppCompatActivity implements OnItemClickListener {
 
 	/** Called when the activity is first created. */
 	

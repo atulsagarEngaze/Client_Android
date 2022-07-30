@@ -1,27 +1,23 @@
 package com.redtop.engaze.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redtop.engaze.BaseEventActivity;
 import com.redtop.engaze.HomeActivity;
 import com.redtop.engaze.Interface.FragmentToActivity;
 import com.redtop.engaze.R;
-import com.redtop.engaze.RunningEventActivityResults;
+import com.redtop.engaze.RunningEventActivity;
 import com.redtop.engaze.domain.Duration;
 
 /**
@@ -86,8 +82,8 @@ public class ExtendEventFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this.getActivity();
-        if (mContext instanceof RunningEventActivityResults){
-            callBackToActivity = (RunningEventActivityResults) mContext;
+        if (mContext instanceof RunningEventActivity){
+            callBackToActivity = (RunningEventActivity) mContext;
         }
         else if (mContext instanceof HomeActivity){
             callBackToActivity = (HomeActivity) mContext;

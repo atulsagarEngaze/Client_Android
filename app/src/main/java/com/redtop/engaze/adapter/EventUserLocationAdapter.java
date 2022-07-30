@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.redtop.engaze.R;
 import com.redtop.engaze.RunningEventActivity;
-import com.redtop.engaze.RunningEventLocationRefresh;
 import com.redtop.engaze.common.customeviews.CircularImageView;
 import com.redtop.engaze.common.enums.AcceptanceStatus;
 import com.redtop.engaze.common.utility.AppUtility;
@@ -165,8 +164,8 @@ public class EventUserLocationAdapter extends RecyclerView.Adapter<EventUserLoca
 
                 @Override
                 public void onClick(View v) {
-                    if (mContext instanceof RunningEventLocationRefresh) {
-                        ((RunningEventLocationRefresh) mContext).userLocationMenuClicked(itemView, uld);
+                    if (mContext instanceof RunningEventActivity) {
+                        ((RunningEventActivity) mContext).userLocationMenuClicked(itemView, uld);
                     }
                 }
             });

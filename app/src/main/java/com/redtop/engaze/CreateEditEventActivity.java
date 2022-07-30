@@ -125,7 +125,7 @@ public class CreateEditEventActivity extends BaseEventActivity {
         mEventTypeView.setOnClickListener(v -> {
             // TODO Auto-generated method stub
 
-            Intent i = new Intent(CreateEditEventActivity.this, EventTypeList.class);
+            Intent i = new Intent(CreateEditEventActivity.this, EventTypeListActivity.class);
             startActivityForResult(i, EVENT_TYPE_REQUEST_CODE);
         });
 
